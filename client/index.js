@@ -185,24 +185,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             $mdSidenav('right').close();
         };
 
-        $scope.login = function (event) {
-            $mdSidenav('right').close();
-            $mdDialog.show({
-                templateUrl: 'core/login.html',
-                parent: angular.element(document.body)
-            }).then(function (result) {
-                $scope.sessionData.userData = result.user;
-                $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.user.company;
-                $scope.sessionData.userData.name = result.user.firstname + " " + result.user.lastname;
-                $scope.sessionData.dynamicTheme = 'user1';
-                Applications.query().$promise.then(function (result) {
-                    $scope.sessionData.applications = result;
-                    SessionService.setSessionData($scope.sessionData);
-                    $location.url('/applications');
-                });
-            });
-        };
-
         $scope.logout = function () {
             $mdSidenav('right').close();
             Logout.get();
