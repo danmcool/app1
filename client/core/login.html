@@ -1,0 +1,30 @@
+<md-dialog md-component-id="login" aria-label="Connect to system" ng-controller="LoginCtrl">
+<div layout-wrap layout-margin layout-align="center">
+	<form>
+	<md-dialog-content>
+		<md-toolbar md-scroll-shrink class="md-hue-1">
+		  <div class="md-toolbar-tools"
+			<h2><span>Enter credentials</span></h2>
+		  </div>
+		</md-toolbar>
+		<div style="height:20px"></div>
+		<md-input-container class="md-block" flex-gt-xs>
+			<label>User name</label>
+			<input ng-disabled="false" ng-required="true" name="user" ng-model="user">
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-xs>
+			<label>Password</label>
+			<input ng-disabled="false" ng-required="true" name="password" type="password" ng-model="password">
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-xs>
+			<label>Company code</label>
+			<input ng-disabled="false" ng-required="true" name="code" ng-model="code">
+		</md-input-container>
+	</md-dialog-content>
+	<md-dialog-actions layout="row">
+	  <md-button ng-click="close()">Cancel</md-button>
+	  <md-button type="submit" ng-click="login(user, password, code)">Login</md-button>
+	</md-dialog-actions>
+  </form>
+</div>
+</md-dialog>
