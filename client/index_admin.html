@@ -1,290 +1,417 @@
 <html lang="en">
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/stylesheets/angular-material.min.css">
-  <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/stylesheets/angular-material.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
 <body ng-app="app1_admin" ng-cloak>
-  <script src="/javascripts/angular.min.js"></script>
-  <script src="/javascripts/angular-route.min.js"></script>
-  <script src="/javascripts/angular-resource.min.js"></script>
-  <script src="/javascripts/angular-animate.min.js"></script>
-  <script src="/javascripts/angular-aria.min.js"></script>
-  <script src="/javascripts/angular-messages.min.js"></script>
-  <script src="/javascripts/angular-material.min.js"></script>
-  <script src="index_admin.js"></script>
-  <script type="text/ng-template" id="welcome.html">
-    <p>Welcome to the administration tool!</p>
-  </script>
-  <script type="text/ng-template" id="datamodels.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="datamodel in datamodels | filter: search">
-          <a href="#datamodels/{{datamodel._id}}">{{datamodel.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New datamodel <input type="text" ng-model="newDataModel"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="datamodelDetails.html">
-    <h1>{{datamodel.name}}</h1>
-    <p>Name: <input type="text" ng-model="datamodel.name"></p>
-    <p>Id: {{datamodel._id}}</p>
-    <p>Datamodel:<br><textarea ng-model="datamodel.datamodel" rows="6" cols="60"></textarea></p>
-    <p>Translation:<br><textarea ng-model="datamodel.translation" rows="6" cols="60"></textarea></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/datamodels">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="datamodelRelations.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="datamodelrelation in datamodelrelations | filter: search">
-          <a href="#datamodelrelations/{{datamodelrelation._id}}">{{datamodelrelation.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New data model relation <input type="text" ng-model="newDataModelRelation"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="datamodelRelationDetails.html">
-    <h1>{{datamodelrelation.name}}</h1>
-    <p>Name: <input type="text" ng-model="datamodelrelation.name"></p>
-    <p>Id: {{datamodelrelation._id}}</p>
-    <p>Datamodel 1: <input type="text" ng-model="datamodelrelation.datamodel1"></p>
-    <p>Datamodel 2: <input type="text" ng-model="datamodelrelation.datamodel2"></p>
-    <p>Type: <select ng-model="datamodelrelation.type">
-      <option value="11">1-1</option>
-      <option value="1n">1-n</option>
-      </select></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/datamodelrelations">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="forms.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="form in forms | filter: search">
-          <a href="#forms/{{form._id}}">{{form.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New form <input type="text" ng-model="newForm"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="formDetails.html">
-    <h1>{{form.name}}</h1>
-    <p>Name: <input type="text" ng-model="form.name"></p>
-    <p>Id: {{form._id}}</p>
-    <p>DataModel id: <input type="text" ea ng-model="form.datamodel_id"></p>
-    <p>Type: <select ng-model="form.type">
-      <option value="form">Form</option>
-      <option value="list">List</option>
-      </select></p>
-    <p>Display:<br><textarea json-text ng-model="form.display" rows="10" cols="60"></textarea></p>
-    <p>Search criteria:<br><textarea ng-model="form.search_criteria" rows="2" cols="60" title="Possible operators are&#13;$eq	Matches values that are equal to a specified value.&#13;$gt	Matches values that are greater than a specified value.&#13;$gte	Matches values that are greater than or equal to a specified value.&#13;$lt	Matches values that are less than a specified value.&#13;$lte	Matches values that are less than or equal to a specified value.&#13;$ne	Matches all values that are not equal to a specified value.&#13;$in	Matches any of the values specified in an array.&#13;$nin Matches none of the values specified in an array."></textarea></p>
-    <p>Sort by:<br><textarea ng-model="form.sort_by" rows="2" cols="60" title="Possible operators are&#13;$eq	Matches values that are equal to a specified value.&#13;$gt	Matches values that are greater than a specified value.&#13;$gte	Matches values that are greater than or equal to a specified value.&#13;$lt	Matches values that are less than a specified value.&#13;$lte	Matches values that are less than or equal to a specified value.&#13;$ne	Matches all values that are not equal to a specified value.&#13;$in	Matches any of the values specified in an array.&#13;$nin Matches none of the values specified in an array."></textarea></p>
-    <p>Actions:<br><textarea json-text ng-model="form.actions" rows="10" cols="60"></textarea></p>
-    <p>Item Actions:<br><textarea json-text ng-model="form.item_actions" rows="10" cols="60"></textarea></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/forms">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="values.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="value in values | filter: search">
-          <a href="#values/{{value._id}}">{{value.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New value <input type="text" ng-model="newValue"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="valueDetails.html">
-    <h1>{{value.name}}</h1>
-    <p>Name: <input type="text" ng-model="value.name"></p>
-    <p>Id: {{value._id}}</p>
-    <p>Type: <select ng-model="value.type">
-      <option value="form">List</option>
-      <option value="list">Hierarchy</option>
-      </select></p>
-    <p>Values:<br><textarea json-text ng-model="value.values" rows="6" cols="60"></textarea></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/values">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="users.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="user in users | filter: search">
-          <a href="#users/{{user._id}}">{{user.user}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New user <input type="text" ng-model="newUser"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="userDetails.html">
-    <h1>{{user.user}}</h1>
-    <p>User: <input type="text" ng-model="user.user"></p>
-    <p>Id: {{user._id}}</p>
-    <p>Password: <input type="text" ng-model="user.password"></p>
-    <p>Company code: <input type="text" ng-model="user._company_code"></p>
-    <p>Email: <input type="text" ng-model="user.email"></p>
-    <p>First name: <input type="text" ng-model="user.firstname"></p>
-    <p>Last name: <input type="text" ng-model="user.lastname"></p>
-    <p>Validated: <input json-text type="text" ng-model="user.validated"></p>
-    <p>Profile:<br><textarea ng-model="user.profile"></textarea></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/users">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="files.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="file in files | filter: search">
-          <a href="#files/{{file._id}}">{{file.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New file <input type="text" ng-model="newFile"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="fileDetails.html">
-    <h1>{{file.file.name}}</h1>
-    <p>Name: <input type="text" ng-model="file.file.name"></p>
-    <p>Id: {{file.file._id}}</p>
-    <p>Type: <input type="text" ng-model="file.file.type"></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/files">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="userprofiles.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="userprofile in userprofiles | filter: search">
-          <a href="#userprofiles/{{userprofile._id}}">{{userprofile.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New user profile <input type="text" ng-model="newUserProfile"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="userprofileDetails.html">
-    <h1>{{userprofile.name}}</h1>
-    <p>Name: <input type="text" ng-model="userprofile.name"></p>
-    <p>Id: {{userprofile._id}}</p>
-    <p>Type: <select ng-model="userprofile.type">
-      <option value="private">Private</option>
-      <option value="public">Public</option>
-      </select></p>
-    <p>Client id: <input type="text" ng-model="userprofile.client_id"></p>
-    <p>Profile:<br><textarea ng-model="userprofile.profile"></textarea></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/userprofiles">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="companies.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="company in companies | filter: search">
-          <a href="#companies/{{company._id}}">{{company.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New company <input type="text" ng-model="newCompany"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="companyDetails.html">
-    <h1>{{company.name}}</h1>
-    <p>Name: <input type="text" ng-model="company.name"></p>
-    <p>Id: {{company._id}}</p>
-    <p>Code: {{company._company_code}}</p>
-    <p>Applications:<br><textarea json-text ng-model="company.applications" rows="10" cols="60"></textarea></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/companies">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="workflows.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="workflow in workflows | filter: search">
-          <a href="#workflows/{{workflow._id}}">{{workflow.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New workflow <input type="text" ng-model="newWorkflow"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="workflowDetails.html">
-    <h1>{{workflow.name}}</h1>
-    <p>Name: <input type="text" ng-model="workflow.name"></p>
-    <p>Id: {{workflow._id}}</p>
-    <p>Description:<br><textarea ng-model="workflow.description" rows="6" cols="60"></textarea></p>
-    <p>Icon: <input type="text" ng-model="workflow.icon"></p>
-    <p>Startup form id: <input type="text" ng-model="workflow.startup_form_id"></p>
-    <p>Application id: <input type="text" ng-model="workflow.application_id"></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/workflows">Cancel</a>
-  </script>
-  <script type="text/ng-template" id="applications.html">
-    <div>
-      Search: <input type="text" ng-model="search.name">
-      <ul>
-        <li ng-repeat="application in applications | filter: search">
-          <a href="#applications/{{application._id}}">{{application.name}}</a>
-          <button ng-click="remove($index)">remove</button>
-        </li>
-      </ul>
-      New application <input type="text" ng-model="newApplication"><button ng-click="save()">Create</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="applicationDetails.html">
-    <h1>{{application.name}}</h1>
-    <p>Name: <input type="text" ng-model="application.name"></p>
-    <p>Id: {{application._id}}</p>
-    <p>Description:<br><textarea ng-model="application.description" rows="6" cols="60"></textarea></p>
-    <p>Icon: <input type="text" ng-model="application.icon"></p>
-    <button ng-click="update()">update</button>
-    <a href="/admin/#/applications">Cancel</a>
-  </script>
-  <md-toolbar class="md-hue-2">
-    <div class="md-toolbar-tools" ng-controller="AppCtrl">
-      <md-button class="md-icon-button" aria-label="Administration" ng-click="toggleLeft()">
-        <md-icon md-svg-icon="/icons/menu.svg"></md-icon>
-      </md-button>
-      <h2>
+    <script src="/javascripts/angular.min.js"></script>
+    <script src="/javascripts/angular-route.min.js"></script>
+    <script src="/javascripts/angular-resource.min.js"></script>
+    <script src="/javascripts/angular-animate.min.js"></script>
+    <script src="/javascripts/angular-aria.min.js"></script>
+    <script src="/javascripts/angular-messages.min.js"></script>
+    <script src="/javascripts/angular-material.min.js"></script>
+    <script src="index_admin.js"></script>
+    <script type="text/ng-template" id="welcome.html">
+        <p>Welcome to the administration tool!</p>
+    </script>
+    <script type="text/ng-template" id="datamodels.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="datamodel in datamodels | filter: search">
+                    <a href="#datamodels/{{datamodel._id}}">{{datamodel.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New datamodel
+            <input type="text" ng-model="newDataModel">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="datamodelDetails.html">
+        <h1>{{datamodel.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="datamodel.name">
+        </p>
+        <p>Id: {{datamodel._id}}</p>
+        <p>Datamodel:
+            <br>
+            <textarea ng-model="datamodel.datamodel" rows="6" cols="60"></textarea>
+        </p>
+        <p>Translation:
+            <br>
+            <textarea ng-model="datamodel.translation" rows="6" cols="60"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/datamodels">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="datamodelRelations.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="datamodelrelation in datamodelrelations | filter: search">
+                    <a href="#datamodelrelations/{{datamodelrelation._id}}">{{datamodelrelation.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New data model relation
+            <input type="text" ng-model="newDataModelRelation">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="datamodelRelationDetails.html">
+        <h1>{{datamodelrelation.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="datamodelrelation.name">
+        </p>
+        <p>Id: {{datamodelrelation._id}}</p>
+        <p>Datamodel 1:
+            <input type="text" ng-model="datamodelrelation.datamodel1">
+        </p>
+        <p>Datamodel 2:
+            <input type="text" ng-model="datamodelrelation.datamodel2">
+        </p>
+        <p>Type:
+            <select ng-model="datamodelrelation.type">
+                <option value="11">1-1</option>
+                <option value="1n">1-n</option>
+            </select>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/datamodelrelations">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="forms.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="form in forms | filter: search">
+                    <a href="#forms/{{form._id}}">{{form.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New form
+            <input type="text" ng-model="newForm">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="formDetails.html">
+        <h1>{{form.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="form.name">
+        </p>
+        <p>Id: {{form._id}}</p>
+        <p>DataModel id:
+            <input type="text" ea ng-model="form.datamodel_id">
+        </p>
+        <p>Type:
+            <select ng-model="form.type">
+                <option value="form">Form</option>
+                <option value="list">List</option>
+            </select>
+        </p>
+        <p>Display:
+            <br>
+            <textarea json-text ng-model="form.display" rows="10" cols="60"></textarea>
+        </p>
+        <p>Search criteria:
+            <br>
+            <textarea ng-model="form.search_criteria" rows="2" cols="60" title="Possible operators are&#13;$eq	Matches values that are equal to a specified value.&#13;$gt	Matches values that are greater than a specified value.&#13;$gte	Matches values that are greater than or equal to a specified value.&#13;$lt	Matches values that are less than a specified value.&#13;$lte	Matches values that are less than or equal to a specified value.&#13;$ne	Matches all values that are not equal to a specified value.&#13;$in	Matches any of the values specified in an array.&#13;$nin Matches none of the values specified in an array."></textarea>
+        </p>
+        <p>Sort by:
+            <br>
+            <textarea ng-model="form.sort_by" rows="2" cols="60" title="Possible operators are&#13;$eq	Matches values that are equal to a specified value.&#13;$gt	Matches values that are greater than a specified value.&#13;$gte	Matches values that are greater than or equal to a specified value.&#13;$lt	Matches values that are less than a specified value.&#13;$lte	Matches values that are less than or equal to a specified value.&#13;$ne	Matches all values that are not equal to a specified value.&#13;$in	Matches any of the values specified in an array.&#13;$nin Matches none of the values specified in an array."></textarea>
+        </p>
+        <p>Actions:
+            <br>
+            <textarea json-text ng-model="form.actions" rows="10" cols="60"></textarea>
+        </p>
+        <p>Item Actions:
+            <br>
+            <textarea json-text ng-model="form.item_actions" rows="10" cols="60"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/forms">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="values.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="value in values | filter: search">
+                    <a href="#values/{{value._id}}">{{value.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New value
+            <input type="text" ng-model="newValue">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="valueDetails.html">
+        <h1>{{value.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="value.name">
+        </p>
+        <p>Id: {{value._id}}</p>
+        <p>Type:
+            <select ng-model="value.type">
+                <option value="form">List</option>
+                <option value="list">Hierarchy</option>
+            </select>
+        </p>
+        <p>Values:
+            <br>
+            <textarea json-text ng-model="value.values" rows="6" cols="60"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/values">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="users.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="user in users | filter: search">
+                    <a href="#users/{{user._id}}">{{user.user}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New user
+            <input type="text" ng-model="newUser">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="userDetails.html">
+        <h1>{{user.user}}</h1>
+        <p>User:
+            <input type="text" ng-model="user.user">
+        </p>
+        <p>Id: {{user._id}}</p>
+        <p>Password:
+            <input type="text" ng-model="user.password">
+        </p>
+        <p>Company code:
+            <input type="text" ng-model="user._company_code">
+        </p>
+        <p>Email:
+            <input type="text" ng-model="user.email">
+        </p>
+        <p>First name:
+            <input type="text" ng-model="user.firstname">
+        </p>
+        <p>Last name:
+            <input type="text" ng-model="user.lastname">
+        </p>
+        <p>Validated:
+            <input json-text type="text" ng-model="user.validated">
+        </p>
+        <p>Profile:
+            <br>
+            <textarea ng-model="user.profile"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/users">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="files.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="file in files | filter: search">
+                    <a href="#files/{{file._id}}">{{file.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New file
+            <input type="text" ng-model="newFile">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="fileDetails.html">
+        <h1>{{file.file.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="file.file.name">
+        </p>
+        <p>Id: {{file.file._id}}</p>
+        <p>Type:
+            <input type="text" ng-model="file.file.type">
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/files">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="userprofiles.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="userprofile in userprofiles | filter: search">
+                    <a href="#userprofiles/{{userprofile._id}}">{{userprofile.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New user profile
+            <input type="text" ng-model="newUserProfile">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="userprofileDetails.html">
+        <h1>{{userprofile.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="userprofile.name">
+        </p>
+        <p>Id: {{userprofile._id}}</p>
+        <p>Type:
+            <select ng-model="userprofile.type">
+                <option value="private">Private</option>
+                <option value="public">Public</option>
+            </select>
+        </p>
+        <p>Client id:
+            <input type="text" ng-model="userprofile.client_id">
+        </p>
+        <p>Profile:
+            <br>
+            <textarea ng-model="userprofile.profile"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/userprofiles">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="companies.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="company in companies | filter: search">
+                    <a href="#companies/{{company._id}}">{{company.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New company
+            <input type="text" ng-model="newCompany">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="companyDetails.html">
+        <h1>{{company.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="company.name">
+        </p>
+        <p>Id: {{company._id}}</p>
+        <p>Code: {{company._company_code}}</p>
+        <p>Applications:
+            <br>
+            <textarea json-text ng-model="company.applications" rows="10" cols="60"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/companies">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="workflows.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="workflow in workflows | filter: search">
+                    <a href="#workflows/{{workflow._id}}">{{workflow.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New workflow
+            <input type="text" ng-model="newWorkflow">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="workflowDetails.html">
+        <h1>{{workflow.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="workflow.name">
+        </p>
+        <p>Id: {{workflow._id}}</p>
+        <p>Description:
+            <br>
+            <textarea ng-model="workflow.description" rows="6" cols="60"></textarea>
+        </p>
+        <p>Icon:
+            <input type="text" ng-model="workflow.icon">
+        </p>
+        <p>Startup form id:
+            <input type="text" ng-model="workflow.startup_form_id">
+        </p>
+        <p>Application id:
+            <input type="text" ng-model="workflow.application_id">
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/workflows">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="applications.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="application in applications | filter: search">
+                    <a href="#applications/{{application._id}}">{{application.name}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New application
+            <input type="text" ng-model="newApplication">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="applicationDetails.html">
+        <h1>{{application.name}}</h1>
+        <p>Name:
+            <input type="text" ng-model="application.name">
+        </p>
+        <p>Id: {{application._id}}</p>
+        <p>Description:
+            <br>
+            <textarea ng-model="application.description" rows="6" cols="60"></textarea>
+        </p>
+        <p>Icon:
+            <input type="text" ng-model="application.icon">
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin/#/applications">Cancel</a>
+    </script>
+    <md-toolbar class="md-hue-2">
+        <div class="md-toolbar-tools" ng-controller="AppCtrl">
+            <md-button class="md-icon-button" aria-label="Administration" ng-click="toggleLeft()">
+                <md-icon md-svg-icon="/icons/menu.svg"></md-icon>
+            </md-button>
+            <h2>
         <span>Administration Tool</span>
       </h2>
-      <span flex></span>
-    </div>
-  </md-toolbar>
-  <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
-    <md-toolbar class="md-theme-indigo">
-      <h1 class="md-toolbar-tools">Choose a page</h1>
+            <span flex></span>
+        </div>
     </md-toolbar>
-    <md-content layout-padding ng-controller="LeftCtrl" layout="column">
-      <md-button ng-href="#about" class="md-primary" style="text-align: left" ng-click="close()">About</md-button>
-      <md-button ng-href="#datamodels" class="md-primary" style="text-align: left" ng-click="close()">Data Models</md-button>
-      <md-button ng-href="#datamodelrelations" class="md-primary" style="text-align: left" ng-click="close()">Data Model Relations</md-button>
-      <md-button ng-href="#forms" class="md-primary" style="text-align: left" ng-click="close()">Forms</md-button>
-      <md-button ng-href="#values" class="md-primary" style="text-align: left" ng-click="close()">Values</md-button>
-      <md-button ng-href="#files" class="md-primary" style="text-align: left" ng-click="close()">Files</md-button>
-      <md-button ng-href="#workflows" class="md-primary" style="text-align: left" ng-click="close()">Workflows</md-button>
-      <md-button ng-href="#applications" class="md-primary" style="text-align: left" ng-click="close()">Applications</md-button>
-      <md-button ng-href="#users" class="md-primary" style="text-align: left" ng-click="close()">Users</md-button>
-      <md-button ng-href="#userprofiles" class="md-primary" style="text-align: left" ng-click="close()">User Profiles</md-button>
-      <md-button ng-href="#companies" class="md-primary" style="text-align: left" ng-click="close()">Companies</md-button>
-      <md-button ng-href="/" class="md-primary" style="text-align: left" ng-click="close()">Player</md-button>
+    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
+        <md-toolbar class="md-theme-indigo">
+            <h1 class="md-toolbar-tools">Choose a page</h1>
+        </md-toolbar>
+        <md-content layout-padding ng-controller="LeftCtrl" layout="column">
+            <md-button ng-href="#about" class="md-primary" style="text-align: left" ng-click="close()">About</md-button>
+            <md-button ng-href="#datamodels" class="md-primary" style="text-align: left" ng-click="close()">Data Models</md-button>
+            <md-button ng-href="#datamodelrelations" class="md-primary" style="text-align: left" ng-click="close()">Data Model Relations</md-button>
+            <md-button ng-href="#forms" class="md-primary" style="text-align: left" ng-click="close()">Forms</md-button>
+            <md-button ng-href="#values" class="md-primary" style="text-align: left" ng-click="close()">Values</md-button>
+            <md-button ng-href="#files" class="md-primary" style="text-align: left" ng-click="close()">Files</md-button>
+            <md-button ng-href="#workflows" class="md-primary" style="text-align: left" ng-click="close()">Workflows</md-button>
+            <md-button ng-href="#applications" class="md-primary" style="text-align: left" ng-click="close()">Applications</md-button>
+            <md-button ng-href="#users" class="md-primary" style="text-align: left" ng-click="close()">Users</md-button>
+            <md-button ng-href="#userprofiles" class="md-primary" style="text-align: left" ng-click="close()">User Profiles</md-button>
+            <md-button ng-href="#companies" class="md-primary" style="text-align: left" ng-click="close()">Companies</md-button>
+            <md-button ng-href="/" class="md-primary" style="text-align: left" ng-click="close()">Player</md-button>
+        </md-content>
+    </md-sidenav>
+    <md-content flex layout-padding ng-view>
     </md-content>
-  </md-sidenav>
-  <md-content flex layout-padding ng-view>
-  </md-content>
 </body>
 
 </html>
