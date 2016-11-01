@@ -17,6 +17,7 @@ var s3 = new AWS.S3({
 var mongoose = require('mongoose');
 var Metadata = require('../models/Metadata.js');
 var Session = require('../models/Session');
+
 router.get('/', function(req, res, next) {
   var pageOptions = {
     skip: parseInt(req.query.skip) || 0,

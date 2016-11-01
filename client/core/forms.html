@@ -131,6 +131,7 @@
                 <div ng-switch-when="address">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
+                            <div id="map"></div>
                             <md-input-container class="md-block" flex-gt-xs>
                                 <p class="subtitle">{{field.address_line1}}</p>
                                 <p class="md-body-1">{{data[field.address_line1]}}</p>
