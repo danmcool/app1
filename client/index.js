@@ -27,58 +27,20 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             getSessionData: getSessionData,
         }
     })
-    /*	.directive('dynamic', function ($compile) {
-    		return {
-    			replace: true,
-    			link: function (scope, ele, attrs) {
-    			  scope.$watch(attrs.dynamic, function(html) {
-    				if (!html) {
-    					return;
-    				}
-    				ele.html((typeof(html) === 'string') ? html : html.data);
-    				$compile(ele.contents())(scope);
-    			  });
-    			}
-    		};
-    	})
-    	.factory('TokenService', function TokenService(){
-    		var token = null;
-      	    var setToken = function setToken(someToken) {
-    		    token = someToken;
-    		}
-    		var getToken = function getToken() {
-    		  return token;
-    		}
-    		var request = function request(config) {
-    			if (token) {
-    				// jqXHR.setRequestHeader('Authorization','Token token="' + app.user.api_key.access_token + '"');
-    				config.headers['token'] = token;
-    			}
-    			return config;
-    		}
-    		return {
-    			setToken: setToken,
-    			getToken: getToken,
-    			request: request
-    		}
-    	})
-    	.config(['$httpProvider', function($httpProvider) {
-    		$httpProvider.interceptors.push('TokenService');
-    	}])*/
     .factory('Applications', ['$resource', function ($resource) {
         return $resource('/api/application/:id', null, {
             'update': {
                 method: 'PUT'
             }
         });
-  }])
+    }])
     .factory('Workflows', ['$resource', function ($resource) {
         return $resource('/api/workflow/:id', null, {
             'update': {
                 method: 'PUT'
             }
         });
-  }])
+    }])
     .factory('Forms', ['$resource', function ($resource) {
         return $resource('/api/form/:id', null, {
             'update': {
@@ -152,12 +114,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
 	}])
-    /*
-        $scope.sessionData = SessionService.getSessionData();
-        $scope.$watch(function () { return SessionService.getSessionData(); }, function (newValue, oldValue) {
-            if (newValue !== oldValue) $scope.sessionData = newValue;
-        });
-      })*/
     .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $mdDialog, $mdTheming, UserStatus, Logout, SessionService, Applications, $location) {
         $scope.sessionData = SessionService.getSessionData();
         $scope.$watch(function () {
@@ -220,11 +176,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }
     })
 
-//---------------
-// Routes
-//---------------
-
-.config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/form/:id/:entry_id', {
             templateUrl: 'core/forms.html',
