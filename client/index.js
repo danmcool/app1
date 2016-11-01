@@ -14,6 +14,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     })
     .factory('SessionService', function SessionService() {
         var sessionData = {
+            title: 'Home',
             dynamicTheme: 'default'
         };
         var setSessionData = function setSessionData(newData) {
