@@ -46,7 +46,7 @@ Metadata.UserProfile = mongoose.model('UserProfile', UserProfileSchema);
 var CompanySchema = new Schema({
     name: String,
     applications: [Schema.Types.ObjectId],
-    properties: [Schema.Types.ObjectId],
+    properties: String,
     _updated_at: {
         type: Date,
         default: Date.now

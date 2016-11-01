@@ -1,7 +1,14 @@
-<md-content class="md-padding" layout-xs="row" layout="row">
-    <section ng-repeat="application in sessionData.applications" flex layout-align="center center" style="text-align: center;" layout-wrap>
-        <md-button class="md-fab md-primary" aria-label="{{application.name}}" ng-click="open(application._id)">
-            <md-icon>{{application.icon}}</md-icon>
-        </md-button>
-    </section>
+<md-content class="md-padding" layout-xs="column" layout="column">
+	<md-card ng-repeat="application in sessionData.applications">
+		<md-card-title>
+			<md-card-title-text>
+				<span class="md-headline">{{application.name}}</span>
+			</md-card-title-text>
+			<md-card-actions layout="row" layout-align="end center">
+			   <md-button class="md-fab md-primary" aria-label="Open" ng-click="open(application._id)">
+					<md-icon>{{application.icon}}</md-icon>
+			   </md-button>
+			</md-card-actions>
+		</md-card-title>
+</md-card>
 </md-content>
