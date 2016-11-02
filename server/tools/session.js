@@ -1,15 +1,15 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var rand = function () {
-    return Math.random().toString(36).substr(2);
-};
-var tokenGenerator = function () {
-    return rand() + rand();
-};
 var Session = {
-    users: {}, count: 0
+    users: {},
+    count: 0
 };
-Session.login = function (user) {
+Session.login = function(user) {
+    var rand = function() {
+        return Math.random().toString(36).substr(2);
+    };
+    var tokenGenerator = function() {
+        return rand() + rand();
+    };
     var token = tokenGenerator();
     while (Session.users[token]) {
         token = tokenGenerator();
@@ -18,11 +18,11 @@ Session.login = function (user) {
     Session.count++;
     return token;
 };
-Session.isActive = function (token) {
+Session.isActive = function(token) {
     if (!Session.users[token]) return false;
     return true;
 };
-Session.logout = function (token) {
+Session.logout = function(token) {
     delete Session.users[token];
     Session.count--;
 };

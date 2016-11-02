@@ -101,8 +101,8 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    document.getElementById('preview').src = url;
-                    document.getElementById('avatar-url').value = url;
+                    //document.getElementById('preview').src = url;
+                    //document.getElementById('avatar-url').value = url;
                 } else {
                     alert('Could not upload file.');
                 }

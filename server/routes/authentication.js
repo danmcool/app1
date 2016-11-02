@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var email = require('mailer');
 
 var Metadata = require('../models/Metadata.js');
-var Session = require('../models/Session.js');
+var Session = require('../tools/session.js');
+var Email = require('../tools/email.js');
 var Constants = Metadata.Constants;
 var Company = Metadata.Company;
 var User = Metadata.User;
@@ -20,14 +20,14 @@ router.post('/register', function (req, res) {
             name: req.body.company_name,
             _company_code: req.body.code
         };
-        Company.create(company, function (err, object) {
+        Company.create(company, function (err, newCompany) {
             if (err) return next(err);
             var userprofile = {
                 name: "Administrator",
                 type: Constants.UserProfileAdministrator,
                 _company_code: req.body.code
             };
-            UserProfile.create(userprofile, function (err, object) {
+            UserProfile.create(userprofile, function (err, newUserprofile) {
                 if (err) return next(err);
                 var user = {
                     user: req.body.user.toLowerCase(),
@@ -35,33 +35,15 @@ router.post('/register', function (req, res) {
                     email: req.body.email,
                     firstname: req.body.firstname,
                     lastname: req.body.lastname,
-                    profile_id: object._id,
+                    profile: newUserprofile._id,
+                    company: newCompany._id,
                     _company_code: req.body.code
                 };
-                User.create(user, function (err, object) {
+                User.create(user, function (err, newUser) {
                     if (err) return next(err);
                     res.status(200).send(
                         "Registration: please check your email to validate the registration!");
-                    email.send({
-                        host: 'smtp.gmail.com',
-                        port: '465',
-                        ssl: true,
-                        domain: 'gmail.com',
-                        to: object.email,
-                        from: 'app1.noreply@gmail.com',
-                        subject: 'Registration validation for App1',
-                        text: 'Automatic message from App1',
-                        html: '<span>Dear customer, thank-you for registering with our website, your initial password is: ' +
-                            Constants.InitialPassword +
-                            '</span><br><span>Please validate your email by clicking on the following link</span><br><a href="http://' +
-                            Constants.WebAddress + '/authentication/validate?user=' + object.user + '&code=' +
-                            object._company_code + '">Validate registration</a>',
-                        authentication: 'login',
-                        username: 'app1.noreply@gmail.com',
-                        password: 'Admin;app1'
-                    }, function (err, result) {
-                        //if (err) return next(err);
-                    });
+                    Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                 });
             });
         });
