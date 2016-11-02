@@ -20,7 +20,7 @@ var authentication = require('./routes/authentication');
 var app = express();
 
 // user schema/model
-var Session = require('./models/Session');
+var Session = require('./tools/session');
 
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Metadata = require('../models/Metadata.js');
-var Session = require('../models/Session');
+var Session = require('../tools/session');
 var DataModel = Metadata.DataModel;
 router.get('/:datamodelid/', function(req, res, next) {
   var pageOptions = {

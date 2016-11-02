@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Metadata = require('../models/Metadata.js');
 var Session = require('../tools/session.js');
 var Email = require('../tools/email.js');
+var ApplicationLiveCycle = require('../tools/application_live_cycle.js');
 var Constants = Metadata.Constants;
 var Company = Metadata.Company;
 var User = Metadata.User;
@@ -69,7 +70,7 @@ router.get('/validate', function (req, res) {
             _company_code: Constants.ProductionCompany
         }, function (err, appObjects) {
             for (var i = 0; i < appObjects.length; i++) {
-                Metadata.copyApplication(appObjects[i], _company_code, objectList);
+                ApplicationLiveCycle.copyApplication(appObjects[i], _company_code, objectList);
             };
         });
     });
@@ -104,7 +105,7 @@ router.post('/login', function (req, res, next) {
                     jsonUser.company = company.name;
                     var token = Session.login(jsonUser);
                     res.cookie('app1_token', token, {
-                        maxAge: 6000000,
+                        maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     });
                     res.status(200).json({
@@ -124,7 +125,7 @@ router.get('/status', function (req, res) {
         err: "Invalid session!"
     });
     res.cookie('app1_token', token, {
-        maxAge: 6000000,
+        maxAge: Constants.MaxSessionTimeout,
         httpOnly: true
     });
     res.status(200).json({

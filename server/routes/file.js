@@ -1,6 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var Session = require('../models/Session');
+var mongoose = require('mongoose');
+
+var Metadata = require('../models/Metadata.js');
+var Session = require('../tools/session');
+
 const S3_BUCKET = 'app1data';
 const REGION = 'eu-central-1';
 var AWS = require('aws-sdk');
@@ -14,9 +18,6 @@ var s3 = new AWS.S3({
     Bucket: S3_BUCKET
   }
 });
-var mongoose = require('mongoose');
-var Metadata = require('../models/Metadata.js');
-var Session = require('../models/Session');
 
 router.get('/', function(req, res, next) {
   var pageOptions = {

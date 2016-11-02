@@ -10,7 +10,8 @@ var Metadata = {
         InitialPassword: "Start123",
         UserProfileAdministrator: "administrator",
         UserProfilePrivate: "private",
-        UserProfilePublic: "public"
+        UserProfilePublic: "public",
+        MaxSessionTimeout: 604800000
     }
 };
 var UserSchema = new Schema({
