@@ -83,7 +83,7 @@ router.post('/login', function(req, res, next) {
         _company_code: req.body._company_code,
         validated: true
     }, 'email firstname lastname profile_id user _company_code')
-        .populate('company', 'profile').exec(
+        .populate('company profile').exec(
             function(err, user) {
                 if (err) return res.status(401).json({
                     err: info
@@ -98,7 +98,7 @@ router.post('/login', function(req, res, next) {
                 });
                 res.status(200).json({
                     token: token,
-                    user: token
+                    user: user
                 });
             });
 });

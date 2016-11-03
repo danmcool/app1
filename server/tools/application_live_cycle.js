@@ -156,22 +156,22 @@ ApplicationLiveCycle.copyForm = function(currentFormId, _company_code, objectLis
         newFormObject.save().then(function() {
             //console.log("f"+newFormObject._id)
             replaceFormPredecessor(newWorkflowId, parentNewFormId, currentFormId, objectList["f_" + currentFormId]);
-            Metadata.copyDataModel(newFormObject.datamodel_id, _company_code, objectList, newFormObject._id);
+            ApplicationLiveCycle.copyDataModel(newFormObject.datamodel_id, _company_code, objectList, newFormObject._id);
             if (newFormObject.display) {
                 for (var j = 0; j < newFormObject.display.length; j++) {
                     if (newFormObject.display[j].listofvalues) {
-                        Metadata.copyValues(newFormObject.display[j].listofvalues, _company_code, objectList, newFormObject._id);
+                        ApplicationLiveCycle.copyValues(newFormObject.display[j].listofvalues, _company_code, objectList, newFormObject._id);
                     }
                 }
             }
             if (newFormObject.actions) {
                 for (var i = 0; i < newFormObject.actions.length; i++) {
-                    Metadata.copyForm(newFormObject.actions[i].next_form_id, _company_code, objectList, null, newFormObject._id);
+                    ApplicationLiveCycle.copyForm(newFormObject.actions[i].next_form_id, _company_code, objectList, null, newFormObject._id);
                 }
             }
             if (newFormObject.item_actions) {
                 for (var k = 0; k < newFormObject.item_actions.length; k++) {
-                    Metadata.copyForm(newFormObject.item_actions[k].next_form_id, _company_code, objectList, null, newFormObject._id);
+                    ApplicationLiveCycle.copyForm(newFormObject.item_actions[k].next_form_id, _company_code, objectList, null, newFormObject._id);
                 }
             }
         });
@@ -187,7 +187,7 @@ ApplicationLiveCycle.copyWorkflow = function(workflowObject, _company_code, appl
     objectList["w_" + workflowObject._id] = newWorkflowObject._id;
     newWorkflowObject.save().then(function() {
         //console.log("w"+newWorkflowObject._id)
-        Metadata.copyForm(newWorkflowObject.startup_form_id, _company_code, objectList, newWorkflowObject._id, null);
+        ApplicationLiveCycle.copyForm(newWorkflowObject.startup_form_id, _company_code, objectList, newWorkflowObject._id, null);
     });
 };
 ApplicationLiveCycle.copyApplication = function(appObject, _company_code, objectList) {
@@ -202,7 +202,7 @@ ApplicationLiveCycle.copyApplication = function(appObject, _company_code, object
         application_id: appObject._id
     }, function(err, workflowObjects) {
         for (var j = 0; j < workflowObjects.length; j++) {
-            Metadata.copyWorkflow(workflowObjects[j], _company_code, newAppObject._id, objectList);
+            ApplicationLiveCycle.copyWorkflow(workflowObjects[j], _company_code, newAppObject._id, objectList);
         }
     });
     newAppObject.save();

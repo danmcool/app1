@@ -182,7 +182,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         $scope.sessionData = {};
         UserStatus.get().$promise.then(function(result) {
             $scope.sessionData.userData = result.user;
-            $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.user.company;
+            $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.company.name;
             $scope.sessionData.userData.name = result.user.firstname + " " + result.user.lastname;
             $scope.sessionData.dynamicTheme = 'user1';
             Applications.query().$promise.then(function(result) {

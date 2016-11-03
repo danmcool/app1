@@ -7,7 +7,7 @@ var Constants = require('../tools/constants.js');
 var filterCompanyCode = function(req, filter) {
   var company_code = Session.users[req.cookies.app1_token]._company_code;
   if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
-  if (company_code != constants.AdminCompany) {
+  if (company_code != Constants.AdminCompany) {
     filter._company_code = {
       "$eq": company_code
     };
