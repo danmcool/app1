@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 
 var ApplicationLiveCycle = {};
 var Metadata = require('../models/Metadata.js');
+var Constants = require('../tools/constants.js');
+
 var replaceFormDataModel = function(formId, oldDataModel, newDataModel) {
     //console.log(formId + "-"+oldDataModel+"-"+newDataModel);
     if (formId) {
@@ -25,7 +27,7 @@ ApplicationLiveCycle.copyDataModel = function(currentDataModelId, _company_code,
         return;
     }
     Metadata.DataModel.findOne({
-        _company_code: Metadata.Constants.ProductionCompany,
+        _company_code: Constants.ProductionCompany,
         _id: currentDataModelId
     }, function(err, dataModelObject) {
         if (!dataModelObject) return;
@@ -74,7 +76,7 @@ ApplicationLiveCycle.copyValues = function(currentValueId, _company_code, object
         return;
     }
     Metadata.Value.findOne({
-        _company_code: Metadata.Constants.ProductionCompany,
+        _company_code: Constants.ProductionCompany,
         _id: currentValueId
     }, function(err, valueObject) {
         if (!valueObject) return;
@@ -132,13 +134,13 @@ var replaceFormPredecessor = function(workflowId, parentFormId, oldFormId, newFo
     }
 };
 ApplicationLiveCycle.copyForm = function(currentFormId, _company_code, objectList, newWorkflowId, parentNewFormId) {
-    if (currentFormId == Metadata.Constants.ApplicationHome) return;
+    if (currentFormId == Constants.ApplicationHome) return;
     if (objectList["f_" + currentFormId]) {
         replaceFormPredecessor(newWorkflowId, parentNewFormId, currentFormId, objectList["f_" + currentFormId]);
         return;
     }
     Metadata.Form.findOne({
-        _company_code: Metadata.Constants.ProductionCompany,
+        _company_code: Constants.ProductionCompany,
         _id: currentFormId
     }, function(err, formObject) {
         if (!formObject) return;
@@ -196,7 +198,7 @@ ApplicationLiveCycle.copyApplication = function(appObject, _company_code, object
     newAppObject._company_code = _company_code;
     objectList["a_" + appObject._id] = newAppObject._id;
     Metadata.Workflow.find({
-        _company_code: Metadata.Constants.ProductionCompany,
+        _company_code: Constants.ProductionCompany,
         application_id: appObject._id
     }, function(err, workflowObjects) {
         for (var j = 0; j < workflowObjects.length; j++) {

@@ -1,18 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Metadata = {
-    ObjectModels: [],
-    Constants: {
-        WebAddress: "ec2-52-57-61-58.eu-central-1.compute.amazonaws.com",
-        AdminCompany: "00000",
-        ProductionCompany: "00000",
-        ApplicationHome: "home",
-        InitialPassword: "Start123",
-        UserProfileAdministrator: "administrator",
-        UserProfilePrivate: "private",
-        UserProfilePublic: "public",
-        MaxSessionTimeout: 604800000
-    }
+    ObjectModels: []
 };
 var UserSchema = new Schema({
     user: String,

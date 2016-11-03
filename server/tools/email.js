@@ -1,4 +1,6 @@
 var email = require('mailer');
+var Constants = require('../tools/constants.js');
+
 var Email = {};
 Email.sendValidation = function(email_address, user, company_code) {
     email.send({

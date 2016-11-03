@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Metadata = require('../models/Metadata.js');
 var Session = require('../tools/session');
-var constants = Metadata.Constants;
+var Constants = require('../tools/constants.js');
 var filterCompanyCode = function(req, filter) {
   var company_code = Session.users[req.cookies.app1_token]._company_code;
   if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
