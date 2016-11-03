@@ -1,15 +1,15 @@
 <md-content class="md-padding" layout-xs="column" layout="column">
-	<md-card ng-repeat="workflow in workflows">
-		<md-card-title>
-			<md-card-title-text>
-				<span class="md-headline">{{workflow.name}}</span>
-				<span class="md-body-1">{{workflow.description}}</span>
-			</md-card-title-text>
-			<md-card-actions layout="row" layout-align="end center">
-			   <md-button class="md-fab md-primary" aria-label="Open" ng-click="open(workflow.startup_form_id)">
-					<md-icon>{{workflow.icon}}</md-icon>
-			   </md-button>
-			</md-card-actions>
-		</md-card-title>
-</md-card>
+    <md-card ng-repeat="workflow in workflows">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{workflow.name}}</span>
+                <span class="md-body-1">{{workflow.description}}</span>
+            </md-card-title-text>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-fab md-primary" aria-label="Open" ng-click="open(workflow.startup_form_id)">
+                    <md-icon>{{workflow.icon}}</md-icon>
+                </md-button>
+            </md-card-actions>
+        </md-card-title>
+    </md-card>
 </md-content>

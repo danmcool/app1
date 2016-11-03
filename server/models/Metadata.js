@@ -3,31 +3,7 @@ var Schema = mongoose.Schema;
 var Metadata = {
     ObjectModels: []
 };
-var UserSchema = new Schema({
-    user: String,
-    password: String,
-    email: String,
-    firstname: String,
-    lastname: String,
-    validated: {
-        type: Boolean,
-        default: false
-    },
-    profile: {
-        type: Schema.Types.ObjectId,
-        ref: 'UserProfile'
-    },
-    company: {
-        type: Schema.Types.ObjectId,
-        ref: 'Company'
-    },
-    _updated_at: {
-        type: Date,
-        default: Date.now
-    },
-    _company_code: String
-});
-Metadata.User = mongoose.model('User', UserSchema);
+
 var UserProfileSchema = new Schema({
     name: String,
     type: String, // administrator/private/public
@@ -51,6 +27,33 @@ var CompanySchema = new Schema({
     _company_code: String
 });
 Metadata.Company = mongoose.model('Company', CompanySchema);
+var UserSchema = new Schema({
+    user: String,
+    password: String,
+    email: String,
+    firstname: String,
+    lastname: String,
+    properties: Schema.Types.Mixed,
+    validated: {
+        type: Boolean,
+        default: false
+    },
+    profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserProfile'
+    },
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company'
+    },
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.User = mongoose.model('User', UserSchema);
+
 var DataModelSchema = new Schema({
     name: String,
     datamodel: Schema.Types.Mixed,
@@ -62,18 +65,21 @@ var DataModelSchema = new Schema({
     _company_code: String
 });
 Metadata.DataModel = mongoose.model('DataModel', DataModelSchema);
-var DataModelRelationSchema = new Schema({
+
+var FileSchema = new Schema({
     name: String,
-    datamodel1: Schema.Types.ObjectId,
-    datamodel2: Schema.Types.ObjectId,
-    type: String, // 1-1, 1-n
+    type: String, // file type (pdf, jpeg, etc.)
+    storage: String, // S3 or disk
+    path: String, // file path
+    file_id: String, // name on disk
     _updated_at: {
         type: Date,
         default: Date.now
     },
     _company_code: String
 });
-Metadata.DataModelRelation = mongoose.model('DataModelRelation', DataModelRelationSchema);
+Metadata.File = mongoose.model('File', FileSchema);
+
 var FormSchema = new Schema({
     name: String,
     type: String, // List or Form
@@ -92,8 +98,8 @@ var FormSchema = new Schema({
 Metadata.Form = mongoose.model('Form', FormSchema);
 var ValueSchema = new Schema({
     name: String,
-    type: String, // Flat or Hierarchy
-    values: [String],
+    type: String, // flat, search
+    values: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now
@@ -101,19 +107,6 @@ var ValueSchema = new Schema({
     _company_code: String
 });
 Metadata.Value = mongoose.model('Value', ValueSchema);
-var FileSchema = new Schema({
-    name: String,
-    type: String, // file type (pdf, jpeg, etc.)
-    storage: String, // S3 or disk
-    path: String, // file path
-    file_id: String, // name on disk
-    _updated_at: {
-        type: Date,
-        default: Date.now
-    },
-    _company_code: String
-});
-Metadata.File = mongoose.model('File', FileSchema);
 var WorkflowSchema = new Schema({
     name: String,
     description: String,
@@ -138,4 +131,5 @@ var ApplicationSchema = new Schema({
     _company_code: String
 });
 Metadata.Application = mongoose.model('Application', ApplicationSchema);
+
 module.exports = Metadata;

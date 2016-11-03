@@ -36,6 +36,10 @@ router.post('/register', function(req, res) {
                     email: req.body.email,
                     firstname: req.body.firstname,
                     lastname: req.body.lastname,
+                    properties: {
+                        theme: "default",
+                        language: "en"
+                    },
                     profile: newUserprofile._id,
                     company: newCompany._id,
                     _company_code: req.body.code
@@ -82,7 +86,7 @@ router.post('/login', function(req, res, next) {
         password: req.body.password,
         _company_code: req.body._company_code,
         validated: true
-    }, 'email firstname lastname profile_id user _company_code')
+    }, 'email firstname lastname user _company_code properties company profile')
         .populate('company profile').exec(
             function(err, user) {
                 if (err) return res.status(401).json({

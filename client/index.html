@@ -21,6 +21,7 @@
     <script src="index.js"></script>
     <script src="core/login.js"></script>
     <script src="core/register.js"></script>
+    <script src="core/user.js"></script>
     <script src="core/applications.js"></script>
     <script src="core/workflows.js"></script>
     <script src="core/forms.js"></script>
@@ -64,9 +65,9 @@
             </md-toolbar>
             <md-button ng-if="!sessionData.userData" ng-href="#login" class="md-primary" style="text-align: left" ng-click="closeRight()">Login</md-button>
             <md-button ng-if="!sessionData.userData" ng-href="#register" class="md-primary" style="text-align: left" ng-click="closeRight()">Register</md-button>
-            <md-button ng-if="sessionData.userData && sessionData.userData.isAdmin" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">Administration</md-button>
-            <md-button ng-if="sessionData.userData && sessionData.userData.isPrivate" ng-href="/user" class="md-primary" style="text-align: left" ng-click="closeRight()">User Profile</md-button>
-            <md-button ng-if="sessionData.userData && sessionData.userData.isPublic" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">Information</md-button>
+            <md-button ng-if="sessionData.userData && sessionData.userData.profile.type=='administrator'" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">Administration</md-button>
+            <md-button ng-if="sessionData.userData && sessionData.userData.profile.type!='public'" ng-href="#user" class="md-primary" style="text-align: left" ng-click="closeRight()">User Settings</md-button>
+            <md-button ng-if="sessionData.userData && sessionData.userData.profile.type=='public'" ng-href="" class="md-primary" style="text-align: left" ng-click="closeRight()">Information</md-button>
             <md-button ng-if="sessionData.userData" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">Logout</md-button>
         </md-content>
     </md-sidenav>

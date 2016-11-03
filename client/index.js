@@ -96,9 +96,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             });
         }
     ])
-    .factory('UserProfile', ['$resource',
+    .factory('User', ['$resource',
         function($resource) {
-            return $resource('/api/userprofile/:id', null, {
+            return $resource('/api/user/:id', null, {
                 'update': {
                     method: 'PUT'
                 }
@@ -182,7 +182,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         $scope.sessionData = {};
         UserStatus.get().$promise.then(function(result) {
             $scope.sessionData.userData = result.user;
-            $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.company.name;
+            $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.user.company.name;
             $scope.sessionData.userData.name = result.user.firstname + " " + result.user.lastname;
             $scope.sessionData.dynamicTheme = 'user1';
             Applications.query().$promise.then(function(result) {
@@ -252,13 +252,18 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 templateUrl: 'core/login.html',
                 controller: 'LoginCtrl'
             })
+            .when('/user', {
+                templateUrl: 'core/user.html',
+                controller: 'UserCtrl'
+            })
             .when('/applications', {
                 templateUrl: 'core/applications.html',
                 controller: 'ApplicationsCtrl'
             })
             .otherwise({
                 redirectTo: '/',
-                templateUrl: 'core/welcome.html'
+                templateUrl: 'core/login.html',
+                controller: 'LoginCtrl'
             });
     }
 ]);

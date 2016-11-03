@@ -290,7 +290,7 @@ router.get('/user/:id', function(req, res, next) {
   });
 });
 router.put('/user/:id', function(req, res, next) {
-  req.body.user = req.body.user.toLowerCase();
+  if (req.body.user) req.body.user = req.body.user.toLowerCase();
   User.findOneAndUpdate(filterCompanyCode(req, {
     _id: req.body._id
   }), req.body, function(err, object) {
