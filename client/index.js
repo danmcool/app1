@@ -191,7 +191,15 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 $scope.sessionData.applications = result;
                 SessionService.setSessionData($scope.sessionData);
                 $location.url('/applications');
+            }).catch(function(error) {
+                // shows an error loading applications
             });
+        }).catch(function(error) {
+            $scope.sessionData = {
+                dynamicTheme: 'default'
+            };
+            SessionService.setSessionData($scope.sessionData);
+            $location.url('/login');
         });
         $scope.closeLeft = function() {
             $mdSidenav('left').close();

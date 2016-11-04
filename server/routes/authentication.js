@@ -16,7 +16,9 @@ router.post('/register', function(req, res) {
     Company.findOne({
         _company_code: req.body.code
     }, function(err, object) {
-        if (object) return res.status(400).send("Registration: company code is already used, please use another code!");
+        if (object) return res.status(400).json({
+            "msg": "Registration: company code is already used, please use another code!"
+        });
         var company = {
             name: req.body.company_name,
             _company_code: req.body.code
@@ -46,8 +48,9 @@ router.post('/register', function(req, res) {
                 };
                 User.create(user, function(err, newUser) {
                     if (err) return next(err);
-                    res.status(200).send(
-                        "Registration: please check your email to validate the registration!");
+                    res.status(200).json({
+                        "msg": "Registration: please check your email to validate the registration!"
+                    });
                     Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                 });
             });
@@ -67,8 +70,12 @@ router.get('/validate', function(req, res) {
         }
     }, function(err, object) {
         if (err) return next(err);
-        if (!object) return res.status(401).send("Registration: user has been already validated!");
-        res.status(200).send("Registration: user has been validated, please log on using initial password!");
+        if (!object) return res.status(401).json({
+            "msg": "Registration: user has been already validated!"
+        });
+        res.status(200).json({
+            "msg": "Registration: user has been validated, please log on using initial password!"
+        });
         var objectList = {};
         Application.find({
             _company_code: Constants.ProductionCompany
@@ -115,14 +122,29 @@ router.get('/status', function(req, res) {
     if (!Session.isActive(token)) return res.status(401).json({
         err: "Invalid session!"
     });
-    res.cookie('app1_token', token, {
-        maxAge: Constants.MaxSessionTimeout,
-        httpOnly: true
-    });
-    res.status(200).json({
-        token: token,
-        user: Session.users[token]
-    });
+    User.findOne({
+        user: Session.users[token].user,
+        _company_code: Session.users[token]._company_code,
+        validated: true
+    }, 'email firstname lastname user _company_code properties company profile')
+        .populate('company profile').exec(
+            function(err, user) {
+                if (err) return res.status(401).json({
+                    err: info
+                });
+                if (!user) return res.status(401).json({
+                    err: "Invalid user name or password!"
+                });
+                Session.users[token] = user;
+                res.cookie('app1_token', token, {
+                    maxAge: Constants.MaxSessionTimeout,
+                    httpOnly: true
+                });
+                res.status(200).json({
+                    token: token,
+                    user: user
+                });
+            });
 });
 
 router.get('/logout', function(req, res) {

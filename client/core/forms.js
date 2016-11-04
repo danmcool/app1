@@ -71,8 +71,8 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             }
         }
         if (form.type == "list") {
-            var keysOfParameters = Object.keys($routeParams);
             if (!$scope.form.search_criteria) form.search_criteria = "";
+            var keysOfParameters = Object.keys($routeParams);
             for (i = 0, l = keysOfParameters.length; i < l; i++) {
                 $scope.form.search_criteria = form.search_criteria.replace('@' + keysOfParameters[i], $routeParams[
                     keysOfParameters[i]]);

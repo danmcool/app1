@@ -7,6 +7,6 @@ var Constants = {
     UserProfileAdministrator: "administrator",
     UserProfilePrivate: "private",
     UserProfilePublic: "public",
-    MaxSessionTimeout: 604800000
+    MaxSessionTimeout: 1209600000
 }
 module.exports = Constants;
