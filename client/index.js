@@ -22,6 +22,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         var getSessionData = function getSessionData() {
             return sessionData;
         }
+        var translate = function translate(value) {
+            return value[sessionData.userData.properties.language];
+        }
         return {
             setSessionData: setSessionData,
             getSessionData: getSessionData
