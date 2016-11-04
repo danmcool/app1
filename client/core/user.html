@@ -15,6 +15,13 @@
                     <md-option value="user2">User2</md-option>
                 </md-select>
             </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Theme</label>
+                <md-select name="language" ng-model="sessionData.userData.properties.language" ng-disabled="false" ng-required="true">
+                    <md-option value="en">English</md-option>
+                    <md-option value="fr">Francais</md-option>
+                </md-select>
+            </md-input-container>
             <md-button flex-gt-xs ng-disabled="userForm.$invalid" ng-click="saveUserData()" class="md-primary">Save</md-button>
         </form>
     </div>
