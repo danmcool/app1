@@ -14,7 +14,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     })
     .factory('SessionService', function SessionService() {
         var sessionData = {
-            title: 'Home',
             dynamicTheme: 'default'
         };
         var setSessionData = function setSessionData(newData) {
@@ -184,7 +183,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             $scope.sessionData.userData = result.user;
             $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.user.company.name;
             $scope.sessionData.userData.name = result.user.firstname + " " + result.user.lastname;
-            $scope.sessionData.dynamicTheme = 'user1';
+            $scope.sessionData.dynamicTheme = $scope.sessionData.userData.properties.theme;
             Applications.query().$promise.then(function(result) {
                 $scope.sessionData.applications = result;
                 SessionService.setSessionData($scope.sessionData);
@@ -205,7 +204,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 dynamicTheme: 'default'
             };
             SessionService.setSessionData($scope.sessionData);
-            dynamicTheme = 'default';
             $location.url('/');
         };
 

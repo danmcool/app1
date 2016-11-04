@@ -1,6 +1,5 @@
 app1.controller('UserCtrl',
     function($scope, $location, User, SessionService) {
-        $scope.theme = "default";
         $scope.sessionData = SessionService.getSessionData();
         $scope.$watch(function() {
             return SessionService.getSessionData();
@@ -10,7 +9,7 @@ app1.controller('UserCtrl',
             }
         });
         $scope.saveUserData = function() {
-            $scope.sessionData.userData.properties.theme = $scope.theme;
+            $scope.sessionData.dynamicTheme = $scope.sessionData.userData.properties.theme;
             SessionService.setSessionData($scope.sessionData);
             User.update({
                 id: $scope.sessionData.userData._id
@@ -18,5 +17,6 @@ app1.controller('UserCtrl',
                 "_id": $scope.sessionData.userData._id,
                 "properties": $scope.sessionData.userData.properties
             });
+            $location.url('/applications');
         }
     });
