@@ -50,42 +50,6 @@
         <button ng-click="update()">update</button>
         <a href="/admin/#/datamodels">Cancel</a>
     </script>
-    <script type="text/ng-template" id="datamodelRelations.html">
-        <div>
-            Search:
-            <input type="text" ng-model="search.name">
-            <ul>
-                <li ng-repeat="datamodelrelation in datamodelrelations | filter: search">
-                    <a href="#datamodelrelations/{{datamodelrelation._id}}">{{datamodelrelation.name}}</a>
-                    <button ng-click="remove($index)">remove</button>
-                </li>
-            </ul>
-            New data model relation
-            <input type="text" ng-model="newDataModelRelation">
-            <button ng-click="save()">Create</button>
-        </div>
-    </script>
-    <script type="text/ng-template" id="datamodelRelationDetails.html">
-        <h1>{{datamodelrelation.name}}</h1>
-        <p>Name:
-            <input type="text" ng-model="datamodelrelation.name">
-        </p>
-        <p>Id: {{datamodelrelation._id}}</p>
-        <p>Datamodel 1:
-            <input type="text" ng-model="datamodelrelation.datamodel1">
-        </p>
-        <p>Datamodel 2:
-            <input type="text" ng-model="datamodelrelation.datamodel2">
-        </p>
-        <p>Type:
-            <select ng-model="datamodelrelation.type">
-                <option value="11">1-1</option>
-                <option value="1n">1-n</option>
-            </select>
-        </p>
-        <button ng-click="update()">update</button>
-        <a href="/admin/#/datamodelrelations">Cancel</a>
-    </script>
     <script type="text/ng-template" id="forms.html">
         <div>
             Search:
@@ -407,7 +371,6 @@
         <md-content layout-padding ng-controller="LeftCtrl" layout="column">
             <md-button ng-href="#about" class="md-primary" style="text-align: left" ng-click="close()">About</md-button>
             <md-button ng-href="#datamodels" class="md-primary" style="text-align: left" ng-click="close()">Data Models</md-button>
-            <md-button ng-href="#datamodelrelations" class="md-primary" style="text-align: left" ng-click="close()">Data Model Relations</md-button>
             <md-button ng-href="#forms" class="md-primary" style="text-align: left" ng-click="close()">Forms</md-button>
             <md-button ng-href="#values" class="md-primary" style="text-align: left" ng-click="close()">Values</md-button>
             <md-button ng-href="#files" class="md-primary" style="text-align: left" ng-click="close()">Files</md-button>

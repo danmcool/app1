@@ -15,7 +15,7 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
           .parent(angular.element(document.body))
           .clickOutsideToClose(true)
           .title('Success')
-          .textContent(res.data.msg)
+          .textContent(res.msg)
           .ariaLabel('Error')
           .ok('Got it!')
         ).then(function() {
