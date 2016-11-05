@@ -1,21 +1,19 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
 
 var Metadata = require('../models/Metadata.js');
 var Session = require('../tools/session');
+var Constants = require('../tools/constants');
 
-const S3_BUCKET = 'app1data';
-const REGION = 'eu-central-1';
 var AWS = require('aws-sdk');
 AWS.config.update({
-  accessKeyId: 'AKIAIYXUGMUVMMXJXR3A',
-  secretAccessKey: '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',
-  region: REGION
+  accessKeyId: Constants.ACCESS_KEY_ID,
+  secretAccessKey: Constants.SECRET_ACCESS_KEY,
+  region: Constants.REGION
 });
-var s3 = new AWS.S3({
+var s3Instance = new AWS.S3({
   params: {
-    Bucket: S3_BUCKET
+    Bucket: Constants.S3_BUCKET
   }
 });
 
@@ -47,7 +45,7 @@ router.post('/', function(req, res, next) {
       ContentType: object.type,
       ACL: 'public-read'
     };
-    s3.getSignedUrl('putObject', params, (err, data) => {
+    s3Instance.getSignedUrl('putObject', params, (err, data) => {
       if (err) {
         console.log(err);
         return next(err);
@@ -55,7 +53,7 @@ router.post('/', function(req, res, next) {
       var result = {
         file: object,
         signedRequest: data,
-        url: 'http://s3.' + REGION + '.amazonaws.com/' + S3_BUCKET + '/' + object._company_code + '/' +
+        url: 'http://s3.' + Constants.REGION + '.amazonaws.com/' + Constants.S3_BUCKET + '/' + object._company_code + '/' +
           object._id
       }
       res.json(result);
@@ -74,7 +72,7 @@ router.get('/:id', function(req, res, next) {
       ContentType: object.type,
       ACL: 'public-read'
     };
-    s3.getSignedUrl('getObject', params, function(err, url) {
+    s3Instance.getSignedUrl('getObject', params, function(err, url) {
       console.log("The URL is", url);
       var result = {
         file: object,

@@ -8,7 +8,7 @@ var UserProfileSchema = new Schema({
     name: String,
     type: String, // administrator/private/public
     profile: String,
-    properties: String, // language (en/fr, etc), color theme, etc.
+    properties: String, // language (en/fr, etc), color theme, alerts, etc.
     _updated_at: {
         type: Date,
         default: Date.now
@@ -55,7 +55,7 @@ var UserSchema = new Schema({
 Metadata.User = mongoose.model('User', UserSchema);
 
 var DataModelSchema = new Schema({
-    name: String,
+    name: Schema.Types.Mixed,
     datamodel: Schema.Types.Mixed,
     translation: Schema.Types.Mixed,
     _updated_at: {
@@ -65,7 +65,17 @@ var DataModelSchema = new Schema({
     _company_code: String
 });
 Metadata.DataModel = mongoose.model('DataModel', DataModelSchema);
-
+var ValueSchema = new Schema({
+    name: Schema.Types.Mixed,
+    type: String, // flat, search
+    values: Schema.Types.Mixed,
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.Value = mongoose.model('Value', ValueSchema);
 var FileSchema = new Schema({
     name: String,
     type: String, // file type (pdf, jpeg, etc.)
@@ -79,12 +89,22 @@ var FileSchema = new Schema({
     _company_code: String
 });
 Metadata.File = mongoose.model('File', FileSchema);
-
 var FormSchema = new Schema({
-    name: String,
+    name: Schema.Types.Mixed,
     type: String, // List or Form
-    datamodel_id: Schema.Types.ObjectId,
-    display: Schema.Types.Mixed, //[{name:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
+    datamodel: {
+        type: Schema.Types.ObjectId,
+        ref: 'DataModel'
+    },
+    values: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Value'
+    }],
+    files: [{
+        type: Schema.Types.ObjectId,
+        ref: 'File'
+    }],
+    display: Schema.Types.Mixed, //[{field:String, text:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
     search_criteria: String,
     sort_by: String,
     actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
@@ -96,19 +116,8 @@ var FormSchema = new Schema({
     _company_code: String
 });
 Metadata.Form = mongoose.model('Form', FormSchema);
-var ValueSchema = new Schema({
-    name: String,
-    type: String, // flat, search
-    values: Schema.Types.Mixed,
-    _updated_at: {
-        type: Date,
-        default: Date.now
-    },
-    _company_code: String
-});
-Metadata.Value = mongoose.model('Value', ValueSchema);
 var WorkflowSchema = new Schema({
-    name: String,
+    name: Schema.Types.Mixed,
     description: String,
     icon: String,
     startup_form_id: Schema.Types.ObjectId,
@@ -121,9 +130,10 @@ var WorkflowSchema = new Schema({
 });
 Metadata.Workflow = mongoose.model('Workflow', WorkflowSchema);
 var ApplicationSchema = new Schema({
-    name: String,
+    name: Schema.Types.Mixed,
     description: String,
     icon: String,
+    translation: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now

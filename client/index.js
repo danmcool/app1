@@ -25,9 +25,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         var translate = function translate(value) {
             return value[sessionData.userData.properties.language];
         }
+        var translateAppMessage = function translateAppMessage(value) {
+            return value[sessionData.userData.properties.language];
+        }
         return {
             setSessionData: setSessionData,
             getSessionData: getSessionData
+            translate: translate
+            translateAppMessage: translateAppMessage
         }
     })
     .factory('MapService', function MapService() {
