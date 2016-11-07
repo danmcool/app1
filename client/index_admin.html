@@ -24,7 +24,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="datamodel in datamodels | filter: search">
-                    <a href="#datamodels/{{datamodel._id}}">{{datamodel.name}}</a>
+                    <a href="#datamodels/{{datamodel._id}}">{{datamodel.name.en}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
@@ -34,9 +34,10 @@
         </div>
     </script>
     <script type="text/ng-template" id="datamodelDetails.html">
-        <h1>{{datamodel.name}}</h1>
+        <h1>{{datamodel.name.en}}</h1>
         <p>Name:
-            <input type="text" ng-model="datamodel.name">
+            <br>
+            <textarea json-text ng-model="datamodel.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{datamodel._id}}</p>
         <p>Datamodel:
@@ -45,7 +46,7 @@
         </p>
         <p>Translation:
             <br>
-            <textarea ng-model="datamodel.translation" rows="6" cols="60"></textarea>
+            <textarea json-text ng-model="datamodel.translation" rows="6" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin/#/datamodels">Cancel</a>
@@ -56,7 +57,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="form in forms | filter: search">
-                    <a href="#forms/{{form._id}}">{{form.name}}</a>
+                    <a href="#forms/{{form._id}}">{{form.name.en}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
@@ -66,9 +67,10 @@
         </div>
     </script>
     <script type="text/ng-template" id="formDetails.html">
-        <h1>{{form.name}}</h1>
+        <h1>{{form.name.en}}</h1>
         <p>Name:
-            <input type="text" ng-model="form.name">
+            <br>
+            <textarea json-text ng-model="form.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{form._id}}</p>
         <p>DataModel:
@@ -113,7 +115,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="value in values | filter: search">
-                    <a href="#values/{{value._id}}">{{value.name}}</a>
+                    <a href="#values/{{value._id}}">{{value.name.en}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
@@ -123,9 +125,10 @@
         </div>
     </script>
     <script type="text/ng-template" id="valueDetails.html">
-        <h1>{{value.name}}</h1>
+        <h1>{{value.name.en}}</h1>
         <p>Name:
-            <input type="text" ng-model="value.name">
+            <br>
+            <textarea json-text ng-model="value.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{value._id}}</p>
         <p>Type:
@@ -226,7 +229,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="userprofile in userprofiles | filter: search">
-                    <a href="#userprofiles/{{userprofile._id}}">{{userprofile.name}}</a>
+                    <a href="#userprofiles/{{userprofile._id}}">{{userprofile.name.en}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
@@ -236,9 +239,10 @@
         </div>
     </script>
     <script type="text/ng-template" id="userprofileDetails.html">
-        <h1>{{userprofile.name}}</h1>
+        <h1>{{userprofile.name.en}}</h1>
         <p>Name:
-            <input type="text" ng-model="userprofile.name">
+            <br>
+            <textarea json-text ng-model="userprofile.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{userprofile._id}}</p>
         <p>Type:
@@ -296,7 +300,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="workflow in workflows | filter: search">
-                    <a href="#workflows/{{workflow._id}}">{{workflow.name}}</a>
+                    <a href="#workflows/{{workflow._id}}">{{workflow.name.en}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
@@ -306,14 +310,15 @@
         </div>
     </script>
     <script type="text/ng-template" id="workflowDetails.html">
-        <h1>{{workflow.name}}</h1>
+        <h1>{{workflow.name.en}}</h1>
         <p>Name:
-            <input type="text" ng-model="workflow.name">
+            <br>
+            <textarea json-text ng-model="workflow.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{workflow._id}}</p>
         <p>Description:
             <br>
-            <textarea ng-model="workflow.description" rows="6" cols="60"></textarea>
+            <textarea json-text ng-model="workflow.description" rows="6" cols="60"></textarea>
         </p>
         <p>Icon:
             <input type="text" ng-model="workflow.icon">
@@ -330,7 +335,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="application in applications | filter: search">
-                    <a href="#applications/{{application._id}}">{{application.name}}</a>
+                    <a href="#applications/{{application._id}}">{{application.name.en}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
@@ -340,14 +345,15 @@
         </div>
     </script>
     <script type="text/ng-template" id="applicationDetails.html">
-        <h1>{{application.name}}</h1>
+        <h1>{{application.name.en}}</h1>
         <p>Name:
-            <input type="text" ng-model="application.name">
+            <br>
+            <textarea json-text ng-model="application.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{application._id}}</p>
         <p>Description:
             <br>
-            <textarea ng-model="application.description" rows="6" cols="60"></textarea>
+            <textarea json-text ng-model="application.description" rows="6" cols="60"></textarea>
         </p>
         <p>Icon:
             <input type="text" ng-model="application.icon">

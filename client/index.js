@@ -22,11 +22,11 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         var getSessionData = function getSessionData() {
             return sessionData;
         }
-        var translate = function translate(value) {
-            return value[sessionData.userData.properties.language];
+        var translate = function translate(text) {
+            return text[sessionData.userData.properties.language];
         }
-        var translateAppMessage = function translateAppMessage(value) {
-            return value[sessionData.userData.properties.language];
+        var translateAppMessage = function translateAppMessage(textKey) {
+            return (AppInternationalDataService.get(textKey))[sessionData.userData.properties.language];
         }
         return {
             setSessionData: setSessionData,

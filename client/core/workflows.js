@@ -10,6 +10,10 @@ app1.controller('WorkflowsCtrl',
                 break;
             }
         }
+    for (workflow in $scope.workflows) {
+        $scope.workflows[workflow].translated_name = SessionService.translate($scope.workflows[workflow].name);
+        $scope.workflows[workflow].translated_description = SessionService.translate($scope.workflows[workflow].description);
+    }
 
         $scope.open = function(href) {
             $location.url("/form/" + href + "/0");

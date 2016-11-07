@@ -1,7 +1,7 @@
 <md-content ng-show="form.type == 'list'" layout-padding>
     <md-toolbar layout="row" class="md-hue-1">
         <div class="md-toolbar-tools">
-            <span>{{form.name}}</span>
+            <span>{{form.title}}</span>
         </div>
     </md-toolbar>
     <md-list flex>
@@ -15,10 +15,10 @@
                 <div ng-repeat="action in form.item_actions" class="md-secondary" layout="row">
                     <div ng-switch="action.action">
                         <div ng-switch-when="delete">
-                            <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)">{{action.name}}</md-button>
+                            <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                         </div>
                         <div ng-switch-when="link">
-                            <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.name}}</md-button>
+                            <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                         </div>
                     </div>
                 </div>
@@ -29,16 +29,16 @@
         <div ng-repeat="action in form.actions">
             <div ng-switch="action.action">
                 <div ng-switch-when="create">
-                    <md-button flex-gt-xs ng-click="create(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                    <md-button flex-gt-xs ng-click="create(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                 </div>
                 <div ng-switch-when="modify">
-                    <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                    <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                 </div>
                 <div ng-switch-when="delete">
-                    <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                    <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                 </div>
                 <div ng-switch-when="link">
-                    <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                    <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
 <md-content ng-show="form.type == 'form'" class="md-inline-form" layout-padding>
     <md-toolbar layout="row" class="md-hue-1">
         <div class="md-toolbar-tools">
-            <span>{{form.name}}</span>
+            <span>{{form.title}}</span>
         </div>
     </md-toolbar>
     <form name="dynamicForm">
@@ -66,10 +66,10 @@
                                 <div ng-repeat="action in form.item_actions" class="md-secondary" layout="row">
                                     <div ng-switch="action.action">
                                         <div ng-switch-when="delete">
-                                            <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)">{{action.name}}</md-button>
+                                            <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                         </div>
                                         <div ng-switch-when="link">
-                                            <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.name}}</md-button>
+                                            <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                         </div>
                                     </div>
                                 </div>
@@ -77,18 +77,19 @@
                         </div>
                     </md-list flex>
                 </div>
+
                 <div ng-switch-when="shorttext">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.name}}</p>
+                                <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.name}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
+                                <label>{{field.translated_name}}</label>
+                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long.
@@ -103,28 +104,28 @@
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.name}}</p>
+                                <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.name}}</label>
-                                <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="8"></textarea>
+                                <label>{{field.translated_name}}</label>
+                                <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="8"></textarea>
                             </md-input-container>
                         </div>
                     </div>
                 </div>
 
                 <div ng-switch-when="feed">
-                    <p class="subtitle">{{field.previous}}</p>
+                    <p class="subtitle">{{field.translated_previous}}</p>
                     <div ng-repeat="existing_feed in data[field.name]">
                         <p class="md-body-2">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
                         <p class="md-body-1">{{existing_feed.text}}</p>
                     </div>
                     <md-input-container class="md-block" flex-gt-xs ng-if="!field.disabled">
-                        <label>{{field.name}}</label>
-                        <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.name}}" ng-model="form.newvalues[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
+                        <label>{{field.translated_name}}</label>
+                        <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
                     </md-input-container>
                 </div>
 
@@ -224,21 +225,21 @@
                         </div>
                     </div>
 
-                    <p class="subtitle">{{field.previous}}</p>
+                    <p class="subtitle">{{field.translated_previous}}</p>
                     <div ng-repeat="existing_feed in data[field.name]">
                         <p class="md-body-2">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
                         <p class="md-body-1">{{existing_feed.text}}</p>
                     </div>
                     <md-input-container class="md-block" flex-gt-xs ng-if="!field.disabled">
-                        <label>{{field.name}}</label>
-                        <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.name}}" ng-model="form.newvalues[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
+                        <label>{{field.translated_name}}</label>
+                        <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
                     </md-input-container>
                 </div>
 
                 <div ng-switch-when="file">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <p class="subtitle">{{field.previous}}</p>
+                            <p class="subtitle">{{field.translated_previous}}</p>
                             <div ng-repeat="existing_file in data[field.name]">
                                 <a class="md-body-2" href="/file/{{existing_file.id}}">
                                     <p class="md-body-2">{{existing_file.name}}</p>
@@ -247,7 +248,7 @@
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs ng-if="!field.disabled">
-                                <input multiple accept="image/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.name}}" name="{{field.name}}" ng-model="form.newvalues[field.name]" onchange="angular.element(this).scope().changeFiles(this)">
+                                <input multiple accept="image/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" onchange="angular.element(this).scope().changeFiles(this)">
                             </md-input-container>
                         </div>
                     </div>
@@ -256,14 +257,14 @@
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.name}}</p>
+                                <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.name}}</label>
-                                <md-select name="{{field.name}}" ng-model="data[field.name]" ng-disabled="field.disabled" ng-required="field.required">
+                                <label>{{field.translated_name}}</label>
+                                <md-select name="{{field.translated_name}}" ng-model="data[field.name]" ng-disabled="field.disabled" ng-required="field.required">
                                     <md-option ng-repeat="value in field.values" value="{{value}}">{{value}}</md-option>
                                 </md-select>
                             </md-input-container>
@@ -272,21 +273,21 @@
                 </div>
                 <div ng-switch-when="check">
                     <md-input-container class="md-block" flex-gt-xs>
-                        <md-checkbox ng-disabled="field.disabled" name="{{field.name}}" ng-model="data[field.name]">{{field.name}}</md-checkbox>
+                        <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="data[field.name]">{{field.translated_name}}</md-checkbox>
                     </md-input-container>
                 </div>
                 <div ng-switch-when="calendar">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.name}}</p>
+                                <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]|date:"yyyy-MM-dd"}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.name}}</label>
-                                <md-datepicker ng-disabled="field.disabled" md-hide-icons="triangle" ng-required="field.required" name="{{field.name}}" ng-model="data[field.name]"></md-datepicker>
+                                <label>{{field.translated_name}}</label>
+                                <md-datepicker ng-disabled="field.disabled" md-hide-icons="triangle" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]"></md-datepicker>
                             </md-input-container>
                         </div>
                     </div>
@@ -295,14 +296,14 @@
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.name}}</p>
+                                <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.name}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
+                                <label>{{field.translated_name}}</label>
+                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long and look like an e-mail address.
@@ -318,16 +319,16 @@
             <div ng-repeat="action in form.actions">
                 <div ng-switch="action.action">
                     <div ng-switch-when="create">
-                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="modify">
-                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="delete">
-                        <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                        <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="link">
-                        <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)" class="md-primary">{{action.name}}</md-button>
+                        <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                 </div>
             </div>

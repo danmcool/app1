@@ -50,7 +50,7 @@ var FormSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Value'
     }],
-    display: Schema.Types.Mixed, //[{field:String, text:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
+    display: Schema.Types.Mixed, //[{text:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
     search_criteria: String,
     sort_by: String,
     actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
@@ -64,7 +64,7 @@ var FormSchema = new Schema({
 Metadata.Form = mongoose.model('Form', FormSchema);
 var WorkflowSchema = new Schema({
     name: Schema.Types.Mixed,
-    description: String,
+    description: Schema.Types.Mixed,
     icon: String,
     startup_form_id: Schema.Types.ObjectId,
     _updated_at: {
@@ -76,9 +76,8 @@ var WorkflowSchema = new Schema({
 Metadata.Workflow = mongoose.model('Workflow', WorkflowSchema);
 var ApplicationSchema = new Schema({
     name: Schema.Types.Mixed,
-    description: String,
+    description: Schema.Types.Mixed,
     icon: String,
-    translation: Schema.Types.Mixed,
     workflows: [{
         type: Schema.Types.ObjectId,
         ref: 'Workflow'
@@ -92,7 +91,7 @@ var ApplicationSchema = new Schema({
 Metadata.Application = mongoose.model('Application', ApplicationSchema);
 
 var UserProfileSchema = new Schema({
-    name: String,
+    name: Schema.Types.Mixed,
     type: String, // administrator/private/public
     profile: String,
     properties: String, // language (en/fr, etc), color theme, alerts, etc.
@@ -105,7 +104,7 @@ var UserProfileSchema = new Schema({
 Metadata.UserProfile = mongoose.model('UserProfile', UserProfileSchema);
 var CompanySchema = new Schema({
     name: String,
-    applications:  [{
+    applications: [{
         type: Schema.Types.ObjectId,
         ref: 'Application'
     }],

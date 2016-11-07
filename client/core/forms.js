@@ -30,7 +30,22 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         });
     }
     $scope.initComponents = function() {
+        $scope.form.title = SessionService.translate($scope.form.name);
+        for (var action in $scope.form.actions) {
+            $scope.form.actions[action].translated_name = SessionService.translate($scope.form.actions[action].name);
+        }
+        for (var action in $scope.form.item_actions) {
+            $scope.form.item_actions[action].translated_name = SessionService.translate($scope.form.item_actions[action].name);
+        }
         for (var field in $scope.form.display) {
+            if ($scope.form.display[field].text) {
+                $scope.form.display[field].translated_name = SessionService.translate($scope.form.display[field].text);
+            } else {
+                $scope.form.display[field].translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[field].name]);
+            }
+            if ($scope.form.display[field].previous) {
+                $scope.form.display[field].translated_previous = SessionService.translate($scope.form.display[field].previous);
+            }
             if ($scope.form.display[field].display == "selection") {
                 for (var value in $scope.form.values) {
                     if ($scope.form.values[value]._id == $scope.form.display[field].listofvalues) {
@@ -49,6 +64,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         id: $routeParams.id
     }, function(form, $resource) {
         $scope.form = form;
+        form.title = SessionService.translate(form.name);
         if (form.type == "form") {
             if ($routeParams.entry_id == '0') {
                 $scope.data = new Datas({

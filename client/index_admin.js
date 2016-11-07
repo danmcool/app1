@@ -106,7 +106,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newWorkflow || $scope.newWorkflow.length < 1) return;
                 var workflow = new Workflows({
-                    name: $scope.newWorkflow
+                    name: {
+                        en: $scope.newWorkflow
+                    }
                 });
                 workflow.$save(function() {
                     $scope.workflows.push(workflow);
@@ -132,7 +134,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newApplication || $scope.newApplication.length < 1) return;
                 var application = new Applications({
-                    name: $scope.newApplication
+                    name: {
+                        en: $scope.newApplication
+                    }
                 });
                 application.$save(function() {
                     $scope.applications.push(application);
@@ -158,7 +162,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newForm || $scope.newForm.length < 1) return;
                 var form = new Forms({
-                    name: $scope.newForm
+                    name: {
+                        en: $scope.newForm
+                    }
                 });
                 form.$save(function() {
                     $scope.forms.push(form);
@@ -184,7 +190,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newValue || $scope.newValue.length < 1) return;
                 var value = new Values({
-                    name: $scope.newValue
+                    name: {
+                        en: $scope.newValue
+                    }
                 });
                 value.$save(function() {
                     $scope.values.push(value);
@@ -210,7 +218,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newUserProfile || $scope.newUserProfile.length < 1) return;
                 var userprofile = new UserProfiles({
-                    name: $scope.newUserProfile
+                    name: {
+                        en: $scope.newUserProfile
+                    }
                 });
                 userprofile.$save(function() {
                     $scope.userprofiles.push(userprofile);
@@ -314,7 +324,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newDataModel || $scope.newDataModel.length < 1) return;
                 var datamodel = new DataModels({
-                    name: $scope.newDataModel
+                    name: {
+                        en: $scope.newDataModel
+                    }
                 });
                 datamodel.$save(function() {
                     $scope.datamodels.push(datamodel);
