@@ -10,7 +10,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.getNextData = function() {
         if ($scope.stopScroll) return;
         if ($scope.tempStopScroll) return;
-        if (!$scope.form.datamodel._id) return;
+        if (!$scope.form.datamodel) return;
         var localLimit = $scope.limit;
         var localSkip = $scope.skip;
         $scope.skip += $scope.limit;
