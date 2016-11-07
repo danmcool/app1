@@ -8,7 +8,6 @@
 </head>
 
 <body ng-app="app1" ng-cloak md-theme="{{sessionData.dynamicTheme}}" ng-controller="AppCtrl">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/angular.min.js"></script>
     <script src="/javascripts/angular-route.min.js"></script>
@@ -25,15 +24,16 @@
     <script src="core/applications.js"></script>
     <script src="core/workflows.js"></script>
     <script src="core/forms.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
+
     <md-toolbar md-scroll-shrink class="md-hue-2">
         <div class="md-toolbar-tools">
             <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleLeft()">
                 <md-icon>menu</md-icon>
             </md-button>
             <h2>
-                <span>{{sessionData.applicationName}}</span>
-                <span flex></span>
                 <span>App1</span>
+                <span>{{sessionData.applicationName}}</span>
             </h2>
             <span flex></span>
             <md-button class="md-icon-button" aria-label="User" ng-click="toggleRight()">
@@ -41,6 +41,7 @@
             </md-button>
         </div>
     </md-toolbar>
+
     <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
         <md-content layout-padding layout="column">
             <md-toolbar class="md-theme-indigo">
@@ -55,6 +56,7 @@
             </div>
         </md-content>
     </md-sidenav>
+
     <md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
         <md-content layout-padding layout="column">
             <md-toolbar ng-if="!sessionData.userData" class="md-theme-indigo">
@@ -71,6 +73,7 @@
             <md-button ng-if="sessionData.userData" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">Logout</md-button>
         </md-content>
     </md-sidenav>
+
     <md-content ng-view>
     </md-content>
 </body>

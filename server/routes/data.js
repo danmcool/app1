@@ -30,7 +30,9 @@ router.post('/:datamodelid/', function(req, res, next) {
     }
     Metadata.ObjectModels[req.params.datamodelid].create(req.body, function(err, object) {
         if (err) return next(err);
-        res.json(object);
+        res.status(200).json({
+            "msg": "Data: entry created!"
+        });
     });
 });
 
@@ -54,7 +56,9 @@ router.put('/:datamodelid/:id', function(req, res, next) {
     }, req.body, function(err, object) {
         if (err) return next(err);
         if (object) {
-            res.json(object);
+            res.status(200).json({
+                "msg": "Data: entry updated!"
+            });
         } else {
             Metadata.ObjectModels[req.params.datamodelid].findOne({
                 _id: req.params.id,
@@ -74,7 +78,9 @@ router.delete('/:datamodelid/:id', function(req, res, next) {
         _company_code: Session.users[req.cookies.app1_token]._company_code
     }, function(err, object) {
         if (err) return next(err);
-        res.json(object);
+        res.status(200).json({
+            "msg": "Data: entry deleted!"
+        });
     });
 });
 
