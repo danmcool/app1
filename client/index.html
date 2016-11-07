@@ -31,7 +31,7 @@
                 <md-icon>menu</md-icon>
             </md-button>
             <h2>
-                <span>{{SessionService.translate(sessionData.applicationName)}}</span>
+                <span>{{sessionData.applicationName}}</span>
                 <span flex></span>
                 <span>App1</span>
             </h2>
@@ -44,7 +44,7 @@
     <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
         <md-content layout-padding layout="column">
             <md-toolbar class="md-theme-indigo">
-                <h1 class="md-toolbar-tools">{{SessionService.translateAppMessage('choose_app')}}</h1>
+                <h1 class="md-toolbar-tools">Choose your applications</h1>
             </md-toolbar>
             <md-button ng-href="#applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">HOME
             </md-button>

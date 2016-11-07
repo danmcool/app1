@@ -30,8 +30,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }
         return {
             setSessionData: setSessionData,
-            getSessionData: getSessionData
-            translate: translate
+            getSessionData: getSessionData,
+            translate: translate,
             translateAppMessage: translateAppMessage
         }
     })
@@ -69,16 +69,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     })
     .factory('Applications', ['$resource',
         function($resource) {
-            return $resource('/api/application/:id', null, {
-                'update': {
-                    method: 'PUT'
-                }
-            });
-        }
-    ])
-    .factory('Workflows', ['$resource',
-        function($resource) {
-            return $resource('/api/workflow/:id', null, {
+            return $resource('/client/application/:id', null, {
                 'update': {
                     method: 'PUT'
                 }
@@ -87,16 +78,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     ])
     .factory('Forms', ['$resource',
         function($resource) {
-            return $resource('/api/form/:id', null, {
-                'update': {
-                    method: 'PUT'
-                }
-            });
-        }
-    ])
-    .factory('Values', ['$resource',
-        function($resource) {
-            return $resource('/api/value/:id', null, {
+            return $resource('/client/form/:id', null, {
                 'update': {
                     method: 'PUT'
                 }

@@ -4,56 +4,6 @@ var Metadata = {
     ObjectModels: []
 };
 
-var UserProfileSchema = new Schema({
-    name: String,
-    type: String, // administrator/private/public
-    profile: String,
-    properties: String, // language (en/fr, etc), color theme, alerts, etc.
-    _updated_at: {
-        type: Date,
-        default: Date.now
-    },
-    _company_code: String
-});
-Metadata.UserProfile = mongoose.model('UserProfile', UserProfileSchema);
-var CompanySchema = new Schema({
-    name: String,
-    applications: [Schema.Types.ObjectId],
-    properties: String,
-    _updated_at: {
-        type: Date,
-        default: Date.now
-    },
-    _company_code: String
-});
-Metadata.Company = mongoose.model('Company', CompanySchema);
-var UserSchema = new Schema({
-    user: String,
-    password: String,
-    email: String,
-    firstname: String,
-    lastname: String,
-    properties: Schema.Types.Mixed,
-    validated: {
-        type: Boolean,
-        default: false
-    },
-    profile: {
-        type: Schema.Types.ObjectId,
-        ref: 'UserProfile'
-    },
-    company: {
-        type: Schema.Types.ObjectId,
-        ref: 'Company'
-    },
-    _updated_at: {
-        type: Date,
-        default: Date.now
-    },
-    _company_code: String
-});
-Metadata.User = mongoose.model('User', UserSchema);
-
 var DataModelSchema = new Schema({
     name: Schema.Types.Mixed,
     datamodel: Schema.Types.Mixed,
@@ -100,10 +50,6 @@ var FormSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Value'
     }],
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref: 'File'
-    }],
     display: Schema.Types.Mixed, //[{field:String, text:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
     search_criteria: String,
     sort_by: String,
@@ -121,7 +67,6 @@ var WorkflowSchema = new Schema({
     description: String,
     icon: String,
     startup_form_id: Schema.Types.ObjectId,
-    application_id: Schema.Types.ObjectId,
     _updated_at: {
         type: Date,
         default: Date.now
@@ -134,6 +79,10 @@ var ApplicationSchema = new Schema({
     description: String,
     icon: String,
     translation: Schema.Types.Mixed,
+    workflows: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Workflow'
+    }],
     _updated_at: {
         type: Date,
         default: Date.now
@@ -141,5 +90,58 @@ var ApplicationSchema = new Schema({
     _company_code: String
 });
 Metadata.Application = mongoose.model('Application', ApplicationSchema);
+
+var UserProfileSchema = new Schema({
+    name: String,
+    type: String, // administrator/private/public
+    profile: String,
+    properties: String, // language (en/fr, etc), color theme, alerts, etc.
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+var CompanySchema = new Schema({
+    name: String,
+    applications:  [{
+        type: Schema.Types.ObjectId,
+        ref: 'Application'
+    }],
+    properties: String,
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.Company = mongoose.model('Company', CompanySchema);
+var UserSchema = new Schema({
+    user: String,
+    password: String,
+    email: String,
+    firstname: String,
+    lastname: String,
+    properties: Schema.Types.Mixed,
+    validated: {
+        type: Boolean,
+        default: false
+    },
+    profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserProfile'
+    },
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company'
+    },
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.User = mongoose.model('User', UserSchema);
 
 module.exports = Metadata;

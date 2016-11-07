@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, DataModels, Files, Datas, Values, SessionService, MapService) {
+app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, DataModels, Files, Datas, SessionService, MapService) {
     $scope.data = {};
     $scope.form = {};
     $scope.skip = 0;
@@ -10,13 +10,13 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.getNextData = function() {
         if ($scope.stopScroll) return;
         if ($scope.tempStopScroll) return;
-        if (!$scope.form.datamodel_id) return;
+        if (!$scope.form.datamodel._id) return;
         var localLimit = $scope.limit;
         var localSkip = $scope.skip;
         $scope.skip += $scope.limit;
         $scope.tempStopScroll = true;
         Datas.query({
-            datamodel_id: $scope.form.datamodel_id,
+            datamodel_id: $scope.form.datamodel._id,
             search_criteria: $scope.form.search_criteria,
             skip: localSkip,
             limit: localLimit,
@@ -32,14 +32,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.initComponents = function() {
         for (var field in $scope.form.display) {
             if ($scope.form.display[field].display == "selection") {
-                Values.get({
-                    id: $scope.form.display[field].listofvalues
-                }, function(listofvalues) {
-                    for (current_field in $scope.form.display) {
-                        if ($scope.form.display[current_field].listofvalues == listofvalues._id)
-                            $scope.form.display[current_field].values = listofvalues.values;
+                for (var value in $scope.form.values) {
+                    if ($scope.form.values[value]._id == $scope.form.display[field].listofvalues) {
+                        $scope.form.display[field].values = $scope.form.values[value].values;
+                        break;
                     }
-                });
+                }
             } else if ($scope.form.display[field].display == "address") {
                 MapService.initMap();
                 var field_name = $scope.form.display[field].name;
@@ -48,29 +46,26 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
     Forms.get({
-        id: $routeParams.id
+        id: $routeParams.id,
+        "populate": ""
     }, function(form, $resource) {
-        /*$scope.datamodel = DataModels.get({
-            id: form.datamodel_id
-        });*/
         $scope.form = form;
         if (form.type == "form") {
             if ($routeParams.entry_id == '0') {
                 $scope.data = new Datas({
-                    datamodel_id: form.datamodel_id
+                    datamodel_id: form.datamodel._id
                 });
                 $scope.initComponents();
             } else {
                 Datas.get({
-                    datamodel_id: form.datamodel_id,
+                    datamodel_id: form.datamodel._id,
                     entry_id: $routeParams.entry_id
                 }).$promise.then(function(data) {
                     $scope.data = data;
                     $scope.initComponents();
                 });
             }
-        }
-        if (form.type == "list") {
+        } else if (form.type == "list") {
             if (!$scope.form.search_criteria) form.search_criteria = "";
             var keysOfParameters = Object.keys($routeParams);
             for (i = 0, l = keysOfParameters.length; i < l; i++) {
@@ -163,7 +158,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.modify = function(formula, next_form_id, data) {
         updateComponents($scope.form, data);
         Datas.update({
-            datamodel_id: $scope.form.datamodel_id,
+            datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
         }, data).$promise.then(function(res) {
             gotoNextForm(formula, next_form_id, data);
@@ -185,7 +180,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     }
     $scope.delete = function(formula, next_form_id, data) {
         Datas.remove({
-            datamodel_id: $scope.form.datamodel_id,
+            datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
         }).$promise
             .then(function(res) {

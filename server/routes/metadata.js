@@ -1,26 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
 var Metadata = require('../models/Metadata.js');
 var Session = require('../tools/session');
 var Constants = require('../tools/constants.js');
-var filterCompanyCode = function(req, filter) {
-    var company_code = Session.users[req.cookies.app1_token]._company_code;
-    if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
-    if (company_code != Constants.AdminCompany) {
-        filter._company_code = {
-            "$eq": company_code
-        };
-        if (req.body != null && req.body._company_code != company_code) {
-            req.body._company_code = company_code;
-        }
-    }
-    return filter;
-}
+
 var computePage = function(req) {
     return pageOptions = {
-        skip: parseInt(req.query.skip) || 0,
-        limit: parseInt(req.query.limit) || 10
+        skip: parseInt(req.query.skip) || Constants.QuerySkip,
+        limit: parseInt(req.query.limit) || Constants.QueryLimit
     }
 }
 
@@ -31,10 +21,10 @@ DataModel.find(function(err, objects) {
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
         try {
-            modelSchema = new mongoose.Schema(JSON.parse(objects[i].datamodel ? objects[i].datamodel : "{}"));
+            modelSchema = new Schema(JSON.parse(objects[i].datamodel ? objects[i].datamodel : "{}"));
         } catch (e) {
             console.log(e);
-            modelSchema = new mongoose.Schema({});
+            modelSchema = new Schema({});
         }
         Metadata.ObjectModels[objects[i]._id] = mongoose.model('data' + objects[i]._id, modelSchema);
     }
@@ -42,14 +32,14 @@ DataModel.find(function(err, objects) {
 
 router.get('/datamodel/', function(req, res, next) {
     var pageOptions = computePage(req);
-    DataModel.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    DataModel.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/datamodel/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     DataModel.create(req.body, function(err, object) {
         if (err) return next(err);
         var modelSchema;
@@ -57,10 +47,18 @@ router.post('/datamodel/', function(req, res, next) {
             if (!object.datamodel) object.datamodel = {};
             object.datamodel._updated_at = "Date";
             object.datamodel._company_code = "String";
-            modelSchema = new mongoose.Schema(object.datamodel);
+            object.datamodel._user = {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            };
+            object.datamodel._files = [{
+                type: Schema.Types.ObjectId,
+                ref: 'File'
+            }];
+            modelSchema = new Schema(object.datamodel);
         } catch (e) {
             console.log(e);
-            modelSchema = new mongoose.Schema({});
+            modelSchema = new Schema({});
         }
         Metadata.ObjectModels[object._id] = mongoose.model('data' + object._id, modelSchema);
         module.exports = Metadata;
@@ -68,7 +66,7 @@ router.post('/datamodel/', function(req, res, next) {
     });
 });
 router.get('/datamodel/:id', function(req, res, next) {
-    DataModel.findOne(filterCompanyCode(req, {
+    DataModel.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -83,18 +81,26 @@ router.put('/datamodel/:id', function(req, res, next) {
     var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : "{}");
     datamodel._updated_at = "Date";
     datamodel._company_code = "String";
+    datamodel._user = {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    };
+    datamodel._files = [{
+        type: Schema.Types.ObjectId,
+        ref: 'File'
+    }];
     req.body.datamodel = JSON.stringify(datamodel);
     try {
-        modelSchema = new mongoose.Schema(datamodel);
+        modelSchema = new Schema(datamodel);
     } catch (e) {
         console.log(e);
-        modelSchema = new mongoose.Schema({});
+        modelSchema = new Schema({});
         res.status(400);
         return res.json(req.body);
     }
     Metadata.ObjectModels[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
     module.exports = Metadata;
-    DataModel.findOneAndUpdate(filterCompanyCode(req, {
+    DataModel.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -102,7 +108,7 @@ router.put('/datamodel/:id', function(req, res, next) {
     });
 });
 router.delete('/datamodel/:id', function(req, res, next) {
-    DataModel.findOneAndRemove(filterCompanyCode(req, {
+    DataModel.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -113,20 +119,20 @@ router.delete('/datamodel/:id', function(req, res, next) {
 var Value = Metadata.Value;
 router.get('/value/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Value.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
+    Value.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/value/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     Value.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/value/:id', function(req, res, next) {
-    Value.findOne(filterCompanyCode(req, {
+    Value.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -134,7 +140,7 @@ router.get('/value/:id', function(req, res, next) {
     });
 });
 router.put('/value/:id', function(req, res, next) {
-    Value.findOneAndUpdate(filterCompanyCode(req, {
+    Value.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -142,7 +148,7 @@ router.put('/value/:id', function(req, res, next) {
     });
 });
 router.delete('/value/:id', function(req, res, next) {
-    Value.findOneAndRemove(filterCompanyCode(req, {
+    Value.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -153,27 +159,20 @@ router.delete('/value/:id', function(req, res, next) {
 var Form = Metadata.Form;
 router.get('/form/', function(req, res, next) {
     var pageOptions = computePage(req);
-    if (req.query.populate) {
-        Form.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('datamodel values files').exec(function(err, object) {
-            if (err) return next(err);
-            res.json(object);
-        });
-    } else {
-        Form.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
-            if (err) return next(err);
-            res.json(object);
-        });
-    }
+    Form.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
 });
 router.post('/form/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     Form.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/form/:id', function(req, res, next) {
-    Form.findOne(filterCompanyCode(req, {
+    Form.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -181,7 +180,7 @@ router.get('/form/:id', function(req, res, next) {
     });
 });
 router.put('/form/:id', function(req, res, next) {
-    Form.findOneAndUpdate(filterCompanyCode(req, {
+    Form.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -189,7 +188,7 @@ router.put('/form/:id', function(req, res, next) {
     });
 });
 router.delete('/form/:id', function(req, res, next) {
-    Form.findOneAndRemove(filterCompanyCode(req, {
+    Form.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -200,21 +199,21 @@ router.delete('/form/:id', function(req, res, next) {
 var Company = Metadata.Company;
 router.get('/company/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Company.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Company.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/company/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     Company.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/company/:id', function(req, res, next) {
-    Company.findOne(filterCompanyCode(req, {
+    Company.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -222,7 +221,7 @@ router.get('/company/:id', function(req, res, next) {
     });
 });
 router.put('/company/:id', function(req, res, next) {
-    Company.findOneAndUpdate(filterCompanyCode(req, {
+    Company.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -230,7 +229,7 @@ router.put('/company/:id', function(req, res, next) {
     });
 });
 router.delete('/company/:id', function(req, res, next) {
-    Company.findOneAndRemove(filterCompanyCode(req, {
+    Company.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -241,21 +240,21 @@ router.delete('/company/:id', function(req, res, next) {
 var UserProfile = Metadata.UserProfile;
 router.get('/userprofile/', function(req, res, next) {
     var pageOptions = computePage(req);
-    UserProfile.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    UserProfile.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/userprofile/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     UserProfile.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/userprofile/:id', function(req, res, next) {
-    UserProfile.findOne(filterCompanyCode(req, {
+    UserProfile.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -263,7 +262,7 @@ router.get('/userprofile/:id', function(req, res, next) {
     });
 });
 router.put('/userprofile/:id', function(req, res, next) {
-    UserProfile.findOneAndUpdate(filterCompanyCode(req, {
+    UserProfile.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -271,7 +270,7 @@ router.put('/userprofile/:id', function(req, res, next) {
     });
 });
 router.delete('/userprofile/:id', function(req, res, next) {
-    UserProfile.findOneAndRemove(filterCompanyCode(req, {
+    UserProfile.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -282,21 +281,21 @@ router.delete('/userprofile/:id', function(req, res, next) {
 var User = Metadata.User;
 router.get('/user/', function(req, res, next) {
     var pageOptions = computePage(req);
-    User.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
+    User.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/user/', function(req, res, next) {
     req.body.user = req.body.user.toLowerCase();
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     User.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/user/:id', function(req, res, next) {
-    User.findOne(filterCompanyCode(req, {
+    User.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -305,7 +304,7 @@ router.get('/user/:id', function(req, res, next) {
 });
 router.put('/user/:id', function(req, res, next) {
     if (req.body.user) req.body.user = req.body.user.toLowerCase();
-    User.findOneAndUpdate(filterCompanyCode(req, {
+    User.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -314,7 +313,7 @@ router.put('/user/:id', function(req, res, next) {
     });
 });
 router.delete('/user/:id', function(req, res, next) {
-    User.findOneAndRemove(filterCompanyCode(req, {
+    User.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -325,27 +324,21 @@ router.delete('/user/:id', function(req, res, next) {
 var Workflow = Metadata.Workflow;
 router.get('/workflow/', function(req, res, next) {
     var pageOptions = computePage(req);
-    var filter = {};
-    if (req.query.application_id) {
-        filter.application_id = {
-            "$eq": req.query.application_id
-        };
-    }
-    Workflow.find(filterCompanyCode(req, filter)).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Workflow.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/workflow/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     Workflow.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/workflow/:id', function(req, res, next) {
-    Workflow.findOne(filterCompanyCode(req, {
+    Workflow.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -353,7 +346,7 @@ router.get('/workflow/:id', function(req, res, next) {
     });
 });
 router.put('/workflow/:id', function(req, res, next) {
-    Workflow.findOneAndUpdate(filterCompanyCode(req, {
+    Workflow.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -361,7 +354,7 @@ router.put('/workflow/:id', function(req, res, next) {
     });
 });
 router.delete('/workflow/:id', function(req, res, next) {
-    Workflow.findOneAndRemove(filterCompanyCode(req, {
+    Workflow.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -371,21 +364,21 @@ router.delete('/workflow/:id', function(req, res, next) {
 var Application = Metadata.Application;
 router.get('/application/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Application.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/application/', function(req, res, next) {
-    filterCompanyCode(req, {});
+    Session.filterCompanyCode(req, {});
     Application.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/application/:id', function(req, res, next) {
-    Application.findOne(filterCompanyCode(req, {
+    Application.findOne(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -393,7 +386,7 @@ router.get('/application/:id', function(req, res, next) {
     });
 });
 router.put('/application/:id', function(req, res, next) {
-    Application.findOneAndUpdate(filterCompanyCode(req, {
+    Application.findOneAndUpdate(Session.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -401,7 +394,7 @@ router.put('/application/:id', function(req, res, next) {
     });
 });
 router.delete('/application/:id', function(req, res, next) {
-    Application.findOneAndRemove(filterCompanyCode(req, {
+    Application.findOneAndRemove(Session.filterCompanyCode(req, {
         _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return next(err);

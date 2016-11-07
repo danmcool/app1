@@ -1,6 +1,8 @@
 const Constants = {
     WebAddress: "ec2-52-57-61-58.eu-central-1.compute.amazonaws.com",
     MaxSessionTimeout: 1209600000,
+    QuerySkip: 0,
+    QueryLimit: 10,
 
     AdminCompany: "00000",
     ProductionCompany: "00000",

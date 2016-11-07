@@ -71,8 +71,8 @@
             <input type="text" ng-model="form.name">
         </p>
         <p>Id: {{form._id}}</p>
-        <p>DataModel id:
-            <input type="text" ea ng-model="form.datamodel_id">
+        <p>DataModel:
+            <input type="text" ea ng-model="form.datamodel">
         </p>
         <p>Type:
             <select ng-model="form.type">
@@ -99,6 +99,10 @@
         <p>Item Actions:
             <br>
             <textarea json-text ng-model="form.item_actions" rows="10" cols="60"></textarea>
+        </p>
+        <p>Values:
+            <br>
+            <textarea json-text ng-model="form.values" rows="3" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin/#/forms">Cancel</a>
@@ -316,9 +320,6 @@
         <p>Startup form id:
             <input type="text" ng-model="workflow.startup_form_id">
         </p>
-        <p>Application id:
-            <input type="text" ng-model="workflow.application_id">
-        </p>
         <button ng-click="update()">update</button>
         <a href="/admin/#/workflows">Cancel</a>
     </script>
@@ -349,6 +350,10 @@
         </p>
         <p>Icon:
             <input type="text" ng-model="application.icon">
+        </p>
+        <p>Workflows:
+            <br>
+            <textarea json-text ng-model="application.workflows" rows="10" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin/#/applications">Cancel</a>

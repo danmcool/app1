@@ -14,6 +14,7 @@ mongoose.connect('mongodb://localhost/apps');
 var metadata = require('./routes/metadata');
 var data = require('./routes/data');
 var file = require('./routes/file');
+var client = require('./routes/client');
 var authentication = require('./routes/authentication');
 
 // create instance of express
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 function allowedPath(req) {
-    if (req.path.startsWith("/data") || req.path.startsWith("/api") || req.path.startsWith("/file")) {
+    if (req.path.startsWith("/data") || req.path.startsWith("/api") || req.path.startsWith("/file") || req.path.startsWith("/client")) {
         return false;
     }
     return true;
@@ -57,10 +58,11 @@ app.use(function (req, res, next) {
 });
 
 // routes
-app.use('/api', metadata);
 app.use('/data', data);
 app.use('/file', file);
+app.use('/client', client);
 app.use('/authentication', authentication);
+app.use('/api', metadata);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../client')));
