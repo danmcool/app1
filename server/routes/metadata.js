@@ -47,14 +47,8 @@ router.post('/datamodel/', function(req, res, next) {
             if (!object.datamodel) object.datamodel = {};
             object.datamodel._updated_at = "Date";
             object.datamodel._company_code = "String";
-            object.datamodel._user = {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            };
-            object.datamodel._files = [{
-                type: Schema.Types.ObjectId,
-                ref: 'File'
-            }];
+            object.datamodel._user = "String";
+            object.datamodel._files = ["String"];
             modelSchema = new Schema(object.datamodel);
         } catch (e) {
             console.log(e);
@@ -81,14 +75,8 @@ router.put('/datamodel/:id', function(req, res, next) {
     var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : "{}");
     datamodel._updated_at = "Date";
     datamodel._company_code = "String";
-    datamodel._user = {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    };
-    datamodel._files = [{
-        type: Schema.Types.ObjectId,
-        ref: 'File'
-    }];
+    datamodel._user = "String";
+    datamodel._files = ["String"];
     req.body.datamodel = JSON.stringify(datamodel);
     try {
         modelSchema = new Schema(datamodel);

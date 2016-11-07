@@ -46,8 +46,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
     Forms.get({
-        id: $routeParams.id,
-        "populate": ""
+        id: $routeParams.id
     }, function(form, $resource) {
         $scope.form = form;
         if (form.type == "form") {
