@@ -15,7 +15,8 @@ var computePage = function(req) {
 router.get('/:datamodelid/', function(req, res, next) {
     var pageOptions = computePage(req);
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : "{}");
-    Metadata.ObjectModels[req.params.datamodelid].find(Session.filterCompanyCode(req, req.query.search_criteria)).skip(pageOptions.skip).limit(pageOptions.limit)
+    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : "{}");
+    Metadata.ObjectModels[req.params.datamodelid].find(Session.filterCompanyCode(req, search_criteria)).skip(pageOptions.skip).limit(pageOptions.limit)
         .sort(sort_by).exec(function(err, objects) {
             if (err) return next(err);
             res.json(objects);
