@@ -2,34 +2,34 @@
     <div layout-wrap layout-margin layout-align="center">
         <md-toolbar layout="row" class="md-hue-1">
             <div class="md-toolbar-tools">
-                <span>Enter credentials</span>
+                <span>{{sessionData.appData.enter_credentials}}</span>
             </div>
         </md-toolbar>
         <div style="height:20px"></div>
         <form name="loginForm">
             <md-input-container class="md-block" flex-gt-xs>
-                <label>User name</label>
+                <label>{{sessionData.appData.user_name}}</label>
                 <input ng-disabled="false" ng-required="true" name="user" ng-model="user" md-minlength="5" md-maxlength="20" ng-minlength="5" ng-maxlength="20">
                 <div ng-messages="registerForm.user.$error" role="alert">
                     <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                        Your user name must be between 5 and 20 characters long.
+                        {{sessionData.appData.user_error}}
                     </div>
                 </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
-                <label>Password</label>
+                <label>{{sessionData.appData.password}}</label>
                 <input ng-disabled="false" ng-required="true" name="password" type="password" ng-model="password">
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
-                <label>Company code</label>
+                <label>{{sessionData.appData.company_code}}</label>
                 <input ng-disabled="false" ng-required="true" name="code" ng-model="code" md-minlength="5" md-maxlength="20" ng-minlength="5" ng-maxlength="20">
                 <div ng-messages="registerForm.code.$error" role="alert">
                     <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                        Your company code must be between 5 and 20 characters long, it will be used by users every time they logon to the system.
+                        {{sessionData.appData.code_error}}
                     </div>
                 </div>
             </md-input-container>
-            <md-button flex-gt-xs ng-disabled="loginForm.$invalid" ng-click="login(user, password, code)" class="md-primary">Login</md-button>
+            <md-button flex-gt-xs ng-disabled="loginForm.$invalid" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
         </form>
     </div>
 </md-content>

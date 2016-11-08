@@ -14,7 +14,13 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     })
     .factory('SessionService', function SessionService() {
         var sessionData = {
-            dynamicTheme: 'default'
+            userData: {
+                properties: {
+                    theme: 'default',
+                    language: 'en'
+                }
+            },
+            appData: {}
         };
         var setSessionData = function setSessionData(newData) {
             sessionData = newData;
@@ -25,14 +31,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         var translate = function translate(text) {
             return text[sessionData.userData.properties.language];
         }
-        var translateAppMessage = function translateAppMessage(textKey) {
-            return (AppInternationalDataService.get(textKey))[sessionData.userData.properties.language];
-        }
         return {
             setSessionData: setSessionData,
             getSessionData: getSessionData,
-            translate: translate,
-            translateAppMessage: translateAppMessage
+            translate: translate
         }
     })
     .factory('MapService', function MapService() {
@@ -160,20 +162,23 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             });
         }
     ])
-    .controller('AppCtrl', function($scope, $timeout, $mdSidenav, $log, $mdDialog, $mdTheming, UserStatus, Logout, SessionService, Applications, $location) {
+    .controller('AppCtrl', function($scope, $timeout, $mdSidenav, $log, $mdDialog, $mdTheming, UserStatus, Logout, SessionService, Applications, AppTranslationService, $location) {
         $scope.sessionData = SessionService.getSessionData();
+
         $scope.$watch(function() {
             return SessionService.getSessionData();
         }, function(newValue, oldValue) {
             if (newValue !== oldValue) $scope.sessionData = newValue;
         });
 
-        $scope.sessionData = {};
         UserStatus.get().$promise.then(function(result) {
+            $scope.sessionData = {
+                applicationName: "App1"
+            };
             $scope.sessionData.userData = result.user;
             $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.user.company.name;
             $scope.sessionData.userData.name = result.user.firstname + " " + result.user.lastname;
-            $scope.sessionData.dynamicTheme = $scope.sessionData.userData.properties.theme;
+            $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             Applications.query().$promise.then(function(result) {
                 $scope.sessionData.applications = result;
                 SessionService.setSessionData($scope.sessionData);
@@ -182,9 +187,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 // shows an error loading applications
             });
         }).catch(function(error) {
-            $scope.sessionData = {
-                dynamicTheme: 'default'
-            };
+            $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             SessionService.setSessionData($scope.sessionData);
             $location.url('/login');
         });
@@ -199,7 +202,13 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             $mdSidenav('right').close();
             Logout.get();
             $scope.sessionData = {
-                dynamicTheme: 'default'
+                userData: {
+                    properties: {
+                        theme: 'default',
+                        language: 'en'
+                    }
+                },
+                appData: AppTranslationService.translate($scope.sessionData.userData.properties.language)
             };
             SessionService.setSessionData($scope.sessionData);
             $location.url('/');

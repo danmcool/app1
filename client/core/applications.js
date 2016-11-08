@@ -1,13 +1,26 @@
 app1.controller('ApplicationsCtrl', function($scope, SessionService, $location) {
     $scope.sessionData = SessionService.getSessionData();
+    if ($scope.sessionData.applications) {
+        for (var i = 0; i < $scope.sessionData.applications.length; i++) {
+            $scope.sessionData.applications[i].translated_name = SessionService.translate($scope.sessionData.applications[i].name);
+            $scope.sessionData.applications[i].translated_description = SessionService.translate($scope.sessionData.applications[i].description);
+        }
+        $scope.sessionData.applicationName = $scope.sessionData.appData.home;
+        SessionService.setSessionData($scope.sessionData);
+    }
+
     $scope.$watch(function() {
         return SessionService.getSessionData();
     }, function(newValue, oldValue) {
         if (newValue !== oldValue) {
             $scope.sessionData = newValue;
-            for (application in $scope.sessionData.applications) {
-                $scope.sessionData.applications[application].translated_name = SessionService.translate($scope.sessionData.applications[application].name);
-                $scope.sessionData.applications[application].translated_description = SessionService.translate($scope.sessionData.applications[application].description);
+            if ($scope.sessionData.applications) {
+                for (var i = 0; i < $scope.sessionData.applications.length; i++) {
+                    $scope.sessionData.applications[i].translated_name = SessionService.translate($scope.sessionData.applications[i].name);
+                    $scope.sessionData.applications[i].translated_description = SessionService.translate($scope.sessionData.applications[i].description);
+                }
+                $scope.sessionData.applicationName = $scope.sessionData.appData.home;
+                SessionService.setSessionData($scope.sessionData);
             }
         }
     });

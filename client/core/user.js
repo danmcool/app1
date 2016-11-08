@@ -1,5 +1,5 @@
 app1.controller('UserCtrl',
-    function($scope, $location, User, SessionService) {
+    function($scope, $location, User, SessionService, AppTranslationService) {
         $scope.sessionData = SessionService.getSessionData();
         $scope.$watch(function() {
             return SessionService.getSessionData();
@@ -9,7 +9,7 @@ app1.controller('UserCtrl',
             }
         });
         $scope.saveUserData = function() {
-            $scope.sessionData.dynamicTheme = $scope.sessionData.userData.properties.theme;
+            $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             SessionService.setSessionData($scope.sessionData);
             User.update({
                 id: $scope.sessionData.userData._id

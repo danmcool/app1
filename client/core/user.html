@@ -2,13 +2,13 @@
     <div layout-wrap layout-margin layout-align="center">
         <md-toolbar layout="row" class="md-hue-1">
             <div class="md-toolbar-tools">
-                <span>User settings</span>
+                <span>{{sessionData.appData.user_settings}}</span>
             </div>
         </md-toolbar>
         <div style="height:20px"></div>
         <form name="userForm">
             <md-input-container class="md-block" flex-gt-xs>
-                <label>Theme</label>
+                <label>{{sessionData.appData.theme}}</label>
                 <md-select name="theme" ng-model="sessionData.userData.properties.theme" ng-disabled="false" ng-required="true">
                     <md-option value="default">Default</md-option>
                     <md-option value="user1">User1</md-option>
@@ -16,13 +16,13 @@
                 </md-select>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
-                <label>Language</label>
+                <label>{{sessionData.appData.language}}</label>
                 <md-select name="language" ng-model="sessionData.userData.properties.language" ng-disabled="false" ng-required="true">
                     <md-option value="en">English</md-option>
                     <md-option value="fr">Francais</md-option>
                 </md-select>
             </md-input-container>
-            <md-button flex-gt-xs ng-disabled="userForm.$invalid" ng-click="saveUserData()" class="md-primary">Save</md-button>
+            <md-button flex-gt-xs ng-disabled="userForm.$invalid" ng-click="saveUserData()" class="md-primary">{{sessionData.appData.save}}</md-button>
         </form>
     </div>
 </md-content>

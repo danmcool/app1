@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
-<body ng-app="app1" ng-cloak md-theme="{{sessionData.dynamicTheme}}" ng-controller="AppCtrl">
+<body ng-app="app1" ng-cloak md-theme="{{sessionData.userData.properties.theme}}" ng-controller="AppCtrl">
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/angular.min.js"></script>
     <script src="/javascripts/angular-route.min.js"></script>
@@ -24,6 +24,7 @@
     <script src="core/applications.js"></script>
     <script src="core/workflows.js"></script>
     <script src="core/forms.js"></script>
+    <script src="core/translation.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
 
     <md-toolbar md-scroll-shrink class="md-hue-2">
@@ -32,7 +33,6 @@
                 <md-icon>menu</md-icon>
             </md-button>
             <h2>
-                <span>App1</span>
                 <span>{{sessionData.applicationName}}</span>
             </h2>
             <span flex></span>
@@ -45,13 +45,12 @@
     <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
         <md-content layout-padding layout="column">
             <md-toolbar class="md-theme-indigo">
-                <h1 class="md-toolbar-tools">Choose your applications</h1>
+                <h1 class="md-toolbar-tools">{{sessionData.appData.choose_app}}</h1>
             </md-toolbar>
-            <md-button ng-href="#applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">HOME
+            <md-button ng-if="sessionData.userData.title" ng-href="#applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
             </md-button>
-
             <div ng-repeat="application in sessionData.applications">
-                <md-button ng-href="#workflows/{{application._id}}" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{application.name}}
+                <md-button ng-href="#workflows/{{application._id}}" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{application.translated_name}}
                 </md-button>
             </div>
         </md-content>
@@ -59,18 +58,18 @@
 
     <md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
         <md-content layout-padding layout="column">
-            <md-toolbar ng-if="!sessionData.userData" class="md-theme-indigo">
-                <h1 class="md-toolbar-tools">User</h1>
+            <md-toolbar ng-if="!sessionData.userData.title" class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.appData.user}}</h1>
             </md-toolbar>
-            <md-toolbar ng-if="sessionData.userData" class="md-theme-indigo">
+            <md-toolbar ng-if="sessionData.userData.title" class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">{{sessionData.userData.title}}</h1>
             </md-toolbar>
-            <md-button ng-if="!sessionData.userData" ng-href="#login" class="md-primary" style="text-align: left" ng-click="closeRight()">Login</md-button>
-            <md-button ng-if="!sessionData.userData" ng-href="#register" class="md-primary" style="text-align: left" ng-click="closeRight()">Register</md-button>
-            <md-button ng-if="sessionData.userData && sessionData.userData.profile.type=='administrator'" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">Administration</md-button>
-            <md-button ng-if="sessionData.userData && sessionData.userData.profile.type!='public'" ng-href="#user" class="md-primary" style="text-align: left" ng-click="closeRight()">User Settings</md-button>
-            <md-button ng-if="sessionData.userData && sessionData.userData.profile.type=='public'" ng-href="" class="md-primary" style="text-align: left" ng-click="closeRight()">Information</md-button>
-            <md-button ng-if="sessionData.userData" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">Logout</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.administration}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='public'" ng-href="" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.information}}</md-button>
+            <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>
         </md-content>
     </md-sidenav>
 
