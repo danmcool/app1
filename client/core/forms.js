@@ -59,7 +59,10 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             if ($scope.form.display[i].display == "selection") {
                 for (var j = 0; j < $scope.form.values.length; j++) {
                     if ($scope.form.display[i].listofvalues == $scope.form.values[j]._id) {
-                        $scope.form.display[i].values = $scope.form.values[j].values;
+                        $scope.form.display[i].values = [];
+                        for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                            $scope.form.display[i].values.push(SessionService.translate($scope.form.values[j].values[k]));
+                        }
                         break;
                     }
                 }

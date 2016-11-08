@@ -89,10 +89,32 @@
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>{{field.translated_name}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
+                                <input type="text" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long.
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-switch-when="number">
+                    <div ng-switch="field.disabled">
+                        <div ng-switch-when="true">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <p class="subtitle">{{field.translated_name}}</p>
+                                <p class="md-body-1">{{data[field.name]}}</p>
+                            </md-input-container>
+                        </div>
+                        <div ng-switch-when="false">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>{{field.translated_name}}</label>
+                                <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" ng-pattern="field.pattern" step="field.step">
+                                <div ng-messages="dynamicForm.$field.name.$error" role="alert">
+                                    <div ng-message-exp="['required', 'pattern']">
+                                        Your input must be a double digit number.
                                     </div>
                                 </div>
                             </md-input-container>
@@ -303,7 +325,7 @@
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>{{field.translated_name}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
+                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" c="/^.+@.+\..+$/" />
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long and look like an e-mail address.

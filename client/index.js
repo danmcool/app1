@@ -29,7 +29,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             return sessionData;
         }
         var translate = function translate(text) {
-            return text[sessionData.userData.properties.language];
+            if (!text) return "xxxxx";
+            var translated_text = text[sessionData.userData.properties.language];
+            if (translated_text) return translated_text;
+            else return text["en"];
         }
         return {
             setSessionData: setSessionData,
