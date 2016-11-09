@@ -99,6 +99,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         register: {
             en: 'Register',
             fr: 'Enregister'
+        },
+        uploading_in_progress: {
+            en: 'Uploading in progress...',
+            fr: 'Téléchargement en cours...'
+        },
+        uploading_done: {
+            en: 'Uploading finished successfully!',
+            fr: 'Téléchargement terminé avec succès!'
         }
     };
     var translate = function translate(language) {

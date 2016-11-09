@@ -41,7 +41,7 @@ router.get('/:datamodelid/:id', function(req, res, next) {
     Metadata.ObjectModels[req.params.datamodelid].findOne({
         _id: req.params.id,
         _company_code: SessionCache.user[req.cookies.app1_token]._company_code
-    }, function(err, object) {
+    }).populate('_files').exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
     });

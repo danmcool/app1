@@ -16,6 +16,7 @@ var computePage = function(req) {
 
 // upload existing data models into memory at run-time (create schema, etc)
 var DataModel = Metadata.DataModel;
+var File = Metadata.File;
 DataModel.find(function(err, objects) {
     if (err) return next(err);
     for (var i = 0; i < objects.length; i++) {
@@ -48,7 +49,10 @@ router.post('/datamodel/', function(req, res, next) {
             object.datamodel._updated_at = "Date";
             object.datamodel._company_code = "String";
             object.datamodel._user = "String";
-            object.datamodel._files = ["String"];
+            object.datamodel._files = [{
+                type: Schema.Types.ObjectId,
+                ref: 'File'
+            }];
             modelSchema = new Schema(object.datamodel);
         } catch (e) {
             console.log(e);
@@ -76,7 +80,10 @@ router.put('/datamodel/:id', function(req, res, next) {
     datamodel._updated_at = "Date";
     datamodel._company_code = "String";
     datamodel._user = "String";
-    datamodel._files = ["String"];
+    datamodel._files = [{
+        type: Schema.Types.ObjectId,
+        ref: 'File'
+    }];
     req.body.datamodel = JSON.stringify(datamodel);
     try {
         modelSchema = new Schema(datamodel);
