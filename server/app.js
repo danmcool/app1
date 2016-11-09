@@ -11,17 +11,16 @@ var path = require('path');
 mongoose.connect('mongodb://localhost/apps');
 
 // require routes
-var metadata = require('./routes/metadata');
-var data = require('./routes/data');
-var file = require('./routes/file');
-var client = require('./routes/client');
+var api = require('./routes/api.js');
+var data = require('./routes/data.js');
+var file = require('./routes/file.js');
+var client = require('./routes/client.js');
 var authentication = require('./routes/authentication');
 
 // create instance of express
 var app = express();
 
-// user schema/model
-var Session = require('./tools/session');
+var SessionCache = require('./tools/session_cache.js');
 
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));
@@ -40,14 +39,14 @@ function allowedPath(req) {
 }
 
 function hasPermission(req) {
-    if (Session.isActive(req.cookies.app1_token)) {
+    if (SessionCache.isActive(req.cookies.app1_token)) {
         return true;
     } else {
         return false;
     }
 }
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     if (allowedPath(req) || hasPermission(req)) {
         next();
     } else {
@@ -62,26 +61,26 @@ app.use('/data', data);
 app.use('/file', file);
 app.use('/client', client);
 app.use('/authentication', authentication);
-app.use('/api', metadata);
+app.use('/api', api);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
-app.get('/admin', function (req, res) {
+app.get('/admin', function(req, res) {
     res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
 });
 
 // error hndlers
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
-app.use(function (err, req, res) {
+app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.end(JSON.stringify({
         message: err.message,

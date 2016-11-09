@@ -2,15 +2,17 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-var Metadata = require('../models/Metadata.js');
-var Session = require('../tools/session.js');
+var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
+var SessionCache = require('../tools/session_cache.js');
 var ApplicationLiveCycle = require('../tools/application_live_cycle.js');
+
 var Company = Metadata.Company;
 var User = Metadata.User;
 var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
+var Session = Metadata.Session;
 
 router.post('/register', function(req, res) {
     Company.findOne({
@@ -102,14 +104,21 @@ router.post('/login', function(req, res, next) {
                 if (!user) return res.status(401).json({
                     err: "Invalid user name or password!"
                 });
-                var token = Session.login(user);
-                res.cookie('app1_token', token, {
-                    maxAge: Constants.MaxSessionTimeout,
-                    httpOnly: true
-                });
-                res.status(200).json({
-                    token: token,
-                    user: user
+                var session = {
+                    user: user._id,
+                    timeout: Date.now() + Constants.MaxSessionTimeout,
+                    _company_code: req.body.code
+                };
+                Session.create(session, function(err, newSession) {
+                    if (err) return next(err);
+                    SessionCache.login(newSession._id, user);
+                    res.cookie('app1_token', newSession._id, {
+                        maxAge: Constants.MaxSessionTimeout,
+                        httpOnly: true
+                    }).status(200).json({
+                        token: newSession._id,
+                        user: user
+                    });
                 });
             });
 });
@@ -119,38 +128,65 @@ router.get('/status', function(req, res) {
         err: "Not logged in!"
     });
     var token = req.cookies.app1_token;
-    if (!Session.isActive(token)) return res.status(401).json({
-        err: "Invalid session!"
+    var current_time = Date.now();
+    Session.findOneAndUpdate({
+        _id: {
+            "$eq": token
+        },
+        timeout: {
+            "$gt": current_time
+        }
+    }, {
+        timeout: current_time + Constants.MaxSessionTimeout
+    }).populate('user').exec(function(err, existingSession) {
+        if (err) return res.status(401).json({
+            err: err.info
+        });
+        if (!existingSession) return res.status(401).json({
+            err: "Invalid session!"
+        });
+        User.findOne({
+            _id: existingSession.user._id,
+            validated: true
+        }, 'email firstname lastname user _company_code properties company profile')
+            .populate('company profile').exec(
+                function(err, user) {
+                    if (err) return res.status(401).json({
+                        err: err.info
+                    });
+                    if (!user) return res.status(401).json({
+                        err: "Invalid user name or password!"
+                    });
+                    if (SessionCache.isActive(token)) {
+                        SessionCache.touch(token);
+                    } else {
+                        SessionCache.login(token, user);
+                    }
+                    res.cookie('app1_token', token, {
+                        maxAge: Constants.MaxSessionTimeout,
+                        httpOnly: true
+                    }).status(200).json({
+                        token: token,
+                        user: user
+                    });
+                });
     });
-    User.findOne({
-        user: Session.users[token].user,
-        _company_code: Session.users[token]._company_code,
-        validated: true
-    }, 'email firstname lastname user _company_code properties company profile')
-        .populate('company profile').exec(
-            function(err, user) {
-                if (err) return res.status(401).json({
-                    err: info
-                });
-                if (!user) return res.status(401).json({
-                    err: "Invalid user name or password!"
-                });
-                Session.users[token] = user;
-                res.cookie('app1_token', token, {
-                    maxAge: Constants.MaxSessionTimeout,
-                    httpOnly: true
-                });
-                res.status(200).json({
-                    token: token,
-                    user: user
-                });
-            });
 });
 
 router.get('/logout', function(req, res) {
-    Session.logout(req.cookies.app1_token);
-    res.clearCookie('app1_token');
-    res.status(200);
+    var token = req.cookies.app1_token;
+    Session.findOneAndRemove({
+        _id: req.cookies.app1_token
+    }, function(err, object) {
+        if (err) return next(err);
+        if (!object) return res.status(401).json({
+            err: "Invalid session!"
+        });
+        SessionCache.logout(req.cookies.app1_token);
+        res.clearCookie('app1_token');
+        res.status(200);
+    });
+
 });
 
 module.exports = router;

@@ -102,6 +102,20 @@ var UserProfileSchema = new Schema({
     _company_code: String
 });
 Metadata.UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+var SessionSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    timeout: Date,
+    properties: String, // browser, device, etc
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.Session = mongoose.model('Session', SessionSchema);
 var CompanySchema = new Schema({
     name: String,
     applications: [{
@@ -135,6 +149,14 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Company'
     },
+    manager: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    reports:  [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     _updated_at: {
         type: Date,
         default: Date.now

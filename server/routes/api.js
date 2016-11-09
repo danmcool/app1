@@ -3,8 +3,8 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Metadata = require('../models/Metadata.js');
-var Session = require('../tools/session');
+var Metadata = require('../models/metadata.js');
+var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 
 var computePage = function(req) {
@@ -32,14 +32,14 @@ DataModel.find(function(err, objects) {
 
 router.get('/datamodel/', function(req, res, next) {
     var pageOptions = computePage(req);
-    DataModel.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    DataModel.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/datamodel/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     DataModel.create(req.body, function(err, object) {
         if (err) return next(err);
         var modelSchema;
@@ -60,7 +60,7 @@ router.post('/datamodel/', function(req, res, next) {
     });
 });
 router.get('/datamodel/:id', function(req, res, next) {
-    DataModel.findOne(Session.filterCompanyCode(req, {
+    DataModel.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -88,7 +88,7 @@ router.put('/datamodel/:id', function(req, res, next) {
     }
     Metadata.ObjectModels[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
     module.exports = Metadata;
-    DataModel.findOneAndUpdate(Session.filterCompanyCode(req, {
+    DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -96,9 +96,9 @@ router.put('/datamodel/:id', function(req, res, next) {
     });
 });
 router.delete('/datamodel/:id', function(req, res, next) {
-    DataModel.findOneAndRemove(Session.filterCompanyCode(req, {
+    DataModel.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -107,20 +107,20 @@ router.delete('/datamodel/:id', function(req, res, next) {
 var Value = Metadata.Value;
 router.get('/value/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Value.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
+    Value.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/value/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     Value.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/value/:id', function(req, res, next) {
-    Value.findOne(Session.filterCompanyCode(req, {
+    Value.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -128,7 +128,7 @@ router.get('/value/:id', function(req, res, next) {
     });
 });
 router.put('/value/:id', function(req, res, next) {
-    Value.findOneAndUpdate(Session.filterCompanyCode(req, {
+    Value.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -136,9 +136,9 @@ router.put('/value/:id', function(req, res, next) {
     });
 });
 router.delete('/value/:id', function(req, res, next) {
-    Value.findOneAndRemove(Session.filterCompanyCode(req, {
+    Value.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -147,20 +147,20 @@ router.delete('/value/:id', function(req, res, next) {
 var Form = Metadata.Form;
 router.get('/form/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Form.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
+    Form.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/form/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     Form.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/form/:id', function(req, res, next) {
-    Form.findOne(Session.filterCompanyCode(req, {
+    Form.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -168,7 +168,7 @@ router.get('/form/:id', function(req, res, next) {
     });
 });
 router.put('/form/:id', function(req, res, next) {
-    Form.findOneAndUpdate(Session.filterCompanyCode(req, {
+    Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -176,9 +176,9 @@ router.put('/form/:id', function(req, res, next) {
     });
 });
 router.delete('/form/:id', function(req, res, next) {
-    Form.findOneAndRemove(Session.filterCompanyCode(req, {
+    Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -187,21 +187,21 @@ router.delete('/form/:id', function(req, res, next) {
 var Company = Metadata.Company;
 router.get('/company/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Company.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Company.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/company/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     Company.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/company/:id', function(req, res, next) {
-    Company.findOne(Session.filterCompanyCode(req, {
+    Company.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -209,7 +209,7 @@ router.get('/company/:id', function(req, res, next) {
     });
 });
 router.put('/company/:id', function(req, res, next) {
-    Company.findOneAndUpdate(Session.filterCompanyCode(req, {
+    Company.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -217,9 +217,9 @@ router.put('/company/:id', function(req, res, next) {
     });
 });
 router.delete('/company/:id', function(req, res, next) {
-    Company.findOneAndRemove(Session.filterCompanyCode(req, {
+    Company.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -228,21 +228,21 @@ router.delete('/company/:id', function(req, res, next) {
 var UserProfile = Metadata.UserProfile;
 router.get('/userprofile/', function(req, res, next) {
     var pageOptions = computePage(req);
-    UserProfile.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    UserProfile.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/userprofile/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     UserProfile.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/userprofile/:id', function(req, res, next) {
-    UserProfile.findOne(Session.filterCompanyCode(req, {
+    UserProfile.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -250,7 +250,7 @@ router.get('/userprofile/:id', function(req, res, next) {
     });
 });
 router.put('/userprofile/:id', function(req, res, next) {
-    UserProfile.findOneAndUpdate(Session.filterCompanyCode(req, {
+    UserProfile.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -258,9 +258,50 @@ router.put('/userprofile/:id', function(req, res, next) {
     });
 });
 router.delete('/userprofile/:id', function(req, res, next) {
-    UserProfile.findOneAndRemove(Session.filterCompanyCode(req, {
+    UserProfile.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+
+var Session = Metadata.Session;
+router.get('/session/', function(req, res, next) {
+    var pageOptions = computePage(req);
+    Session.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+        object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.post('/session/', function(req, res, next) {
+    SessionCache.filterCompanyCode(req, {});
+    Session.create(req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/session/:id', function(req, res, next) {
+    Session.findOne(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.put('/session/:id', function(req, res, next) {
+    Session.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
     }), req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.delete('/session/:id', function(req, res, next) {
+    Session.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -269,21 +310,21 @@ router.delete('/userprofile/:id', function(req, res, next) {
 var User = Metadata.User;
 router.get('/user/', function(req, res, next) {
     var pageOptions = computePage(req);
-    User.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
+    User.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/user/', function(req, res, next) {
     req.body.user = req.body.user.toLowerCase();
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     User.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/user/:id', function(req, res, next) {
-    User.findOne(Session.filterCompanyCode(req, {
+    User.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -292,18 +333,18 @@ router.get('/user/:id', function(req, res, next) {
 });
 router.put('/user/:id', function(req, res, next) {
     if (req.body.user) req.body.user = req.body.user.toLowerCase();
-    User.findOneAndUpdate(Session.filterCompanyCode(req, {
+    User.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
-        //Session.users[req.cookies.app1_token] =
+        //SessionCache.users[req.cookies.app1_token] =
         res.json(object);
     });
 });
 router.delete('/user/:id', function(req, res, next) {
-    User.findOneAndRemove(Session.filterCompanyCode(req, {
+    User.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -312,21 +353,21 @@ router.delete('/user/:id', function(req, res, next) {
 var Workflow = Metadata.Workflow;
 router.get('/workflow/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Workflow.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Workflow.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/workflow/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     Workflow.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/workflow/:id', function(req, res, next) {
-    Workflow.findOne(Session.filterCompanyCode(req, {
+    Workflow.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -334,7 +375,7 @@ router.get('/workflow/:id', function(req, res, next) {
     });
 });
 router.put('/workflow/:id', function(req, res, next) {
-    Workflow.findOneAndUpdate(Session.filterCompanyCode(req, {
+    Workflow.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -342,9 +383,9 @@ router.put('/workflow/:id', function(req, res, next) {
     });
 });
 router.delete('/workflow/:id', function(req, res, next) {
-    Workflow.findOneAndRemove(Session.filterCompanyCode(req, {
+    Workflow.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
@@ -352,21 +393,21 @@ router.delete('/workflow/:id', function(req, res, next) {
 var Application = Metadata.Application;
 router.get('/application/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(Session.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Application.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.post('/application/', function(req, res, next) {
-    Session.filterCompanyCode(req, {});
+    SessionCache.filterCompanyCode(req, {});
     Application.create(req.body, function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
 });
 router.get('/application/:id', function(req, res, next) {
-    Application.findOne(Session.filterCompanyCode(req, {
+    Application.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
@@ -374,7 +415,7 @@ router.get('/application/:id', function(req, res, next) {
     });
 });
 router.put('/application/:id', function(req, res, next) {
-    Application.findOneAndUpdate(Session.filterCompanyCode(req, {
+    Application.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
@@ -382,9 +423,9 @@ router.put('/application/:id', function(req, res, next) {
     });
 });
 router.delete('/application/:id', function(req, res, next) {
-    Application.findOneAndRemove(Session.filterCompanyCode(req, {
+    Application.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    }), req.body, function(err, object) {
+    }), function(err, object) {
         if (err) return next(err);
         res.json(object);
     });
