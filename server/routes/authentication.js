@@ -28,7 +28,7 @@ router.post('/register', function(req, res) {
         Company.create(company, function(err, newCompany) {
             if (err) return next(err);
             var userprofile = {
-                name: "Administrator",
+                name: {"en":"Administrator"},
                 type: Constants.UserProfileAdministrator,
                 _company_code: req.body.code
             };
@@ -72,18 +72,13 @@ router.get('/validate', function(req, res) {
         }
     }, function(err, object) {
         if (err) return next(err);
-        if (!object) return res.status(401).json({
-            "msg": "Registration: user has been already validated!"
-        });
-        res.status(200).json({
-            "msg": "Registration: user has been validated, please log on using initial password!"
-        });
+        if (!object) return res.status(401).send("Registration: user has been already validated!");
         Application.find({
             _company_code: Constants.ProductionCompany
         }, function(err, appObjects) {
             var appList = [];
             for (var i = 0; i < appObjects.length; i++) {
-                appList.push(appObjects[i])
+                appList.push(""+appObjects[i]._id);
             };
             Company.findOneAndUpdate({
                 _company_code: _company_code
@@ -91,6 +86,7 @@ router.get('/validate', function(req, res) {
                 applications: appList
             });
         });
+        res.status(200).send("<p>Registration: user has been validated, please log on using initial password!</p><br><a href='/#login'>Login</a>");
         /*
         var objectList = {};
         Application.find({
