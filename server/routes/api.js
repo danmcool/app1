@@ -22,7 +22,15 @@ DataModel.find(function(err, objects) {
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
         try {
-            modelSchema = new Schema(JSON.parse(objects[i].datamodel ? objects[i].datamodel : "{}"));
+            var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : "{}");
+            datamodel._updated_at = "Date";
+            datamodel._company_code = "String";
+            datamodel._user = "String";
+            datamodel._files = [{
+                type: Schema.Types.ObjectId,
+                ref: 'File'
+            }];
+            modelSchema = new Schema(datamodel);
         } catch (e) {
             console.log(e);
             modelSchema = new Schema({});
