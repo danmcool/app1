@@ -270,8 +270,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             })
             .otherwise({
                 redirectTo: '/',
-                templateUrl: 'core/login.html',
-                controller: 'LoginCtrl'
+                templateUrl: 'core/register.html',
+                controller: 'RegisterCtrl'
             });
     }
 ]);

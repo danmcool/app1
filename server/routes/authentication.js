@@ -111,13 +111,14 @@ router.post('/login', function(req, res, next) {
                 };
                 Session.create(session, function(err, newSession) {
                     if (err) return next(err);
-                    SessionCache.login(newSession._id, user);
+                    var jsonUser = JSON.parse(JSON.stringify(user));
+                    SessionCache.login(newSession._id, jsonUser);
                     res.cookie('app1_token', newSession._id, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     }).status(200).json({
                         token: newSession._id,
-                        user: user
+                        user: jsonUser
                     });
                 });
             });
@@ -157,17 +158,18 @@ router.get('/status', function(req, res) {
                     if (!user) return res.status(401).json({
                         err: "Invalid user name or password!"
                     });
+                    var jsonUser = JSON.parse(JSON.stringify(user));
                     if (SessionCache.isActive(token)) {
                         SessionCache.touch(token);
                     } else {
-                        SessionCache.login(token, user);
+                        SessionCache.login(token, jsonUser);
                     }
                     res.cookie('app1_token', token, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     }).status(200).json({
                         token: token,
-                        user: user
+                        user: jsonUser
                     });
                 });
     });

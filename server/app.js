@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var path = require('path');
 
+mongoose.Promise = global.Promise;
+
 // mongoose
 mongoose.connect('mongodb://localhost/apps');
 
@@ -15,7 +17,10 @@ var api = require('./routes/api.js');
 var data = require('./routes/data.js');
 var file = require('./routes/file.js');
 var client = require('./routes/client.js');
-var authentication = require('./routes/authentication');
+var authentication = require('./routes/authentication.js');
+
+// init metadata and sessions
+require('./tools/init_objects.js');
 
 // create instance of express
 var app = express();

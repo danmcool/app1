@@ -14,31 +14,7 @@ var computePage = function(req) {
     }
 }
 
-// upload existing data models into memory at run-time (create schema, etc)
 var DataModel = Metadata.DataModel;
-var File = Metadata.File;
-DataModel.find(function(err, objects) {
-    if (err) return next(err);
-    for (var i = 0; i < objects.length; i++) {
-        var modelSchema;
-        try {
-            var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : "{}");
-            datamodel._updated_at = "Date";
-            datamodel._company_code = "String";
-            datamodel._user = "String";
-            datamodel._files = [{
-                type: Schema.Types.ObjectId,
-                ref: 'File'
-            }];
-            modelSchema = new Schema(datamodel);
-        } catch (e) {
-            console.log(e);
-            modelSchema = new Schema({});
-        }
-        Metadata.ObjectModels[objects[i]._id] = mongoose.model('data' + objects[i]._id, modelSchema);
-    }
-});
-
 router.get('/datamodel/', function(req, res, next) {
     var pageOptions = computePage(req);
     DataModel.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
