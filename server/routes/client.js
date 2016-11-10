@@ -14,8 +14,10 @@ var computePage = function(req) {
 }
 
 router.get('/form/:id', function(req, res, next) {
-    Metadata.Form.findOne(SessionCache.filterCompanyCode(req, {
-        _id: req.params.id
+    Metadata.Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
+        _id: {
+            "$eq": req.params.id
+        }
     })).populate('datamodel values').exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
@@ -24,7 +26,7 @@ router.get('/form/:id', function(req, res, next) {
 
 router.get('/application/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Metadata.Application.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('workflows').exec(function(err,
+    Metadata.Application.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('workflows').exec(function(err,
         object) {
         if (err) return next(err);
         res.json(object);

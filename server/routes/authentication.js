@@ -78,14 +78,29 @@ router.get('/validate', function(req, res) {
         res.status(200).json({
             "msg": "Registration: user has been validated, please log on using initial password!"
         });
+        Application.find({
+            _company_code: Constants.ProductionCompany
+        }, function(err, appObjects) {
+            var appList = [];
+            for (var i = 0; i < appObjects.length; i++) {
+                appList.push(appObjects[i])
+            };
+            Company.findOneAndUpdate({
+                _company_code: _company_code
+            }, {
+                applications: appList
+            });
+        });
+        /*
         var objectList = {};
         Application.find({
             _company_code: Constants.ProductionCompany
         }, function(err, appObjects) {
             for (var i = 0; i < appObjects.length; i++) {
+                appList.push(appObjects[i])
                 ApplicationLiveCycle.copyApplication(appObjects[i], _company_code, objectList);
             };
-        });
+        });*/
     });
 });
 

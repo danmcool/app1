@@ -72,4 +72,18 @@ SessionCache.filterCompanyCode = function(req, filter) {
     return filter;
 }
 
+SessionCache.filterApplicationCompanyCode = function(req, filter) {
+    var company_code = SessionCache.user[req.cookies.app1_token]._company_code;
+    if (company_code != Constants.AdminCompany) {
+        if (!filter) filter = {};
+        filter._company_code = {
+            "$in": [company_code, Constants.ProductionCompany]
+        };
+        if (req.body != null && req.body._company_code != company_code) {
+            req.body._company_code = company_code;
+        }
+    }
+    return filter;
+}
+
 module.exports = SessionCache;
