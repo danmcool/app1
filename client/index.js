@@ -192,7 +192,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }).catch(function(error) {
             $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             SessionService.setSessionData($scope.sessionData);
-            $location.url('/login');
+            $location.url('/');
         });
         $scope.closeLeft = function() {
             $mdSidenav('left').close();

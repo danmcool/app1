@@ -107,6 +107,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         uploading_done: {
             en: 'Uploading finished successfully!',
             fr: 'Téléchargement terminé avec succès!'
+        },
+        already_account: {
+            en: 'If you already have an account, please click here to login!',
+            fr: 'Si vous avez déjà un compte, veuillez cliquer ici pour se connecter!'
         }
     };
     var translate = function translate(language) {
