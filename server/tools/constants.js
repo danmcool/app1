@@ -1,5 +1,5 @@
 const Constants = {
-    WebAddress: "ec2-52-57-61-58.eu-central-1.compute.amazonaws.com",
+    WebAddress: "app1.cloud",
     MaxSessionTimeout: 1209600000,
     QuerySkip: 0,
     QueryLimit: 10,
@@ -16,6 +16,14 @@ const Constants = {
     S3_BUCKET: "app1data",
     REGION: "eu-central-1",
     ACCESS_KEY_ID: "AKIAIYXUGMUVMMXJXR3A",
-    SECRET_ACCESS_KEY: "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"
+    SECRET_ACCESS_KEY: "svOcOW/XI0vPYWAryVPcNyBt0gX+D9xhIgry5acD",
+
+    EmailUserName: 'app1.noreply@gmail.com',
+    EmailPassword: 'Admin;App1',
+    EmailHost: 'smtp.gmail.com',
+    EmailPort: '465',
+    EmailSSL: true,
+    EmailDomain: 'gmail.com',
+    EmailAuthentication: 'login'
 }
 module.exports = Constants;
