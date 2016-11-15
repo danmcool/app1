@@ -40,6 +40,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             $scope.tempStopScroll = false;
         });
     }
+
     $scope.initText = function() {
         $scope.form.title = SessionService.translate($scope.form.name);
         if ($scope.form.actions) {
@@ -65,14 +66,45 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             }
         }
     }
-    $scope.initComponents = function() {
+
+    $scope.initComponentsList = function() {
+        if (!$scope.form.search_criteria) $scope.form.search_criteria = "";
+        var keysOfParameters = Object.keys($routeParams);
+        for (i = 0, l = keysOfParameters.length; i < l; i++) {
+            $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[i], $routeParams[
+                keysOfParameters[i]]);
+        }
+        for (var j = 0; j < $scope.form.values.length; j++) {
+            if ($scope.form.display.title_listofvalues == $scope.form.values[j]._id) {
+                $scope.form.display.title_values = {};
+                for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                    $scope.form.display.title_values[$scope.form.values[j].values[k]._id] =
+                        SessionService.translate($scope.form.values[j].values[k]);
+                }
+            } else if ($scope.form.display.subtitle_listofvalues == $scope.form.values[j]._id) {
+                $scope.form.display.subtitle_values = {};
+                for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                    $scope.form.display.subtitle_values[$scope.form.values[j].values[k]._id] =
+                        SessionService.translate($scope.form.values[j].values[k]);
+                }
+            }
+        }
+    }
+
+    $scope.initComponentsForm = function() {
         for (var i = 0; i < $scope.form.display.length; i++) {
-            if ($scope.form.display[i].display == "selection") {
+            if ($scope.form.display[i].display == "selection" || $scope.form.display[i].display == "currency") {
                 for (var j = 0; j < $scope.form.values.length; j++) {
                     if ($scope.form.display[i].listofvalues == $scope.form.values[j]._id) {
                         $scope.form.display[i].values = [];
+                        $scope.form.display[i].values_key = {};
                         for (k = 0; k < $scope.form.values[j].values.length; k++) {
-                            $scope.form.display[i].values.push(SessionService.translate($scope.form.values[j].values[k]));
+                            $scope.form.display[i].values.push({
+                                "_id": $scope.form.values[j].values[k]._id,
+                                "name": SessionService.translate($scope.form.values[j].values[k])
+                            });
+                            $scope.form.display[i].values_key[$scope.form.values[j].values[k]._id] =
+                                SessionService.translate($scope.form.values[j].values[k]);
                         }
                         break;
                     }
@@ -93,29 +125,24 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     }, function(form, $resource) {
         $scope.form = form;
         $scope.initText();
-        if (form.type == "form") {
+        if ($scope.form.type == "form") {
             if ($routeParams.entry_id == '0') {
                 $scope.data = new Datas({
-                    datamodel_id: form.datamodel._id,
+                    datamodel_id: $scope.form.datamodel._id,
                     _files: []
                 });
-                $scope.initComponents();
+                $scope.initComponentsForm();
             } else {
                 Datas.get({
-                    datamodel_id: form.datamodel._id,
+                    datamodel_id: $scope.form.datamodel._id,
                     entry_id: $routeParams.entry_id
                 }).$promise.then(function(data) {
                     $scope.data = data;
-                    $scope.initComponents();
+                    $scope.initComponentsForm();
                 });
             }
-        } else if (form.type == "list") {
-            if (!$scope.form.search_criteria) form.search_criteria = "";
-            var keysOfParameters = Object.keys($routeParams);
-            for (i = 0, l = keysOfParameters.length; i < l; i++) {
-                $scope.form.search_criteria = form.search_criteria.replace('@' + keysOfParameters[i], $routeParams[
-                    keysOfParameters[i]]);
-            }
+        } else if ($scope.form.type == "list") {
+            $scope.initComponentsList();
             $scope.getNextData();
         }
     });

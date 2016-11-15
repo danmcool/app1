@@ -8,8 +8,28 @@
         <div infinite-scroll="getNextData()" infinite-scroll-distance="10">
             <md-list-item class="md-3-line" ng-repeat="data in datas">
                 <div class="md-list-item-text" layout="column">
-                    <h3>{{data[form.display.title]}}</h3>
-                    <h4>{{data[form.display.subtitle]}}</h4>
+                    <div ng-switch="form.display.title_display">
+                        <div ng-switch-when="text">
+                            <h3>{{data[form.display.title]}}</h3>
+                        </div>
+                        <div ng-switch-when="value">
+                            <h3>{{form.display.title_values[data[form.display.title]]}}</h3>
+                        </div>
+                        <div ng-switch-when="currency">
+                            <h3>{{data[form.display.title]}}</h3>
+                        </div>
+                    </div>
+                    <div ng-switch="form.display.subtitle_display">
+                        <div ng-switch-when="text">
+                            <h4>{{data[form.display.subtitle]}}</h4>
+                        </div>
+                        <div ng-switch-when="value">
+                            <h4>{{form.display.subtitle_values[data[form.display.subtitle]]}}</h4>
+                        </div>
+                        <div ng-switch-when="currency">
+                            <h4>{{data[form.display.subtitle].value}} {{form.display.subtitle_values[data[form.display.subtitle].currency]}}</h4>
+                        </div>
+                    </div>
                     <p>{{data[form.display.date]|date:form.date_format}}</p>
                 </div>
                 <div ng-repeat="action in form.item_actions" class="md-secondary" layout="row">
@@ -44,7 +64,7 @@
         </div>
     </div>
 </md-content>
-<md-content ng-show="form.type == 'form'" class="md-inline-form" layout-padding>
+<md-content ng-show="form.type == 'form'" layout-padding>
     <md-toolbar layout="row" class="md-hue-1">
         <div class="md-toolbar-tools">
             <span>{{form.title}}</span>
@@ -118,6 +138,35 @@
                                     </div>
                                 </div>
                             </md-input-container>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-switch-when="currency">
+                    <div ng-switch="field.disabled">
+                        <div ng-switch-when="true">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <p class="subtitle">{{field.translated_name}}</p>
+                                <p class="md-body-1">{{data[field.name].value}} {{field.values_key[data[field.name].currency]}}</p>
+                            </md-input-container>
+                        </div>
+                        <div ng-switch-when="false">
+                            <div layout="row">
+                                <md-input-container flex="80">
+                                    <label>{{field.translated_name}}</label>
+                                    <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name].value" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max">
+                                    <div ng-messages="dynamicForm.$field.name.$error" role="alert">
+                                        <div ng-message-exp="['required', 'pattern']">
+                                            Your input must be a double digit number.
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex="20">
+                                    <md-select ng-model="data[field.name].currency" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}">
+                                        <md-option ng-repeat="value in field.values" value="{{value._id}}" ng-selected="data[field.name].currency == value._id">{{value.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -281,19 +330,20 @@
                         <div ng-switch-when="true">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <p class="subtitle">{{field.translated_name}}</p>
-                                <p class="md-body-1">{{data[field.name]}}</p>
+                                <p class="md-body-1">{{field.values_key[data[field.name]]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>{{field.translated_name}}</label>
                                 <md-select name="{{field.translated_name}}" ng-model="data[field.name]" ng-disabled="field.disabled" ng-required="field.required">
-                                    <md-option ng-repeat="value in field.values" value="{{value}}">{{value}}</md-option>
+                                    <md-option ng-repeat="value in field.values" value="{{value._id}}" ng-selected="data[field.name]=={{value._id}}">{{value.name}}</md-option>
                                 </md-select>
                             </md-input-container>
                         </div>
                     </div>
                 </div>
+
                 <div ng-switch-when="check">
                     <md-input-container class="md-block" flex-gt-xs>
                         <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="data[field.name]">{{field.translated_name}}</md-checkbox>
@@ -311,11 +361,12 @@
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>{{field.translated_name}}</label>
-                                <md-datepicker ng-disabled="field.disabled" md-hide-icons="triangle" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]"></md-datepicker>
+                                <md-datepicker ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]"></md-datepicker>
                             </md-input-container>
                         </div>
                     </div>
                 </div>
+
                 <div ng-switch-when="email">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
