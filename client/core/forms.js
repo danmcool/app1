@@ -110,9 +110,11 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                     }
                 }
             } else if ($scope.form.display[i].display == "address") {
-                MapService.initMap();
-                var field_name = $scope.form.display[i].name;
-                MapService.geocodeAddress($scope.data[field_name].address_line1 + ',' + $scope.data[field_name].address_line2 + ',' + $scope.data[field_name].address_city + ',' + $scope.data[field_name].address_state + ',' + $scope.data[field_name].address_postal_code + ',' + $scope.data[field_name].address_country);
+                if ($scope.form.display[i].disabled) {
+                    MapService.initMap();
+                    var field_name = $scope.form.display[i].name;
+                    MapService.geocodeAddress($scope.data[field_name].address_line1 + ',' + $scope.data[field_name].address_line2 + ',' + $scope.data[field_name].address_city + ',' + $scope.data[field_name].address_state + ',' + $scope.data[field_name].address_postal_code + ',' + $scope.data[field_name].address_country);
+                }
             } else if ($scope.form.display[i].display == "calendar") {
                 var field_name = $scope.form.display[i].name;
                 if ($scope.data[field_name]) $scope.data[field_name] = new Date($scope.data[field_name]);
