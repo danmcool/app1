@@ -18,7 +18,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.currentFile = 0;
     $scope.filesCount = 0;
 
-    $scope.getNextData = function() {
+    var getNextData = function() {
         if ($scope.stopScroll) return;
         if ($scope.tempStopScroll) return;
         if (!$scope.form.datamodel) return;
@@ -41,7 +41,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         });
     }
 
-    $scope.initText = function() {
+    var initText = function() {
         $scope.form.title = SessionService.translate($scope.form.name);
         if ($scope.form.actions) {
             for (var i = 0; i < $scope.form.actions.length; i++) {
@@ -75,7 +75,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
 
-    $scope.initComponentsList = function() {
+    var initComponentsList = function() {
         if (!$scope.form.search_criteria) $scope.form.search_criteria = "";
         var keysOfParameters = Object.keys($routeParams);
         for (i = 0, l = keysOfParameters.length; i < l; i++) {
@@ -99,7 +99,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
 
-    $scope.initComponentsForm = function() {
+    var initComponentsForm = function() {
         for (var i = 0; i < $scope.form.display.length; i++) {
             if ($scope.form.display[i].display == "selection" || $scope.form.display[i].display == "currency") {
                 for (var j = 0; j < $scope.form.values.length; j++) {
@@ -120,8 +120,10 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             } else if ($scope.form.display[i].display == "address") {
                 if ($scope.form.display[i].disabled) {
                     var field_name = $scope.form.display[i].name;
-                    MapService.initMap("map"+field_name);
-                    MapService.geocodeAddress("map"+field_name, $scope.data[field_name].address_line1 + ',' + $scope.data[field_name].address_line2 + ',' + $scope.data[field_name].address_city + ',' + $scope.data[field_name].address_state + ',' + $scope.data[field_name].address_postal_code + ',' + $scope.data[field_name].address_country);
+                    MapService.initMap("map" + field_name);
+                    var address = $scope.data[field_name];
+                    MapService.geocodeAddress("map" + field_name, (address.address_line1 ? (address.address_line1 + ',') : '') +
+                        (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
             } else if ($scope.form.display[i].display == "calendar") {
                 var field_name = $scope.form.display[i].name;
@@ -134,26 +136,26 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         id: $routeParams.id
     }, function(form, $resource) {
         $scope.form = form;
-        $scope.initText();
+        initText();
         if ($scope.form.type == "form") {
             if ($routeParams.entry_id == '0') {
                 $scope.data = new Datas({
                     datamodel_id: $scope.form.datamodel._id,
                     _files: []
                 });
-                $scope.initComponentsForm();
+                initComponentsForm();
             } else {
                 Datas.get({
                     datamodel_id: $scope.form.datamodel._id,
                     entry_id: $routeParams.entry_id
                 }).$promise.then(function(data) {
                     $scope.data = data;
-                    $scope.initComponentsForm();
+                    initComponentsForm();
                 });
             }
         } else if ($scope.form.type == "list") {
-            $scope.initComponentsList();
-            $scope.getNextData();
+            initComponentsList();
+            getNextData();
         }
     });
 
