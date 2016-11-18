@@ -66,8 +66,7 @@ router.put('/:datamodelid/:id', function(req, res, next) {
                 _company_code: SessionCache.user[req.cookies.app1_token]._company_code
             }, function(err, object) {
                 if (err) return next(err);
-                res.status(400);
-                res.json(object);
+                res.status(400).json(object);
             });
         }
     });

@@ -55,6 +55,14 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
         if ($scope.form.display) {
             for (var i = 0; i < $scope.form.display.length; i++) {
+                if ($scope.form.display[i].display == "address") {
+                    $scope.form.display[i].address_line1_translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].name].address_line1);
+                    $scope.form.display[i].address_line2_translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].name].address_line2);
+                    $scope.form.display[i].address_city_translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].name].address_city);
+                    $scope.form.display[i].address_state_translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].name].address_state);
+                    $scope.form.display[i].address_postal_code_translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].name].address_postal_code);
+                    $scope.form.display[i].address_country_translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].name].address_country);
+                }
                 if ($scope.form.display[i].text) {
                     $scope.form.display[i].translated_name = SessionService.translate($scope.form.display[i].text);
                 } else {
@@ -111,9 +119,9 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 }
             } else if ($scope.form.display[i].display == "address") {
                 if ($scope.form.display[i].disabled) {
-                    MapService.initMap();
                     var field_name = $scope.form.display[i].name;
-                    MapService.geocodeAddress($scope.data[field_name].address_line1 + ',' + $scope.data[field_name].address_line2 + ',' + $scope.data[field_name].address_city + ',' + $scope.data[field_name].address_state + ',' + $scope.data[field_name].address_postal_code + ',' + $scope.data[field_name].address_country);
+                    MapService.initMap("map"+field_name);
+                    MapService.geocodeAddress("map"+field_name, $scope.data[field_name].address_line1 + ',' + $scope.data[field_name].address_line2 + ',' + $scope.data[field_name].address_city + ',' + $scope.data[field_name].address_state + ',' + $scope.data[field_name].address_postal_code + ',' + $scope.data[field_name].address_country);
                 }
             } else if ($scope.form.display[i].display == "calendar") {
                 var field_name = $scope.form.display[i].name;

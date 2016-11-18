@@ -95,19 +95,19 @@
                                 </div>
                             </md-list-item>
                         </div>
-                    </md-list flex>
+                    </md-list>
                 </div>
 
                 <div ng-switch-when="shorttext">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <input type="text" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
@@ -123,13 +123,13 @@
                 <div ng-switch-when="number">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max">
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
@@ -145,7 +145,7 @@
                 <div ng-switch-when="currency">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name].value}} {{field.values_key[data[field.name].currency]}}</p>
                             </md-input-container>
@@ -174,13 +174,13 @@
                 <div ng-switch-when="editor">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="8"></textarea>
                             </md-input-container>
@@ -194,7 +194,7 @@
                         <p class="md-body-2">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
                         <p class="md-body-1">{{existing_feed.text}}</p>
                     </div>
-                    <md-input-container class="md-block" flex-gt-xs ng-if="!field.disabled">
+                    <md-input-container flex-gt-xs ng-if="!field.disabled" class="md-block">
                         <label>{{field.translated_name}}</label>
                         <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
                     </md-input-container>
@@ -203,36 +203,40 @@
                 <div ng-switch-when="address">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <div id="map"></div>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.address_line1}}</p>
-                                <p class="md-body-1">{{data[field.address_line1]}}</p>
+                            <div id="map{{field.name}}" ng-style="{'width':'100%';'height':'200px';'background-color':'grey'}"></div>
+                            <md-input-container flex-gt-xs class="md-block">
+                                <p class="subtitle">{{field.address_line1_translated_name}}</p>
+                                <p class="md-body-1">{{data[field.name].address_line1}}</p>
                             </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.address_line2}}</p>
-                                <p class="md-body-1">{{data[field.address_line2]}}</p>
+                            <md-input-container flex-gt-xs class="md-block">
+                                <p class="subtitle">{{field.address_line2_translated_name}}</p>
+                                <p class="md-body-1">{{data[field.name].address_line2}}</p>
                             </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.address_city}}</p>
-                                <p class="md-body-1">{{data[field.address_city]}}</p>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.address_state}}</p>
-                                <p class="md-body-1">{{data[field.address_state]}}</p>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.address_postal_code}}</p>
-                                <p class="md-body-1">{{data[field.address_postal_code]}}</p>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <p class="subtitle">{{field.address_country}}</p>
-                                <p class="md-body-1">{{data[field.address_country]}}</p>
-                            </md-input-container>
+                            <div layout="row">
+                                <md-input-container flex-gt-xs flex="70">
+                                    <p class="subtitle">{{field.address_city_translated_name}}</p>
+                                    <p class="md-body-1">{{data[field.name].address_city}}</p>
+                                </md-input-container>
+                                <md-input-container flex-gt-xs flex="30">
+                                    <p class="subtitle">{{field.address_postal_code_translated_name}}</p>
+                                    <p class="md-body-1">{{data[field.name].address_postal_code}}</p>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex-gt-xs flex="50">
+                                    <p class="subtitle">{{field.address_state_translated_name}}</p>
+                                    <p class="md-body-1">{{data[field.name].address_state}}</p>
+                                </md-input-container>
+                                <md-input-container flex-gt-xs flex="50">
+                                    <p class="subtitle">{{field.address_country_translated_name}}</p>
+                                    <p class="md-body-1">{{data[field.name].address_country}}</p>
+                                </md-input-container>
+                            </div>
                         </div>
                         <div ng-switch-when="false">
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_line1}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1}}" ng-model="data[field.name].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
+                                <label>{{field.address_line1_translated_name}}</label>
+                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="data[field.name].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
                                     <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                         Your input must be between 1 and 200 characters long.
@@ -240,71 +244,56 @@
                                 </div>
                             </md-input-container>
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_line2}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line2}}" ng-model="data[field.name].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                <label>{{field.address_line2_translated_name}}</label>
+                                <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="data[field.name].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">
                                     <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                         Your input must be between 0 and 200 characters long.
                                     </div>
                                 </div>
                             </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_city}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city}}" ng-model="data[field.name].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
-                                <div ng-messages="dynamicForm.$field.name.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                        Your input must be between 1 and 200 characters long.
+                            <div layout="row">
+                                <md-input-container flex-gt-xs flex="70">
+                                    <label>{{field.address_city_translated_name}}</label>
+                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="data[field.name].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
+                                    <div ng-messages="dynamicForm.$field.name.$error" role="alert">
+                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                            Your input must be between 1 and 200 characters long.
+                                        </div>
                                     </div>
-                                </div>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_state}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_state}}" ng-model="data[field.name].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                <div ng-messages="dynamicForm.$field.name.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                        Your input must be between 0 and 200 characters long.
+                                </md-input-container>
+                                <md-input-container flex-gt-xs flex="30">
+                                    <label>{{field.address_postal_code_translated_name}}</label>
+                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="data[field.name].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                    <div ng-messages="dynamicForm.$field.name.$error" role="alert">
+                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                            Your input must be between 0 and 200 characters long.
+                                        </div>
                                     </div>
-                                </div>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_postal_code}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code}}" ng-model="data[field.name].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                <div ng-messages="dynamicForm.$field.name.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                        Your input must be between 0 and 200 characters long.
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex-gt-xs flex="50">
+                                    <label>{{field.address_state_translated_name}}</label>
+                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="data[field.name].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                    <div ng-messages="dynamicForm.$field.name.$error" role="alert">
+                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                            Your input must be between 0 and 200 characters long.
+                                        </div>
                                     </div>
-                                </div>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_country}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country}}" ng-model="data[field.name].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                <div ng-messages="dynamicForm.$field.name.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                        Your input must be between 0 and 200 characters long.
+                                </md-input-container>
+                                <md-input-container flex-gt-xs flex="50">
+                                    <label>{{field.address_country_translated_name}}</label>
+                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="data[field.name].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                    <div ng-messages="dynamicForm.$field.name.$error" role="alert">
+                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                            Your input must be between 0 and 200 characters long.
+                                        </div>
                                     </div>
-                                </div>
-                            </md-input-container>
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <label>{{field.address_line2}}</label>
-                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line2}}" ng-model="data[field.name].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                <div ng-messages="dynamicForm.$field.name.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                        Your input must be between 0 and 200 characters long.
-                                    </div>
-                                </div>
-                            </md-input-container>
+                                </md-input-container>
+                            </div>
                         </div>
                     </div>
-
-                    <p class="subtitle">{{field.translated_previous}}</p>
-                    <div ng-repeat="existing_feed in data[field.name]">
-                        <p class="md-body-2">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
-                        <p class="md-body-1">{{existing_feed.text}}</p>
-                    </div>
-                    <md-input-container class="md-block" flex-gt-xs ng-if="!field.disabled">
-                        <label>{{field.translated_name}}</label>
-                        <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
-                    </md-input-container>
                 </div>
 
                 <div ng-switch-when="file">
@@ -318,7 +307,7 @@
                         </div>
                         <div ng-switch-when="false">
                             <p class="subtitle" id="file_upload"></p>
-                            <md-input-container class="md-block" ng-if="!field.disabled">
+                            <md-input-container ng-if="!field.disabled" class="md-block">
                                 <input multiple accept="image/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" onchange="angular.element(this).scope().changeFiles(this.files)">
                             </md-input-container>
                         </div>
@@ -328,13 +317,13 @@
                 <div ng-switch-when="selection">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs>
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{field.values_key[data[field.name]]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <md-select name="{{field.translated_name}}" ng-model="data[field.name]" ng-disabled="field.disabled" ng-required="field.required">
                                     <md-option ng-repeat="value in field.values" value="{{value._id}}" ng-selected="data[field.name]=={{value._id}}">{{value.name}}</md-option>
@@ -345,7 +334,7 @@
                 </div>
 
                 <div ng-switch-when="check">
-                    <md-input-container class="md-block" flex-gt-xs>
+                    <md-input-container flex-gt-xs class="md-block">
                         <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="data[field.name]">{{field.translated_name}}</md-checkbox>
                     </md-input-container>
                 </div>
@@ -353,13 +342,13 @@
                 <div ng-switch-when="calendar">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]|date:"yyyy-MM-dd"}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <md-datepicker ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]"></md-datepicker>
                             </md-input-container>
@@ -370,13 +359,13 @@
                 <div ng-switch-when="email">
                     <div ng-switch="field.disabled">
                         <div ng-switch-when="true">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <p class="subtitle">{{field.translated_name}}</p>
                                 <p class="md-body-1">{{data[field.name]}}</p>
                             </md-input-container>
                         </div>
                         <div ng-switch-when="false">
-                            <md-input-container class="md-block" flex-gt-xs>
+                            <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" c="/^.+@.+\..+$/" />
                                 <div ng-messages="dynamicForm.$field.name.$error" role="alert">

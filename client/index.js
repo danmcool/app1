@@ -41,29 +41,28 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }
     })
     .factory('MapService', function MapService() {
-        var map = {};
-        var geocoder = {};
+        var maps = {};
 
-        var initMap = function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
+        var initMap = function initMap(mapId) {
+            maps[mapId] = new google.maps.Map(document.getElementById(mapId), {
                 zoom: 2
             });
-            geocoder = new google.maps.Geocoder();
         }
 
-        var geocodeAddress = function geocodeAddress(address) {
+        var geocodeAddress = function geocodeAddress(mapId, address) {
+            var geocoder = new google.maps.Geocoder();
             geocoder.geocode({
                 'address': address
             }, function(results, status) {
                 if (status === 'OK') {
-                    map.setCenter(results[0].geometry.location);
-                    map.setZoom(14);
+                    maps[mapId].setCenter(results[0].geometry.location);
+                    maps[mapId].setZoom(14);
                     var marker = new google.maps.Marker({
-                        map: resultsMap,
+                        map: maps[mapId],
                         position: results[0].geometry.location
                     });
                 } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
+                    //alert('Geocode was not successful for the following reason: ' + status);
                 }
             });
         }
