@@ -247,7 +247,7 @@ router.get('/open', function(req, res, next) {
         User.findOneAndUpdate({
             _id: SessionCache.user[req.cookies.app1_token]._id,
             validated: true}, {
-        $push:{remote_profiles:{req.query.profile_id}}
+        $push:{remote_profiles:[req.query.profile_id]}
     },function(err, object) {
         if (err) return next(err);
         if (!object) return res.status(401).json({
