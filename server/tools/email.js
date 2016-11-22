@@ -2,7 +2,7 @@ var email = require('mailer');
 var Constants = require('../tools/constants.js');
 
 var Email = {};
-Email.sendValidation = function(email_address, user, company_code) {
+Email.send = function(email_address, subject, text, html) {
     email.send({
         host: Constants.EmailHost,
         port: Constants.EmailPort,
@@ -10,13 +10,9 @@ Email.sendValidation = function(email_address, user, company_code) {
         domain: Constants.EmailDomain,
         to: email_address,
         from: Constants.EmailUserName,
-        subject: 'Registration validation for App1',
-        text: 'Automatic message from App1',
-        html: '<span>Dear customer, thank-you for registering with our website, your initial password is: ' +
-            Constants.InitialPassword +
-            '</span><br><span>Please validate your email by clicking on the following link</span><br><a href="http://' +
-            Constants.WebAddress + '/authentication/validate?user=' + user + '&code=' +
-            company_code + '">Validate registration</a>',
+        subject: subject,
+        text: text,
+        html: html,
         authentication: Constants.EmailAuthentication,
         username: Constants.EmailUserName,
         password: Constants.EmailPassword
@@ -24,4 +20,17 @@ Email.sendValidation = function(email_address, user, company_code) {
         //if (err) return next(err);
     });
 }
+
+Email.sendValidation = function(email_address, user, company_code) {
+    Email.send(
+        email_address,
+        'Registration validation for App1',
+        'Automatic message from App1',
+        '<span>Dear customer, thank-you for registering with our website, your initial password is: ' +
+        Constants.InitialPassword +
+        '</span><br><span>Please validate your email by clicking on the following link</span><br><a href="http://' +
+        Constants.WebAddress + '/authentication/validate?user=' + user + '&code=' +
+        company_code + '">Validate registration</a>');
+}
+
 module.exports = Email;

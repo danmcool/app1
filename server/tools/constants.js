@@ -9,8 +9,10 @@ const Constants = {
     ApplicationHome: "home",
 
     InitialPassword: "Start123",
+    Public_User: "public",
     UserProfileAdministrator: "administrator",
     UserProfilePrivate: "private",
+    UserProfileShare: "share",
     UserProfilePublic: "public",
 
     S3_BUCKET: "app1data",

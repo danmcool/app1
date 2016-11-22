@@ -28,7 +28,9 @@ router.post('/register', function(req, res) {
         Company.create(company, function(err, newCompany) {
             if (err) return next(err);
             var userprofile = {
-                name: {"en":"Administrator"},
+                name: {
+                    "en": "Administrator"
+                },
                 type: Constants.UserProfileAdministrator,
                 _company_code: req.body.code
             };
@@ -78,7 +80,7 @@ router.get('/validate', function(req, res) {
         }, function(err, appObjects) {
             var appList = [];
             for (var i = 0; i < appObjects.length; i++) {
-                appList.push(""+appObjects[i]._id);
+                appList.push("" + appObjects[i]._id);
             };
             Company.findOneAndUpdate({
                 _company_code: _company_code
@@ -196,8 +198,62 @@ router.get('/logout', function(req, res) {
             err: "Invalid session!"
         });
         SessionCache.logout(req.cookies.app1_token);
-        res.clearCookie('app1_token');
-        res.status(200);
+        res.clearCookie('app1_token').status(200);
+    });
+
+});
+
+router.get('/share', function(req, res, next) {
+    if (!req.cookies.app1_token) return res.status(401).json({
+        err: "Not logged in!"
+    });
+    if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id) return res.status(401).json({
+        err: "Invalid parameters!"
+    });
+
+    var userprofile = {
+        name: {
+            en: "ShareForm"
+        },
+        properties: {
+            forms: {
+                [req.query.form_id]: true
+            },
+            datamodels: {
+                [req.query.datamodel_id]: {
+                    [req.query.data_id]: SessionCache.user[req.cookies.app1_token]._company_code
+                }
+            }
+        },
+        type: Constants.UserProfileShare,
+        _company_code: SessionCache.user[req.cookies.app1_token]._company_code
+    };
+    UserProfile.create(userprofile, function(err, newUserprofile) {
+        if (err) return next(err);
+        res.status(200).json({
+            msg: "Form shared successfully!"
+        });
+        Email.sendShare(SessionCache.user[req.cookies.app1_token].email, req.query.form_id, req.query.datamodel_id, req.query.data_id, newUserprofile._id, newUserProfile._company_code);
+    });
+});
+
+router.get('/open', function(req, res, next) {
+    if (!req.cookies.app1_token) return res.status(401).json({
+        err: "Not logged in!"
+    });
+    if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id || SessionCache.user[req.cookies.app1_token]._company_code == req.query.code) return res.status(401).json({
+        err: "Invalid parameters!"
+    });
+        User.findOneAndUpdate({
+            _id: SessionCache.user[req.cookies.app1_token]._id,
+            validated: true}, {
+        $push:{remote_profiles:{req.query.profile_id}}
+    },function(err, object) {
+        if (err) return next(err);
+        if (!object) return res.status(401).json({
+            err: "Invalid parameters!"
+        });
+        res.redirect(200, 'http://example.com');
     });
 
 });

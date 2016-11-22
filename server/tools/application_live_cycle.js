@@ -50,7 +50,7 @@ ApplicationLiveCycle.copyDataModel = function(currentDataModelId, _company_code,
                 console.log(e);
                 modelSchema = new Schema({});
             }
-            Metadata.ObjectModels[newDataModelObject._id] = mongoose.model('data' + newDataModelObject._id, modelSchema);
+            Metadata.Objects[newDataModelObject._id].model = mongoose.model('data' + newDataModelObject._id, modelSchema);
             module.exports = Metadata;
         });
     });

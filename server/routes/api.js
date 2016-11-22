@@ -42,7 +42,7 @@ router.post('/datamodel/', function(req, res, next) {
             console.log(e);
             modelSchema = new Schema({});
         }
-        Metadata.ObjectModels[object._id] = mongoose.model('data' + object._id, modelSchema);
+        Metadata.Objects[object._id] = mongoose.model('data' + object._id, modelSchema);
         module.exports = Metadata;
         res.json(object);
     });
@@ -58,7 +58,7 @@ router.get('/datamodel/:id', function(req, res, next) {
 router.put('/datamodel/:id', function(req, res, next) {
     delete mongoose.connection.models['data' + req.body._id];
     delete mongoose.modelSchemas['data' + req.body._id];
-    delete Metadata.ObjectModels[req.body._id];
+    delete Metadata.Objects[req.body._id];
     var modelSchema;
     var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : "{}");
     datamodel._updated_at = "Date";
@@ -77,7 +77,7 @@ router.put('/datamodel/:id', function(req, res, next) {
         res.status(400);
         return res.json(req.body);
     }
-    Metadata.ObjectModels[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
+    Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
     module.exports = Metadata;
     DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id

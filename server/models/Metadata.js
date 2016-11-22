@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
 var Metadata = {
-    ObjectModels: []
+    Objects: {}
 };
 
 var DataModelSchema = new Schema({
@@ -145,6 +146,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'UserProfile'
     },
+    remote_profiles: [{
+        type: Schema.Types.ObjectId,
+        ref: 'UserProfile'
+    }],
     company: {
         type: Schema.Types.ObjectId,
         ref: 'Company'

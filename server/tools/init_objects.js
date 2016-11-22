@@ -24,7 +24,7 @@ DataModel.find(function(err, objects) {
             console.log(e);
             modelSchema = new Schema({});
         }
-        Metadata.ObjectModels[objects[i]._id] = mongoose.model('data' + objects[i]._id, modelSchema);
+        Metadata.Objects[objects[i]._id] = mongoose.model('data' + objects[i]._id, modelSchema);
     }
 });
 
