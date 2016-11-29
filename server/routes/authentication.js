@@ -106,32 +106,30 @@ router.post('/login', function(req, res, next) {
     User.findOne({
         user: req.body.user.toLowerCase(),
         password: req.body.password,
-        _company_code: req.body._company_code,
         validated: true
-    }, 'email firstname lastname user _company_code properties company profile')
-        .populate('company profile').exec(
-            function(err, user) {
-                if (err) return res.status(401).json({
-                    err: info
+    }, 'email firstname lastname user _company_code properties')
+        .populate('company profile remote_profiles manager reports').exec(
+            function(errUser, userObject) {
+                if (errUser) return res.status(401).json({
+                    errUser: info
                 });
-                if (!user) return res.status(401).json({
+                if (!userObject) return res.status(401).json({
                     err: "Invalid user name or password!"
                 });
                 var session = {
-                    user: user._id,
+                    user: userObject._id,
                     timeout: Date.now() + Constants.MaxSessionTimeout,
-                    _company_code: req.body.code
+                    _company_code: userObject._company_code
                 };
                 Session.create(session, function(err, newSession) {
                     if (err) return next(err);
-                    var jsonUser = JSON.parse(JSON.stringify(user));
-                    SessionCache.login(newSession._id, jsonUser);
+                    SessionCache.login(newSession._id, userObject);
                     res.cookie('app1_token', newSession._id, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     }).status(200).json({
                         token: newSession._id,
-                        user: jsonUser
+                        user: SessionCache.user[newSession._id]
                     });
                 });
             });
@@ -210,7 +208,6 @@ router.get('/share', function(req, res, next) {
     if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id) return res.status(401).json({
         err: "Invalid parameters!"
     });
-
     var userprofile = {
         name: {
             en: "ShareForm"
@@ -233,7 +230,7 @@ router.get('/share', function(req, res, next) {
         res.status(200).json({
             msg: "Form shared successfully!"
         });
-        Email.sendShare(SessionCache.user[req.cookies.app1_token].email, req.query.form_id, req.query.datamodel_id, req.query.data_id, newUserprofile._id, newUserProfile._company_code);
+        Email.sendShare(SessionCache.user[req.cookies.app1_token].email, req.query.form_id, req.query.datamodel_id, req.query.data_id, newUserprofile._id);
     });
 });
 
@@ -241,21 +238,33 @@ router.get('/open', function(req, res, next) {
     if (!req.cookies.app1_token) return res.status(401).json({
         err: "Not logged in!"
     });
-    if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id || SessionCache.user[req.cookies.app1_token]._company_code == req.query.code) return res.status(401).json({
+    if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id) return res.status(401).json({
         err: "Invalid parameters!"
     });
-        User.findOneAndUpdate({
-            _id: SessionCache.user[req.cookies.app1_token]._id,
-            validated: true}, {
-        $push:{remote_profiles:[req.query.profile_id]}
-    },function(err, object) {
-        if (err) return next(err);
-        if (!object) return res.status(401).json({
+    UserProfile.findOne({
+        _id: req.query.profile_id
+    }, function(errProfile, objectProfile) {
+        if (errProfile) return next(errProfile);
+        if (!objectProfile) return res.status(401).json({
             err: "Invalid parameters!"
         });
-        res.redirect(200, 'http://example.com');
+        User.findOneAndUpdate({
+            _id: SessionCache.user[req.cookies.app1_token]._id,
+            validated: true
+        }, {
+            $push: {
+                remote_profiles: [req.query.profile_id]
+            }
+        }, 'email firstname lastname user _company_code properties')
+            .populate('company profile remote_profiles').exec(function(errUser, userObject) {
+                if (errUser) return next(err);
+                if (!userObject) return res.status(401).json({
+                    err: "Invalid parameters!"
+                });
+                SessionCache.update(req.cookies.app1_token, userObject);
+                res.redirect(200, "/#/form/" + req.query.form_id + "/" + req.query.data_id);
+            });
     });
-
 });
 
 module.exports = router;

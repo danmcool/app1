@@ -3,9 +3,9 @@ app1.controller('RegisterCtrl', function($scope, $location, $mdDialog, Register,
     $scope.sessionData.applicationName = "App1";
     SessionService.setSessionData($scope.sessionData);
 
-    $scope.register = function(user, code, firstname, lastname, email, company_name) {
+    $scope.register = function(firstname, lastname, email, code, company_name) {
         var registerObject = new Register({
-            user: user,
+            user: email,
             code: code,
             firstname: firstname,
             lastname: lastname,

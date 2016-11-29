@@ -36,8 +36,22 @@ setInterval(function() {
     }*/
 
 
-SessionCache.login = function(token, user) {
-    SessionCache.user[token] = user;
+SessionCache.prepareUser = function(userObject) {
+    var strUser = JSON.stringify(userObject);
+    if (userObject.user) strUser = strUser.replace("@@user", userObject.user);
+    if (userObject.manager) strUser = strUser.replace("@@manager", userObject.manager);
+    if (userObject.reports) strUser = strUser.replace("@@reports", JSON.stringify(userObject.reports).replace(/]|[[]/g, ""));
+    if (userObject.company_code) strUser = strUser.replace("@@company_code", userObject._company_code);
+    return JSON.parse(strUser);
+}
+
+SessionCache.login = function(token, userObject) {
+    SessionCache.user[token] = SessionCache.prepareUser(userObject);
+    SessionCache.touch(token);
+};
+
+SessionCache.update = function(token, userObject) {
+    SessionCache.user[token] = SessionCache.prepareUser(userObject);
     SessionCache.touch(token);
 };
 
@@ -91,29 +105,6 @@ SessionCache.filterDataUserProfile = function(req, filter, datamodel_id, data_id
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
-        filter._company_code = {
-            "$eq": company_code
-        };
-        if (req.body != null && req.body._company_code != company_code) {
-            req.body._company_code = company_code;
-        }
-    }
-    return filter;
-}
-
-SessionCache.filterDataUserProfile = function(req, filter, datamodel_id, data_id) {
-    if (!filter) filter = {};
-    var profile = SessionCache.user[req.cookies.app1_token].profile;
-    if (profile.properties && profile.properties[datamodel_id] && profile.properties[datamodel_id][data_id]) {
-
-        var newProperties = JSON.parse(JSON.stringify(SessionCache.user[req.cookies.app1_token].userprofile[datamodel_id]).replace("@@user", SessionCache.user[req.cookies.app1_token]._user));
-        for (var key in newProperties) {
-            filter[key] = SessionCache.user[req.cookies.app1_token].userprofile[datamodel_id][key];
-        }
-    }
-    var company_code = SessionCache.user[req.cookies.app1_token]._company_code;
-    if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
-    if (company_code != Constants.AdminCompany) {
         filter._company_code = {
             "$eq": company_code
         };

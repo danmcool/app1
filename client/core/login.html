@@ -20,15 +20,6 @@
                 <label>{{sessionData.appData.password}}</label>
                 <input ng-disabled="false" ng-required="true" name="password" type="password" ng-model="password">
             </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs>
-                <label>{{sessionData.appData.company_code}}</label>
-                <input ng-disabled="false" ng-required="true" name="code" ng-model="code" md-minlength="5" md-maxlength="20" ng-minlength="5" ng-maxlength="20">
-                <div ng-messages="registerForm.code.$error" role="alert">
-                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                        {{sessionData.appData.code_error}}
-                    </div>
-                </div>
-            </md-input-container>
             <md-button flex-gt-xs ng-disabled="loginForm.$invalid" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
         </form>
     </div>

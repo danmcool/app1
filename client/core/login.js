@@ -4,11 +4,10 @@ app1.controller('LoginCtrl',
         $scope.sessionData.applicationName = "App1";
         SessionService.setSessionData($scope.sessionData);
 
-        $scope.login = function(user, password, code) {
+        $scope.login = function(user, password) {
             var loginObject = new Login({
                 user: user,
-                password: password,
-                _company_code: code
+                password: password
             });
             loginObject.$save(function(userResult) {
                 $scope.sessionData = {};
