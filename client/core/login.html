@@ -20,7 +20,7 @@
                 <label>{{sessionData.appData.password}}</label>
                 <input ng-disabled="false" ng-required="true" name="password" type="password" ng-model="password">
             </md-input-container>
-            <md-button flex-gt-xs ng-disabled="loginForm.$invalid" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
+            <md-button flex-gt-xs ng-disabled="loginForm.$invalid" type="submit" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
         </form>
     </div>
 </md-content>

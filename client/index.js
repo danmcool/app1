@@ -178,8 +178,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 applicationName: "App1"
             };
             $scope.sessionData.userData = result.user;
-            $scope.sessionData.userData.title = result.user.firstname + " " + result.user.lastname + " @ " + result.user.company.name;
-            $scope.sessionData.userData.name = result.user.firstname + " " + result.user.lastname;
+            $scope.sessionData.userData.title = (result.user.firstname ? result.user.firstname : "") + " " + (result.user.lastname ? result.user.lastname : "") + " @ " + (result.user.company.name ? result.user.company.name : "");
+            $scope.sessionData.userData.name = (result.user.firstname ? result.user.firstname : "") + " " + (result.user.lastname ? result.user.lastname : "");
             $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             Applications.query().$promise.then(function(result) {
                 $scope.sessionData.applications = result;
