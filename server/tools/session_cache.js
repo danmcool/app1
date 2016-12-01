@@ -38,10 +38,10 @@ setInterval(function() {
 
 SessionCache.prepareUser = function(userObject) {
     var strUser = JSON.stringify(userObject);
-    if (userObject.user) strUser = strUser.replace("@@user", userObject.user);
-    if (userObject.manager) strUser = strUser.replace("@@manager", userObject.manager);
-    if (userObject.reports) strUser = strUser.replace("@@reports", JSON.stringify(userObject.reports).replace(/]|[[]/g, ""));
-    if (userObject.company_code) strUser = strUser.replace("@@company_code", userObject._company_code);
+    if (userObject.user) strUser = strUser.replace(/@@user/g, userObject.user);
+    if (userObject.manager) strUser = strUser.replace(/@@manager/g, userObject.manager);
+    if (userObject.reports) strUser = strUser.replace(/@@reports/g, JSON.stringify(userObject.reports).replace(/]|[[]/g, ""));
+    if (userObject._company_code) strUser = strUser.replace(/@@company_code/g, userObject._company_code);
     return JSON.parse(strUser);
 }
 

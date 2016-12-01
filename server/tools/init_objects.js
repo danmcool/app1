@@ -34,21 +34,20 @@ Session.find({
     timeout: {
         "$gt": Date.now()
     }
-}).populate('user').exec(function(errSessions, existingSessions) {
+}).exec(function(errSessions, existingSessions) {
     if (errSessions) return next(errSessions);
     if (!existingSessions) return;
     for (var i = 0; i < existingSessions.length; i++) {
         var token = existingSessions[i]._id;
         User.findOne({
-            _id: existingSessions[i].user._id,
+            _id: existingSessions[i].user,
             validated: true
-        }, 'email firstname lastname user _company_code properties company profile')
-            .populate('company profile').exec(
-                function(err, user) {
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            .populate('company profile remote_profiles manager reports').exec(
+                function(err, userObject) {
                     if (err) return next(err);
-                    if (!user) return;
-                    var jsonUser = JSON.parse(JSON.stringify(user));
-                    SessionCache.login(token, jsonUser);
+                    if (!userObject) return;
+                    SessionCache.login(token, userObject);
                 });
     }
 });

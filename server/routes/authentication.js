@@ -107,7 +107,7 @@ router.post('/login', function(req, res, next) {
         user: req.body.user.toLowerCase(),
         password: req.body.password,
         validated: true
-    }, 'email firstname lastname user _company_code properties')
+    }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
         .populate('company profile remote_profiles manager reports').exec(
             function(errUser, userObject) {
                 if (errUser) return res.status(401).json({
@@ -160,27 +160,26 @@ router.get('/status', function(req, res) {
         User.findOne({
             _id: existingSession.user._id,
             validated: true
-        }, 'email firstname lastname user _company_code properties company profile')
-            .populate('company profile').exec(
-                function(err, user) {
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            .populate('company profile remote_profiles manager reports').exec(
+                function(err, userObject) {
                     if (err) return res.status(401).json({
                         err: err.info
                     });
-                    if (!user) return res.status(401).json({
+                    if (!userObject) return res.status(401).json({
                         err: "Invalid user name or password!"
                     });
-                    var jsonUser = JSON.parse(JSON.stringify(user));
                     if (SessionCache.isActive(token)) {
                         SessionCache.touch(token);
                     } else {
-                        SessionCache.login(token, jsonUser);
+                        SessionCache.login(token, userObject);
                     }
                     res.cookie('app1_token', token, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     }).status(200).json({
                         token: token,
-                        user: jsonUser
+                        user: SessionCache.user[token]
                     });
                 });
     });
