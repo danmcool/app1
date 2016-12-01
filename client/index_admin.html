@@ -135,8 +135,9 @@
         <p>Id: {{value._id}}</p>
         <p>Type:
             <select ng-model="value.type">
-                <option value="form">List</option>
-                <option value="list">Hierarchy</option>
+                <option value="list">Simple list</option>
+                <option value="user">User list</option>
+                <option value="query">Query data</option>
             </select>
         </p>
         <p>Values:
@@ -249,12 +250,13 @@
         <p>Id: {{userprofile._id}}</p>
         <p>Type:
             <select ng-model="userprofile.type">
+                <option value="administrator">Administrator</option>
                 <option value="private">Private</option>
                 <option value="public">Public</option>
             </select>
         </p>
-        <p>Client id:
-            <input type="text" ng-model="userprofile.client_id">
+        <p>Company code:
+            <input type="text" ng-model="userprofile._company_code">
         </p>
         <p>Profile:
             <br>
