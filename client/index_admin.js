@@ -61,6 +61,15 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             });
         }
     ])
+    .factory('Sessions', ['$resource',
+        function($resource) {
+            return $resource('/api/session/:id', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
     .factory('Companies', ['$resource',
         function($resource) {
             return $resource('/api/company/:id', null, {
@@ -233,6 +242,34 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                     id: userprofile._id
                 }, function() {
                     $scope.userprofiles.splice(index, 1);
+                });
+            }
+        }
+    ])
+    .controller('SessionsCtrl', ['$scope', 'Sessions',
+        function($scope, Sessions) {
+            $scope.sessions = Sessions.query({
+                skip: 0,
+                limit: 100
+            });
+            $scope.save = function() {
+                if (!$scope.newSession || $scope.newSession.length < 1) return;
+                var session = new Sessions({
+                    name: {
+                        en: $scope.newSession
+                    }
+                });
+                session.$save(function() {
+                    $scope.sessions.push(session);
+                    $scope.newSession = '';
+                });
+            }
+            $scope.remove = function(index) {
+                var session = $scope.sessions[index];
+                Sessions.remove({
+                    id: session._id
+                }, function() {
+                    $scope.sessions.splice(index, 1);
                 });
             }
         }
@@ -433,6 +470,21 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             }
         }
     ])
+    .controller('SessionDetailsCtrl', ['$scope', '$routeParams', 'Sessions', '$location',
+        function($scope,
+            $routeParams, Sessions, $location) {
+            $scope.session = Sessions.get({
+                id: $routeParams.id
+            });
+            $scope.update = function() {
+                Sessions.update({
+                    id: $scope.session._id
+                }, $scope.session, function() {
+                    $location.url('/sessions');
+                });
+            }
+        }
+    ])
     .controller('CompanyDetailsCtrl', ['$scope', '$routeParams', 'Companies', '$location',
         function($scope,
             $routeParams, Companies, $location) {
@@ -547,6 +599,14 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             .when('/userprofiles/:id', {
                 templateUrl: 'userprofileDetails.html',
                 controller: 'UserProfileDetailsCtrl'
+            })
+            .when('/sessions', {
+                templateUrl: 'sessions.html',
+                controller: 'SessionsCtrl'
+            })
+            .when('/sessions/:id', {
+                templateUrl: 'sessionDetails.html',
+                controller: 'SessionDetailsCtrl'
             })
             .when('/companies', {
                 templateUrl: 'companies.html',

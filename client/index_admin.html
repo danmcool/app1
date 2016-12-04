@@ -51,7 +51,7 @@
             <textarea json-text ng-model="datamodel.translation" rows="6" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/datamodels">Cancel</a>
+        <a href="/admin#/datamodels">Cancel</a>
     </script>
     <script type="text/ng-template" id="forms.html">
         <div>
@@ -109,7 +109,7 @@
             <textarea json-text ng-model="form.values" rows="3" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/forms">Cancel</a>
+        <a href="/admin#/forms">Cancel</a>
     </script>
     <script type="text/ng-template" id="values.html">
         <div>
@@ -145,7 +145,7 @@
             <textarea json-text ng-model="value.values" rows="6" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/values">Cancel</a>
+        <a href="/admin#/values">Cancel</a>
     </script>
     <script type="text/ng-template" id="users.html">
         <div>
@@ -196,8 +196,16 @@
         <p>Company:
             <input type="text" ng-model="user.company">
         </p>
+        <p>Manager:
+            <br>
+            <textarea json-text ng-model="user.manager" rows="3" cols="60"></textarea>
+        </p>
+        <p>Reports:
+            <br>
+            <textarea json-text ng-model="user.reports" rows="3" cols="60"></textarea>
+        </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/users">Cancel</a>
+        <a href="/admin#/users">Cancel</a>
     </script>
     <script type="text/ng-template" id="files.html">
         <div>
@@ -224,7 +232,7 @@
             <input type="text" ng-model="file.file.type">
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/files">Cancel</a>
+        <a href="/admin#/files">Cancel</a>
     </script>
     <script type="text/ng-template" id="userprofiles.html">
         <div>
@@ -263,7 +271,39 @@
             <textarea json-text ng-model="userprofile.profile" rows="3" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/userprofiles">Cancel</a>
+        <a href="/admin#/userprofiles">Cancel</a>
+    </script>
+    <script type="text/ng-template" id="sessions.html">
+        <div>
+            Search:
+            <input type="text" ng-model="search.name">
+            <ul>
+                <li ng-repeat="session in sessions | filter: search">
+                    <a href="#sessions/{{session._id}}">{{session.user}}</a>
+                    <button ng-click="remove($index)">remove</button>
+                </li>
+            </ul>
+            New session
+            <input type="text" ng-model="newSession">
+            <button ng-click="save()">Create</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="sessionDetails.html">
+        <h1>{{session.name.en}}</h1>
+        <p>User:
+            <br>
+            <textarea json-text ng-model="session.user" rows="3" cols="60"></textarea>
+        </p>
+        <p>Id: {{session._id}}</p>
+        <p>Timeout:
+            <input type="text" ng-model="session.timeout">
+        </p>
+        <p>Properties:
+            <br>
+            <textarea json-text ng-model="session.properties" rows="6" cols="60"></textarea>
+        </p>
+        <button ng-click="update()">update</button>
+        <a href="/admin#/session">Cancel</a>
     </script>
     <script type="text/ng-template" id="companies.html">
         <div>
@@ -296,7 +336,7 @@
             <textarea json-text ng-model="company.properties" rows="10" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/companies">Cancel</a>
+        <a href="/admin#/companies">Cancel</a>
     </script>
     <script type="text/ng-template" id="workflows.html">
         <div>
@@ -331,7 +371,7 @@
             <input type="text" ng-model="workflow.startup_form_id">
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/workflows">Cancel</a>
+        <a href="/admin#/workflows">Cancel</a>
     </script>
     <script type="text/ng-template" id="applications.html">
         <div>
@@ -367,7 +407,7 @@
             <textarea json-text ng-model="application.workflows" rows="10" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
-        <a href="/admin/#/applications">Cancel</a>
+        <a href="/admin#/applications">Cancel</a>
     </script>
     <md-toolbar class="md-hue-2">
         <div class="md-toolbar-tools" ng-controller="AppCtrl">
@@ -394,6 +434,7 @@
             <md-button ng-href="#applications" class="md-primary" style="text-align: left" ng-click="close()">Applications</md-button>
             <md-button ng-href="#users" class="md-primary" style="text-align: left" ng-click="close()">Users</md-button>
             <md-button ng-href="#userprofiles" class="md-primary" style="text-align: left" ng-click="close()">User Profiles</md-button>
+            <md-button ng-href="#sessions" class="md-primary" style="text-align: left" ng-click="close()">Sessions</md-button>
             <md-button ng-href="#companies" class="md-primary" style="text-align: left" ng-click="close()">Companies</md-button>
             <md-button ng-href="/" class="md-primary" style="text-align: left" ng-click="close()">Player</md-button>
         </md-content>

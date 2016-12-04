@@ -108,7 +108,7 @@ router.post('/login', function(req, res, next) {
         password: req.body.password,
         validated: true
     }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
-        .populate('company profile remote_profiles manager reports').exec(
+        .populate('company profile remote_profiles').exec(
             function(errUser, userObject) {
                 if (errUser) return res.status(401).json({
                     errUser: info
@@ -156,12 +156,12 @@ router.get('/status', function(req, res) {
         });
         if (!existingSession) return res.status(401).json({
             err: "Invalid session!"
-        });
+     });
         User.findOne({
             _id: existingSession.user._id,
             validated: true
         }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
-            .populate('company profile remote_profiles manager reports').exec(
+            .populate('company profile remote_profiles').exec(
                 function(err, userObject) {
                     if (err) return res.status(401).json({
                         err: err.info
@@ -254,7 +254,7 @@ router.get('/open', function(req, res, next) {
             $push: {
                 remote_profiles: [req.query.profile_id]
             }
-        }, 'email firstname lastname user _company_code properties')
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
             .populate('company profile remote_profiles').exec(function(errUser, userObject) {
                 if (errUser) return next(err);
                 if (!userObject) return res.status(401).json({

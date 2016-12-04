@@ -74,7 +74,7 @@ router.get('/:id', function(req, res, next) {
         };
         s3Instance.getSignedUrl('getObject', params, function(err, url) {
             if (err) return next(err);
-            if (!url) return res.status(401).json({
+            if (!url) return res.status(400).json({
                 "msg": "Url is null!"
             });
             console.log("The URL is", url);

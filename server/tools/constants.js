@@ -26,6 +26,13 @@ const Constants = {
     EmailPort: '465',
     EmailSSL: true,
     EmailDomain: 'gmail.com',
-    EmailAuthentication: 'login'
+    EmailAuthentication: 'login',
+
+    ValuesTypeList: 'list',
+    ValuesTypeUser: 'user',
+    ValuesTypeQuery: 'query',
+    ValuesRelationUserManager: 'user_manager',
+    ValuesRelationUserReports: 'user_reports',
+    ValuesRelationUserList: 'user_list'
 }
 module.exports = Constants;

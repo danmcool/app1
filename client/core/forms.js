@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, DataModels, Files, Datas, SessionService, MapService) {
+app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, Value, DataModels, Files, Datas, SessionService, MapService) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function() {
@@ -84,16 +84,42 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
         for (var j = 0; j < $scope.form.values.length; j++) {
             if ($scope.form.display.title_listofvalues == $scope.form.values[j]._id) {
-                $scope.form.display.title_values = {};
-                for (k = 0; k < $scope.form.values[j].values.length; k++) {
-                    $scope.form.display.title_values[$scope.form.values[j].values[k]._id] =
-                        SessionService.translate($scope.form.values[j].values[k]);
+                if ($scope.form.values[j].type == "user") {
+                    Value.update({
+                        id: $scope.form.values[j]._id,
+                        type: $scope.form.values[j].type
+                    }, $scope.form.values[j].values).$promise.then(function(res) {
+                        $scope.form.display.title_values = {};
+                        for (l = 0; l < res.values.length; l++) {
+                            $scope.form.display.title_values[res.values[l]._id] =
+                                SessionService.translate(res.values[l]);
+                        }
+                    });
+                } else if ($scope.form.values[j].type == "query") {} else {
+                    $scope.form.display.title_values = {};
+                    for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                        $scope.form.display.title_values[$scope.form.values[j].values[k]._id] =
+                            SessionService.translate($scope.form.values[j].values[k]);
+                    }
                 }
             } else if ($scope.form.display.subtitle_listofvalues == $scope.form.values[j]._id) {
-                $scope.form.display.subtitle_values = {};
-                for (k = 0; k < $scope.form.values[j].values.length; k++) {
-                    $scope.form.display.subtitle_values[$scope.form.values[j].values[k]._id] =
-                        SessionService.translate($scope.form.values[j].values[k]);
+                if ($scope.form.values[j].type == "user") {
+                    Value.update({
+                        id: $scope.form.values[j]._id,
+                        type: $scope.form.values[j].type
+                    }, $scope.form.values[j].values).$promise.then(function(res) {
+                        $scope.form.display.subtitle_values = {};
+                        for (l = 0; l < res.values.length; l++) {
+                            $scope.form.display.subtitle_values[res.values[l]._id] =
+                                SessionService.translate(res.values[l]);
+                        }
+                    });
+                } else if ($scope.form.values[j].type == "query") {} else {
+                    $scope.form.display.subtitle_values = {};
+                    for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                        $scope.form.display.subtitle_values[$scope.form.values[j].values[k]._id] =
+                            SessionService.translate($scope.form.values[j].values[k]);
+                    }
                 }
             }
         }
@@ -104,17 +130,49 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             if ($scope.form.display[i].display == "selection" || $scope.form.display[i].display == "currency") {
                 for (var j = 0; j < $scope.form.values.length; j++) {
                     if ($scope.form.display[i].listofvalues == $scope.form.values[j]._id) {
-                        $scope.form.display[i].values = [];
-                        $scope.form.display[i].values_key = {};
-                        for (k = 0; k < $scope.form.values[j].values.length; k++) {
-                            $scope.form.display[i].values.push({
-                                "_id": $scope.form.values[j].values[k]._id,
-                                "name": SessionService.translate($scope.form.values[j].values[k])
-                            });
-                            $scope.form.display[i].values_key[$scope.form.values[j].values[k]._id] =
-                                SessionService.translate($scope.form.values[j].values[k]);
+                        if ($scope.form.values[j].type == "user") {
+                            Value.update({
+                                id: $scope.form.values[j]._id,
+                                type: $scope.form.values[j].type
+                            }, $scope.form.values[j].values).$promise.then(function(res) {
+                                for (var k = 0; k < $scope.form.display.length; k++) {
+                                    if ($scope.form.display[k].listofvalues == res._id) {
+                                        $scope.form.display[k].values = [];
+                                        $scope.form.display[k].values_key = {};
+                                        for (l = 0; l < res.values.length; l++) {
+                                            $scope.form.display[k].values.push({
+                                                "_id": res.values[l]._id,
+                                                "name": SessionService.translate(res.values[l])
+                                            });
+                                            $scope.form.display[k].values_key[res.values[l]._id] =
+                                                SessionService.translate(res.values[l]);
+                                        }
+                                    }
+                                }
+                            })
+                        } else if ($scope.form.values[j].type == "query") {
+                            $scope.form.display[i].values = [];
+                            $scope.form.display[i].values_key = {};
+                            for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                                $scope.form.display[i].values.push({
+                                    "_id": $scope.form.values[j].values[k]._id,
+                                    "name": SessionService.translate($scope.form.values[j].values[k])
+                                });
+                                $scope.form.display[i].values_key[$scope.form.values[j].values[k]._id] =
+                                    SessionService.translate($scope.form.values[j].values[k]);
+                            }
+                        } else {
+                            $scope.form.display[i].values = [];
+                            $scope.form.display[i].values_key = {};
+                            for (k = 0; k < $scope.form.values[j].values.length; k++) {
+                                $scope.form.display[i].values.push({
+                                    "_id": $scope.form.values[j].values[k]._id,
+                                    "name": SessionService.translate($scope.form.values[j].values[k])
+                                });
+                                $scope.form.display[i].values_key[$scope.form.values[j].values[k]._id] =
+                                    SessionService.translate($scope.form.values[j].values[k]);
+                            }
                         }
-                        break;
                     }
                 }
             } else if ($scope.form.display[i].display == "address") {
@@ -223,7 +281,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
 
-    var updateComponents = function(form, data) {
+    var updateComponents = function(form, set_value, data) {
         for (var i = 0; i < form.display.length; i++) {
             if (form.display[i].display == "feed") {
                 var field_name = form.display[i].name;
@@ -240,10 +298,13 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 }
             }
         }
+        if (set_value) {
+            data[set_value.name] = set_value.value;
+        }
     }
 
-    $scope.create = function(formula, next_form_id, data) {
-        updateComponents($scope.form, data);
+    $scope.create = function(formula, next_form_id, set_value, data) {
+        updateComponents($scope.form, set_value, data);
         $scope.data.$save().then(function(res) {
             gotoNextForm(formula, next_form_id, data);
         })
@@ -251,8 +312,8 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 $scope.data = res.data;
             });
     }
-    $scope.modify = function(formula, next_form_id, data) {
-        updateComponents($scope.form, data);
+    $scope.modify = function(formula, next_form_id, set_value, data) {
+        updateComponents($scope.form, set_value, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id

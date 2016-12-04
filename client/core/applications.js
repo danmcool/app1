@@ -12,7 +12,7 @@ app1.controller('ApplicationsCtrl', function($scope, SessionService, $location) 
     $scope.$watch(function() {
         return SessionService.getSessionData();
     }, function(newValue, oldValue) {
-        if (newValue !== oldValue) {
+        if (newValue != oldValue) {
             $scope.sessionData = newValue;
             var apps = $scope.sessionData.applications;
             if (apps) {

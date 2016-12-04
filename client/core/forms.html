@@ -40,6 +40,9 @@
                         <div ng-switch-when="link">
                             <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                         </div>
+                        <div ng-switch-when="modify">
+                            <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
+                        </div>
                     </div>
                 </div>
             </md-list-item>
@@ -49,10 +52,10 @@
         <div ng-repeat="action in form.actions">
             <div ng-switch="action.action">
                 <div ng-switch-when="create">
-                    <md-button flex-gt-xs ng-click="create(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
+                    <md-button flex-gt-xs ng-click="create(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
                 </div>
                 <div ng-switch-when="modify">
-                    <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
+                    <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
                 </div>
                 <div ng-switch-when="delete">
                     <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
@@ -326,7 +329,7 @@
                             <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
                                 <md-select name="{{field.translated_name}}" ng-model="data[field.name]" ng-disabled="field.disabled" ng-required="field.required">
-                                    <md-option ng-repeat="value in field.values" value="{{value._id}}" ng-selected="data[field.name]=={{value._id}}">{{value.name}}</md-option>
+                                    <md-option ng-repeat="value in field.values" value="{{value._id}}" ng-selected="data[field.name]=='{{value._id}}'">{{value.name}}</md-option>
                                 </md-select>
                             </md-input-container>
                         </div>
@@ -350,7 +353,7 @@
                         <div ng-switch-when="false">
                             <md-input-container flex-gt-xs class="md-block">
                                 <label>{{field.translated_name}}</label>
-                                <md-datepicker ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]"></md-datepicker>
+                                <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]"></md-datepicker>
                             </md-input-container>
                         </div>
                     </div>
@@ -383,10 +386,10 @@
             <div ng-repeat="action in form.actions">
                 <div ng-switch="action.action">
                     <div ng-switch-when="create">
-                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
+                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="modify">
-                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
+                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="delete">
                         <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>

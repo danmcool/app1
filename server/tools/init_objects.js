@@ -43,7 +43,7 @@ Session.find({
             _id: existingSessions[i].user,
             validated: true
         }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
-            .populate('company profile remote_profiles manager reports').exec(
+            .populate('company profile remote_profiles').exec(
                 function(err, userObject) {
                     if (err) return next(err);
                     if (!userObject) return;

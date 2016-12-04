@@ -89,6 +89,15 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             });
         }
     ])
+    .factory('Value', ['$resource',
+        function($resource) {
+            return $resource('/client/value/:id', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
     .factory('User', ['$resource',
         function($resource) {
             return $resource('/api/user/:id', null, {

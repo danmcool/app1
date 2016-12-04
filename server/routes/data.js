@@ -92,11 +92,11 @@ router.put('/:datamodelid/:id', function(req, res, next) {
             found = true;
             break;
         }
-        if (!found) {
-            return res.status(401).json({
-                err: "Not enough user rights!"
-            });
-        }
+    }
+    if (!found) {
+        return res.status(401).json({
+            err: "Not enough user rights!"
+        });
     }
     var lookup_date = Date.parse(req.body._updated_at);
     req.body._updated_at = Date.now();
