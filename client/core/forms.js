@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, Value, DataModels, Files, Datas, SessionService, MapService) {
+app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, Value, Share, DataModels, Files, Datas, SessionService, MapService) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function() {
@@ -307,10 +307,9 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         updateComponents($scope.form, set_value, data);
         $scope.data.$save().then(function(res) {
             gotoNextForm(formula, next_form_id, data);
-        })
-            .catch(function(res) {
-                $scope.data = res.data;
-            });
+        }).catch(function(res) {
+            $scope.data = res.data;
+        });
     }
     $scope.modify = function(formula, next_form_id, set_value, data) {
         updateComponents($scope.form, set_value, data);
@@ -319,21 +318,20 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             entry_id: data._id
         }, data).$promise.then(function(res) {
             gotoNextForm(formula, next_form_id, data);
-        })
-            .catch(function(res) {
-                $scope.data = res.data;
-                $mdDialog.show(
-                    $mdDialog.alert()
-                    .parent(angular.element(document.body))
-                    .clickOutsideToClose(true)
-                    .title('New version of document')
-                    .textContent(
-                        'The underlying data of this document has been modified by another user, please revise the content and save again!'
-                    )
-                    .ariaLabel('Alert Dialog Demo')
-                    .ok('Got it!')
-                );
-            });
+        }).catch(function(res) {
+            $scope.data = res.data;
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title('New version of document')
+                .textContent(
+                    'The underlying data of this document has been modified by another user, please revise the content and save again!'
+                )
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+            );
+        });
     }
     $scope.delete = function(formula, next_form_id, data) {
         Datas.remove({
@@ -352,5 +350,33 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     }
     $scope.link = function(formula, next_form_id, data) {
         gotoNextForm(formula, next_form_id, data);
+    }
+    $scope.share = function(formula, next_form_id, set_value, constraint, email_field_name, form_id, data) {
+        updateComponents($scope.form, set_value, data);
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: data._id
+        }, data).$promise.then(function(res) {
+            Share.get({
+                form_id: form_id,
+                datamodel_id: $scope.form.datamodel._id,
+                data_id: data._id,
+                email: data[email_field_name]
+            }).$promise.then(function(res) {
+                gotoNextForm(formula, next_form_id, data);
+            })
+        }).catch(function(res) {
+            $scope.data = res.data;
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title('New version of document')
+                .textContent('The underlying data of this document has been modified by another user,' +
+                    ' please revise the content and save again!')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+            );
+        });
     }
 });

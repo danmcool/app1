@@ -2,13 +2,14 @@ var email = require('mailer');
 var Constants = require('../tools/constants.js');
 
 var Email = {};
-Email.send = function(email_address, subject, text, html) {
+Email.send = function(email_address, cc_email_address, subject, text, html) {
     email.send({
         host: Constants.EmailHost,
         port: Constants.EmailPort,
         ssl: Constants.EmailSSL,
         domain: Constants.EmailDomain,
         to: email_address,
+        cc: cc_email_address,
         from: Constants.EmailUserName,
         subject: subject,
         text: text,
@@ -24,6 +25,7 @@ Email.send = function(email_address, subject, text, html) {
 Email.sendValidation = function(email_address, user, company_code) {
     Email.send(
         email_address,
+        '',
         'Registration validation for App1',
         'Automatic message from App1',
         '<span>Dear customer, thank-you for registering with our website, your initial password is: ' +
@@ -33,9 +35,10 @@ Email.sendValidation = function(email_address, user, company_code) {
         company_code + '">Validate registration</a>');
 }
 
-Email.sendShare = function(email_address, form_id, datamodel_id, data_id, profile_id) {
+Email.sendShare = function(email_address, cc_email_address, form_id, datamodel_id, data_id, profile_id) {
     Email.send(
         email_address,
+        cc_email_address,
         'App1 - Shared form',
         'Automatic message from App1',
         '<span>A form has been shared with you, to access it please click on the following link:</span><br><a href="http://' +

@@ -56,23 +56,49 @@ router.post('/:datamodelid/', function(req, res, next) {
 });
 
 router.get('/:datamodelid/:id', function(req, res, next) {
-    var profile = SessionCache.user[req.cookies.app1_token].profile.profile;
+    var user = SessionCache.user[req.cookies.app1_token];
+    var profile = user.profile.profile;
+    var remote_profile = {};
+    var remote = false;
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].read) {
-        return res.status(401).json({
-            err: "Not enough user rights!"
-        });
+        if (!user.remote_profiles || user.remote_profiles.length == 0) {
+            return res.status(401).json({
+                err: "Not enough user rights!"
+            });
+        }
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i].properties.datamodels[req.params.datamodelid] && user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id]) {
+                remote_profile = user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id];
+                remote = true;
+                break;
+            }
+        }
+        if (!remote) {
+            return res.status(401).json({
+                err: "Not enough user rights!"
+            });
+        }
     }
     var search_criteria = {
-        "_id": {
+        _id: {
             "$eq": req.params.id
         }
     };
-    search_criteria._company_code = {
-        "$eq": profile.datamodels[req.params.datamodelid].read._company_code
-    };
-    search_criteria._user = {
-        "$in": profile.datamodels[req.params.datamodelid].read._user
-    };
+    if (remote) {
+        search_criteria._company_code = {
+            "$eq": remote_profile._company_code
+        };
+        search_criteria[remote_profile.constraint.key] = {
+            "$eq": remote_profile.constraint.value
+        };
+    } else {
+        search_criteria._company_code = {
+            "$eq": profile.datamodels[req.params.datamodelid].read._company_code
+        };
+        search_criteria._user = {
+            "$in": profile.datamodels[req.params.datamodelid].read._user
+        };
+    }
     Metadata.Objects[req.params.datamodelid].findOne(search_criteria).populate('_files').exec(function(err, object) {
         if (err) return next(err);
         res.json(object);
@@ -81,22 +107,63 @@ router.get('/:datamodelid/:id', function(req, res, next) {
 
 router.put('/:datamodelid/:id', function(req, res, next) {
     var profile = SessionCache.user[req.cookies.app1_token].profile.profile;
+    var remote_profile = {};
+    var remote = false;
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body._user) {
-        return res.status(401).json({
-            err: "Not enough user rights!"
-        });
-    }
-    var found = false;
-    for (var i = 0; i < profile.datamodels[req.params.datamodelid].update._user.length; i++) {
-        if (profile.datamodels[req.params.datamodelid].update._user[i] == req.body._user) {
-            found = true;
-            break;
+        if (!user.remote_profiles || user.remote_profiles.length == 0) {
+            return res.status(401).json({
+                err: "Not enough user rights!"
+            });
+        }
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i].properties.datamodels[req.params.datamodelid] && user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id]) {
+                remote_profile = user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id];
+                remote = true;
+                break;
+            }
+        }
+        if (!remote) {
+            return res.status(401).json({
+                err: "Not enough user rights!"
+            });
         }
     }
-    if (!found) {
-        return res.status(401).json({
-            err: "Not enough user rights!"
-        });
+    if (!remote) {
+        var found = false;
+        for (var i = 0; i < profile.datamodels[req.params.datamodelid].update._user.length; i++) {
+            if (profile.datamodels[req.params.datamodelid].update._user[i] == req.body._user) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return res.status(401).json({
+                err: "Not enough user rights!"
+            });
+        }
+    }
+    var search_criteria = {
+        _id: {
+            "$eq": req.params.id
+        }
+    };
+    if (remote) {
+        search_criteria._company_code = {
+            "$eq": remote_profile._company_code
+        };
+        search_criteria._user = {
+            "$eq": req.body._user
+        };
+        search_criteria[remote_profile.constraint.key] = {
+            "$eq": remote_profile.constraint.value
+        };
+    } else {
+        search_criteria._company_code = {
+            "$eq": profile.datamodels[req.params.datamodelid].read._company_code
+        };
+        search_criteria._user = {
+            "$in": profile.datamodels[req.params.datamodelid].read._user
+        };
     }
     var lookup_date = Date.parse(req.body._updated_at);
     req.body._updated_at = Date.now();
