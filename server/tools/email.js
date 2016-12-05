@@ -42,7 +42,7 @@ Email.sendShare = function(email_address, cc_email_address, form_id, datamodel_i
         'App1 - Shared form',
         'Automatic message from App1',
         '<span>A form has been shared with you, to access it please click on the following link:</span><br><a href="http://' +
-        Constants.WebAddress + '/authentication/open?form_id=' + form_id + '&datamodel_id=' +
+        Constants.WebAddress + '/client/open?form_id=' + form_id + '&datamodel_id=' +
         datamodel_id + '&data_id=' +
         data_id +
         '&profile_id=' +
