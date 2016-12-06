@@ -22,17 +22,29 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             },
             appData: {}
         };
-        var setSessionData = function setSessionData(newData) {
-            sessionData = newData;
-        }
-        var getSessionData = function getSessionData() {
-            return sessionData;
-        }
         var translate = function translate(text) {
             if (!text) return "xxxxx";
             var translated_text = text[sessionData.userData.properties.language];
             if (translated_text) return translated_text;
             else return text["en"];
+        }
+        var translateInternal = function translate(text, language) {
+            if (!text) return "xxxxx";
+            var translated_text = text[language];
+            if (translated_text) return translated_text;
+            else return text["en"];
+        }
+        var setSessionData = function setSessionData(newData) {
+            if (newData.applications) {
+                for (var i = 0; i < newData.applications.length; i++) {
+                    newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.language);
+                    newData.applications[i].translated_description = translateInternal(newData.applications[i].description, newData.userData.properties.language);
+                }
+            }
+            sessionData = newData;
+        }
+        var getSessionData = function getSessionData() {
+            return sessionData;
         }
         return {
             setSessionData: setSessionData,

@@ -18,11 +18,11 @@ app1.controller('WorkflowsCtrl',
                             break;
                         }
                     }
-                    SessionService.setSessionData($scope.sessionData);
                     for (var i = 0; i < $scope.workflows.length; i++) {
                         $scope.workflows[i].translated_name = SessionService.translate($scope.workflows[i].name);
                         $scope.workflows[i].translated_description = SessionService.translate($scope.workflows[i].description);
                     }
+                    SessionService.setSessionData($scope.sessionData);
                 }
             }
         }

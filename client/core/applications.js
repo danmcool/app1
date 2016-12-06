@@ -1,6 +1,5 @@
 app1.controller('ApplicationsCtrl', function($scope, SessionService, $location) {
     $scope.sessionData = SessionService.getSessionData();
-
     $scope.$watch(function() {
         return SessionService.getSessionData();
     }, function(newValue, oldValue) {
