@@ -149,7 +149,7 @@ router.get('/open', function(req, res, next) {
     if (!req.cookies.app1_token) return res.status(401).json({
         err: "Not logged in!"
     });
-    if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id) return res.status(401).json({
+    if (!req.query.form_id || !req.query.datamodel_id || !req.query.data_id || !req.query.profile_id) return res.status(401).json({
         err: "Invalid parameters!"
     });
     UserProfile.findOne({
@@ -159,12 +159,17 @@ router.get('/open', function(req, res, next) {
         if (!objectProfile) return res.status(401).json({
             err: "Invalid parameters!"
         });
+        var userWithRemoteProfile = SessionCache.user[req.cookies.app1_token];
+        userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
+        SessionCache.update(req.cookies.app1_token, userWithRemoteProfile);
+        res.redirect("/#/form/" + req.query.form_id + "/" + req.query.data_id);
+        /*
         User.findOneAndUpdate({
             _id: SessionCache.user[req.cookies.app1_token]._id,
             validated: true
         }, {
             $push: {
-                remote_profiles: [req.query.profile_id]
+                remote_profiles: req.query.profile_id
             }
         }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
             .populate('company profile remote_profiles').exec(function(errUser, userObject) {
@@ -173,8 +178,32 @@ router.get('/open', function(req, res, next) {
                     err: "Invalid parameters!"
                 });
                 SessionCache.update(req.cookies.app1_token, userObject);
-                res.redirect(200, "/#/form/" + req.query.form_id + "/" + req.query.data_id);
+                res.redirect("/#/form/" + req.query.form_id + "/" + req.query.data_id);
             });
+        */
+    });
+});
+
+router.get('/calendar', function(req, res, next) {
+    if (!req.cookies.app1_token) return res.status(401).json({
+        err: "Not logged in!"
+    });
+    if (!req.query.project_name || !req.query.start_date || !req.query.end_date || !req.query.user_id) return res.status(401).json({
+        err: "Invalid parameters!"
+    });
+    User.findOne({
+        _id: req.query.user_id,
+        _company_code: SessionCache.user[req.cookies.app1_token]._company_code,
+        validated: true
+    }, 'email firstname lastname').exec(function(errUser, userObject) {
+        if (errUser) return next(err);
+        if (!userObject) return res.status(401).json({
+            err: "Invalid parameters!"
+        });
+        res.status(200).json({
+            msg: "Calendar sent!"
+        });
+        Email.sendCalendar(userObject.email, req.query.project_name, req.query.start_date, req.query.end_date, ((userObject.firstname ? userObject.firstname : "") + " " + (userObject.lastname ? userObject.lastname : "")));
     });
 });
 

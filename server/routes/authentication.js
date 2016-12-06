@@ -88,7 +88,7 @@ router.get('/validate', function(req, res) {
                 applications: appList
             });
         });
-        res.status(200).send("<p>Registration: user has been validated, please log on using initial password!</p><br><a href='/#login'>Login</a>");
+        res.status(200).send("<p>Registration: user has been validated, please log on using initial password!</p><br><a href='/#/login'>Login</a>");
         /*
         var objectList = {};
         Application.find({

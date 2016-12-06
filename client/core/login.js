@@ -17,6 +17,12 @@ app1.controller('LoginCtrl',
                 $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
                 Applications.query().$promise.then(function(applicationsResult) {
                     $scope.sessionData.applications = applicationsResult;
+                    var apps = $scope.sessionData.applications;
+                    for (var i = 0; i < apps.length; i++) {
+                        apps[i].translated_name = SessionService.translate(apps[i].name);
+                        apps[i].translated_description = SessionService.translate(apps[i].description);
+                    }
+                    $scope.sessionData.applicationName = $scope.sessionData.appData.home;
                     SessionService.setSessionData($scope.sessionData);
                     $location.url('/applications');
                 });

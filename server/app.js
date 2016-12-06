@@ -3,7 +3,6 @@ var express = require('express');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var expressSession = require('express-session');
 var mongoose = require('mongoose');
 var path = require('path');
 
@@ -55,9 +54,7 @@ app.use(function(req, res, next) {
     if (allowedPath(req) || hasPermission(req)) {
         next();
     } else {
-        return res.status(401).json({
-            err: "Path not allowed or no permission to access!"
-        });
+        return res.status(401).redirect('/');
     }
 });
 

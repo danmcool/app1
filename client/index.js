@@ -100,7 +100,16 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     ])
     .factory('Share', ['$resource',
         function($resource) {
-            return $resource('/client/share/:id', null, {
+            return $resource('/client/share', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
+    .factory('Calendar', ['$resource',
+        function($resource) {
+            return $resource('/client/calendar', null, {
                 'update': {
                     method: 'PUT'
                 }
@@ -201,8 +210,16 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             Applications.query().$promise.then(function(result) {
                 $scope.sessionData.applications = result;
+                var apps = $scope.sessionData.applications;
+                for (var i = 0; i < apps.length; i++) {
+                    apps[i].translated_name = SessionService.translate(apps[i].name);
+                    apps[i].translated_description = SessionService.translate(apps[i].description);
+                }
+                $scope.sessionData.applicationName = $scope.sessionData.appData.home;
                 SessionService.setSessionData($scope.sessionData);
-                $location.url('/applications');
+                if ($location.path() == '/') {
+                    $location.url('/applications');
+                }
             }).catch(function(error) {
                 // shows an error loading applications
             });

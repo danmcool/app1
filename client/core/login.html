@@ -9,12 +9,7 @@
         <form name="loginForm">
             <md-input-container class="md-block" flex-gt-xs>
                 <label>{{sessionData.appData.user_name}}</label>
-                <input ng-disabled="false" ng-required="true" name="user" ng-model="user" md-minlength="5" md-maxlength="20" ng-minlength="5" ng-maxlength="20">
-                <div ng-messages="registerForm.user.$error" role="alert">
-                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                        {{sessionData.appData.user_error}}
-                    </div>
-                </div>
+                <input ng-disabled="false" ng-required="true" name="user" ng-model="user">
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
                 <label>{{sessionData.appData.password}}</label>

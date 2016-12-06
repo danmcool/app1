@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, Value, Share, DataModels, Files, Datas, SessionService, MapService) {
+app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, Value, Share, Calendar, DataModels, Files, Datas, SessionService, MapService) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function() {
@@ -361,7 +361,37 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 form_id: form_id,
                 datamodel_id: $scope.form.datamodel._id,
                 data_id: data._id,
-                email: data[email_field_name]
+                email: data[email_field_name],
+                key: constraint.key,
+                value: constraint.value
+            }).$promise.then(function(res) {
+                gotoNextForm(formula, next_form_id, data);
+            })
+        }).catch(function(res) {
+            $scope.data = res.data;
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title('New version of document')
+                .textContent('The underlying data of this document has been modified by another user,' +
+                    ' please revise the content and save again!')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('Got it!')
+            );
+        });
+    }
+    $scope.calendar = function(formula, next_form_id, set_value, project_name_field, start_date_field, end_date_field, data) {
+        updateComponents($scope.form, set_value, data);
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: data._id
+        }, data).$promise.then(function(res) {
+            Calendar.get({
+                project_name: data[project_name_field],
+                start_date: data[start_date_field],
+                end_date: data[end_date_field],
+                user_id: data._user
             }).$promise.then(function(res) {
                 gotoNextForm(formula, next_form_id, data);
             })

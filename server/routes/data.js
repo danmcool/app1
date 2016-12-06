@@ -106,7 +106,8 @@ router.get('/:datamodelid/:id', function(req, res, next) {
 });
 
 router.put('/:datamodelid/:id', function(req, res, next) {
-    var profile = SessionCache.user[req.cookies.app1_token].profile.profile;
+    var user = SessionCache.user[req.cookies.app1_token];
+    var profile = user.profile.profile;
     var remote_profile = {};
     var remote = false;
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body._user) {
@@ -169,8 +170,7 @@ router.put('/:datamodelid/:id', function(req, res, next) {
     req.body._updated_at = Date.now();
     Metadata.Objects[req.params.datamodelid].findOneAndUpdate({
         _id: req.params.id,
-        _updated_at: lookup_date,
-        _company_code: profile.datamodels[req.params.datamodelid].update._company_code
+        _updated_at: lookup_date
     }, req.body, function(err, object) {
         if (err) return next(err);
         if (object) {
