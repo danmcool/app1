@@ -236,9 +236,9 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     var uploadFile = function(file, signedRequest, url) {
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', signedRequest);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
                     $scope.currentFile++;
                     if ($scope.currentFile > $scope.filesCount) {
                         document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_done;
