@@ -13,7 +13,7 @@ var computePage = function(req) {
 }
 
 router.get('/:datamodelid/', function(req, res, next) {
-    var profile = SessionCache.user[req.cookies.app1_token].profile.profile;
+    var profile = SessionCache.user[req.cookies[Constants.SessionCookie]].profile.profile;
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].list) {
         return res.status(401).json({
             err: "Not enough user rights!"
@@ -36,7 +36,7 @@ router.get('/:datamodelid/', function(req, res, next) {
 });
 
 router.post('/:datamodelid/', function(req, res, next) {
-    var profile = SessionCache.user[req.cookies.app1_token].profile.profile;
+    var profile = SessionCache.user[req.cookies[Constants.SessionCookie]].profile.profile;
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].create) {
         return res.status(401).json({
             err: "Not enough user rights!"
@@ -56,7 +56,7 @@ router.post('/:datamodelid/', function(req, res, next) {
 });
 
 router.get('/:datamodelid/:id', function(req, res, next) {
-    var user = SessionCache.user[req.cookies.app1_token];
+    var user = SessionCache.user[req.cookies[Constants.SessionCookie]];
     var profile = user.profile.profile;
     var remote_profile = {};
     var remote = false;
@@ -106,7 +106,7 @@ router.get('/:datamodelid/:id', function(req, res, next) {
 });
 
 router.put('/:datamodelid/:id', function(req, res, next) {
-    var user = SessionCache.user[req.cookies.app1_token];
+    var user = SessionCache.user[req.cookies[Constants.SessionCookie]];
     var profile = user.profile.profile;
     var remote_profile = {};
     var remote = false;
@@ -190,7 +190,7 @@ router.put('/:datamodelid/:id', function(req, res, next) {
 });
 
 router.delete('/:datamodelid/:id', function(req, res, next) {
-    var profile = SessionCache.user[req.cookies.app1_token].profile.profile;
+    var profile = SessionCache.user[req.cookies[Constants.SessionCookie]].profile.profile;
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].delete || !req.body._user) {
         return res.status(401).json({
             err: "Not enough user rights!"

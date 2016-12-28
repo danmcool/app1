@@ -124,7 +124,7 @@ router.post('/login', function(req, res, next) {
                 Session.create(session, function(err, newSession) {
                     if (err) return next(err);
                     SessionCache.login(newSession._id, userObject);
-                    res.cookie('app1_token', newSession._id, {
+                    res.cookie(Constants.SessionCookie, newSession._id, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     }).status(200).json({
@@ -136,10 +136,10 @@ router.post('/login', function(req, res, next) {
 });
 
 router.get('/status', function(req, res) {
-    if (!req.cookies.app1_token) return res.status(401).json({
+    if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
         err: "Not logged in!"
     });
-    var token = req.cookies.app1_token;
+    var token = req.cookies[Constants.SessionCookie];
     var current_time = Date.now();
     Session.findOneAndUpdate({
         _id: {
@@ -174,7 +174,7 @@ router.get('/status', function(req, res) {
                     } else {
                         SessionCache.login(token, userObject);
                     }
-                    res.cookie('app1_token', token, {
+                    res.cookie(Constants.SessionCookie, token, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
                     }).status(200).json({
@@ -186,16 +186,16 @@ router.get('/status', function(req, res) {
 });
 
 router.get('/logout', function(req, res) {
-    var token = req.cookies.app1_token;
+    var token = req.cookies[Constants.SessionCookie];
     Session.findOneAndRemove({
-        _id: req.cookies.app1_token
+        _id: req.cookies[Constants.SessionCookie]
     }, function(err, object) {
         if (err) return next(err);
         if (!object) return res.status(401).json({
             err: "Invalid session!"
         });
-        SessionCache.logout(req.cookies.app1_token);
-        res.clearCookie('app1_token').status(200);
+        SessionCache.logout(req.cookies[Constants.SessionCookie]);
+        res.clearCookie(Constants.SessionCookie).status(200);
     });
 
 });

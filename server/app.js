@@ -9,7 +9,7 @@ var path = require('path');
 mongoose.Promise = global.Promise;
 
 // mongoose
-mongoose.connect('mongodb://localhost/apps');
+mongoose.connect('mongodb://127.0.0.1/apps');
 
 // require routes
 var api = require('./routes/api.js');

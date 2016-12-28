@@ -72,7 +72,7 @@ SessionCache.logout = function(token) {
 };
 
 SessionCache.filterCompanyCode = function(req, filter) {
-    var company_code = SessionCache.user[req.cookies.app1_token]._company_code;
+    var company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
@@ -87,7 +87,7 @@ SessionCache.filterCompanyCode = function(req, filter) {
 }
 
 SessionCache.filterApplicationCompanyCode = function(req, filter) {
-    var company_code = SessionCache.user[req.cookies.app1_token]._company_code;
+    var company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
@@ -101,7 +101,7 @@ SessionCache.filterApplicationCompanyCode = function(req, filter) {
 }
 
 SessionCache.filterDataUserProfile = function(req, filter, datamodel_id, data_id) {
-    var company_code = SessionCache.user[req.cookies.app1_token]._company_code;
+    var company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};

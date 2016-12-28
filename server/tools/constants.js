@@ -3,6 +3,7 @@ const Constants = {
     MaxSessionTimeout: 1209600000,
     QuerySkip: 0,
     QueryLimit: 10,
+    SessionCookie: 'app1_token',
 
     AdminCompany: "00000",
     ProductionCompany: "00000",

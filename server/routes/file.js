@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
     }
     var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : "{}");
     search_criteria._company_code = {
-        "$eq": SessionCache.user[req.cookies.app1_token]._company_code
+        "$eq": SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code
     };
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : "{}");
     Metadata.File.find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function(
@@ -36,7 +36,7 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
     if (req.body) {
         req.body._updated_at = Date.now();
-        req.body._company_code = SessionCache.user[req.cookies.app1_token]._company_code;
+        req.body._company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
     }
     Metadata.File.create(req.body, function(err, object) {
         if (err) return next(err);
@@ -88,7 +88,7 @@ router.put('/:id', function(req, res, next) {
     Metadata.File.findOneAndUpdate({
         _id: req.params.id,
         _updated_at: lookup_date,
-        _company_code: SessionCache.user[req.cookies.app1_token].code
+        _company_code: SessionCache.user[req.cookies[Constants.SessionCookie]].code
     }, req.body, function(err, object) {
         if (err) return next(err);
         if (object) {
@@ -96,7 +96,7 @@ router.put('/:id', function(req, res, next) {
         } else {
             Metadata.File.findOne({
                 _id: req.params.id,
-                _company_code: SessionCache.user[req.cookies.app1_token]._company_code
+                _company_code: SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code
             }, function(err, object) {
                 if (err) return next(err);
                 res.status(400).json({
@@ -109,7 +109,7 @@ router.put('/:id', function(req, res, next) {
 router.delete('/:id', function(req, res, next) {
     Metadata.File.findOneAndRemove({
         _id: req.params.id,
-        _company_code: SessionCache.user[req.cookies.app1_token]._company_code
+        _company_code: SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code
     }, function(err, object) {
         if (err) return next(err);
         res.json({

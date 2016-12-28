@@ -328,7 +328,6 @@ router.put('/user/:id', function(req, res, next) {
         _id: req.body._id
     }), req.body, function(err, object) {
         if (err) return next(err);
-        //SessionCache.users[req.cookies.app1_token] =
         res.json(object);
     });
 });
