@@ -130,7 +130,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     ])
     .factory('User', ['$resource',
         function($resource) {
-            return $resource('/api/user/:id', null, {
+            return $resource('/client/user/:id', null, {
                 'update': {
                     method: 'PUT'
                 }

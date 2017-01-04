@@ -106,6 +106,31 @@ router.get('/application/', function(req, res, next) {
     });
 });
 
+router.put('/user/:id', function(req, res, next) {
+    if (req.body.user) req.body.user = req.body.user.toLowerCase();
+    User.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function(err, object) {
+        if (err) return res.status(400).json({
+            errUser: err
+        });
+        User.findOne({
+            _id: req.body._id
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            .populate('company profile remote_profiles').exec(
+                function(errUser, userObject) {
+                    if (errUser) return res.status(401).json({
+                        errUser: info
+                    });
+                    if (!userObject) return res.status(401).json({
+                        err: "Invalid user name!"
+                    });
+                    SessionCache.update(req.cookies.app1_token, userObject);
+                    res.json(userObject);
+                });
+    });
+});
+
 router.get('/share', function(req, res, next) {
     if (!req.cookies.app1_token) return res.status(401).json({
         err: "Not logged in!"
