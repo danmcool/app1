@@ -256,9 +256,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                         theme: 'default',
                         language: 'en'
                     }
-                },
-                appData: AppTranslationService.translate($scope.sessionData.userData.properties.language)
+                }
             };
+            $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             SessionService.setSessionData($scope.sessionData);
             $location.url('/');
         };

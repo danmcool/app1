@@ -4,7 +4,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.$watch(function() {
         return SessionService.getSessionData();
     }, function(newValue, oldValue) {
-        if (newValue !== oldValue) $scope.sessionData = newValue;
+        if (newValue != oldValue) $scope.sessionData = newValue;
     });
 
     $scope.data = {};

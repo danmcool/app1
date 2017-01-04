@@ -4,7 +4,7 @@ app1.controller('UserCtrl',
         $scope.$watch(function() {
             return SessionService.getSessionData();
         }, function(newValue, oldValue) {
-            if (newValue !== oldValue) {
+            if (newValue != oldValue) {
                 $scope.sessionData = newValue;
             }
         });
