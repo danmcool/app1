@@ -93,7 +93,7 @@ Metadata.Application = mongoose.model('Application', ApplicationSchema);
 
 var UserProfileSchema = new Schema({
     name: Schema.Types.Mixed,
-    type: String, // administrator/private/public
+    type: String, // administrator/private/public/share
     profile: Schema.Types.Mixed,
     properties: Schema.Types.Mixed, // language (en/fr, etc), color theme, alerts, etc.
     _updated_at: {

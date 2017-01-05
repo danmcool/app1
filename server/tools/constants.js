@@ -15,6 +15,64 @@ const Constants = {
     UserProfilePrivate: "private",
     UserProfileShare: "share",
     UserProfilePublic: "public",
+    UserProfileAdministratorDefault: {
+        list: {
+            _company_code: "@@company_code"
+        },
+        create: {
+            _company_code: "@@company_code",
+            user: ["@@user"]
+        },
+        read: {
+            _company_code: "@@company_code"
+        },
+        update: {
+            _company_code: "@@company_code"
+        },
+        delete: {
+            _company_code: "@@company_code"
+        }
+    },
+    UserProfilePrivateDefault: {
+        list: {
+            _company_code: "@@company_code",
+            user: ["@@user", "@@reports", "@@public"]
+        },
+        create: {
+            _company_code: "@@company_code",
+            user: ["@@user"]
+        },
+        read: {
+            _company_code: "@@company_code",
+            user: ["@@user", "@@reports", "@@public"]
+        },
+        update: {
+            _company_code: "@@company_code",
+            user: ["@@user", "@@reports", "@@public"]
+        },
+        delete: {
+            _company_code: "@@company_code",
+            user: ["@@user", "@@reports", "@@public"]
+        }
+    },
+    UserProfilePublicDefault: {
+        list: {
+            _company_code: "@@company_code",
+            user: ["@@public"]
+        },
+        create: {
+            _company_code: "@@company_code",
+            user: ["@@public"]
+        },
+        read: {
+            _company_code: "@@company_code",
+            user: ["@@public"]
+        },
+        update: {
+            _company_code: "@@company_code",
+            user: ["@@public"]
+        }
+    },
 
     S3_BUCKET: "app1data",
     REGION: "eu-central-1",
@@ -36,4 +94,5 @@ const Constants = {
     ValuesRelationUserReports: 'user_reports',
     ValuesRelationUserList: 'user_list'
 }
+
 module.exports = Constants;
