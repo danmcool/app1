@@ -1,14 +1,14 @@
 var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll'])
     .config(function($mdThemingProvider) {
         $mdThemingProvider.theme('default')
-            .primaryPalette('pink')
-            .accentPalette('orange');
+            .primaryPalette('grey')
+            .accentPalette('amber');
         $mdThemingProvider.theme('user1')
             .primaryPalette('purple')
             .accentPalette('green');
         $mdThemingProvider.theme('user2')
-            .primaryPalette('blue-grey')
-            .accentPalette('deep-orange');
+            .primaryPalette('pink')
+            .accentPalette('orange');
         $mdThemingProvider.alwaysWatchTheme(true);
         $mdThemingProvider.generateThemesOnDemand(false);
     })
@@ -20,6 +20,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                     language: 'en'
                 }
             },
+            applicationName: "App1",
             appData: {}
         };
         var translate = function translate(text) {
