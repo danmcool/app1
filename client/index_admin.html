@@ -21,6 +21,7 @@
         <p>Welcome to the administration tool!</p>
     </script>
     <script type="text/ng-template" id="datamodels.html">
+        <h1>Data Models</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -36,7 +37,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="datamodelDetails.html">
-        <h1>{{datamodel.name.en}}</h1>
+        <h1>Data Model: {{datamodel.name.en}}</h1>
         <p>Name:
             <br>
             <textarea json-text ng-model="datamodel.name" rows="3" cols="60"></textarea>
@@ -54,6 +55,7 @@
         <a href="/admin#/datamodels">Cancel</a>
     </script>
     <script type="text/ng-template" id="forms.html">
+        <h1>Forms</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -69,7 +71,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="formDetails.html">
-        <h1>{{form.name.en}}</h1>
+        <h1>Form: {{form.name.en}}</h1>
         <p>Name:
             <br>
             <textarea json-text ng-model="form.name" rows="3" cols="60"></textarea>
@@ -112,6 +114,7 @@
         <a href="/admin#/forms">Cancel</a>
     </script>
     <script type="text/ng-template" id="values.html">
+        <h1>Values</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -127,7 +130,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="valueDetails.html">
-        <h1>{{value.name.en}}</h1>
+        <h1>Value: {{value.name.en}}</h1>
         <p>Name:
             <br>
             <textarea json-text ng-model="value.name" rows="3" cols="60"></textarea>
@@ -148,6 +151,7 @@
         <a href="/admin#/values">Cancel</a>
     </script>
     <script type="text/ng-template" id="users.html">
+        <h1>Users</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -163,7 +167,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="userDetails.html">
-        <h1>{{user.user}}</h1>
+        <h1>User: {{user.user}}</h1>
         <p>User:
             <input type="text" ng-model="user.user">
         </p>
@@ -212,6 +216,7 @@
         <a href="/admin#/users">Cancel</a>
     </script>
     <script type="text/ng-template" id="files.html">
+        <h1>Files</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -227,7 +232,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="fileDetails.html">
-        <h1>{{file.file.name}}</h1>
+        <h1>File: {{file.file.name}}</h1>
         <p>Name:
             <input type="text" ng-model="file.file.name">
         </p>
@@ -239,6 +244,7 @@
         <a href="/admin#/files">Cancel</a>
     </script>
     <script type="text/ng-template" id="userprofiles.html">
+        <h1>User Profiles</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -254,7 +260,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="userprofileDetails.html">
-        <h1>{{userprofile.name.en}}</h1>
+        <h1>User Profile: {{userprofile.name.en}}</h1>
         <p>Name:
             <br>
             <textarea json-text ng-model="userprofile.name" rows="3" cols="60"></textarea>
@@ -278,6 +284,7 @@
         <a href="/admin#/userprofiles">Cancel</a>
     </script>
     <script type="text/ng-template" id="sessions.html">
+        <h1>Sessions</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -293,7 +300,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="sessionDetails.html">
-        <h1>{{session.name.en}}</h1>
+        <h1>Session: {{session.name.en}}</h1>
         <p>User:
             <br>
             <textarea json-text ng-model="session.user" rows="3" cols="60"></textarea>
@@ -310,6 +317,7 @@
         <a href="/admin#/session">Cancel</a>
     </script>
     <script type="text/ng-template" id="companies.html">
+        <h1>Companies</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -325,7 +333,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="companyDetails.html">
-        <h1>{{company.name}}</h1>
+        <h1>Company: {{company.name}}</h1>
         <p>Name:
             <input type="text" ng-model="company.name">
         </p>
@@ -343,6 +351,7 @@
         <a href="/admin#/companies">Cancel</a>
     </script>
     <script type="text/ng-template" id="workflows.html">
+        <h1>Workflows</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -358,7 +367,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="workflowDetails.html">
-        <h1>{{workflow.name.en}}</h1>
+        <h1>Workflow: {{workflow.name.en}}</h1>
         <p>Name:
             <br>
             <textarea json-text ng-model="workflow.name" rows="3" cols="60"></textarea>
@@ -378,6 +387,7 @@
         <a href="/admin#/workflows">Cancel</a>
     </script>
     <script type="text/ng-template" id="applications.html">
+        <h1>Applications</h1>
         <div>
             Search:
             <input type="text" ng-model="search.name">
@@ -393,7 +403,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="applicationDetails.html">
-        <h1>{{application.name.en}}</h1>
+        <h1>Application: {{application.name.en}}</h1>
         <p>Name:
             <br>
             <textarea json-text ng-model="application.name" rows="3" cols="60"></textarea>

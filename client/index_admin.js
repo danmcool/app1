@@ -16,7 +16,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             }
         };
     })
-    .factory('Workflows', ['$resource',
+    .factory('Workflows',
         function($resource) {
             return $resource('/api/workflow/:id', null, {
                 'update': {
@@ -24,8 +24,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Applications', ['$resource',
+)
+    .factory('Applications',
         function($resource) {
             return $resource('/api/application/:id', null, {
                 'update': {
@@ -33,8 +33,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Forms', ['$resource',
+)
+    .factory('Forms',
         function($resource) {
             return $resource('/api/form/:id', null, {
                 'update': {
@@ -42,8 +42,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Values', ['$resource',
+)
+    .factory('Values',
         function($resource) {
             return $resource('/api/value/:id', null, {
                 'update': {
@@ -51,8 +51,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('UserProfiles', ['$resource',
+)
+    .factory('UserProfiles',
         function($resource) {
             return $resource('/api/userprofile/:id', null, {
                 'update': {
@@ -60,8 +60,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Sessions', ['$resource',
+)
+    .factory('Sessions',
         function($resource) {
             return $resource('/api/session/:id', null, {
                 'update': {
@@ -69,8 +69,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Companies', ['$resource',
+)
+    .factory('Companies',
         function($resource) {
             return $resource('/api/company/:id', null, {
                 'update': {
@@ -78,8 +78,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Users', ['$resource',
+)
+    .factory('Users',
         function($resource) {
             return $resource('/api/user/:id', null, {
                 'update': {
@@ -87,8 +87,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('Files', ['$resource',
+)
+    .factory('Files',
         function($resource) {
             return $resource('/file/:id', null, {
                 'update': {
@@ -96,8 +96,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .factory('DataModels', ['$resource',
+)
+    .factory('DataModels',
         function($resource) {
             return $resource('/api/datamodel/:id', null, {
                 'update': {
@@ -105,9 +105,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 }
             });
         }
-    ])
-    .controller('WorkflowsCtrl', ['$scope', 'Workflows',
-        function($scope, Workflows) {
+)
+    .controller('WorkflowsCtrl',
+        function($scope, Workflows, $mdDialog) {
             $scope.workflows = Workflows.query({
                 skip: 0,
                 limit: 100
@@ -125,17 +125,26 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var workflow = $scope.workflows[index];
-                Workflows.remove({
-                    id: workflow._id
-                }, function() {
-                    $scope.workflows.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var workflow = $scope.workflows[index];
+                    Workflows.remove({
+                        id: workflow._id
+                    }, function() {
+                        $scope.workflows.splice(index, 1);
+                    });
                 });
             }
         }
-    ])
-    .controller('ApplicationsCtrl', ['$scope', 'Applications',
-        function($scope, Applications) {
+)
+    .controller('ApplicationsCtrl',
+        function($scope, Applications, $mdDialog) {
             $scope.applications = Applications.query({
                 skip: 0,
                 limit: 100
@@ -161,9 +170,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('FormsCtrl', ['$scope', 'Forms',
-        function($scope, Forms) {
+)
+    .controller('FormsCtrl',
+        function($scope, Forms, $mdDialog) {
             $scope.forms = Forms.query({
                 skip: 0,
                 limit: 100
@@ -189,37 +198,35 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('ValuesCtrl', ['$scope', 'Values',
-        function($scope, Values) {
-            $scope.values = Values.query({
-                skip: 0,
-                limit: 100
+)
+    .controller('ValuesCtrl', function($scope, Values, $mdDialog) {
+        $scope.values = Values.query({
+            skip: 0,
+            limit: 100
+        });
+        $scope.save = function() {
+            if (!$scope.newValue || $scope.newValue.length < 1) return;
+            var value = new Values({
+                name: {
+                    en: $scope.newValue
+                }
             });
-            $scope.save = function() {
-                if (!$scope.newValue || $scope.newValue.length < 1) return;
-                var value = new Values({
-                    name: {
-                        en: $scope.newValue
-                    }
-                });
-                value.$save(function() {
-                    $scope.values.push(value);
-                    $scope.newValue = '';
-                });
-            }
-            $scope.remove = function(index) {
-                var value = $scope.values[index];
-                Values.remove({
-                    id: value._id
-                }, function() {
-                    $scope.values.splice(index, 1);
-                });
-            }
+            value.$save(function() {
+                $scope.values.push(value);
+                $scope.newValue = '';
+            });
         }
-    ])
-    .controller('UserProfilesCtrl', ['$scope', 'UserProfiles',
-        function($scope, UserProfiles) {
+        $scope.remove = function(index) {
+            var value = $scope.values[index];
+            Values.remove({
+                id: value._id
+            }, function() {
+                $scope.values.splice(index, 1);
+            });
+        }
+    })
+    .controller('UserProfilesCtrl',
+        function($scope, UserProfiles, $mdDialog) {
             $scope.userprofiles = UserProfiles.query({
                 skip: 0,
                 limit: 100
@@ -244,10 +251,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                     $scope.userprofiles.splice(index, 1);
                 });
             }
-        }
-    ])
-    .controller('SessionsCtrl', ['$scope', 'Sessions',
-        function($scope, Sessions) {
+        })
+    .controller('SessionsCtrl',
+        function($scope, Sessions, $mdDialog) {
             $scope.sessions = Sessions.query({
                 skip: 0,
                 limit: 100
@@ -273,9 +279,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('CompaniesCtrl', ['$scope', 'Companies',
-        function($scope, Companies) {
+)
+    .controller('CompaniesCtrl',
+        function($scope, Companies, $mdDialog) {
             $scope.companies = Companies.query({
                 skip: 0,
                 limit: 100
@@ -299,9 +305,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('UsersCtrl', ['$scope', 'Users',
-        function($scope, Users) {
+)
+    .controller('UsersCtrl',
+        function($scope, Users, $mdDialog) {
             $scope.users = Users.query({
                 skip: 0,
                 limit: 100
@@ -325,9 +331,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('FilesCtrl', ['$scope', 'Files',
-        function($scope, Files) {
+)
+    .controller('FilesCtrl',
+        function($scope, Files, $mdDialog) {
             $scope.files = Files.query({
                 skip: 0,
                 limit: 100
@@ -351,9 +357,9 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('DataModelsCtrl', ['$scope', 'DataModels',
-        function($scope, DataModels) {
+)
+    .controller('DataModelsCtrl',
+        function($scope, DataModels, $mdDialog) {
             $scope.datamodels = DataModels.query({
                 skip: 0,
                 limit: 100
@@ -379,8 +385,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('WorkflowDetailsCtrl', ['$scope', '$routeParams', 'Workflows', '$location',
+)
+    .controller('WorkflowDetailsCtrl',
         function($scope,
             $routeParams, Workflows, $location) {
             $scope.workflow = Workflows.get({
@@ -394,8 +400,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('ApplicationDetailsCtrl', ['$scope', '$routeParams', 'Applications', '$location',
+)
+    .controller('ApplicationDetailsCtrl',
         function($scope,
             $routeParams, Applications, $location) {
             $scope.application = Applications.get({
@@ -409,8 +415,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('DataModelDetailsCtrl', ['$scope', '$routeParams', 'DataModels', '$location',
+)
+    .controller('DataModelDetailsCtrl',
         function($scope,
             $routeParams, DataModels, $location) {
             $scope.datamodel = DataModels.get({
@@ -424,8 +430,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('FormDetailsCtrl', ['$scope', '$routeParams', 'Forms', '$location',
+)
+    .controller('FormDetailsCtrl',
         function($scope, $routeParams,
             Forms, $location) {
             $scope.form = Forms.get({
@@ -439,8 +445,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('ValueDetailsCtrl', ['$scope', '$routeParams', 'Values', '$location',
+)
+    .controller('ValueDetailsCtrl',
         function($scope, $routeParams,
             Values, $location) {
             $scope.value = Values.get({
@@ -454,8 +460,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('UserProfileDetailsCtrl', ['$scope', '$routeParams', 'UserProfiles', '$location',
+)
+    .controller('UserProfileDetailsCtrl',
         function($scope,
             $routeParams, UserProfiles, $location) {
             $scope.userprofile = UserProfiles.get({
@@ -469,8 +475,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('SessionDetailsCtrl', ['$scope', '$routeParams', 'Sessions', '$location',
+)
+    .controller('SessionDetailsCtrl',
         function($scope,
             $routeParams, Sessions, $location) {
             $scope.session = Sessions.get({
@@ -484,8 +490,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('CompanyDetailsCtrl', ['$scope', '$routeParams', 'Companies', '$location',
+)
+    .controller('CompanyDetailsCtrl',
         function($scope,
             $routeParams, Companies, $location) {
             $scope.company = Companies.get({
@@ -499,8 +505,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('UserDetailsCtrl', ['$scope', '$routeParams', 'Users', '$location',
+)
+    .controller('UserDetailsCtrl',
         function($scope, $routeParams,
             Users, $location) {
             $scope.user = Users.get({
@@ -514,8 +520,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
-    .controller('FileDetailsCtrl', ['$scope', '$routeParams', 'Files', '$location',
+)
+    .controller('FileDetailsCtrl',
         function($scope, $routeParams,
             Files, $location) {
             $scope.file = Files.get({
@@ -529,7 +535,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
         }
-    ])
+)
     .controller('LeftCtrl', function($scope, $timeout, $mdSidenav, $log) {
         $scope.close = function() {
             $mdSidenav('left').close();

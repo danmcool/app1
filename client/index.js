@@ -298,6 +298,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 templateUrl: 'core/workflows.html',
                 controller: 'WorkflowsCtrl'
             })
+            .when('/welcome', {
+                templateUrl: 'core/welcome.html',
+                controller: 'WelcomeCtrl'
+            })
             .when('/register', {
                 templateUrl: 'core/register.html',
                 controller: 'RegisterCtrl'
@@ -316,8 +320,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             })
             .otherwise({
                 redirectTo: '/',
-                templateUrl: 'core/register.html',
-                controller: 'RegisterCtrl'
+                templateUrl: 'core/welcome.html',
+                controller: 'WelcomeCtrl'
             });
     }
 ]);
