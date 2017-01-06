@@ -10,6 +10,7 @@ const Constants = {
     ApplicationHome: "home",
 
     InitialPassword: "Start123",
+    SecretKey: "App1!;ZXC",
     Public_User: "public",
     UserProfileAdministrator: "administrator",
     UserProfilePrivate: "private",

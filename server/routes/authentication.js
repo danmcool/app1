@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var crypto = require('crypto');
 
 var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
@@ -13,6 +14,14 @@ var User = Metadata.User;
 var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
 var Session = Metadata.Session;
+
+var hashPassword = function(password) {
+    var hash = crypto.createHmac('sha256', Constants.SecretKey);
+    hash.update(password);
+    var value = hash.digest('hex');
+    console.log(value);
+    return value;
+}
 
 router.post('/register', function(req, res) {
     Company.findOne({
@@ -38,7 +47,7 @@ router.post('/register', function(req, res) {
                 if (err) return next(err);
                 var user = {
                     user: req.body.user.toLowerCase(),
-                    password: Constants.InitialPassword,
+                    password: hashPassword(Constants.InitialPassword),
                     email: req.body.email,
                     firstname: req.body.firstname,
                     lastname: req.body.lastname,
@@ -105,7 +114,7 @@ router.get('/validate', function(req, res) {
 router.post('/login', function(req, res, next) {
     User.findOne({
         user: req.body.user.toLowerCase(),
-        password: req.body.password,
+        password: hashPassword(req.body.password),
         validated: true
     }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
         .populate('company profile remote_profiles').exec(
@@ -156,7 +165,7 @@ router.get('/status', function(req, res) {
         });
         if (!existingSession) return res.status(401).json({
             err: "Invalid session!"
-     });
+        });
         User.findOne({
             _id: existingSession.user._id,
             validated: true
