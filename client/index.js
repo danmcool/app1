@@ -1,7 +1,7 @@
 var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll'])
     .config(function($mdThemingProvider) {
         $mdThemingProvider.theme('default')
-            .primaryPalette('grey')
+            .primaryPalette('blue-grey')
             .accentPalette('amber');
         $mdThemingProvider.theme('user1')
             .primaryPalette('purple')
@@ -58,7 +58,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 
         var initMap = function initMap(mapId) {
             maps[mapId] = new google.maps.Map(document.getElementById(mapId), {
-                zoom: 2
+                zoom: 2,
+                scrollwheel: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
             });
         }
 
@@ -257,7 +259,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                         theme: 'default',
                         language: 'en'
                     }
-                }
+                },
+                applicationName: "App1"
             };
             $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             SessionService.setSessionData($scope.sessionData);

@@ -100,6 +100,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Register',
             fr: 'Enregister'
         },
+        welcome: {
+            en: 'Welcome',
+            fr: 'Accueil'
+        },
         uploading_in_progress: {
             en: 'Uploading in progress...',
             fr: 'Téléchargement en cours...'
