@@ -12,9 +12,7 @@ var https = require('https');
 var ssl = {
     key: fs.readFileSync('./server/ssl/app1-key.pem', 'utf8'),
     cert: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
-    ca: [fs.readFileSync('./server/ssl/gd_1.crt', 'utf8'),
-         fs.readFileSync('./server/ssl/gd_2.crt', 'utf8'),
-         fs.readFileSync('./server/ssl/gd_3.crt', 'utf8')]
+    ca: fs.readFileSync('./server/ssl/app1-intermediate-cert.crt', 'utf8')
 };
 var server = https.createServer(ssl, app);
 var port = 443;
