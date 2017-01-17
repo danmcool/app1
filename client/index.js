@@ -219,6 +219,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             $scope.sessionData = {
                 applicationName: "App1"
             };
+            $scope.sessionData.token = result.token;
             $scope.sessionData.userData = result.user;
             $scope.sessionData.userData.title = (result.user.firstname ? result.user.firstname : "") + " " + (result.user.lastname ? result.user.lastname : "") + " @ " + (result.user.company.name ? result.user.company.name : "");
             $scope.sessionData.userData.name = (result.user.firstname ? result.user.firstname : "") + " " + (result.user.lastname ? result.user.lastname : "");

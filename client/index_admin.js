@@ -162,11 +162,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var application = $scope.applications[index];
-                Applications.remove({
-                    id: application._id
-                }, function() {
-                    $scope.applications.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var application = $scope.applications[index];
+                    Applications.remove({
+                        id: application._id
+                    }, function() {
+                        $scope.applications.splice(index, 1);
+                    });
                 });
             }
         }
@@ -190,11 +199,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var form = $scope.forms[index];
-                Forms.remove({
-                    id: form._id
-                }, function() {
-                    $scope.forms.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var form = $scope.forms[index];
+                    Forms.remove({
+                        id: form._id
+                    }, function() {
+                        $scope.forms.splice(index, 1);
+                    });
                 });
             }
         }
@@ -217,11 +235,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             });
         }
         $scope.remove = function(index) {
-            var value = $scope.values[index];
-            Values.remove({
-                id: value._id
-            }, function() {
-                $scope.values.splice(index, 1);
+            $mdDialog.show(
+                $mdDialog.confirm()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title('Remove object?')
+                .ok('Yes')
+                .cancel('No')
+            ).then(function() {
+                var value = $scope.values[index];
+                Values.remove({
+                    id: value._id
+                }, function() {
+                    $scope.values.splice(index, 1);
+                });
             });
         }
     })
@@ -244,11 +271,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var userprofile = $scope.userprofiles[index];
-                UserProfiles.remove({
-                    id: userprofile._id
-                }, function() {
-                    $scope.userprofiles.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var userprofile = $scope.userprofiles[index];
+                    UserProfiles.remove({
+                        id: userprofile._id
+                    }, function() {
+                        $scope.userprofiles.splice(index, 1);
+                    });
                 });
             }
         })
@@ -271,11 +307,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var session = $scope.sessions[index];
-                Sessions.remove({
-                    id: session._id
-                }, function() {
-                    $scope.sessions.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var session = $scope.sessions[index];
+                    Sessions.remove({
+                        id: session._id
+                    }, function() {
+                        $scope.sessions.splice(index, 1);
+                    });
                 });
             }
         }
@@ -289,7 +334,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
             $scope.save = function() {
                 if (!$scope.newCompany || $scope.newCompany.length < 1) return;
                 var company = new Companies({
-                    name: $scope.newCompany
+                    name: $scope.newCompany,
+                    _company_code: $scope.newCompany
                 });
                 company.$save(function() {
                     $scope.companies.push(company);
@@ -297,11 +343,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var company = $scope.companies[index];
-                Companies.remove({
-                    id: company._id
-                }, function() {
-                    $scope.companies.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var company = $scope.companies[index];
+                    Companies.remove({
+                        id: company._id
+                    }, function() {
+                        $scope.companies.splice(index, 1);
+                    });
                 });
             }
         }
@@ -323,11 +378,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var user = $scope.users[index];
-                Users.remove({
-                    id: user._id
-                }, function() {
-                    $scope.users.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var user = $scope.users[index];
+                    Users.remove({
+                        id: user._id
+                    }, function() {
+                        $scope.users.splice(index, 1);
+                    });
                 });
             }
         }
@@ -349,11 +413,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var user = $scope.files[index];
-                Files.remove({
-                    id: file._id
-                }, function() {
-                    $scope.files.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                        var user = $scope.files[index];
+                        Files.remove({
+                            id: file._id
+                        }, function() {
+                            $scope.files.splice(index, 1);
+                        });
                 });
             }
         }
@@ -377,11 +450,20 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
                 });
             }
             $scope.remove = function(index) {
-                var datamodel = $scope.datamodels[index];
-                DataModels.remove({
-                    id: datamodel._id
-                }, function() {
-                    $scope.datamodels.splice(index, 1);
+                $mdDialog.show(
+                    $mdDialog.confirm()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('Remove object?')
+                    .ok('Yes')
+                    .cancel('No')
+                ).then(function() {
+                    var datamodel = $scope.datamodels[index];
+                    DataModels.remove({
+                        id: datamodel._id
+                    }, function() {
+                        $scope.datamodels.splice(index, 1);
+                    });
                 });
             }
         }

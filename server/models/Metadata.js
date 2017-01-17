@@ -128,11 +128,11 @@ var CompanySchema = new Schema({
         type: Date,
         default: Date.now
     },
-    _company_code: String
+    _company_code: { type: String, unique: true }
 });
 Metadata.Company = mongoose.model('Company', CompanySchema);
 var UserSchema = new Schema({
-    user: String,
+    user: { type: String, unique: true },
     password: String,
     email: String,
     firstname: String,

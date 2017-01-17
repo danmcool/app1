@@ -76,6 +76,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'User Settings',
             fr: 'Configuration utilisateur'
         },
+        user_invitation: {
+            en: 'Invite Enterprise Users',
+            fr: 'Inviter utilisateurs entreprise'
+        },
+        user_invitation_key: {
+            en: 'User invitation key:',
+            fr: 'Clé pour invitation utilisateur:'
+        },
+        download_outlook_plugin: {
+            en: 'Download Outlook Plugin',
+            fr: 'Télécharger le plugin pour Outlook'
+        },
         administration: {
             en: 'Administration',
             fr: 'Administration'

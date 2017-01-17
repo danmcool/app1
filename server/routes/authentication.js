@@ -148,6 +148,10 @@ router.post('/invite', function(req, res, next) {
     }, {
         timeout: current_time + Constants.MaxSessionTimeout
     }).populate('user').exec(function(err, existingSession) {
+        if (err) return next(err);
+        if (!existingSession) return res.status(401).json({
+            err: "Not found user session!"
+        });
         UserProfile.findOne({
             _company_code: {
                 "$eq": existingSession.user._company_code
@@ -160,20 +164,28 @@ router.post('/invite', function(req, res, next) {
             if (!userprofile) return res.status(401).json({
                 err: "Not found user profile!"
             });
-            for (var invitedUser in req.body.users) {
-                invitedUser.password = Constants.InitialPasswordHash;
-                invitedUser.company = existingSession.user.company;
-                invitedUser._company_code = existingSession.user._company_code;
-                invitedUser.profile = userprofile._id;
-                invitedUser.validated = false;
-                User.create(invitedUser, function(errNewUser, newUser) {
-                    if (errNewUser) return next(errNewUser);
-                    res.status(200).json({
-                        "msg": "Registration: please check your email to validate the registration!"
-                    });
-                    Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
+            for (var i in req.body.users) {
+                var invitedUser = req.body.users[i];
+                User.findOne({
+                    user: invitedUser.user
+                }, function(errUserFind, objectUserFind) {
+                    if (errUserFind) return next(errUserFind);
+                    if (!objectUserFind) {
+                        invitedUser.password = Constants.InitialPasswordHash;
+                        invitedUser.company = existingSession.user.company;
+                        invitedUser._company_code = existingSession.user._company_code;
+                        invitedUser.profile = userprofile._id;
+                        invitedUser.validated = false;
+                        User.create(invitedUser, function(errNewUser, newUser) {
+                            if (errNewUser) return next(errNewUser);
+                            Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
+                        });
+                    }
                 });
             }
+            res.status(200).json({
+                "msg": "Invitation: users have been invited to join App1!"
+            });
         });
     });
 
@@ -185,12 +197,11 @@ router.post('/login', function(req, res, next) {
     if (!req.body || !req.body.user || !req.body.password) return res.status(401).json({
         err: "Invalid user name or password!"
     });
-    console.log(Date.now());
+    //console.log(Date.now());
     crypto.pbkdf2(req.body.password, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function(errCrypto, key) {
         if (errCrypto) return next(errCrypto);
         var hashPassword = key.toString('hex');
-        console.log(Date.now());
-        console.log(hashPassword);
+        //console.log(Date.now());
         User.findOne({
             user: req.body.user.toLowerCase(),
             password: hashPassword,

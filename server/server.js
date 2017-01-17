@@ -14,6 +14,10 @@ var ssl = {
     cert: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
     ca: fs.readFileSync('./server/ssl/app1-intermediate-cert.crt', 'utf8')
 };
+
+//var server = http.createServer(app);
+//var port = 80;
+
 var server = https.createServer(ssl, app);
 var port = 443;
 

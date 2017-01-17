@@ -11,6 +11,7 @@ app1.controller('LoginCtrl',
             });
             loginObject.$save(function(userResult) {
                 $scope.sessionData = {};
+                $scope.sessionData.token = userResult.token;
                 $scope.sessionData.userData = userResult.user;
                 $scope.sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : "") + " " + (userResult.user.lastname ? userResult.user.lastname : "") + " @ " + (userResult.user.company.name ? userResult.user.company.name : "");
                 $scope.sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : "") + " " + (userResult.user.lastname ? userResult.user.lastname : "");
