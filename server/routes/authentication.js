@@ -42,35 +42,46 @@ router.post('/register', function(req, res) {
             };
             Company.create(company, function(errCompany, newCompany) {
                 if (errCompany) return next(errCompany);
-                var userprofile = {
+                var userprofileAdministrator = {
                     name: {
                         "en": "Administrator"
                     },
                     type: Constants.UserProfileAdministrator,
                     _company_code: req.body.code
                 };
-                UserProfile.create(userprofile, function(errUserProfile, newUserprofile) {
-                    if (errUserProfile) return next(errUserProfile);
-                    var user = {
-                        user: userName,
-                        password: Constants.InitialPasswordHash,
-                        email: req.body.email,
-                        firstname: req.body.firstname,
-                        lastname: req.body.lastname,
-                        properties: {
-                            theme: "default",
-                            language: "en"
+                UserProfile.create(userprofileAdministrator, function(errUserProfileAdministrator, newUserprofileAdministrator) {
+                    if (errUserProfileAdministrator) return next(errUserProfileAdministrator);
+                    var userprofilePrivate = {
+                        name: {
+                            "en": "Private"
                         },
-                        profile: newUserprofile._id,
-                        company: newCompany._id,
+                        type: Constants.UserProfilePrivate,
                         _company_code: req.body.code
                     };
-                    User.create(user, function(errNewUser, newUser) {
-                        if (errNewUser) return next(errNewUser);
-                        res.status(200).json({
-                            "msg": "Registration: please check your email to validate the registration!"
+                    UserProfile.create(userprofilePrivate, function(errUserProfilePrivate, newUserprofilePrivate) {
+                        if (errUserProfilePrivate) return next(errUserProfile);
+
+                        var user = {
+                            user: userName,
+                            password: Constants.InitialPasswordHash,
+                            email: req.body.email,
+                            firstname: req.body.firstname,
+                            lastname: req.body.lastname,
+                            properties: {
+                                theme: "default",
+                                language: "en"
+                            },
+                            profile: newUserprofileAdministrator._id,
+                            company: newCompany._id,
+                            _company_code: req.body.code
+                        };
+                        User.create(user, function(errNewUser, newUser) {
+                            if (errNewUser) return next(errNewUser);
+                            res.status(200).json({
+                                "msg": "Registration: please check your email to validate the registration!"
+                            });
+                            Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                         });
-                        Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                     });
                 });
             });
@@ -137,8 +148,33 @@ router.post('/invite', function(req, res, next) {
     }, {
         timeout: current_time + Constants.MaxSessionTimeout
     }).populate('user').exec(function(err, existingSession) {
-       // for (
-    //existingSession.user.company
+        UserProfile.findOne({
+            _company_code: {
+                "$eq": existingSession.user._company_code
+            },
+            type: {
+                "$eq": Constants.UserProfilePrivate
+            }
+        }, function(err, userprofile) {
+            if (err) return next(err);
+            if (!userprofile) return res.status(401).json({
+                err: "Not found user profile!"
+            });
+            for (var invitedUser in req.body.users) {
+                invitedUser.password = Constants.InitialPasswordHash;
+                invitedUser.company = existingSession.user.company;
+                invitedUser._company_code = existingSession.user._company_code;
+                invitedUser.profile = userprofile._id;
+                invitedUser.validated = false;
+                User.create(invitedUser, function(errNewUser, newUser) {
+                    if (errNewUser) return next(errNewUser);
+                    res.status(200).json({
+                        "msg": "Registration: please check your email to validate the registration!"
+                    });
+                    Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
+                });
+            }
+        });
     });
 
     // "password":Constants.InitialPasswordHash,"profile":"58249c3e591d37288c45819c","company":"58249c3e591d37288c45819b","_company_code":"smarthys"
