@@ -15,56 +15,63 @@ var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
 var Session = Metadata.Session;
 
-var hashPassword = function(password) {
-    var hash = crypto.createHmac('sha256', Constants.SecretKey);
-    hash.update(password);
-    var value = hash.digest('hex');
-    console.log(value);
-    return value;
-}
-
 router.post('/register', function(req, res) {
-    Company.findOne({
-        _company_code: req.body.code
-    }, function(err, object) {
-        if (object) return res.status(400).json({
-            "msg": "Registration: company code is already used, please use another code!"
+    if (!req.body.email) {
+        return res.status(400).json({
+            "msg": "Registration: email is not provided!"
         });
-        var company = {
-            name: req.body.company_name,
+    }
+    var userName = req.body.email.toLowerCase();
+    User.findOne({
+        user: userName
+    }, function(errUserFind, objectUserFind) {
+        if (errUserFind) return next(errUserFind);
+        if (objectUserFind) return res.status(400).json({
+            "msg": "Registration: email is already used, please choose another email!"
+        });
+        Company.findOne({
             _company_code: req.body.code
-        };
-        Company.create(company, function(err, newCompany) {
-            if (err) return next(err);
-            var userprofile = {
-                name: {
-                    "en": "Administrator"
-                },
-                type: Constants.UserProfileAdministrator,
+        }, function(errCompanyFind, objectCompanyFind) {
+            if (errCompanyFind) return next(errCompanyFind);
+            if (objectCompanyFind) return res.status(400).json({
+                "msg": "Registration: company code is already used, please use another code!"
+            });
+            var company = {
+                name: req.body.company_name,
                 _company_code: req.body.code
             };
-            UserProfile.create(userprofile, function(err, newUserprofile) {
-                if (err) return next(err);
-                var user = {
-                    user: req.body.user.toLowerCase(),
-                    password: hashPassword(Constants.InitialPassword),
-                    email: req.body.email,
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    properties: {
-                        theme: "default",
-                        language: "en"
+            Company.create(company, function(errCompany, newCompany) {
+                if (errCompany) return next(errCompany);
+                var userprofile = {
+                    name: {
+                        "en": "Administrator"
                     },
-                    profile: newUserprofile._id,
-                    company: newCompany._id,
+                    type: Constants.UserProfileAdministrator,
                     _company_code: req.body.code
                 };
-                User.create(user, function(err, newUser) {
-                    if (err) return next(err);
-                    res.status(200).json({
-                        "msg": "Registration: please check your email to validate the registration!"
+                UserProfile.create(userprofile, function(errUserProfile, newUserprofile) {
+                    if (errUserProfile) return next(errUserProfile);
+                    var user = {
+                        user: userName,
+                        password: Constants.InitialPasswordHash,
+                        email: req.body.email,
+                        firstname: req.body.firstname,
+                        lastname: req.body.lastname,
+                        properties: {
+                            theme: "default",
+                            language: "en"
+                        },
+                        profile: newUserprofile._id,
+                        company: newCompany._id,
+                        _company_code: req.body.code
+                    };
+                    User.create(user, function(errNewUser, newUser) {
+                        if (errNewUser) return next(errNewUser);
+                        res.status(200).json({
+                            "msg": "Registration: please check your email to validate the registration!"
+                        });
+                        Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                     });
-                    Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                 });
             });
         });
@@ -111,37 +118,74 @@ router.get('/validate', function(req, res) {
     });
 });
 
+router.post('/invite', function(req, res, next) {
+    if (!req.query.key) return res.status(401).json({
+        err: "Invalid parameters!"
+    });
+    if (!req.body.users) return res.status(401).json({
+        err: "Invalid parameters!"
+    });
+    var token = req.query.key;
+    var current_time = Date.now();
+    Session.findOneAndUpdate({
+        _id: {
+            "$eq": token
+        },
+        timeout: {
+            "$gt": current_time
+        }
+    }, {
+        timeout: current_time + Constants.MaxSessionTimeout
+    }).populate('user').exec(function(err, existingSession) {
+       // for (
+    //existingSession.user.company
+    });
+
+    // "password":Constants.InitialPasswordHash,"profile":"58249c3e591d37288c45819c","company":"58249c3e591d37288c45819b","_company_code":"smarthys"
+
+});
+
 router.post('/login', function(req, res, next) {
-    User.findOne({
-        user: req.body.user.toLowerCase(),
-        password: hashPassword(req.body.password),
-        validated: true
-    }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
-        .populate('company profile remote_profiles').exec(
-            function(errUser, userObject) {
-                if (errUser) return res.status(401).json({
-                    errUser: info
-                });
-                if (!userObject) return res.status(401).json({
-                    err: "Invalid user name or password!"
-                });
-                var session = {
-                    user: userObject._id,
-                    timeout: Date.now() + Constants.MaxSessionTimeout,
-                    _company_code: userObject._company_code
-                };
-                Session.create(session, function(err, newSession) {
-                    if (err) return next(err);
-                    SessionCache.login(newSession._id, userObject);
-                    res.cookie(Constants.SessionCookie, newSession._id, {
-                        maxAge: Constants.MaxSessionTimeout,
-                        httpOnly: true
-                    }).status(200).json({
-                        token: newSession._id,
-                        user: SessionCache.user[newSession._id]
+    if (!req.body || !req.body.user || !req.body.password) return res.status(401).json({
+        err: "Invalid user name or password!"
+    });
+    console.log(Date.now());
+    crypto.pbkdf2(req.body.password, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function(errCrypto, key) {
+        if (errCrypto) return next(errCrypto);
+        var hashPassword = key.toString('hex');
+        console.log(Date.now());
+        console.log(hashPassword);
+        User.findOne({
+            user: req.body.user.toLowerCase(),
+            password: hashPassword,
+            validated: true
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            .populate('company profile remote_profiles').exec(
+                function(errUser, userObject) {
+                    if (errUser) return res.status(401).json({
+                        errUser: info
+                    });
+                    if (!userObject) return res.status(401).json({
+                        err: "Invalid user name or password!"
+                    });
+                    var session = {
+                        user: userObject._id,
+                        timeout: Date.now() + Constants.MaxSessionTimeout,
+                        _company_code: userObject._company_code
+                    };
+                    Session.create(session, function(err, newSession) {
+                        if (err) return next(err);
+                        SessionCache.login(newSession._id, userObject);
+                        res.cookie(Constants.SessionCookie, newSession._id, {
+                            maxAge: Constants.MaxSessionTimeout,
+                            httpOnly: true
+                        }).status(200).json({
+                            token: newSession._id,
+                            user: SessionCache.user[newSession._id]
+                        });
                     });
                 });
-            });
+    });
 });
 
 router.get('/status', function(req, res) {

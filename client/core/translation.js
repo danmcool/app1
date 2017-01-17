@@ -49,8 +49,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Sauvegarder'
         },
         code_error: {
-            en: 'Your company code must be between 5 and 20 characters long, it will be used by users every time they logon to the system.',
-            fr: 'Votre code société doit contenir entre 5 et 20 caractères, il sera utilisé lors de chaque connexion utilisateur.'
+            en: 'Your company code must be between 5 and 20 characters long, it is used for the security of company data.',
+            fr: 'Votre code société doit contenir entre 5 et 20 caractères, il sera utilisé pour la sécurité des données de votre société.'
         },
         first_name: {
             en: 'First name',
