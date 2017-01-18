@@ -77,6 +77,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
 
     var initComponentsList = function() {
         if (!$scope.form.search_criteria) $scope.form.search_criteria = "";
+        $scope.form.search_criteria = $scope.form.search_criteria.replace('@_user_id', $scope.sessionData.userData._id);
         var keysOfParameters = Object.keys($routeParams);
         for (i = 0, l = keysOfParameters.length; i < l; i++) {
             $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[i], $routeParams[
