@@ -27,7 +27,7 @@ const Constants = {
         },
         create: {
             _company_code: "@@company_code",
-            user: ["@@user"]
+            _user: ["@@user"]
         },
         read: {
             _company_code: "@@company_code"
@@ -50,15 +50,15 @@ const Constants = {
         },
         read: {
             _company_code: "@@company_code",
-            user: ["@@user", "@@reports", "@@public"]
+            _user: ["@@user", "@@reports", "@@public"]
         },
         update: {
             _company_code: "@@company_code",
-            user: ["@@user", "@@reports", "@@public"]
+            _user: ["@@user", "@@reports", "@@public"]
         },
         delete: {
             _company_code: "@@company_code",
-            user: ["@@user", "@@reports", "@@public"]
+            _user: ["@@user", "@@reports", "@@public"]
         }
     },
     UserProfilePublicDefault: {

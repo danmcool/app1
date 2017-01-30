@@ -77,7 +77,7 @@ router.post('/:datamodelid/', function(req, res, next) {
     if (req.body) {
         req.body._updated_at = Date.now();
         req.body._company_code = profile.datamodels[req.params.datamodelid].create._company_code;
-        req.body._user = profile.datamodels[req.params.datamodelid].create._user;
+        req.body._user = profile.datamodels[req.params.datamodelid].create._user[0];
     }
     Metadata.Objects[req.params.datamodelid].create(req.body, function(err, object) {
         if (err) return next(err);
