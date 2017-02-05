@@ -1,6 +1,9 @@
 const Constants = {
     WebAddress: "app1.cloud",
-    MaxSessionTimeout: 1209600000,
+    MaxSessionTimeout: 14 * 24 * 60 * 60 * 1000, // 2 weeks cookie validity
+    MaxSessionCacheTimeout: 60 * 60 * 1000, // 1 hour cookie cache
+    DBSessionTimerCleanup: 60 * 60 * 1000, // clean up every hour for sessions
+    CacheSessionTimerCleanup: 10 * 60 * 1000, // clean up cookie cache every 10 minutes
     QuerySkip: 0,
     QueryLimit: 10,
     SessionCookie: 'app1_token',
