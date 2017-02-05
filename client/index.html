@@ -25,6 +25,7 @@
     <script src="core/login.js"></script>
     <script src="core/register.js"></script>
     <script src="core/user.js"></script>
+    <script src="core/company.js"></script>
     <script src="core/applications.js"></script>
     <script src="core/workflows.js"></script>
     <script src="core/forms.js"></script>
@@ -72,8 +73,8 @@
             <md-button ng-if="!sessionData.userData.title" ng-href="#login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
             <md-button ng-if="!sessionData.userData.title" ng-href="#register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.administration}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
-            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='public'" ng-href="" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.information}}</md-button>
             <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>
         </md-content>
     </md-sidenav>

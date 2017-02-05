@@ -8,6 +8,7 @@ var Email = require('../tools/email.js');
 
 var DataModel = Metadata.DataModel;
 var User = Metadata.User;
+var Company = Metadata.Company;
 var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
 
@@ -109,7 +110,7 @@ router.get('/application/', function(req, res, next) {
 router.put('/user/:id', function(req, res, next) {
     if (req.body.user) req.body.user = req.body.user.toLowerCase();
     User.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
-        _id: req.body._id
+        _id: req.params.id
     }), req.body, function(err, object) {
         if (err) return res.status(400).json({
             errUser: err
@@ -128,6 +129,15 @@ router.put('/user/:id', function(req, res, next) {
                     SessionCache.update(req.cookies.app1_token, userObject);
                     res.json(userObject);
                 });
+    });
+});
+
+router.put('/company/:id', function(req, res, next) {
+    Company.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
     });
 });
 

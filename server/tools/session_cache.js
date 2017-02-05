@@ -2,12 +2,19 @@ var mongoose = require('mongoose');
 
 var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
+var Session = Metadata.Session;
+var User = Metadata.User;
 
 var SessionCache = {
     user: {},
-    timeout: {}
+    timeout: {},
+    company_idp: {},
+    service_provider: {}
 };
 
+var SamlServiceProviderCache = {};
+
+// clean server sessions
 setInterval(function() {
     var current_time = Date.now();
     Metadata.Session.remove({
@@ -15,14 +22,17 @@ setInterval(function() {
             "$lt": current_time
         }
     });
+}, Constants.DBSessionTimerCleanup);
+
+// clean local cache to remove or update user data (to avoid using a message queue)
+setInterval(function() {
     var keys = Object.keys(SessionCache.timeout);
     for (var i = 0; i < keys.length; i++) {
         if (SessionCache.timeout[keys[i]] < current_time) {
-            SessionCache.logout(keys[i]);
+            SessionCache.removeUserCache(keys[i]);
         }
     }
-}, 60 * 60 * 1000);
-
+}, Constants.CacheSessionTimerCleanup);
 /*
     var rand = function() {
         return Math.random().toString(36).substr(2);
@@ -45,30 +55,55 @@ SessionCache.prepareUser = function(userObject) {
     return JSON.parse(strUser);
 }
 
-SessionCache.login = function(token, userObject) {
+SessionCache.cacheUser = function(token, userObject) {
     SessionCache.user[token] = SessionCache.prepareUser(userObject);
     SessionCache.touch(token);
 };
 
 SessionCache.update = function(token, userObject) {
     SessionCache.user[token] = SessionCache.prepareUser(userObject);
-    SessionCache.touch(token);
 };
 
-SessionCache.isActive = function(token) {
+SessionCache.isActive = function(token, callback) {
     if (SessionCache.timeout[token] && SessionCache.timeout[token] > Date.now()) {
-        return true;
+        callback(true);
+        return;
     }
-    return false;
+    Session.findOne({
+        _id: token,
+        timeout: {
+            "$gt": Date.now()
+        }
+    }).exec(function(errSession, existingSession) {
+        if (errSession) return next(errSession);
+        if (!existingSession) return;
+        User.findOne({
+            _id: existingSession.user,
+            validated: true
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            .populate('company profile remote_profiles').exec(
+                function(err, userObject) {
+                    if (err) return next(err);
+                    if (!userObject) return;
+                    SessionCache.cacheUser(token, userObject);
+                    callback(true);
+                });
+    });
+    callback(false);
 };
 
 SessionCache.touch = function(token) {
-    SessionCache.timeout[token] = Date.now() + Constants.MaxSessionTimeout;
+    SessionCache.timeout[token] = Date.now() + Constants.MaxSessionCacheTimeout;
 };
 
-SessionCache.logout = function(token) {
+SessionCache.removeUserCache = function(token) {
     delete SessionCache.user[token];
     delete SessionCache.timeout[token];
+};
+
+SessionCache.updateCompanyIdP = function(company_id, identityProvider) {
+    delete SessionCache.company_idp[company_id];
+    SessionCache.company_idp[company_id] = identityProvider;
 };
 
 SessionCache.filterCompanyCode = function(req, filter) {

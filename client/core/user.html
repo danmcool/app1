@@ -25,18 +25,4 @@
             <md-button flex-gt-xs ng-disabled="userForm.$invalid" ng-click="saveUserData()" class="md-primary">{{sessionData.appData.save}}</md-button>
         </form>
     </div>
-    <div layout-wrap layout-margin layout-align="center">
-        <md-toolbar layout="row" class="md-hue-1">
-            <div class="md-toolbar-tools">
-                <span>{{sessionData.appData.user_invitation}}</span>
-            </div>
-        </md-toolbar>
-        <div style="height:20px"></div>
-        <form name="userForm">
-            <md-input-container class="md-block" flex-gt-xs>
-                <p class="md-hue-1">{{sessionData.appData.user_invitation_key}} {{sessionData.token}}</p>
-            </md-input-container>
-            <md-button flex-gt-xs href="/plugin/App1Setup.msi" class="md-primary">{{sessionData.appData.download_outlook_plugin}}</md-button>
-        </form>
-    </div>
 </md-content>

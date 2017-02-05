@@ -25,6 +25,7 @@ require('./tools/init_objects.js');
 var app = express();
 
 var SessionCache = require('./tools/session_cache.js');
+var Constants = require('./tools/constants.js');
 
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));
@@ -42,14 +43,6 @@ function allowedPath(req) {
     return true;
 }
 
-function hasPermission(req) {
-    if (SessionCache.isActive(req.cookies.app1_token)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 function nocache(req, res) {
     if (req.path.startsWith("/data") || req.path.startsWith("/api") || req.path.startsWith("/file") || req.path.startsWith("/client") || req.path.startsWith("/authentication")) {
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -59,11 +52,18 @@ function nocache(req, res) {
 }
 
 app.use(function(req, res, next) {
-    if (allowedPath(req) || hasPermission(req)) {
+    if (allowedPath(req)) {
         nocache(req, res);
         next();
     } else {
-        return res.status(401).redirect('/');
+        SessionCache.isActive(req.cookies.app1_token, function(active) {
+            if (active) {
+                nocache(req, res);
+                next();
+            } else {
+                return res.status(401).redirect('/');
+            }
+        });
     }
 });
 

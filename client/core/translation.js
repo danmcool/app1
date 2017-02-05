@@ -76,6 +76,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'User Settings',
             fr: 'Configuration utilisateur'
         },
+        company_settings: {
+            en: 'Company Settings',
+            fr: 'Configuration enterprise'
+        },
         user_invitation: {
             en: 'Invite Enterprise Users',
             fr: 'Inviter utilisateurs entreprise'
@@ -127,6 +131,26 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         already_account: {
             en: 'If you already have an account, please click here to login!',
             fr: 'Si vous avez déjà un compte, veuillez cliquer ici pour se connecter!'
+        },
+        enable_saml: {
+            en: 'Enable user SSO login for enterprise using SAML',
+            fr: 'Activer la connexion automatique des utilisateurs en utilisant le SAML de l’entreprise'
+        },
+        saml_sso_redirect_url: {
+            en: 'Enter URL used for SAML SSO connection (redirect)',
+            fr: 'Saisir le lien utilisé pour la connexion SAML SSO (redirection)'
+        },
+        saml_sso_certificate: {
+            en: 'Paste the certificate for Identity Provide connection',
+            fr: 'Coller le certificat pour la connexion avec le service de l’identification'
+        },
+        saml_login_url: {
+            en: 'Following URL is allowing the SSO SAML login',
+            fr: 'Cette URL permet le login SSO SAML'
+        },
+        saml_activate_test: {
+            en: 'Activate test mode - login is not possible',
+            fr: 'Activer le mode test - la connexion n`est pas disponible'
         }
     };
     var translate = function translate(language) {

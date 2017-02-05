@@ -123,7 +123,7 @@ var CompanySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Application'
     }],
-    properties: String,
+    properties: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now

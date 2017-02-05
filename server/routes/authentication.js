@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var crypto = require('crypto');
+var fs = require('fs');
 
 var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
@@ -18,7 +19,7 @@ var Session = Metadata.Session;
 router.post('/register', function(req, res) {
     if (!req.body.email) {
         return res.status(400).json({
-            "msg": "Registration: email is not provided!"
+            msg: "Registration: email is not provided!"
         });
     }
     var userName = req.body.email.toLowerCase();
@@ -27,14 +28,14 @@ router.post('/register', function(req, res) {
     }, function(errUserFind, objectUserFind) {
         if (errUserFind) return next(errUserFind);
         if (objectUserFind) return res.status(400).json({
-            "msg": "Registration: email is already used, please choose another email!"
+            msg: "Registration: email is already used, please choose another email!"
         });
         Company.findOne({
             _company_code: req.body.code
         }, function(errCompanyFind, objectCompanyFind) {
             if (errCompanyFind) return next(errCompanyFind);
             if (objectCompanyFind) return res.status(400).json({
-                "msg": "Registration: company code is already used, please use another code!"
+                msg: "Registration: company code is already used, please use another code!"
             });
             var company = {
                 name: req.body.company_name,
@@ -78,7 +79,7 @@ router.post('/register', function(req, res) {
                         User.create(user, function(errNewUser, newUser) {
                             if (errNewUser) return next(errNewUser);
                             res.status(200).json({
-                                "msg": "Registration: please check your email to validate the registration!"
+                                msg: "Registration: please check your email to validate the registration!"
                             });
                             Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                         });
@@ -184,7 +185,7 @@ router.post('/invite', function(req, res, next) {
                 });
             }
             res.status(200).json({
-                "msg": "Invitation: users have been invited to join App1!"
+                msg: "Invitation: users have been invited to join App1!"
             });
         });
     });
@@ -222,7 +223,7 @@ router.post('/login', function(req, res, next) {
                     };
                     Session.create(session, function(err, newSession) {
                         if (err) return next(err);
-                        SessionCache.login(newSession._id, userObject);
+                        SessionCache.cacheUser(newSession._id, userObject);
                         res.cookie(Constants.SessionCookie, newSession._id, {
                             maxAge: Constants.MaxSessionTimeout,
                             httpOnly: true
@@ -269,11 +270,7 @@ router.get('/status', function(req, res) {
                     if (!userObject) return res.status(401).json({
                         err: "Invalid user name or password!"
                     });
-                    if (SessionCache.isActive(token)) {
-                        SessionCache.touch(token);
-                    } else {
-                        SessionCache.login(token, userObject);
-                    }
+                    SessionCache.cacheUser(token, userObject);
                     res.cookie(Constants.SessionCookie, token, {
                         maxAge: Constants.MaxSessionTimeout,
                         httpOnly: true
@@ -294,10 +291,47 @@ router.get('/logout', function(req, res) {
         if (!object) return res.status(401).json({
             err: "Invalid session!"
         });
-        SessionCache.logout(req.cookies[Constants.SessionCookie]);
+        SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
         res.clearCookie(Constants.SessionCookie).status(200);
     });
+});
 
+router.get('/login_saml/:company_code', function(req, res) {
+    SessionCache.service_provider.create_login_request_url(SessionCache.company_idp[req.params.company_code], {
+        relay_state: req.params.company_code
+    }, function(err, login_url, request_id) {
+        if (err) {
+            return res.status(500).json({
+                err: err
+            });
+        }
+        res.redirect(login_url);
+    });
+});
+
+router.post('/saml_callback', function(req, res) {
+    var options = {
+        request_body: req.body
+    };
+    var company_code = req.body.RelayState || req.query.RelayState;
+    SessionCache.service_provider.post_assert(SessionCache.company_idp[company_code], options, function(err, saml_response) {
+        if (err) {
+            return res.status(500).json({
+                err: err.message
+            });
+        }
+        // Save name_id and session_index for logout
+        // Note:  In practice these should be saved in the user session, not globally.
+        name_id = saml_response.user.name_id;
+        session_index = saml_response.user.session_index;
+        //saml_response.user.attributes.EmailAddress[0] FirstName LastName
+        res.send("Hello " + JSON.stringify(saml_response));
+    });
+});
+
+router.get('/saml_metadata', function(req, res) {
+    res.type('application/xml');
+    res.status(200).send(SessionCache.service_provider.create_metadata());
 });
 
 module.exports = router;

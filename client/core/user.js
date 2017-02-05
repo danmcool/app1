@@ -14,7 +14,6 @@ app1.controller('UserCtrl',
             User.update({
                 id: $scope.sessionData.userData._id
             }, {
-                "_id": $scope.sessionData.userData._id,
                 "properties": $scope.sessionData.userData.properties
             });
             $location.url('/applications');

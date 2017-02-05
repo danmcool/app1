@@ -1,4 +1,7 @@
 var mongoose = require('mongoose');
+var fs = require('fs');
+var saml2 = require('saml2-js');
+
 var Schema = mongoose.Schema;
 
 var Metadata = require('../models/metadata.js');
@@ -28,7 +31,8 @@ DataModel.find(function(err, objects) {
     }
 });
 
-var Session = Metadata.Session;
+// create session cache
+/*var Session = Metadata.Session;
 var User = Metadata.User;
 Session.find({
     timeout: {
@@ -50,4 +54,30 @@ Session.find({
                     SessionCache.login(token, userObject);
                 });
     }
-});
+});*/
+
+// initialize saml service provider
+var sp_options = {
+    entity_id: "app1_saml_metadata.xml", //'https://localhost/authentication/saml_metadata',
+    private_key: fs.readFileSync("./server/ssl/app1-key.pem", "utf8"),
+    certificate: fs.readFileSync("./server/ssl/app1-cert.crt", "utf8"),
+    assert_endpoint: "https://app1.cloud/authentication/saml_callback",
+    force_authn: false,
+    /*auth_context: {
+        comparison: 'exact',
+        class_refs: ['urn:oasis:names:tc:SAML:1.0:am:password']
+    },*/
+    //nameid_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+    sign_get_request: false,
+    allow_unencrypted_assertion: true
+}
+SessionCache.service_provider = new saml2.ServiceProvider(sp_options);
+
+// initialize saml identity providers
+var idp_options = {
+    sso_login_url: "https://idp.ssocircle.com:443/sso/SSORedirect/metaAlias/publicidp",
+    //sso_login_url: 'https://idp.testshib.org/idp/profile/SAML2/Redirect/SSO',
+    //sso_logout_url: '',
+    certificates: [fs.readFileSync("./server/ssl/idp-cert.crt", "utf8")]
+};
+SessionCache.updateCompanyIdP("00000", new saml2.IdentityProvider(idp_options));

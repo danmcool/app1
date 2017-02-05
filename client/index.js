@@ -140,6 +140,15 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             });
         }
     ])
+    .factory('Company', ['$resource',
+        function($resource) {
+            return $resource('/client/company/:id', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
     .factory('DataModels', ['$resource',
         function($resource) {
             return $resource('/api/datamodel/:id', null, {
@@ -318,6 +327,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             .when('/user', {
                 templateUrl: 'core/user.html',
                 controller: 'UserCtrl'
+            })
+            .when('/company', {
+                templateUrl: 'core/company.html',
+                controller: 'CompanyCtrl'
             })
             .when('/applications', {
                 templateUrl: 'core/applications.html',
