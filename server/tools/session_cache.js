@@ -90,6 +90,7 @@ SessionCache.isActive = function(token, callback) {
                     if (!userObject) return;
                     SessionCache.cacheUser(token, userObject);
                     callback(true);
+                    return;
                 });
     });
     callback(false);
