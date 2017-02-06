@@ -79,7 +79,10 @@ SessionCache.isActive = function(token, callback) {
         }
     }).exec(function(errSession, existingSession) {
         if (errSession) return next(errSession);
-        if (!existingSession) return;
+        if (!existingSession) {
+            callback(false);
+            return;
+        }
         User.findOne({
             _id: existingSession.user,
             validated: true
@@ -90,10 +93,8 @@ SessionCache.isActive = function(token, callback) {
                     if (!userObject) return;
                     SessionCache.cacheUser(token, userObject);
                     callback(true);
-                    return;
                 });
     });
-    callback(false);
 };
 
 SessionCache.touch = function(token) {
