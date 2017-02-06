@@ -307,7 +307,7 @@ router.get('/login_saml/:company_code', function(req, res) {
     Company.findOne({
         _company_code: company_code
     }, function(errCompany, objectCompany) {
-        if (!objectCompany.properties.saml || !objectCompany.properties.saml.enabled)
+        if (!objectCompany.properties || !objectCompany.properties.saml || !objectCompany.properties.saml.enabled)
             return res.status(401).json({
                 err: "Company SAML not setup correctly!"
             });
