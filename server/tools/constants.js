@@ -45,11 +45,11 @@ const Constants = {
     UserProfilePrivateDefault: {
         list: {
             _company_code: "@@company_code",
-            user: ["@@user", "@@reports", "@@public"]
+            _user: ["@@user", "@@reports", "@@public"]
         },
         create: {
             _company_code: "@@company_code",
-            user: ["@@user"]
+            _user: ["@@user"]
         },
         read: {
             _company_code: "@@company_code",
@@ -67,15 +67,15 @@ const Constants = {
     UserProfilePublicDefault: {
         list: {
             _company_code: "@@company_code",
-            user: ["@@public"]
+            _user: ["@@public"]
         },
         create: {
             _company_code: "@@company_code",
-            user: ["@@public"]
+            _user: ["@@public"]
         },
         read: {
             _company_code: "@@company_code",
-            user: ["@@public"]
+            _user: ["@@public"]
         },
         update: {
             _company_code: "@@company_code",

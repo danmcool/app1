@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var fs = require('fs');
+var saml2 = require('saml2-js');
 
 var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
@@ -216,12 +217,17 @@ router.post('/login', function(req, res, next) {
                     if (!userObject) return res.status(401).json({
                         err: "Invalid user name or password!"
                     });
-                    var session = {
+                    Session.findOneAndUpdate({
                         user: userObject._id,
-                        timeout: Date.now() + Constants.MaxSessionTimeout,
                         _company_code: userObject._company_code
-                    };
-                    Session.create(session, function(err, newSession) {
+                    }, {
+                        user: userObject._id,
+                        _company_code: userObject._company_code,
+                        timeout: Date.now() + Constants.MaxSessionTimeout
+                    }, {
+                        upsert: true,
+                        new: true
+                    }, function(err, newSession) {
                         if (err) return next(err);
                         SessionCache.cacheUser(newSession._id, userObject);
                         res.cookie(Constants.SessionCookie, newSession._id, {
@@ -229,7 +235,7 @@ router.post('/login', function(req, res, next) {
                             httpOnly: true
                         }).status(200).json({
                             token: newSession._id,
-                            user: SessionCache.user[newSession._id]
+                            user: SessionCache.userData[newSession._id]
                         });
                     });
                 });
@@ -276,7 +282,7 @@ router.get('/status', function(req, res) {
                         httpOnly: true
                     }).status(200).json({
                         token: token,
-                        user: SessionCache.user[token]
+                        user: SessionCache.userData[token]
                     });
                 });
     });
@@ -297,15 +303,33 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/login_saml/:company_code', function(req, res) {
-    SessionCache.service_provider.create_login_request_url(SessionCache.company_idp[req.params.company_code], {
-        relay_state: req.params.company_code
-    }, function(err, login_url, request_id) {
-        if (err) {
-            return res.status(500).json({
-                err: err
+    var company_code = req.params.company_code;
+    Company.findOne({
+        _company_code: company_code
+    }, function(errCompany, objectCompany) {
+        if (!objectCompany.properties.saml || !objectCompany.properties.saml.enabled)
+            return res.status(401).json({
+                err: "Company SAML not setup correctly!"
             });
+        var idp_options = {
+            sso_login_url: objectCompany.properties.saml.sso_redirect_url,
+            certificates: [objectCompany.properties.saml.sso_certificate]
+        };
+        SessionCache.identityProvider[company_code] = {
+            test: objectCompany.properties.saml.test,
+            company_id: objectCompany._id
         }
-        res.redirect(login_url);
+        SessionCache.identityProvider[company_code].idp = new saml2.IdentityProvider(idp_options);
+        SessionCache.serviceProvider.create_login_request_url(SessionCache.identityProvider[company_code].idp, {
+            relay_state: company_code
+        }, function(err, login_url, request_id) {
+            if (err) {
+                return res.status(500).json({
+                    err: err
+                });
+            }
+            res.redirect(login_url);
+        });
     });
 });
 
@@ -314,24 +338,107 @@ router.post('/saml_callback', function(req, res) {
         request_body: req.body
     };
     var company_code = req.body.RelayState || req.query.RelayState;
-    SessionCache.service_provider.post_assert(SessionCache.company_idp[company_code], options, function(err, saml_response) {
-        if (err) {
-            return res.status(500).json({
-                err: err.message
+    if (!SessionCache.identityProvider[company_code]) return res.status(401).json({
+        err: "Missing company code!"
+    });
+    SessionCache.serviceProvider.post_assert(SessionCache.identityProvider[company_code].idp, options, function(errSaml, objectSaml) {
+        if (errSaml)
+            return res.status(401).json({
+                err: errSaml.message
             });
-        }
         // Save name_id and session_index for logout
         // Note:  In practice these should be saved in the user session, not globally.
-        name_id = saml_response.user.name_id;
-        session_index = saml_response.user.session_index;
-        //saml_response.user.attributes.EmailAddress[0] FirstName LastName
-        res.send("Hello " + JSON.stringify(saml_response));
+        //var name_id = objectSaml.user.name_id;
+        //var session_index = objectSaml.user.session_index;
+        //objectSaml.user.attributes.EmailAddress[0] FirstName LastName
+        if (SessionCache.identityProvider[company_code].test) {
+            return res.send("Hello " + JSON.stringify(objectSaml));
+        }
+        User.findOne({
+            user: objectSaml.user.attributes.EmailAddress[0],
+            _company_code: company_code
+        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            .populate('company profile remote_profiles').exec(
+                function(errUser, userObject) {
+                    if (errUser) return res.status(401).json({
+                        err: errUser
+                    });
+                    if (!userObject) {
+                        UserProfile.findOne({
+                            _company_code: company_code,
+                            type: Constants.UserProfilePrivate
+                        }, function(errProfile, objectProfile) {
+                            if (errProfile) return res.status(401).json({
+                                err: errProfile
+                            });
+                            if (!objectProfile) return res.status(401).json({
+                                err: "Missing private user profile"
+                            });
+                            var user = {
+                                user: objectSaml.user.attributes.EmailAddress[0],
+                                password: Constants.InitialPasswordHash,
+                                email: objectSaml.user.attributes.EmailAddress[0],
+                                firstname: objectSaml.user.attributes.FirstName,
+                                lastname: objectSaml.user.attributes.LastName,
+                                validated: true,
+                                properties: {
+                                    theme: "default",
+                                    language: "en"
+                                },
+                                profile: objectProfile._id,
+                                company: SessionCache.identityProvider[company_code].company_id,
+                                _company_code: company_code
+                            };
+                            User.create(user, function(errNewUser, newUser) {
+                                if (errNewUser) return next(errNewUser);
+                                Session.findOneAndUpdate({
+                                    user: newUser._id,
+                                    _company_code: newUser._company_code
+                                }, {
+                                    user: newUser._id,
+                                    _company_code: newUser._company_code,
+                                    timeout: Date.now() + Constants.MaxSessionTimeout
+                                }, {
+                                    upsert: true,
+                                    new: true
+                                }, function(err, newSession) {
+                                    if (err) return next(err);
+                                    SessionCache.cacheUser(newSession._id, newUser);
+                                    return res.cookie(Constants.SessionCookie, newSession._id, {
+                                        maxAge: Constants.MaxSessionTimeout,
+                                        httpOnly: true
+                                    }).redirect("/");
+                                });
+                                Email.sendSAMLNewUser(newUser.email, newUser.user, newUser._company_code);
+                            });
+                        });
+                    } else {
+                        Session.findOneAndUpdate({
+                            user: userObject._id,
+                            _company_code: userObject._company_code
+                        }, {
+                            user: userObject._id,
+                            _company_code: userObject._company_code,
+                            timeout: Date.now() + Constants.MaxSessionTimeout
+                        }, {
+                            upsert: true,
+                            new: true
+                        }, function(err, newSession) {
+                            if (err) return next(err);
+                            SessionCache.cacheUser(newSession._id, userObject);
+                            return res.cookie(Constants.SessionCookie, newSession._id, {
+                                maxAge: Constants.MaxSessionTimeout,
+                                httpOnly: true
+                            }).redirect("/");
+                        });
+                    }
+                });
     });
 });
 
 router.get('/saml_metadata', function(req, res) {
     res.type('application/xml');
-    res.status(200).send(SessionCache.service_provider.create_metadata());
+    res.status(200).send(SessionCache.serviceProvider.create_metadata());
 });
 
 module.exports = router;

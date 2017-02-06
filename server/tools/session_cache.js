@@ -6,10 +6,10 @@ var Session = Metadata.Session;
 var User = Metadata.User;
 
 var SessionCache = {
-    user: {},
-    timeout: {},
-    company_idp: {},
-    service_provider: {}
+    userData: {},
+    userTimeout: {},
+    serviceProvider: {},
+    identityProvider: {}
 };
 
 var SamlServiceProviderCache = {};
@@ -26,9 +26,10 @@ setInterval(function() {
 
 // clean local cache to remove or update user data (to avoid using a message queue)
 setInterval(function() {
-    var keys = Object.keys(SessionCache.timeout);
+    var current_time = Date.now();
+    var keys = Object.keys(SessionCache.userTimeout);
     for (var i = 0; i < keys.length; i++) {
-        if (SessionCache.timeout[keys[i]] < current_time) {
+        if (SessionCache.userTimeout[keys[i]] < current_time) {
             SessionCache.removeUserCache(keys[i]);
         }
     }
@@ -52,20 +53,22 @@ SessionCache.prepareUser = function(userObject) {
     strUser = strUser.replace(/@@public/g, "");
     if (userObject.reports) strUser = strUser.replace(/"@@reports"/g, (userObject.reports ? (userObject.reports.length > 0 ? JSON.stringify(userObject.reports).replace(/]|[[]/g, "") : "\"\"") : "\"\""));
     if (userObject._company_code) strUser = strUser.replace(/@@company_code/g, userObject._company_code);
-    return JSON.parse(strUser);
+    var resUser = JSON.parse(strUser);
+    if (resUser.company.properties) resUser.company.properties.saml = {};
+    return resUser;
 }
 
 SessionCache.cacheUser = function(token, userObject) {
-    SessionCache.user[token] = SessionCache.prepareUser(userObject);
+    SessionCache.userData[token] = SessionCache.prepareUser(userObject);
     SessionCache.touch(token);
 };
 
 SessionCache.update = function(token, userObject) {
-    SessionCache.user[token] = SessionCache.prepareUser(userObject);
+    SessionCache.userData[token] = SessionCache.prepareUser(userObject);
 };
 
 SessionCache.isActive = function(token, callback) {
-    if (SessionCache.timeout[token] && SessionCache.timeout[token] > Date.now()) {
+    if (SessionCache.userTimeout[token] && SessionCache.userTimeout[token] > Date.now()) {
         callback(true);
         return;
     }
@@ -93,21 +96,16 @@ SessionCache.isActive = function(token, callback) {
 };
 
 SessionCache.touch = function(token) {
-    SessionCache.timeout[token] = Date.now() + Constants.MaxSessionCacheTimeout;
+    SessionCache.userTimeout[token] = Date.now() + Constants.MaxSessionCacheTimeout;
 };
 
 SessionCache.removeUserCache = function(token) {
-    delete SessionCache.user[token];
-    delete SessionCache.timeout[token];
-};
-
-SessionCache.updateCompanyIdP = function(company_id, identityProvider) {
-    delete SessionCache.company_idp[company_id];
-    SessionCache.company_idp[company_id] = identityProvider;
+    delete SessionCache.userData[token];
+    delete SessionCache.userTimeout[token];
 };
 
 SessionCache.filterCompanyCode = function(req, filter) {
-    var company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
+    var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
@@ -122,7 +120,7 @@ SessionCache.filterCompanyCode = function(req, filter) {
 }
 
 SessionCache.filterApplicationCompanyCode = function(req, filter) {
-    var company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
+    var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
@@ -136,7 +134,7 @@ SessionCache.filterApplicationCompanyCode = function(req, filter) {
 }
 
 SessionCache.filterDataUserProfile = function(req, filter, datamodel_id, data_id) {
-    var company_code = SessionCache.user[req.cookies[Constants.SessionCookie]]._company_code;
+    var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};

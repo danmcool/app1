@@ -67,11 +67,22 @@ Email.sendValidation = function(email_address, user, company_code) {
         '',
         'Registration validation for App1',
         'Automatic message from App1',
-        '<span>Dear customer, thank-you for registering with our website, your initial password is: ' +
+        '<span><p>Dear customer, thank-you for registering with our website, your initial password is: ' +
         Constants.InitialPassword +
-        '</span><br><span>Please validate your email by clicking on the following link</span><br><a href="http://' +
+        '</p></span><br><span><p><b>Please validate your email by clicking on the following link</b></p></span><br><a href="http://' +
         Constants.WebAddress + '/authentication/validate?user=' + user + '&code=' +
-        company_code + '">Validate registration</a>');
+        company_code + '"><p><b>Validate registration</b></p></a>');
+}
+
+Email.sendSAMLNewUser = function(email_address, user, company_code) {
+    Email.send(
+        email_address,
+        '',
+        'Registration validation for App1',
+        'Automatic message from App1',
+        '<span><p>Dear user, thank-you for registering with our website, your initial password is: ' +
+        Constants.InitialPassword +
+        '</p></span>');
 }
 
 Email.sendShare = function(email_address, cc_email_address, form_id, datamodel_id, data_id, profile_id) {

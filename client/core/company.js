@@ -6,13 +6,23 @@ app1.controller('CompanyCtrl',
         }, function(newValue, oldValue) {
             if (newValue != oldValue) {
                 $scope.sessionData = newValue;
+                if ($scope.sessionData.userData.company) {
+                    $scope.company = Company.get({
+                        id: $scope.sessionData.userData.company._id
+                    });
+                }
             }
         });
+        if ($scope.sessionData.userData.company) {
+            $scope.company = Company.get({
+                id: $scope.sessionData.userData.company._id
+            });
+        }
         $scope.saveCompanyData = function() {
             SessionService.setSessionData($scope.sessionData);
             Company.update({
-                id: $scope.sessionData.userData.company._id
-            }, $scope.sessionData.userData.company);
+                id: $scope.company._id
+            }, $scope.company);
             $location.url('/applications');
         }
     });

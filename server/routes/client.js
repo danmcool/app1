@@ -34,14 +34,14 @@ router.put('/value/:id', function(req, res, next) {
         });
         if (req.body.relation == Constants.ValuesRelationUserReports) {
             User.find({
-                _company_code: SessionCache.user[req.cookies.app1_token]._company_code,
+                _company_code: SessionCache.userData[req.cookies.app1_token]._company_code,
                 "$or": [{
                     _id: {
-                        "$in": SessionCache.user[req.cookies.app1_token].reports
+                        "$in": SessionCache.userData[req.cookies.app1_token].reports
                     }
                 }, {
                     _id: {
-                        "$eq": SessionCache.user[req.cookies.app1_token]._id
+                        "$eq": SessionCache.userData[req.cookies.app1_token]._id
                     }
                 }]
             }, 'user email firstname lastname').skip(pageOptions.skip).limit(pageOptions.limit).exec(function(errUserObjects, userObjects) {
@@ -59,9 +59,9 @@ router.put('/value/:id', function(req, res, next) {
             });
         } else if (valueObject.values.relation == Constants.ValuesRelationUserManager) {
             User.find({
-                _company_code: SessionCache.user[req.cookies.app1_token]._company_code,
+                _company_code: SessionCache.userData[req.cookies.app1_token]._company_code,
                 _id: {
-                    "$in": SessionCache.user[req.cookies.app1_token].reports
+                    "$in": SessionCache.userData[req.cookies.app1_token].reports
                 }
             }, 'user email firstname lastname').skip(pageOptions.skip).limit(pageOptions.limit).exec(function(errUserObjects, userObjects) {
                 if (errUserObjects) return next(errUserObjects);
@@ -132,6 +132,15 @@ router.put('/user/:id', function(req, res, next) {
     });
 });
 
+router.get('/company/:id', function(req, res, next) {
+    Company.findOne(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+
 router.put('/company/:id', function(req, res, next) {
     Company.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
@@ -159,7 +168,7 @@ router.get('/share', function(req, res, next) {
             datamodels: {
                 [req.query.datamodel_id]: {
                     [req.query.data_id]: {
-                        _company_code: SessionCache.user[req.cookies.app1_token]._company_code,
+                        _company_code: SessionCache.userData[req.cookies.app1_token]._company_code,
                         constraint: {
                             key: req.query.key,
                             value: req.query.value
@@ -169,14 +178,14 @@ router.get('/share', function(req, res, next) {
             }
         },
         type: Constants.UserProfileShare,
-        _company_code: SessionCache.user[req.cookies.app1_token]._company_code
+        _company_code: SessionCache.userData[req.cookies.app1_token]._company_code
     };
     UserProfile.create(userprofile, function(err, newUserprofile) {
         if (err) return next(err);
         res.status(200).json({
             msg: "Form shared successfully!"
         });
-        Email.sendShare(req.query.email, SessionCache.user[req.cookies.app1_token].email, req.query.form_id, req.query.datamodel_id, req.query.data_id, newUserprofile._id);
+        Email.sendShare(req.query.email, SessionCache.userData[req.cookies.app1_token].email, req.query.form_id, req.query.datamodel_id, req.query.data_id, newUserprofile._id);
     });
 });
 
@@ -194,13 +203,13 @@ router.get('/open', function(req, res, next) {
         if (!objectProfile) return res.status(401).json({
             err: "Invalid parameters!"
         });
-        var userWithRemoteProfile = SessionCache.user[req.cookies.app1_token];
+        var userWithRemoteProfile = SessionCache.userData[req.cookies.app1_token];
         userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
         SessionCache.update(req.cookies.app1_token, userWithRemoteProfile);
         res.redirect("/#/form/" + req.query.form_id + "/" + req.query.data_id);
         /*
         User.findOneAndUpdate({
-            _id: SessionCache.user[req.cookies.app1_token]._id,
+            _id: SessionCache.userData[req.cookies.app1_token]._id,
             validated: true
         }, {
             $push: {
@@ -228,7 +237,7 @@ router.get('/calendar', function(req, res, next) {
     });
     User.findOne({
         _id: req.query.user_id,
-        _company_code: SessionCache.user[req.cookies.app1_token]._company_code,
+        _company_code: SessionCache.userData[req.cookies.app1_token]._company_code,
         validated: true
     }, 'email firstname lastname').exec(function(errUser, userObject) {
         if (errUser) return next(err);

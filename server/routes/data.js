@@ -26,7 +26,7 @@ var getDefaultProfile = function(userType) {
 }
 
 var getProfile = function(token, datamodelid) {
-    var user = SessionCache.user[token];
+    var user = SessionCache.userData[token];
     var profile = user.profile.profile;
     if (!profile) {
         profile = {
@@ -34,10 +34,10 @@ var getProfile = function(token, datamodelid) {
         };
     }
     if (!profile.datamodels[datamodelid]) {
-        profile.datamodels[datamodelid] = getDefaultProfile(SessionCache.user[token].profile.type);
+        profile.datamodels[datamodelid] = getDefaultProfile(SessionCache.userData[token].profile.type);
         user.profile.profile = profile;
         SessionCache.update(token, user);
-        profile = SessionCache.user[token].profile.profile;
+        profile = SessionCache.userData[token].profile.profile;
     }
     return profile;
 }
@@ -88,7 +88,7 @@ router.post('/:datamodelid/', function(req, res, next) {
 });
 
 router.get('/:datamodelid/:id', function(req, res, next) {
-    var user = SessionCache.user[req.cookies[Constants.SessionCookie]];
+    var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
     var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
@@ -137,7 +137,7 @@ router.get('/:datamodelid/:id', function(req, res, next) {
 });
 
 router.put('/:datamodelid/:id', function(req, res, next) {
-    var user = SessionCache.user[req.cookies[Constants.SessionCookie]];
+    var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
     var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
     var remote_profile = {};
     var remote = false;

@@ -151,6 +151,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         saml_activate_test: {
             en: 'Activate test mode - login is not possible',
             fr: 'Activer le mode test - la connexion n`est pas disponible'
+        },
+        saml_metadata_url: {
+            en: 'Metadata definition of App1 service provider - to be uploaded to Identity Provider',
+            fr: 'Définition des métadonnées du service App1 - a charger sur le service d`Identification'
         }
     };
     var translate = function translate(language) {

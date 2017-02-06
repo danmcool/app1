@@ -31,31 +31,6 @@ DataModel.find(function(err, objects) {
     }
 });
 
-// create session cache
-/*var Session = Metadata.Session;
-var User = Metadata.User;
-Session.find({
-    timeout: {
-        "$gt": Date.now()
-    }
-}).exec(function(errSessions, existingSessions) {
-    if (errSessions) return next(errSessions);
-    if (!existingSessions) return;
-    for (var i = 0; i < existingSessions.length; i++) {
-        var token = existingSessions[i]._id;
-        User.findOne({
-            _id: existingSessions[i].user,
-            validated: true
-        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
-            .populate('company profile remote_profiles').exec(
-                function(err, userObject) {
-                    if (err) return next(err);
-                    if (!userObject) return;
-                    SessionCache.login(token, userObject);
-                });
-    }
-});*/
-
 // initialize saml service provider
 var sp_options = {
     entity_id: "app1_saml_metadata.xml", //'https://localhost/authentication/saml_metadata',
@@ -71,13 +46,4 @@ var sp_options = {
     sign_get_request: false,
     allow_unencrypted_assertion: true
 }
-SessionCache.service_provider = new saml2.ServiceProvider(sp_options);
-
-// initialize saml identity providers
-var idp_options = {
-    sso_login_url: "https://idp.ssocircle.com:443/sso/SSORedirect/metaAlias/publicidp",
-    //sso_login_url: 'https://idp.testshib.org/idp/profile/SAML2/Redirect/SSO',
-    //sso_logout_url: '',
-    certificates: [fs.readFileSync("./server/ssl/idp-cert.crt", "utf8")]
-};
-SessionCache.updateCompanyIdP("00000", new saml2.IdentityProvider(idp_options));
+SessionCache.serviceProvider = new saml2.ServiceProvider(sp_options);
