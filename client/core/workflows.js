@@ -36,8 +36,8 @@ app1.controller('WorkflowsCtrl',
             }
         });
 
-        $scope.open = function(href) {
-            $location.url("/form/" + href + "/0");
+        $scope.open = function(formId) {
+            $location.url("/form/" + formId + "/0");
         }
 
         initWorkflows();

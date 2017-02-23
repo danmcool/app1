@@ -1,75 +1,4 @@
-<md-content ng-show="form.type == 'list'" layout-padding>
-    <md-toolbar layout="row" class="md-hue-1">
-        <div class="md-toolbar-tools">
-            <span>{{form.title}}</span>
-        </div>
-    </md-toolbar>
-    <md-list flex ng-cloak>
-        <div infinite-scroll="getNextData()" infinite-scroll-distance="10">
-            <md-list-item class="md-3-line" ng-repeat="data in datas">
-                <div class="md-list-item-text" layout="column">
-                    <div ng-switch="form.display.title_display">
-                        <div ng-switch-when="text">
-                            <h3>{{data[form.display.title]}}</h3>
-                        </div>
-                        <div ng-switch-when="value">
-                            <h3>{{form.display.title_values[data[form.display.title]]}}</h3>
-                        </div>
-                        <div ng-switch-when="currency">
-                            <h3>{{data[form.display.title]}}</h3>
-                        </div>
-                    </div>
-                    <div ng-switch="form.display.subtitle_display">
-                        <div ng-switch-when="text">
-                            <h4>{{data[form.display.subtitle]}}</h4>
-                        </div>
-                        <div ng-switch-when="value">
-                            <h4>{{form.display.subtitle_values[data[form.display.subtitle]]}}</h4>
-                        </div>
-                        <div ng-switch-when="currency">
-                            <h4>{{data[form.display.subtitle].value}} {{form.display.subtitle_values[data[form.display.subtitle].currency]}}</h4>
-                        </div>
-                    </div>
-                    <p>{{data[form.display.date]|date:form.date_format}}</p>
-                </div>
-                <div ng-repeat="action in form.item_actions" class="md-secondary" layout="row">
-                    <div ng-switch="action.action">
-                        <div ng-switch-when="delete">
-                            <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
-                        </div>
-                        <div ng-switch-when="link">
-                            <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
-                        </div>
-                        <div ng-switch-when="modify">
-                            <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
-                        </div>
-                    </div>
-                </div>
-            </md-list-item>
-        </div>
-    </md-list>
-
-    <div layout="row" layout-align="end" flex ng-cloak>
-        <div ng-repeat="action in form.actions">
-            <div ng-switch="action.action">
-                <div ng-switch-when="create">
-                    <md-button flex-gt-xs ng-click="create(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
-                </div>
-                <div ng-switch-when="modify">
-                    <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
-                </div>
-                <div ng-switch-when="delete">
-                    <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
-                </div>
-                <div ng-switch-when="link">
-                    <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
-                </div>
-            </div>
-        </div>
-    </div>
-</md-content>
-
-<md-content ng-show="form.type == 'form'" layout-padding>
+<md-content layout-padding>
     <md-toolbar layout="row" class="md-hue-1">
         <div class="md-toolbar-tools">
             <span>{{form.title}}</span>
@@ -80,15 +9,35 @@
             <div ng-switch="field.display">
 
                 <div ng-switch-when="list" ng-cloak>
-                    <md-list flex>
+                    <md-list flex ng-cloak>
                         <div infinite-scroll="getNextData()" infinite-scroll-distance="10">
                             <md-list-item class="md-3-line" ng-repeat="data in datas">
                                 <div class="md-list-item-text" layout="column">
-                                    <h3>{{data[form.display.title]}}</h3>
-                                    <h4>{{data[form.display.subtitle]}}</h4>
-                                    <p>{{data[form.display.date]|date:form.date_format}}</p>
+                                    <div ng-switch="field.title_display">
+                                        <div ng-switch-when="text">
+                                            <h3>{{data[field.title]}}</h3>
+                                        </div>
+                                        <div ng-switch-when="value">
+                                            <h3>{{field.title_values[data[field.title]]}}</h3>
+                                        </div>
+                                        <div ng-switch-when="currency">
+                                            <h3>{{data[field.title]}}</h3>
+                                        </div>
+                                    </div>
+                                    <div ng-switch="field.subtitle_display">
+                                        <div ng-switch-when="text">
+                                            <h4>{{data[field.subtitle]}}</h4>
+                                        </div>
+                                        <div ng-switch-when="value">
+                                            <h4>{{field.subtitle_values[data[field.subtitle]]}}</h4>
+                                        </div>
+                                        <div ng-switch-when="currency">
+                                            <h4>{{data[field.subtitle].value}} {{field.subtitle_values[data[field.subtitle].currency]}}</h4>
+                                        </div>
+                                    </div>
+                                    <p>{{data[field.date]|date:field.date_format}}</p>
                                 </div>
-                                <div ng-repeat="action in form.item_actions" class="md-secondary" layout="row">
+                                <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
                                     <div ng-switch="action.action">
                                         <div ng-switch-when="delete">
                                             <md-button flex-gt-xs ng-click="delete(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
@@ -96,10 +45,38 @@
                                         <div ng-switch-when="link">
                                             <md-button flex-gt-xs ng-click="link(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                         </div>
+                                        <div ng-switch-when="modify">
+                                            <md-button flex-gt-xs ng-click="modify(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
+                                        </div>
                                     </div>
                                 </div>
                             </md-list-item>
                         </div>
+                    </md-list>
+                </div>
+
+                <div ng-switch-when="item" ng-cloak>
+                    <md-list flex>
+                        <md-list-item class="md-3-line" ng-repeat="item in data[field.items]">
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{item[field.title]}}</h3>
+                                <h4>{{item[field.subtitle]}}</h4>
+                                <p>{{item[field.date]|date:field.date_format}}</p>
+                            </div>
+                            <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
+                                <div ng-switch="action.action">
+                                    <div ng-switch-when="delete">
+                                        <md-button flex-gt-xs ng-click="deleteItem(action.formula, action.next_form_id, item)">{{action.translated_name}}</md-button>
+                                    </div>
+                                    <div ng-switch-when="move">
+                                        <md-button flex-gt-xs ng-click="moveItem(action.formula, action.next_form_id, item)">{{action.translated_name}}</md-button>
+                                    </div>
+                                    <div ng-switch-when="link">
+                                        <md-button flex-gt-xs ng-click="linkItem(action.formula, action.next_form_id, item)">{{action.translated_name}}</md-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-list-item>
                     </md-list>
                 </div>
 
@@ -361,10 +338,10 @@
                     </div>
                 </div>
 
-                <div ng-switch-when="formula" ng-cloak>
+                <div ng-switch-when="calculation" ng-cloak>
                     <md-input-container flex-gt-xs class="md-block">
                         <p class="subtitle">{{field.translated_name}}</p>
-                        <p class="md-body-1">{{data[field.name]}}</p>
+                        <p class="md-body-1">{{field.calculation_value}}</p>
                     </md-input-container>
                 </div>
 
@@ -397,6 +374,12 @@
                 <div ng-switch="action.action">
                     <div ng-switch-when="create">
                         <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
+                    </div>
+                    <div ng-switch-when="register">
+                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="addItem(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
+                    </div>
+                    <div ng-switch-when="unregister">
+                        <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="deleteItem(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="modify">
                         <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, data)" class="md-primary">{{action.translated_name}}</md-button>

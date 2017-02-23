@@ -42,7 +42,6 @@ var FileSchema = new Schema({
 Metadata.File = mongoose.model('File', FileSchema);
 var FormSchema = new Schema({
     name: Schema.Types.Mixed,
-    type: String, // List or Form
     datamodel: {
         type: Schema.Types.ObjectId,
         ref: 'DataModel'
@@ -55,7 +54,6 @@ var FormSchema = new Schema({
     search_criteria: String,
     sort_by: String,
     actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
-    item_actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
     _updated_at: {
         type: Date,
         default: Date.now

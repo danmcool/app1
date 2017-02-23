@@ -38,10 +38,10 @@ var sp_options = {
     certificate: fs.readFileSync("./server/ssl/app1-cert.crt", "utf8"),
     assert_endpoint: "https://app1.cloud/authentication/saml_callback",
     force_authn: false,
-    /*auth_context: {
-        comparison: 'exact',
-        class_refs: ['urn:oasis:names:tc:SAML:1.0:am:password']
-    },*/
+    //auth_context: {
+    //    comparison: 'exact',
+    //    class_refs: ['urn:oasis:names:tc:SAML:1.0:am:password']
+    //},
     //nameid_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
     sign_get_request: false,
     allow_unencrypted_assertion: true

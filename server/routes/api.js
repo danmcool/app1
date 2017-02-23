@@ -30,9 +30,9 @@ router.post('/datamodel/', function(req, res, next) {
         var modelSchema;
         try {
             if (!object.datamodel) object.datamodel = {};
-            object.datamodel._updated_at = "Date";
-            object.datamodel._company_code = "String";
-            object.datamodel._user = "String";
+            object.datamodel._updated_at = 'Date';
+            object.datamodel._company_code = 'String';
+            object.datamodel._user = 'String';
             object.datamodel._files = [{
                 type: Schema.Types.ObjectId,
                 ref: 'File'
@@ -61,9 +61,9 @@ router.put('/datamodel/:id', function(req, res, next) {
     delete Metadata.Objects[req.body._id];
     var modelSchema;
     var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : "{}");
-    datamodel._updated_at = "Date";
-    datamodel._company_code = "String";
-    datamodel._user = "String";
+    datamodel._updated_at = 'Date';
+    datamodel._company_code = 'String';
+    datamodel._user = 'String';
     datamodel._files = [{
         type: Schema.Types.ObjectId,
         ref: 'File'
