@@ -642,7 +642,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial'])
         function buildDelayedToggler(navID) {
             return debounce(function() {
                 $mdSidenav(navID).toggle().then(function() {
-                    $log.debug("toggle " + navID + " is done");
+                    $log.debug('toggle ' + navID + ' is done');
                 });
             }, 200);
         }

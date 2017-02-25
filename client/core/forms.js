@@ -51,14 +51,14 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         if ($scope.form.display) {
             var display = $scope.form.display;
             for (var i = 0; i < display.length; i++) {
-                if (display[i].display == "address") {
+                if (display[i].display == 'address') {
                     display[i].address_line1_translated_name = SessionService.translate($scope.form.datamodel.translation[display[i].name].address_line1);
                     display[i].address_line2_translated_name = SessionService.translate($scope.form.datamodel.translation[display[i].name].address_line2);
                     display[i].address_city_translated_name = SessionService.translate($scope.form.datamodel.translation[display[i].name].address_city);
                     display[i].address_state_translated_name = SessionService.translate($scope.form.datamodel.translation[display[i].name].address_state);
                     display[i].address_postal_code_translated_name = SessionService.translate($scope.form.datamodel.translation[display[i].name].address_postal_code);
                     display[i].address_country_translated_name = SessionService.translate($scope.form.datamodel.translation[display[i].name].address_country);
-                } else if (display[i].display == "list") {
+                } else if (display[i].display == 'list') {
                     for (var j = 0; j < display[i].item_actions.length; j++) {
                         display[i].item_actions[j].translated_name = SessionService.translate(display[i].item_actions[j].name);
                     }
@@ -82,8 +82,8 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 formDisplay[i].values_key = {};
                 for (k = 0; k < newValues.length; k++) {
                     formDisplay[i].values.push({
-                        "_id": newValues[k]._id,
-                        "name": SessionService.translate(newValues[k])
+                        '_id': newValues[k]._id,
+                        'name': SessionService.translate(newValues[k])
                     });
                     formDisplay[i].values_key[newValues[k]._id] =
                         SessionService.translate(newValues[k]);
@@ -108,7 +108,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         var formDisplay = $scope.form.display;
         var formValues = $scope.form.values;
         for (var j = 0; j < formValues.length; j++) {
-            if (formValues[j].type == "user") {
+            if (formValues[j].type == 'user') {
                 Value.update({
                     id: formValues[j]._id,
                     type: formValues[j].type
@@ -121,29 +121,33 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             }
         }
         for (var i = 0; i < formDisplay.length; i++) {
-            if (formDisplay[i].display == "address") {
+            if (formDisplay[i].display == 'address') {
                 if (formDisplay[i].disabled) {
                     var field_name = formDisplay[i].name;
-                    MapService.initMap("map" + field_name);
+                    MapService.initMap('map' + field_name);
                     var address = $scope.data[field_name];
-                    MapService.geocodeAddress("map" + field_name, (address.address_line1 ? (address.address_line1 + ',') : '') +
+                    MapService.geocodeAddress('map' + field_name, (address.address_line1 ? (address.address_line1 + ',') : '') +
                         (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
-            } else if (formDisplay[i].display == "calendar") {
+            } else if (formDisplay[i].display == 'calendar') {
                 var field_name = formDisplay[i].name;
                 if ($scope.data[field_name]) $scope.data[field_name] = new Date($scope.data[field_name]);
-            } else if (formDisplay[i].display == "calculation") {
+            } else if (formDisplay[i].display == 'calculation') {
                 var data = $scope.data;
                 formDisplay[i].calculation_value = eval(formDisplay[i].calculation);
-            } else if (formDisplay[i].display == "list") {
-                if (!$scope.form.search_criteria) $scope.form.search_criteria = "";
-                $scope.form.search_criteria = $scope.form.search_criteria.replace('@_user_id', $scope.sessionData.userData._id);
+            } else if (formDisplay[i].display == 'list') {
+                if (!$scope.form.search_criteria) $scope.form.search_criteria = '';
+                $scope.form.search_criteria = $scope.form.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
                 var keysOfParameters = Object.keys($routeParams);
                 for (k = 0, l = keysOfParameters.length; k < l; k++) {
                     $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
                         keysOfParameters[k]]);
                 }
                 getNextData();
+                //} else if (formDisplay[i].display == 'editor') {
+                //if (formDisplay[i].disabled) {
+                //    $scope.data[formDisplay[i].name] = $scope.data[formDisplay[i].name].replace(/\n/g, '<br>');
+                //}
             }
         }
     }
@@ -170,9 +174,9 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     });
 
-    var gotoNextForm = function(formula, next_form_id, data) {
-        if (next_form_id == "home") {
-            $location.url("/workflows/" + $scope.sessionData.application_id);
+    var gotoNextForm = function(formula, nextFormId, data) {
+        if (nextFormId == 'home') {
+            $location.url('/workflows/' + $scope.sessionData.application_id);
         } else {
             var formUrl = (data._id ? data._id : '0');
             formUrl = formUrl + '?skip=0&limit=10';
@@ -182,7 +186,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                     formUrl = formUrl + '&' + keys[i] + '=' + data[formula[keys[i]]];
                 }
             }
-            $location.url('/form/' + next_form_id + '/' + formUrl);
+            $location.url('/form/' + nextFormId + '/' + formUrl);
         }
     }
 
@@ -195,8 +199,11 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                     $scope.currentFile++;
                     if ($scope.currentFile > $scope.filesCount) {
                         document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_done;
+                        setTimeout(function() {
+                            document.getElementById('file_upload').textContent = '';
+                        }, 4 * 1000);
                     } else {
-                        document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + " " + $scope.currentFile + "/" + $scope.filesCount;
+                        document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' ' + $scope.currentFile + '/' + $scope.filesCount;
                     }
                     //document.getElementById('file_upload').src = url;
                     //document.getElementById('avatar-url').value = url;
@@ -209,23 +216,25 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     };
     $scope.changeFiles = function(files) {
         if (files.length == 0) return;
-        //$scope.dynamicForm.$setValidity({"Attachments": true});
-        $scope.data._files = [];
-        $scope.files = [];
+        //$scope.dynamicForm.$setValidity({'Attachments': true});
+        if (!$scope.data._files) $scope.data._files = [];
+        if (!$scope.files) $scope.files = [];
         $scope.filesCount = files.length;
         $scope.currentFile = 1;
-        document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + " " + $scope.currentFile + "/" + $scope.filesCount;
+        document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' ' + $scope.currentFile + '/' + $scope.filesCount;
         for (i = 0; i < $scope.filesCount; i++) {
             $scope.files.push(files[i]);
             var file = new Files({
-                "name": files[i].name,
-                "type": files[i].type
+                'name': files[i].name,
+                'type': files[i].type
             });
             file.$save().then(function(res) {
                 for (var j = 0; j < $scope.files.length; j++) {
                     if ($scope.files[j].name == res.file.name) {
                         $scope.data._files.push({
-                            "_id": res.file._id
+                            '_id': res.file._id,
+                            'name': res.file.name,
+                            'type': res.file.type
                         });
                         uploadFile(files[j], res.signedRequest, res.url);
                     }
@@ -233,79 +242,137 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             });
         }
     }
+    $scope.removeFile = function(fileId) {
+        var files = $scope.data._files;
+        for (var i = 0; i < files.length; i++) {
+            if (files[i]._id == fileId) {
+                files.splice(i, 1);
+                Files.remove({
+                    id: fileId
+                }).$promise
+                    .then(function(res) {})
+                    .catch(function(res) {
+                        /* show error*/
+                    })
+                break;
+            }
+        }
+    }
 
-    var updateComponents = function(form, set_value, data) {
+    var updateComponents = function(form, setValue, data) {
         for (var i = 0; i < form.display.length; i++) {
-            if (form.display[i].display == "feed") {
+            if (form.display[i].display == 'feed') {
                 var field_name = form.display[i].name;
                 if (form.newvalues[field_name] && form.newvalues[field_name].length > 0) {
                     if (!data[field_name]) {
                         data[field_name] = [];
                     }
                     data[field_name].push({
-                        "text": form.newvalues[field_name],
-                        "from": $scope.sessionData.userData.name,
-                        "user": $scope.sessionData.userData.user,
-                        "date": Date.now()
+                        'text': form.newvalues[field_name],
+                        'from': $scope.sessionData.userData.name,
+                        'user': $scope.sessionData.userData.user,
+                        'date': Date.now()
                     });
                 }
             }
         }
-        if (set_value) {
-            data[set_value.name] = set_value.value;
+        if (setValue) {
+            data[setValue.name] = setValue.value;
         }
     }
 
-    $scope.create = function(formula, next_form_id, set_value, data) {
-        updateComponents($scope.form, set_value, data);
+    var updateErrorAlert = function() {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_document_version)
+            .textContent($scope.sessionData.appData.already_modified_document)
+            .ok($scope.sessionData.appData.ok)
+        );
+    }
+
+    $scope.create = function(formula, nextFormId, setValue, data) {
+        updateComponents($scope.form, setValue, data);
         $scope.data.$save().then(function(res) {
-            gotoNextForm(formula, next_form_id, data);
+            gotoNextForm(formula, nextFormId, data);
         }).catch(function(res) {
             $scope.data = res.data;
         });
     }
-    $scope.modify = function(formula, next_form_id, set_value, data) {
-        updateComponents($scope.form, set_value, data);
+    $scope.modify = function(formula, nextFormId, setValue, data) {
+        updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
         }, data).$promise.then(function(res) {
-            gotoNextForm(formula, next_form_id, data);
+            gotoNextForm(formula, nextFormId, data);
         }).catch(function(res) {
             $scope.data = res.data;
-            $mdDialog.show(
-                $mdDialog.alert()
-                .parent(angular.element(document.body))
-                .clickOutsideToClose(true)
-                .title('New version of document')
-                .textContent(
-                    'The underlying data of this document has been modified by another user, please revise the content and save again!'
-                )
-                .ariaLabel('Alert Dialog Demo')
-                .ok('Got it!')
-            );
+            updateErrorAlert();
         });
     }
-    $scope.delete = function(formula, next_form_id, data) {
-        Datas.remove({
+    $scope.delete = function(formula, nextFormId, setValue, data) {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.confirmation)
+            .textContent($scope.sessionData.appData.removal_confirmation)
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)
+        ).then(function() {
+            Datas.remove({
+                datamodel_id: $scope.form.datamodel._id,
+                entry_id: data._id
+            }).$promise
+                .then(function(res) {
+                    gotoNextForm(formula, nextFormId, data);
+                })
+                .catch(function(res) {
+                    /* show error*/
+                });
+        });
+    }
+    $scope.link = function(formula, nextFormId, data) {
+        gotoNextForm(formula, nextFormId, data);
+    }
+    $scope.associate = function(formula, nextFormId, setValue, data, actionItem, datamodel, idMap) {
+        updateComponents($scope.form, setValue, data);
+        if (datamodel == 'User') {
+            data[actionItem].push($scope.sessionData.userData._id);
+        } else {}
+        Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }).$promise
-            .then(function(res) {
-                gotoNextForm(formula, next_form_id, data);
-            })
-            .catch(function(res) {
-                /* show error*/
-            })
-            .finally(function() {
-                console.log("always called");
-            });
+        }, data).$promise.then(function(res) {
+            gotoNextForm(formula, nextFormId, data);
+        }).catch(function(res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
     }
-    $scope.link = function(formula, next_form_id, data) {
-        gotoNextForm(formula, next_form_id, data);
+    $scope.dissociate = function(formula, nextFormId, setValue, data, actionItem, datamodel, idMap) {
+        updateComponents($scope.form, setValue, data);
+        if (datamodel == 'User') {
+            for (var i = data[actionItem].length - 1; i >= 0; i--) {
+                if (data[actionItem][i] == $scope.sessionData.userData._id) {
+                    data[actionItem].splice(i, 1);
+                }
+            }
+        } else {}
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: data._id
+        }, data).$promise.then(function(res) {
+            gotoNextForm(formula, nextFormId, data);
+        }).catch(function(res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
     }
-    $scope.share = function(formula, next_form_id, set_value, constraint, email_field_name, form_id, data) {
-        updateComponents($scope.form, set_value, data);
+    $scope.share = function(formula, nextFormId, setValue, constraint, email_field_name, form_id, data) {
+        updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
@@ -318,24 +385,15 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 key: constraint.key,
                 value: constraint.value
             }).$promise.then(function(res) {
-                gotoNextForm(formula, next_form_id, data);
+                gotoNextForm(formula, nextFormId, data);
             })
         }).catch(function(res) {
             $scope.data = res.data;
-            $mdDialog.show(
-                $mdDialog.alert()
-                .parent(angular.element(document.body))
-                .clickOutsideToClose(true)
-                .title('New version of document')
-                .textContent('The underlying data of this document has been modified by another user,' +
-                    ' please revise the content and save again!')
-                .ariaLabel('Alert Dialog Demo')
-                .ok('Got it!')
-            );
+            updateErrorAlert();
         });
     }
-    $scope.calendar = function(formula, next_form_id, set_value, project_name_field, start_date_field, end_date_field, data) {
-        updateComponents($scope.form, set_value, data);
+    $scope.calendar = function(formula, nextFormId, setValue, project_name_field, start_date_field, end_date_field, data) {
+        updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
@@ -346,20 +404,11 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 end_date: data[end_date_field],
                 user_id: data._user
             }).$promise.then(function(res) {
-                gotoNextForm(formula, next_form_id, data);
+                gotoNextForm(formula, nextFormId, data);
             })
         }).catch(function(res) {
             $scope.data = res.data;
-            $mdDialog.show(
-                $mdDialog.alert()
-                .parent(angular.element(document.body))
-                .clickOutsideToClose(true)
-                .title('New version of document')
-                .textContent('The underlying data of this document has been modified by another user,' +
-                    ' please revise the content and save again!')
-                .ariaLabel('Alert Dialog Demo')
-                .ok('Got it!')
-            );
+            updateErrorAlert();
         });
     }
 });

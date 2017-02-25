@@ -37,14 +37,14 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 function allowedPath(req) {
-    if (req.path.startsWith("/data") || req.path.startsWith("/api") || req.path.startsWith("/file") || req.path.startsWith("/client")) {
+    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client')) {
         return false;
     }
     return true;
 }
 
 function nocache(req, res) {
-    if (req.path.startsWith("/data") || req.path.startsWith("/api") || req.path.startsWith("/file") || req.path.startsWith("/client") || req.path.startsWith("/authentication")) {
+    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client') || req.path.startsWith('/authentication')) {
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
         res.header('Expires', '-1');
         res.header('Pragma', 'no-cache');

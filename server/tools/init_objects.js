@@ -14,10 +14,10 @@ DataModel.find(function(err, objects) {
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
         try {
-            var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : "{}");
-            datamodel._updated_at = "Date";
-            datamodel._company_code = "String";
-            datamodel._user = "String";
+            var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : '{}');
+            datamodel._updated_at = 'Date';
+            datamodel._company_code = 'String';
+            datamodel._user = 'String';
             datamodel._files = [{
                 type: Schema.Types.ObjectId,
                 ref: 'File'
@@ -33,10 +33,10 @@ DataModel.find(function(err, objects) {
 
 // initialize saml service provider
 var sp_options = {
-    entity_id: "app1_saml_metadata.xml", //'https://localhost/authentication/saml_metadata',
-    private_key: fs.readFileSync("./server/ssl/app1-key.pem", "utf8"),
-    certificate: fs.readFileSync("./server/ssl/app1-cert.crt", "utf8"),
-    assert_endpoint: "https://app1.cloud/authentication/saml_callback",
+    entity_id: 'app1_saml_metadata.xml', //'https://localhost/authentication/saml_metadata',
+    private_key: fs.readFileSync('./server/ssl/app1-key.pem', 'utf8'),
+    certificate: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
+    assert_endpoint: 'https://app1.cloud/authentication/saml_callback',
     force_authn: false,
     //auth_context: {
     //    comparison: 'exact',

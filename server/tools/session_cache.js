@@ -19,7 +19,7 @@ setInterval(function() {
     var current_time = Date.now();
     Metadata.Session.remove({
         timeout: {
-            "$lt": current_time
+            '$lt': current_time
         }
     });
 }, Constants.DBSessionTimerCleanup);
@@ -34,6 +34,7 @@ setInterval(function() {
         }
     }
 }, Constants.CacheSessionTimerCleanup);
+
 /*
     var rand = function() {
         return Math.random().toString(36).substr(2);
@@ -50,8 +51,8 @@ SessionCache.prepareUser = function(userObject) {
     var strUser = JSON.stringify(userObject);
     if (userObject.user) strUser = strUser.replace(/@@user/g, userObject._id);
     if (userObject.manager) strUser = strUser.replace(/@@manager/g, userObject.manager);
-    strUser = strUser.replace(/@@public/g, "");
-    if (userObject.reports) strUser = strUser.replace(/"@@reports"/g, (userObject.reports ? (userObject.reports.length > 0 ? JSON.stringify(userObject.reports).replace(/]|[[]/g, "") : "\"\"") : "\"\""));
+    strUser = strUser.replace(/@@public/g, '');
+    if (userObject.reports) strUser = strUser.replace(/'@@reports'/g, (userObject.reports ? (userObject.reports.length > 0 ? JSON.stringify(userObject.reports).replace(/]|[[]/g, '') : '\'\'') : '\'\''));
     if (userObject._company_code) strUser = strUser.replace(/@@company_code/g, userObject._company_code);
     var resUser = JSON.parse(strUser);
     if (resUser.company.properties) resUser.company.properties.saml = {};
@@ -75,7 +76,7 @@ SessionCache.isActive = function(token, callback) {
     Session.findOne({
         _id: token,
         timeout: {
-            "$gt": Date.now()
+            '$gt': Date.now()
         }
     }).exec(function(errSession, existingSession) {
         if (errSession) return next(errSession);
@@ -112,7 +113,7 @@ SessionCache.filterCompanyCode = function(req, filter) {
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
-            "$eq": company_code
+            '$eq': company_code
         };
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;
@@ -126,7 +127,7 @@ SessionCache.filterApplicationCompanyCode = function(req, filter) {
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
-            "$in": [company_code, Constants.ProductionCompany]
+            '$in': [company_code, Constants.ProductionCompany]
         };
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;
@@ -141,7 +142,7 @@ SessionCache.filterDataUserProfile = function(req, filter, datamodel_id, data_id
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
-            "$eq": company_code
+            '$eq': company_code
         };
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;

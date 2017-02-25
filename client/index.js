@@ -20,20 +20,20 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                     language: 'en'
                 }
             },
-            applicationName: "App1",
+            applicationName: 'App1',
             appData: {}
         };
         var translate = function translate(text) {
-            if (!text) return "xxxxx";
+            if (!text) return 'xxxxx';
             var translated_text = text[sessionData.userData.properties.language];
             if (translated_text) return translated_text;
-            else return text["en"];
+            else return text['en'];
         }
         var translateInternal = function translate(text, language) {
-            if (!text) return "xxxxx";
+            if (!text) return 'xxxxx';
             var translated_text = text[language];
             if (translated_text) return translated_text;
-            else return text["en"];
+            else return text['en'];
         }
         var setSessionData = function setSessionData(newData) {
             if (newData.applications) {
@@ -170,8 +170,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     .factory('Datas', ['$resource',
         function($resource) {
             return $resource('/data/:datamodel_id/:entry_id', {
-                datamodel_id: "@datamodel_id",
-                entry_id: "@entry_id"
+                datamodel_id: '@datamodel_id',
+                entry_id: '@entry_id'
             }, {
                 'update': {
                     method: 'PUT'
@@ -226,12 +226,12 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 
         UserStatus.get().$promise.then(function(result) {
             $scope.sessionData = {
-                applicationName: "App1"
+                applicationName: 'App1'
             };
             $scope.sessionData.token = result.token;
             $scope.sessionData.userData = result.user;
-            $scope.sessionData.userData.title = (result.user.firstname ? result.user.firstname : "") + " " + (result.user.lastname ? result.user.lastname : "") + " @ " + (result.user.company.name ? result.user.company.name : "");
-            $scope.sessionData.userData.name = (result.user.firstname ? result.user.firstname : "") + " " + (result.user.lastname ? result.user.lastname : "");
+            $scope.sessionData.userData.title = (result.user.firstname ? result.user.firstname : '') + ' ' + (result.user.lastname ? result.user.lastname : '') + ' @ ' + (result.user.company.name ? result.user.company.name : '');
+            $scope.sessionData.userData.name = (result.user.firstname ? result.user.firstname : '') + ' ' + (result.user.lastname ? result.user.lastname : '');
             $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             Applications.query().$promise.then(function(result) {
                 $scope.sessionData.applications = result;
@@ -270,7 +270,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                         language: 'en'
                     }
                 },
-                applicationName: "App1"
+                applicationName: 'App1'
             };
             $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
             SessionService.setSessionData($scope.sessionData);

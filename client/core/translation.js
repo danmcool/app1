@@ -155,6 +155,40 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         saml_metadata_url: {
             en: 'Metadata definition of App1 service provider - to be uploaded to Identity Provider',
             fr: 'Définition des métadonnées du service App1 - a charger sur le service d`Identification'
+        },
+        already_modified_document: {
+            en: 'The underlying data of this document has been modified by another user,' +
+                ' please revise the content and save again!',
+            fr: 'Le document courant a été déjà modifié par un autre utilisateur,' +
+                ' veuillez vérifier le contenu et sauvegarder à nouveau!'
+        },
+        new_document_version: {
+            en: 'New document version',
+            fr: 'Nouvelle version de document'
+        },
+        removal_confirmation: {
+            en: 'Remove the object?',
+            fr: 'Supprimer l’objet?'
+        },
+        confirmation: {
+            en: 'Confirm',
+            fr: 'Confirmer'
+        },
+        yes: {
+            en: 'Yes',
+            fr: 'Oui'
+        },
+        no: {
+            en: 'No',
+            fr: 'Non'
+        },
+        ok: {
+            en: 'Ok',
+            fr: 'Ok'
+        },
+        cancel: {
+            en: 'Cancel',
+            fr: 'Annuler'
         }
     };
     var translate = function translate(language) {

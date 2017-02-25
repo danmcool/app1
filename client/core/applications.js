@@ -11,6 +11,6 @@ app1.controller('ApplicationsCtrl', function($scope, SessionService, $location) 
         }
     });
     $scope.open = function(application_id) {
-        $location.url("/workflows/" + application_id);
+        $location.url('/workflows/' + application_id);
     }
 });

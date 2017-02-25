@@ -20,7 +20,7 @@ var Session = Metadata.Session;
 router.post('/register', function(req, res) {
     if (!req.body.email) {
         return res.status(400).json({
-            msg: "Registration: email is not provided!"
+            msg: 'Registration: email is not provided!'
         });
     }
     var userName = req.body.email.toLowerCase();
@@ -29,14 +29,14 @@ router.post('/register', function(req, res) {
     }, function(errUserFind, objectUserFind) {
         if (errUserFind) return next(errUserFind);
         if (objectUserFind) return res.status(400).json({
-            msg: "Registration: email is already used, please choose another email!"
+            msg: 'Registration: email is already used, please choose another email!'
         });
         Company.findOne({
             _company_code: req.body.code
         }, function(errCompanyFind, objectCompanyFind) {
             if (errCompanyFind) return next(errCompanyFind);
             if (objectCompanyFind) return res.status(400).json({
-                msg: "Registration: company code is already used, please use another code!"
+                msg: 'Registration: company code is already used, please use another code!'
             });
             var company = {
                 name: req.body.company_name,
@@ -46,7 +46,7 @@ router.post('/register', function(req, res) {
                 if (errCompany) return next(errCompany);
                 var userprofileAdministrator = {
                     name: {
-                        "en": "Administrator"
+                        'en': 'Administrator'
                     },
                     type: Constants.UserProfileAdministrator,
                     _company_code: req.body.code
@@ -55,7 +55,7 @@ router.post('/register', function(req, res) {
                     if (errUserProfileAdministrator) return next(errUserProfileAdministrator);
                     var userprofilePrivate = {
                         name: {
-                            "en": "Private"
+                            'en': 'Private'
                         },
                         type: Constants.UserProfilePrivate,
                         _company_code: req.body.code
@@ -70,8 +70,8 @@ router.post('/register', function(req, res) {
                             firstname: req.body.firstname,
                             lastname: req.body.lastname,
                             properties: {
-                                theme: "default",
-                                language: "en"
+                                theme: 'default',
+                                language: 'en'
                             },
                             profile: newUserprofileAdministrator._id,
                             company: newCompany._id,
@@ -80,7 +80,7 @@ router.post('/register', function(req, res) {
                         User.create(user, function(errNewUser, newUser) {
                             if (errNewUser) return next(errNewUser);
                             res.status(200).json({
-                                msg: "Registration: please check your email to validate the registration!"
+                                msg: 'Registration: please check your email to validate the registration!'
                             });
                             Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
                         });
@@ -103,13 +103,13 @@ router.get('/validate', function(req, res) {
         }
     }, function(err, object) {
         if (err) return next(err);
-        if (!object) return res.status(401).send("Registration: user has been already validated!");
+        if (!object) return res.status(401).send('Registration: user has been already validated!');
         Application.find({
             _company_code: Constants.ProductionCompany
         }, function(err, appObjects) {
             var appList = [];
             for (var i = 0; i < appObjects.length; i++) {
-                appList.push("" + appObjects[i]._id);
+                appList.push('' + appObjects[i]._id);
             };
             Company.findOneAndUpdate({
                 _company_code: _company_code
@@ -117,7 +117,7 @@ router.get('/validate', function(req, res) {
                 applications: appList
             });
         });
-        res.status(200).send("<p>Registration: user has been validated, please log on using initial password!</p><br><a href='/#/login'>Login</a>");
+        res.status(200).send('<p>Registration: user has been validated, please log on using initial password!</p><br><a href="/#/login">Login</a>');
         /*
         var objectList = {};
         Application.find({
@@ -133,38 +133,38 @@ router.get('/validate', function(req, res) {
 
 router.post('/invite', function(req, res, next) {
     if (!req.query.key) return res.status(401).json({
-        err: "Invalid parameters!"
+        err: 'Invalid parameters!'
     });
     if (!req.body.users) return res.status(401).json({
-        err: "Invalid parameters!"
+        err: 'Invalid parameters!'
     });
     var token = req.query.key;
     var current_time = Date.now();
     Session.findOneAndUpdate({
         _id: {
-            "$eq": token
+            '$eq': token
         },
         timeout: {
-            "$gt": current_time
+            '$gt': current_time
         }
     }, {
         timeout: current_time + Constants.MaxSessionTimeout
     }).populate('user').exec(function(err, existingSession) {
         if (err) return next(err);
         if (!existingSession) return res.status(401).json({
-            err: "Not found user session!"
+            err: 'Not found user session!'
         });
         UserProfile.findOne({
             _company_code: {
-                "$eq": existingSession.user._company_code
+                '$eq': existingSession.user._company_code
             },
             type: {
-                "$eq": Constants.UserProfilePrivate
+                '$eq': Constants.UserProfilePrivate
             }
         }, function(err, userprofile) {
             if (err) return next(err);
             if (!userprofile) return res.status(401).json({
-                err: "Not found user profile!"
+                err: 'Not found user profile!'
             });
             for (var i in req.body.users) {
                 var invitedUser = req.body.users[i];
@@ -186,18 +186,18 @@ router.post('/invite', function(req, res, next) {
                 });
             }
             res.status(200).json({
-                msg: "Invitation: users have been invited to join App1!"
+                msg: 'Invitation: users have been invited to join App1!'
             });
         });
     });
 
-    // "password":Constants.InitialPasswordHash,"profile":"58249c3e591d37288c45819c","company":"58249c3e591d37288c45819b","_company_code":"smarthys"
+    // 'password':Constants.InitialPasswordHash,'profile':'58249c3e591d37288c45819c','company':'58249c3e591d37288c45819b','_company_code':'smarthys'
 
 });
 
 router.post('/login', function(req, res, next) {
     if (!req.body || !req.body.user || !req.body.password) return res.status(401).json({
-        err: "Invalid user name or password!"
+        err: 'Invalid user name or password!'
     });
     //console.log(Date.now());
     crypto.pbkdf2(req.body.password, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function(errCrypto, key) {
@@ -215,7 +215,7 @@ router.post('/login', function(req, res, next) {
                         errUser: info
                     });
                     if (!userObject) return res.status(401).json({
-                        err: "Invalid user name or password!"
+                        err: 'Invalid user name or password!'
                     });
                     Session.findOneAndUpdate({
                         user: userObject._id,
@@ -244,16 +244,16 @@ router.post('/login', function(req, res, next) {
 
 router.get('/status', function(req, res) {
     if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
-        err: "Not logged in!"
+        err: 'Not logged in!'
     });
     var token = req.cookies[Constants.SessionCookie];
     var current_time = Date.now();
     Session.findOneAndUpdate({
         _id: {
-            "$eq": token
+            '$eq': token
         },
         timeout: {
-            "$gt": current_time
+            '$gt': current_time
         }
     }, {
         timeout: current_time + Constants.MaxSessionTimeout
@@ -262,7 +262,7 @@ router.get('/status', function(req, res) {
             err: err.info
         });
         if (!existingSession) return res.status(401).json({
-            err: "Invalid session!"
+            err: 'Invalid session!'
         });
         User.findOne({
             _id: existingSession.user._id,
@@ -274,7 +274,7 @@ router.get('/status', function(req, res) {
                         err: err.info
                     });
                     if (!userObject) return res.status(401).json({
-                        err: "Invalid user name or password!"
+                        err: 'Invalid user name or password!'
                     });
                     SessionCache.cacheUser(token, userObject);
                     res.cookie(Constants.SessionCookie, token, {
@@ -295,7 +295,7 @@ router.get('/logout', function(req, res) {
     }, function(err, object) {
         if (err) return next(err);
         if (!object) return res.status(401).json({
-            err: "Invalid session!"
+            err: 'Invalid session!'
         });
         SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
         res.clearCookie(Constants.SessionCookie).status(200);
@@ -309,7 +309,7 @@ router.get('/login_saml/:company_code', function(req, res) {
     }, function(errCompany, objectCompany) {
         if (!objectCompany.properties || !objectCompany.properties.saml || !objectCompany.properties.saml.enabled)
             return res.status(401).json({
-                err: "Company SAML not setup correctly!"
+                err: 'Company SAML not setup correctly!'
             });
         var idp_options = {
             sso_login_url: objectCompany.properties.saml.sso_redirect_url,
@@ -339,7 +339,7 @@ router.post('/saml_callback', function(req, res) {
     };
     var company_code = req.body.RelayState || req.query.RelayState;
     if (!SessionCache.identityProvider[company_code]) return res.status(401).json({
-        err: "Missing company code!"
+        err: 'Missing company code!'
     });
     SessionCache.serviceProvider.post_assert(SessionCache.identityProvider[company_code].idp, options, function(errSaml, objectSaml) {
         if (errSaml)
@@ -352,7 +352,7 @@ router.post('/saml_callback', function(req, res) {
         //var session_index = objectSaml.user.session_index;
         //objectSaml.user.attributes.EmailAddress[0] FirstName LastName
         if (SessionCache.identityProvider[company_code].test) {
-            return res.send("Hello " + JSON.stringify(objectSaml));
+            return res.send('Hello ' + JSON.stringify(objectSaml));
         }
         User.findOne({
             user: objectSaml.user.attributes.EmailAddress[0],
@@ -372,7 +372,7 @@ router.post('/saml_callback', function(req, res) {
                                 err: errProfile
                             });
                             if (!objectProfile) return res.status(401).json({
-                                err: "Missing private user profile"
+                                err: 'Missing private user profile'
                             });
                             var user = {
                                 user: objectSaml.user.attributes.EmailAddress[0],
@@ -382,8 +382,8 @@ router.post('/saml_callback', function(req, res) {
                                 lastname: objectSaml.user.attributes.LastName,
                                 validated: true,
                                 properties: {
-                                    theme: "default",
-                                    language: "en"
+                                    theme: 'default',
+                                    language: 'en'
                                 },
                                 profile: objectProfile._id,
                                 company: SessionCache.identityProvider[company_code].company_id,
@@ -407,7 +407,7 @@ router.post('/saml_callback', function(req, res) {
                                     return res.cookie(Constants.SessionCookie, newSession._id, {
                                         maxAge: Constants.MaxSessionTimeout,
                                         httpOnly: true
-                                    }).redirect("/");
+                                    }).redirect('/');
                                 });
                                 Email.sendSAMLNewUser(newUser.email, newUser.user, newUser._company_code);
                             });
@@ -429,7 +429,7 @@ router.post('/saml_callback', function(req, res) {
                             return res.cookie(Constants.SessionCookie, newSession._id, {
                                 maxAge: Constants.MaxSessionTimeout,
                                 httpOnly: true
-                            }).redirect("/");
+                            }).redirect('/');
                         });
                     }
                 });

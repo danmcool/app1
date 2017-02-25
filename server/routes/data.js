@@ -46,18 +46,18 @@ router.get('/:datamodelid/', function(req, res, next) {
     var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].list) {
         return res.status(401).json({
-            err: "Not enough user rights!"
+            err: 'Not enough user rights!'
         });
     }
     var pageOptions = computePage(req);
-    var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : "{}");
-    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : "{}");
+    var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
+    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
     search_criteria._company_code = {
-        "$eq": profile.datamodels[req.params.datamodelid].list._company_code
+        '$eq': profile.datamodels[req.params.datamodelid].list._company_code
     };
     if (profile.datamodels[req.params.datamodelid].list._user) {
         search_criteria._user = {
-            "$in": profile.datamodels[req.params.datamodelid].list._user
+            '$in': profile.datamodels[req.params.datamodelid].list._user
         };
     }
     Metadata.Objects[req.params.datamodelid].find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit)
@@ -71,7 +71,7 @@ router.post('/:datamodelid/', function(req, res, next) {
     var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].create) {
         return res.status(401).json({
-            err: "Not enough user rights!"
+            err: 'Not enough user rights!'
         });
     }
     if (req.body) {
@@ -82,7 +82,7 @@ router.post('/:datamodelid/', function(req, res, next) {
     Metadata.Objects[req.params.datamodelid].create(req.body, function(err, object) {
         if (err) return next(err);
         res.status(200).json({
-            "msg": "Data: entry created!"
+            'msg': 'Data: entry created!'
         });
     });
 });
@@ -104,29 +104,29 @@ router.get('/:datamodelid/:id', function(req, res, next) {
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].read) {
         if (!remote) {
             return res.status(401).json({
-                err: "Not enough user rights!"
+                err: 'Not enough user rights!'
             });
         }
     }
     var search_criteria = {
         _id: {
-            "$eq": req.params.id
+            '$eq': req.params.id
         }
     };
     if (remote) {
         search_criteria._company_code = {
-            "$eq": remote_profile._company_code
+            '$eq': remote_profile._company_code
         };
         search_criteria[remote_profile.constraint.key] = {
-            "$eq": remote_profile.constraint.value
+            '$eq': remote_profile.constraint.value
         };
     } else {
         search_criteria._company_code = {
-            "$eq": profile.datamodels[req.params.datamodelid].read._company_code
+            '$eq': profile.datamodels[req.params.datamodelid].read._company_code
         };
         if (profile.datamodels[req.params.datamodelid].read._user) {
             search_criteria._user = {
-                "$in": profile.datamodels[req.params.datamodelid].read._user
+                '$in': profile.datamodels[req.params.datamodelid].read._user
             };
         }
     }
@@ -153,32 +153,32 @@ router.put('/:datamodelid/:id', function(req, res, next) {
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body._user) {
         if (!remote) {
             return res.status(401).json({
-                err: "Not enough user rights!"
+                err: 'Not enough user rights!'
             });
         }
     }
     var search_criteria = {
         _id: {
-            "$eq": req.params.id
+            '$eq': req.params.id
         }
     };
     if (remote) {
         search_criteria._company_code = {
-            "$eq": remote_profile._company_code
+            '$eq': remote_profile._company_code
         };
         search_criteria._user = {
-            "$eq": req.body._user
+            '$eq': req.body._user
         };
         search_criteria[remote_profile.constraint.key] = {
-            "$eq": remote_profile.constraint.value
+            '$eq': remote_profile.constraint.value
         };
     } else {
         search_criteria._company_code = {
-            "$eq": profile.datamodels[req.params.datamodelid].update._company_code
+            '$eq': profile.datamodels[req.params.datamodelid].update._company_code
         };
         if (profile.datamodels[req.params.datamodelid].update._user) {
             search_criteria._user = {
-                "$in": profile.datamodels[req.params.datamodelid].update._user
+                '$in': profile.datamodels[req.params.datamodelid].update._user
             };
         }
     }
@@ -188,7 +188,7 @@ router.put('/:datamodelid/:id', function(req, res, next) {
         if (err) return next(err);
         if (object) {
             res.status(200).json({
-                "msg": "Data: entry updated!"
+                'msg': 'Data: entry updated!'
             });
         } else {
             delete search_criteria._updated_at;
@@ -204,7 +204,7 @@ router.delete('/:datamodelid/:id', function(req, res, next) {
     var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].delete || !req.body._user) {
         return res.status(401).json({
-            err: "Not enough user rights!"
+            err: 'Not enough user rights!'
         });
     }
     var found = false;
@@ -215,7 +215,7 @@ router.delete('/:datamodelid/:id', function(req, res, next) {
         }
         if (!found) {
             return res.status(401).json({
-                err: "Not enough user rights!"
+                err: 'Not enough user rights!'
             });
         }
     }
@@ -225,7 +225,7 @@ router.delete('/:datamodelid/:id', function(req, res, next) {
     }, function(err, object) {
         if (err) return next(err);
         res.status(200).json({
-            "msg": "Data: entry deleted!"
+            'msg': 'Data: entry deleted!'
         });
     });
 });

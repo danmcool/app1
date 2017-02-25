@@ -1,6 +1,6 @@
 app1.controller('RegisterCtrl', function($scope, $location, $mdDialog, Register, SessionService) {
     $scope.sessionData = SessionService.getSessionData();
-    $scope.sessionData.applicationName = "App1";
+    $scope.sessionData.applicationName = 'App1';
     SessionService.setSessionData($scope.sessionData);
 
     $scope.register = function(firstname, lastname, email, code, company_name) {
@@ -19,7 +19,6 @@ app1.controller('RegisterCtrl', function($scope, $location, $mdDialog, Register,
                 .clickOutsideToClose(true)
                 .title('Success')
                 .textContent(res.msg)
-                .ariaLabel('Error')
                 .ok('Got it!')
             ).then(function() {
                 $location.url('/');
@@ -31,7 +30,6 @@ app1.controller('RegisterCtrl', function($scope, $location, $mdDialog, Register,
                 .clickOutsideToClose(true)
                 .title('Error')
                 .textContent(res.data.msg)
-                .ariaLabel('Error')
                 .ok('Got it!')
             );
         });

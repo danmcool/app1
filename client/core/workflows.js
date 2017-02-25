@@ -3,8 +3,8 @@ app1.controller('WorkflowsCtrl',
         $scope.sessionData = SessionService.getSessionData();
 
         var initWorkflows = function() {
-            if ($routeParams.application_id == "undefined") {
-                $location.url("/applications");
+            if ($routeParams.application_id == 'undefined') {
+                $location.url('/applications');
             } else {
                 $scope.sessionData.application_id = $routeParams.application_id;
                 if ($scope.sessionData.applications) {
@@ -37,7 +37,7 @@ app1.controller('WorkflowsCtrl',
         });
 
         $scope.open = function(formId) {
-            $location.url("/form/" + formId + "/0");
+            $location.url('/form/' + formId + '/0');
         }
 
         initWorkflows();

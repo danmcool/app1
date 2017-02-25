@@ -60,7 +60,7 @@ router.put('/datamodel/:id', function(req, res, next) {
     delete mongoose.modelSchemas['data' + req.body._id];
     delete Metadata.Objects[req.body._id];
     var modelSchema;
-    var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : "{}");
+    var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : '{}');
     datamodel._updated_at = 'Date';
     datamodel._company_code = 'String';
     datamodel._user = 'String';

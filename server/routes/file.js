@@ -22,11 +22,11 @@ router.get('/', function(req, res, next) {
         skip: parseInt(req.query.skip) || 0,
         limit: parseInt(req.query.limit) || 10
     }
-    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : "{}");
+    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
     search_criteria._company_code = {
-        "$eq": SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+        '$eq': SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
     };
-    var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : "{}");
+    var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
     Metadata.File.find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function(
         err, objects) {
         if (err) return next(err);
@@ -41,7 +41,7 @@ router.post('/', function(req, res, next) {
     Metadata.File.create(req.body, function(err, object) {
         if (err) return next(err);
         var params = {
-            Key: req.body._company_code + "/" + object._id,
+            Key: req.body._company_code + '/' + object._id,
             ContentType: object.type,
             ACL: 'public-read'
         };
@@ -67,17 +67,17 @@ router.get('/:id', function(req, res, next) {
     }), function(err, object) {
         if (err) return next(err);
         if (!object) return res.status(401).json({
-            "msg": "Cannot find file object!"
+            'msg': 'Cannot find file object!'
         });
         var params = {
-            Key: req.body._company_code + "/" + object._id
+            Key: req.body._company_code + '/' + object._id
         };
         s3Instance.getSignedUrl('getObject', params, function(err, url) {
             if (err) return next(err);
             if (!url) return res.status(400).json({
-                "msg": "Url is null!"
+                'msg': 'Url is null!'
             });
-            console.log("The URL is", url);
+            console.log('The URL is', url);
             res.redirect(url);
         });
     });
@@ -100,7 +100,7 @@ router.put('/:id', function(req, res, next) {
             }, function(err, object) {
                 if (err) return next(err);
                 res.status(400).json({
-                    "msg": "Object has been modified by another user!"
+                    'msg': 'Object has been modified by another user!'
                 });
             });
         }
@@ -112,9 +112,16 @@ router.delete('/:id', function(req, res, next) {
         _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
     }, function(err, object) {
         if (err) return next(err);
-        res.json({
-            "msg": "Object has been deleted!"
+        var params = {
+            Key: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code + '/' + object._id
+        };
+        s3Instance.deleteObject(params, function(err, data) {
+            if (err) return next(err);
+            res.json({
+                'msg': 'Object has been deleted!'
+            });
         });
+
     });
 });
 module.exports = router;
