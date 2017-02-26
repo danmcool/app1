@@ -202,21 +202,23 @@ router.put('/:datamodelid/:id', function(req, res, next) {
 
 router.delete('/:datamodelid/:id', function(req, res, next) {
     var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
-    if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].delete || !req.body._user) {
+    if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].delete) {
         return res.status(401).json({
             err: 'Not enough user rights!'
         });
     }
-    var found = false;
-    for (var i = 0; i < profile.datamodels[req.params.datamodelid].delete._user.length; i++) {
-        if (profile.datamodels[req.params.datamodelid].delete._user[i] == req.body._user) {
-            found = true;
-            break;
-        }
-        if (!found) {
-            return res.status(401).json({
-                err: 'Not enough user rights!'
-            });
+    if (profile.datamodels[req.params.datamodelid].delete._user) {
+        var found = false;
+        for (var i = 0; i < profile.datamodels[req.params.datamodelid].delete._user.length; i++) {
+            if (profile.datamodels[req.params.datamodelid].delete._user[i] == SessionCache.userData[req.cookies[Constants.SessionCookie]]._id) {
+                found = true;
+                break;
+            }
+            if (!found) {
+                return res.status(401).json({
+                    err: 'Not enough user rights!'
+                });
+            }
         }
     }
     Metadata.Objects[req.params.datamodelid].findOneAndRemove({

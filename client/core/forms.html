@@ -66,13 +66,13 @@
                             </div>
                             <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
                                 <div ng-switch="action.action">
-                                    <div ng-switch-when="delete">
+                                    <div ng-switch-when="delete_item">
                                         <md-button flex-gt-xs ng-click="deleteItem(action.formula, action.next_form_id, item)">{{action.translated_name}}</md-button>
                                     </div>
-                                    <div ng-switch-when="move">
-                                        <md-button flex-gt-xs ng-click="moveItem(action.formula, action.next_form_id, item)">{{action.translated_name}}</md-button>
+                                    <div ng-switch-when="move_item">
+                                        <md-button flex-gt-xs ng-click="moveItem(action.formula, action.next_form_id, action.set_value, item._id, field.name, action.destination_field_name, action.datamodel)">{{action.translated_name}}</md-button>
                                     </div>
-                                    <div ng-switch-when="link">
+                                    <div ng-switch-when="link_item">
                                         <md-button flex-gt-xs ng-click="linkItem(action.formula, action.next_form_id, item)">{{action.translated_name}}</md-button>
                                     </div>
                                 </div>
