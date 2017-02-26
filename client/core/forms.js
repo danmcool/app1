@@ -88,18 +88,18 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
     var updateValuesTitle = function(formDisplay, newValues) {
-                formDisplay.title_values = {};
-                for (k = 0; k < newValues.length; k++) {
-                    formDisplay.title_values[newValues[k]._id] =
-                        SessionService.translate(newValues[k]);
-                }
+        formDisplay.title_values = {};
+        for (k = 0; k < newValues.length; k++) {
+            formDisplay.title_values[newValues[k]._id] =
+                SessionService.translate(newValues[k]);
+        }
     }
     var updateValuesSubTitle = function(formDisplay, newValues) {
-                formDisplay.subtitle_values = {};
-                for (k = 0; k < newValues.length; k++) {
-                    formDisplay.subtitle_values[newValues[k]._id] =
-                        SessionService.translate(newValues[k]);
-                }
+        formDisplay.subtitle_values = {};
+        for (k = 0; k < newValues.length; k++) {
+            formDisplay.subtitle_values[newValues[k]._id] =
+                SessionService.translate(newValues[k]);
+        }
     }
     var initComponents = function() {
         var formDisplay = $scope.form.display;
@@ -175,6 +175,25 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 //if (formDisplay[i].disabled) {
                 //    $scope.data[formDisplay[i].name] = $scope.data[formDisplay[i].name].replace(/\n/g, '<br>');
                 //}
+            } else if (formDisplay[i].display == 'item') {
+                for (var j = 0; j < formValues.length; j++) {
+                    if (formDisplay[i].listofvalues == formValues[j]._id) {
+                        var currentFormDisplay = formDisplay[i];
+                        if (formValues[j].type == 'list') {
+                            $scope.data[currentFormDisplay.items+'_values']= formValues[j].values;
+                        } else {
+                            var itemValues = formValues[j].values;
+                            itemValues.id_list = $scope.data[currentFormDisplay.items];
+                            Value.update({
+                                id: formValues[j]._id,
+                                type: formValues[j].type
+                            }, itemValues).$promise.then(function(resValues) {
+                                $scope.data[currentFormDisplay.items+'_values'] = resValues;
+                            });
+                        }
+                    }
+                }
+
             }
         }
     }
