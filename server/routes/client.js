@@ -69,8 +69,10 @@ router.put('/value/:id', function(req, res, next) {
                 });
                 for (var i in userObjects) {
                     result.values.push({
-                        '_id': userObjects[i]._id,
-                        'en': ((userObjects[i].firstname ? userObjects[i].firstname : '') + ' ' + (userObjects[i].lastname ? userObjects[i].lastname : ''))
+                        _id: userObjects[i]._id,
+                        en: ((userObjects[i].firstname ? userObjects[i].firstname : '') + ' ' + (userObjects[i].lastname ? userObjects[i].lastname : '')),
+                        name: ((userObjects[i].firstname ? userObjects[i].firstname : '') + ' ' + (userObjects[i].lastname ? userObjects[i].lastname : '')),
+                        email: userObjects[i].email
                     });
                 }
                 return res.status(200).json(result);
