@@ -397,6 +397,9 @@
                     <div ng-switch-when="dissociate">
                         <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="dissociate(action.formula, action.next_form_id, action.set_value, data, action.item, action.datamodel, action.id_map)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>
+                    <div ng-switch-when="download">
+                        <md-button flex-gt-xs ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>
+                    </div>
                     <div ng-switch-when="share">
                         <md-button flex-gt-xs ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint, action.email_field_name, action.share_form_id, data)" class="md-primary">{{action.translated_name}}</md-button>
                     </div>

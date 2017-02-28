@@ -26,6 +26,7 @@ router.put('/value/:id', function(req, res, next) {
     });
     var result = {
         _id: req.params.id,
+        index: req.body.index,
         values: []
     };
     if (req.query.type == Constants.ValuesTypeUser) {

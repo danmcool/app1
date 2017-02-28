@@ -77,7 +77,8 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         }
     }
 
-    var updateValuesForm = function(formDisplay, newValues) {
+    var updateValuesForm = function(index, newValues) {
+        var formDisplay = $scope.form.display[index];
         formDisplay.values = [];
         formDisplay.values_key = {};
         for (k = 0; k < newValues.length; k++) {
@@ -89,30 +90,32 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 SessionService.translate(newValues[k]);
         }
     }
-    var updateValuesTitle = function(formDisplay, newValues) {
+    var updateValuesTitle = function(index, newValues) {
+        var formDisplay = $scope.form.display[index];
         formDisplay.title_values = {};
         for (k = 0; k < newValues.length; k++) {
             formDisplay.title_values[newValues[k]._id] =
                 SessionService.translate(newValues[k]);
         }
     }
-    var updateValuesSubTitle = function(formDisplay, newValues) {
+    var updateValuesSubTitle = function(index, newValues) {
+        var formDisplay = $scope.form.display[index];
         formDisplay.subtitle_values = {};
         for (k = 0; k < newValues.length; k++) {
             formDisplay.subtitle_values[newValues[k]._id] =
                 SessionService.translate(newValues[k]);
         }
     }
-    var updateValuesItems = function(formDisplay, newValues) {
-        formDisplay[formDisplay.items + '_values'] = [];
-        for (k = 0; k < newValues.length; k++) {
-            formDisplay[formDisplay.items + '_values'].push(newValues[k]);
-        }
+    var updateValuesItems = function(index, newValues) {
+        var formDisplay = $scope.form.display[index];
+        var valuesFieldName = formDisplay.items + '_values';
+        formDisplay[valuesFieldName] = newValues;
+        $scope.data[formDisplay.items] = newValues;
     }
     var initComponents = function() {
         var formDisplay = $scope.form.display;
         var formValues = $scope.form.values;
-        for (let i = 0; i < formDisplay.length; i++) {
+        for (var i = 0; i < formDisplay.length; i++) {
             if (formDisplay[i].display == 'address') {
                 if (formDisplay[i].disabled) {
                     var field_name = formDisplay[i].name;
@@ -125,13 +128,15 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 for (var j = 0; j < formValues.length; j++) {
                     if (formDisplay[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesForm(formDisplay[i], formValues[j].values);
+                            updateValuesForm(i, formValues[j].values);
                         } else {
+                            var itemValues = formValues[j].values;
+                            itemValues.index = i;
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type
-                            }, formValues[j].values).$promise.then(function(resValues) {
-                                updateValuesForm(formDisplay[i], resValues.values);
+                            }, itemValues).$promise.then(function(resValues) {
+                                updateValuesForm(resValues.index, resValues.values);
                             });
                         }
                         break;
@@ -147,24 +152,28 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 for (var j = 0; j < formValues.length; j++) {
                     if (formDisplay[i].title_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesTitle(formDisplay[i], formValues[j].values);
+                            updateValuesTitle(i, formValues[j].values);
                         } else {
+                            var itemValues = formValues[j].values;
+                            itemValues.index = i;
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type
-                            }, formValues[j].values).$promise.then(function(resValues) {
-                                updateValuesTitle(formDisplay[i], resValues.values);
+                            }, itemValues).$promise.then(function(resValues) {
+                                updateValuesTitle(resValues.index, resValues.values);
                             });
                         }
                     } else if (formDisplay[i].subtitle_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesSubTitle(formDisplay[i], formValues[j].values);
+                            updateValuesSubTitle(i, formValues[j].values);
                         } else {
+                            var itemValues = formValues[j].values;
+                            itemValues.index = i;
                             Value.update({
                                 id: formValues[j]._id,
-                                type: formValues[j].type
-                            }, formValues[j].values).$promise.then(function(resValues) {
-                                updateValuesSubTitle(formDisplay[i], resValues.values);
+                                type: formValues[j].type,
+                            }, itemValues).$promise.then(function(resValues) {
+                                updateValuesSubTitle(resValues.index, resValues.values);
                             });
                         }
                     }
@@ -182,19 +191,21 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 //    $scope.data[formDisplay[i].name] = $scope.data[formDisplay[i].name].replace(/\n/g, '<br>');
                 //}
             } else if (formDisplay[i].display == 'item') {
-                for (let j = 0; j < formValues.length; j++) {
+                for (var j = 0; j < formValues.length; j++) {
                     if (formDisplay[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            $scope.data[formDisplay[i].items + '_values'] = formValues[j].values;
+                            updateValuesItems(i, formValues[j].values);
                         } else {
-                            var itemValues = {};
+                            var itemValues = {
+                                index: i
+                            };
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.data[formDisplay[i].items];
                             Value.update({
                                 id: formValues[j]._id,
-                                type: formValues[j].type
+                                type: formValues[j].type,
                             }, itemValues).$promise.then(function(resValues) {
-                                updateValuesItems(formDisplay[i], resValues.values);
+                                updateValuesItems(resValues.index, resValues.values);
                             });
                         }
                     }
@@ -479,12 +490,46 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             updateErrorAlert();
         });
     }
-    $scope.download = function(data, fields) {
+    $scope.download = function(data, dataFields, fileName) {
+        var content = 'sep=,\n';
+        for (var i = 0; i < dataFields.attributes.length; i++) {
+            content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + (data[dataFields.attributes[i]]+'').replace(/\"/g,'""') + '"' + '\n';
+        }
+        for (var i = 0; i < dataFields.items.length; i++) {
+            content += '"' + dataFields.items[i].name + '"' + ',' + '"' + data[dataFields.items[i].name].length + '"' + '\n';
+            if (data[dataFields.items[i].name].length > 0) {
+                for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
+                    content += '"' + dataFields.items[i].attributes[j] + '"' + ',';
+                }
+                content += '\n';
+                for (var k = 0; k < data[dataFields.items[i].name].length; k++) {
+                    for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
+                        content += '"' + (data[dataFields.items[i].name][k][dataFields.items[i].attributes[j]]+'').replace(/\"/g,'""') + '"' + ',';
+                    }
+                    content += '\n';
+                }
+            }
+        }
         var downloadElement = document.createElement('a');
-        downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent('sep=,\nv1,v2,v3,v5\n4,5,3,6'));
-        downloadElement.setAttribute('download', 'test.csv');
-        downloadElement.click();
-        delete downloadElement;
+        downloadElement.setAttribute('target', '_blank'); //open file in new window
+        if (Blob !== undefined) {
+            var blob = new Blob([content], {
+                type: 'text/csv'
+            });
+            downloadElement.setAttribute('href', URL.createObjectURL(blob));
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(blob, data[fileName] + '.csv');
+            } else {
+                downloadElement.setAttribute("download", data[fileName] + '.csv');
+                downloadElement.click();
+            }
+        } else {
+            downloadElement.setAttribute('href', 'data:text/csv,' + encodeURIComponent(content));
+            downloadElement.setAttribute('download', data[fileName] + '.csv');
+            document.body.appendChild(downloadElement);
+            downloadElement.click();
+            document.body.removeChild(downloadElement);
+        }
     }
     $scope.share = function(formula, nextFormId, setValue, constraint, email_field_name, form_id, data) {
         updateComponents($scope.form, setValue, data);
