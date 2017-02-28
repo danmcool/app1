@@ -479,6 +479,13 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             updateErrorAlert();
         });
     }
+    $scope.download = function(data, fields) {
+        var downloadElement = document.createElement('a');
+        downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent('sep=,\nv1,v2,v3,v5\n4,5,3,6'));
+        downloadElement.setAttribute('download', 'test.csv');
+        downloadElement.click();
+        delete downloadElement;
+    }
     $scope.share = function(formula, nextFormId, setValue, constraint, email_field_name, form_id, data) {
         updateComponents($scope.form, setValue, data);
         Datas.update({
