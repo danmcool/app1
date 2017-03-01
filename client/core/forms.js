@@ -241,15 +241,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         return Math.random().toString(16).substr(2);
     };
 
-    var gotoNextForm = function(formula, nextFormId, data) {
+    var gotoNextForm = function(formula, nextFormId, data, newDataId) {
         if (nextFormId == 'home') {
             $location.url('/workflows/' + $scope.sessionData.application_id);
         } else {
             var formUrl = (data._id ? data._id : '0');
-            formUrl = formUrl + '?skip=0&limit=10';
-            if (nextFormId == $scope.form._id && data._id && data._id == $scope.data._id) {
-                formUrl = formUrl + '&nocache=' + rand();
-            }
+            formUrl = formUrl + '?nocache=' + rand();
             if (formula) {
                 keys = Object.keys(formula);
                 for (i = 0, l = keys.length; i < l; i++) {
@@ -365,7 +362,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.create = function(formula, nextFormId, setValue, data) {
         updateComponents($scope.form, setValue, data);
         $scope.data.$save().then(function(res) {
-            gotoNextForm(formula, nextFormId, data);
+            gotoNextForm(formula, nextFormId, data, data._id);
         }).catch(function(res) {
             $scope.data = res.data;
         });
@@ -426,7 +423,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         updateComponents($scope.form, setValue, data);
         if (datamodel == 'User') {
             for (var i = data[actionItem].length - 1; i >= 0; i--) {
-                if (data[actionItem][i] == $scope.sessionData.userData._id) {
+                if (data[actionItem][i] == $scope.sessionData.userData._id || data[actionItem][i]._id == $scope.sessionData.userData._id) {
                     data[actionItem].splice(i, 1);
                 }
             }
@@ -454,7 +451,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             updateComponents($scope.form, setValue, $scope.data);
             if (datamodel == 'User') {
                 for (var i = $scope.data[fieldName].length - 1; i >= 0; i--) {
-                    if ($scope.data[fieldName][i] == itemId) {
+                    if ($scope.data[fieldName][i]._id == itemId || $scope.data[fieldName][i]._id == itemId) {
                         $scope.data[fieldName].splice(i, 1);
                     }
                 }
@@ -474,7 +471,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         updateComponents($scope.form, setValue, $scope.data);
         if (datamodel == 'User') {
             for (var i = $scope.data[fieldName].length - 1; i >= 0; i--) {
-                if ($scope.data[fieldName][i] == itemId) {
+                if ($scope.data[fieldName][i] == itemId || $scope.data[fieldName][i]._id == itemId) {
                     $scope.data[fieldName].splice(i, 1);
                 }
             }
@@ -493,7 +490,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
     $scope.download = function(data, dataFields, fileName) {
         var content = 'sep=,\n';
         for (var i = 0; i < dataFields.attributes.length; i++) {
-            content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + (data[dataFields.attributes[i]]+'').replace(/\"/g,'""') + '"' + '\n';
+            content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + (data[dataFields.attributes[i]] + '').replace(/\"/g, '""') + '"' + '\n';
         }
         for (var i = 0; i < dataFields.items.length; i++) {
             content += '"' + dataFields.items[i].name + '"' + ',' + '"' + data[dataFields.items[i].name].length + '"' + '\n';
@@ -504,7 +501,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                 content += '\n';
                 for (var k = 0; k < data[dataFields.items[i].name].length; k++) {
                     for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
-                        content += '"' + (data[dataFields.items[i].name][k][dataFields.items[i].attributes[j]]+'').replace(/\"/g,'""') + '"' + ',';
+                        content += '"' + (data[dataFields.items[i].name][k][dataFields.items[i].attributes[j]] + '').replace(/\"/g, '""') + '"' + ',';
                     }
                     content += '\n';
                 }

@@ -41,7 +41,7 @@ router.post('/', function(req, res, next) {
     Metadata.File.create(req.body, function(err, object) {
         if (err) return next(err);
         var params = {
-            Key: req.body._company_code + '/' + object._id,
+            Key: req.body._company_code + '/' + object._id + '/' + object.name,
             ContentType: object.type,
             ACL: 'public-read'
         };
@@ -54,7 +54,7 @@ router.post('/', function(req, res, next) {
                 file: object,
                 signedRequest: data,
                 url: 'http://s3.' + Constants.REGION + '.amazonaws.com/' + Constants.S3_BUCKET + '/' + object._company_code + '/' +
-                    object._id
+                    object._id + '/' + object.name
             }
             res.json(result);
             res.end();
@@ -70,14 +70,13 @@ router.get('/:id', function(req, res, next) {
             'msg': 'Cannot find file object!'
         });
         var params = {
-            Key: req.body._company_code + '/' + object._id
+            Key: req.body._company_code + '/' + object._id + '/' + object.name
         };
         s3Instance.getSignedUrl('getObject', params, function(err, url) {
             if (err) return next(err);
             if (!url) return res.status(400).json({
                 'msg': 'Url is null!'
             });
-            console.log('The URL is', url);
             res.redirect(url);
         });
     });
@@ -113,7 +112,7 @@ router.delete('/:id', function(req, res, next) {
     }, function(err, object) {
         if (err) return next(err);
         var params = {
-            Key: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code + '/' + object._id
+            Key: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code + '/' + object._id + '/' + object.name
         };
         s3Instance.deleteObject(params, function(err, data) {
             if (err) return next(err);
