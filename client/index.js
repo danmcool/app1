@@ -9,6 +9,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         $mdThemingProvider.theme('user2')
             .primaryPalette('pink')
             .accentPalette('orange');
+        $mdThemingProvider.theme('user3')
+            .primaryPalette('blue')
+            .accentPalette('light-blue');
         $mdThemingProvider.alwaysWatchTheme(true);
         $mdThemingProvider.generateThemesOnDemand(false);
     })
@@ -209,6 +212,15 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     .factory('Register', ['$resource',
         function($resource) {
             return $resource('/authentication/register', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
+    .factory('Notify', ['$resource',
+        function($resource) {
+            return $resource('/client/notify/:user_id', null, {
                 'update': {
                     method: 'PUT'
                 }
