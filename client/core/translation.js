@@ -80,6 +80,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Company Settings',
             fr: 'Configuration enterprise'
         },
+        company_logo_url: {
+            en: 'Please prove an URL for company logo',
+            fr: 'Veuillez fournir une URL pour le logo de la société'
+        },
+        company_description: {
+            en: 'Please enter a notice for users',
+            fr: 'Veuillez saisir une information pour les utilisateurs'
+        },
+        saml_settings: {
+            en: 'SSO Configuration using SAML',
+            fr: 'Configuration SSO en utilisant SAML'
+        },
         user_invitation: {
             en: 'Invite Enterprise Users',
             fr: 'Inviter utilisateurs entreprise'
