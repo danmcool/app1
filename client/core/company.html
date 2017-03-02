@@ -6,12 +6,28 @@
             </div>
         </md-toolbar>
         <div style="height:20px"></div>
-        <form name="userForm">
+        <form name="companyForm">
             <md-input-container class="md-block" flex-gt-xs>
                 <label>{{sessionData.appData.company_name}}</label>
                 <input ng-disabled="false" ng-required="true" name="sessionData.appData.company_name" ng-model="company.name" md-minlength="1" md-maxlength="100" ng-minlength="1" ng-maxlength="100">
             </md-input-container>
-            <md-input-container flex-gt-xs class="md-block">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>{{sessionData.appData.company_logo_url}}</label>
+                <input ng-disabled="false" ng-required="true" name="sessionData.appData.company_logo_url" ng-model="company.properties.logo_url" md-minlength="1" md-maxlength="500" ng-minlength="1" ng-maxlength="500">
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>{{sessionData.appData.company_description}}</label>
+                <textarea ng-disabled="false" ng-required="false" name="{{sessionData.appData.company_description}}" ng-model="company.properties.description" md-minlength="0" ng-minlength="0" md-maxlength="2048" ng-maxlength="2048" rows="4"></textarea>
+            </md-input-container>
+            <md-button flex-gt-xs ng-disabled="companyForm.$invalid" ng-click="saveCompanyData()" class="md-primary">{{sessionData.appData.save}}</md-button>
+        </form>
+        <form name="samlForm">
+            <md-toolbar layout="row" class="md-hue-1">
+                <div class="md-toolbar-tools">
+                    <span>{{sessionData.appData.saml_settings}}</span>
+                </div>
+            </md-toolbar>
+            <md-input-container flex-gt-xs class="md-block" aria-label="none">
                 <md-checkbox name="{{sessionData.appData.enable_saml}}" ng-model="company.properties.saml.enabled">{{sessionData.appData.enable_saml}}</md-checkbox>
             </md-input-container>
             <div ng-if="company.properties.saml.enabled">
@@ -35,7 +51,7 @@
                     <textarea ng-disabled="false" ng-required="false" name="{{sessionData.appData.saml_sso_certificate}}" ng-model="company.properties.saml.sso_certificate" md-minlength="0" ng-minlength="0" md-maxlength="4096" ng-maxlength="4096" rows="8"></textarea>
                 </md-input-container>
             </div>
-            <md-button flex-gt-xs ng-disabled="userForm.$invalid" ng-click="saveCompanyData()" class="md-primary">{{sessionData.appData.save}}</md-button>
+            <md-button flex-gt-xs ng-disabled="samlForm.$invalid" ng-click="saveCompanyData()" class="md-primary">{{sessionData.appData.save}}</md-button>
         </form>
     </div>
     <div layout-wrap layout-margin layout-align="center">

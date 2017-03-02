@@ -1,15 +1,21 @@
 <md-content class="md-padding" layout-xs="column" layout="column">
-	<md-card ng-repeat="application in sessionData.applications">
-		<md-card-title>
-			<md-card-title-text>
-				<span class="md-headline">{{application.translated_name}}</span>
-				<span class="md-body-1">{{application.translated_description}}</span>
-			</md-card-title-text>
-			<md-card-actions layout="row" layout-align="end center">
-			   <md-button class="md-fab md-primary" aria-label="Open" ng-click="open(application._id)">
-					<md-icon>{{application.icon}}</md-icon>
-			   </md-button>
-			</md-card-actions>
-		</md-card-title>
-</md-card>
+    <md-card>
+        <md-card-title>
+            <span flex class="md-headline">{{sessionData.userData.company.properties.description}}</span>
+            <img ng-src="{{sessionData.userData.company.properties.logo_url}}" md-card-sm-image>
+        </md-card-title>
+    </md-card>
+    <md-card ng-repeat="application in sessionData.applications">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{application.translated_name}}</span>
+                <span class="md-body-1">{{application.translated_description}}</span>
+            </md-card-title-text>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-fab md-primary" aria-label="Open" ng-click="open(application._id)">
+                    <md-icon>{{application.icon}}</md-icon>
+                </md-button>
+            </md-card-actions>
+        </md-card-title>
+    </md-card>
 </md-content>
