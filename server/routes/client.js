@@ -106,9 +106,27 @@ router.get('/form/:id', function(req, res, next) {
 router.get('/application/', function(req, res, next) {
     var pageOptions = computePage(req);
     Application.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('workflows').exec(function(err,
-        object) {
+        apps) {
         if (err) return next(err);
-        res.json(object);
+        var remoteProfiles = SessionCache.userData[req.cookies[Constants.SessionCookie]].remote_profiles;
+        for (var i = 0; i < apps.length; i++) {
+            var profileFound = Constants.UserProfileApplicationTypeDefault;
+            for (var j = 0; j < remoteProfiles.length; j++) {
+                if (remoteProfiles[j].type == Constants.UserProfileApplication && remoteProfiles[j].properties.application_id == apps[i]._id) {
+                    profileFound = remoteProfiles[j].properties.application_type;
+                    break;
+                }
+            }
+            var appProfile = apps[i].profiles[profileFound];
+            if (appProfile) {
+                for (var j = apps[i].workflows.length - 1; j >= 0; j--) {
+                    if (!appProfile[apps[i].workflows[j]._id]) {
+                        apps[i].workflows.splice(j, 1);
+                    }
+                }
+            }
+        }
+        res.json(apps);
     });
 });
 

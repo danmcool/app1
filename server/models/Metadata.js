@@ -81,6 +81,7 @@ var ApplicationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Workflow'
     }],
+    profiles: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now
@@ -91,9 +92,9 @@ Metadata.Application = mongoose.model('Application', ApplicationSchema);
 
 var UserProfileSchema = new Schema({
     name: Schema.Types.Mixed,
-    type: String, // administrator/private/public/share
+    type: String, // administrator/private/public/share/application
     profile: Schema.Types.Mixed,
-    properties: Schema.Types.Mixed, // language (en/fr, etc), color theme, alerts, etc.
+    properties: Schema.Types.Mixed, // application,
     _updated_at: {
         type: Date,
         default: Date.now
@@ -126,11 +127,17 @@ var CompanySchema = new Schema({
         type: Date,
         default: Date.now
     },
-    _company_code: { type: String, unique: true }
+    _company_code: {
+        type: String,
+        unique: true
+    }
 });
 Metadata.Company = mongoose.model('Company', CompanySchema);
 var UserSchema = new Schema({
-    user: { type: String, unique: true },
+    user: {
+        type: String,
+        unique: true
+    },
     password: String,
     email: String,
     firstname: String,
@@ -156,7 +163,7 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    reports:  [{
+    reports: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],

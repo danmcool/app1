@@ -262,6 +262,8 @@
                 <option value="administrator">Administrator</option>
                 <option value="private">Private</option>
                 <option value="public">Public</option>
+                <option value="share">Share</option>
+                <option value="application">Application</option>
             </select>
         </p>
         <p>Company code:
@@ -270,6 +272,10 @@
         <p>Profile:
             <br>
             <textarea json-text ng-model="userprofile.profile" rows="3" cols="60"></textarea>
+        </p>
+        <p>Properties:
+            <br>
+            <textarea json-text ng-model="userprofile.properties" rows="3" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin#/userprofiles">Cancel</a>
@@ -410,6 +416,10 @@
         <p>Workflows:
             <br>
             <textarea json-text ng-model="application.workflows" rows="10" cols="60"></textarea>
+        </p>
+        <p>Profiles:
+            <br>
+            <textarea json-text ng-model="application.profiles" rows="6" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin#/applications">Cancel</a>

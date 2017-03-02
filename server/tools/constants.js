@@ -24,6 +24,7 @@ const Constants = {
     UserProfilePrivate: 'private',
     UserProfileShare: 'share',
     UserProfilePublic: 'public',
+    UserProfileApplication: 'application',
     UserProfileAdministratorDefault: {
         list: {
             _company_code: '@@company_code'
@@ -79,6 +80,7 @@ const Constants = {
             _user: ['@@public']
         }
     },
+    UserProfileApplicationTypeDefault: 'default',
 
     S3_BUCKET: 'app1data',
     REGION: 'eu-central-1',
