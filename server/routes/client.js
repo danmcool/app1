@@ -105,7 +105,11 @@ router.get('/form/:id', function(req, res, next) {
 
 router.get('/application/', function(req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('workflows').exec(function(err,
+    Application.find(SessionCache.filterApplicationCompanyCode(req, {
+        '_id': {
+            '$in': SessionCache.userData[req.cookies[Constants.SessionCookie]].company.applications
+        }
+    })).skip(pageOptions.skip).limit(pageOptions.limit).populate('workflows').exec(function(err,
         apps) {
         if (err) return next(err);
         var remoteProfiles = SessionCache.userData[req.cookies[Constants.SessionCookie]].remote_profiles;
@@ -271,6 +275,29 @@ router.get('/calendar', function(req, res, next) {
             msg: 'Calendar sent!'
         });
         Email.sendCalendar(userObject.email, req.query.project_name, req.query.start_date, req.query.end_date, ((userObject.firstname ? userObject.firstname : '') + ' ' + (userObject.lastname ? userObject.lastname : '')));
+    });
+});
+
+router.put('/notify/:user_id', function(req, res, next) {
+    if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
+        err: 'Not logged in!'
+    });
+    if (!req.body.email_title || !req.body.email_html) return res.status(400).json({
+        err: 'Invalid parameters!'
+    });
+    User.findOne({
+        _id: req.params.user_id,
+        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
+        validated: true
+    }, 'email firstname lastname').exec(function(errUser, userObject) {
+        if (errUser) return next(err);
+        if (!userObject) return res.status(400).json({
+            err: 'Invalid parameters!'
+        });
+        res.status(200).json({
+            msg: 'Email sent!'
+        });
+        Email.send(userObject.email, null, req.body.email_title, 'Automatic message from App1', req.body.email_html.replace(/@@user/g, ((userObject.firstname ? userObject.firstname : '') + ' ' + (userObject.lastname ? userObject.lastname : ''))));
     });
 });
 
