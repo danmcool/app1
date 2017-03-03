@@ -114,6 +114,7 @@ router.get('/application/', function(req, res, next) {
         if (err) return next(err);
         var remoteProfiles = SessionCache.userData[req.cookies[Constants.SessionCookie]].remote_profiles;
         for (var i = 0; i < apps.length; i++) {
+            if (!apps[i].profiles) continue;
             var profileFound = Constants.UserProfileApplicationTypeDefault;
             for (var j = 0; j < remoteProfiles.length; j++) {
                 if (remoteProfiles[j].type == Constants.UserProfileApplication && remoteProfiles[j].properties.application_id == apps[i]._id) {
