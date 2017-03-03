@@ -284,7 +284,7 @@
                         <div ng-switch-when="true">
                             <p class="subtitle">{{field.translated_name}}</p>
                             <div ng-repeat="file in data._files">
-                                <a class="md-body-2" href="/file/{{file._id}}">
+                                <a class="md-body-2" href="/file/{{file._id}}" target="_blank">
                                     <p class="md-body-2">{{file.name}}</p>
                                 </a>
                             </div>
@@ -293,7 +293,7 @@
                             <p class="subtitle">{{field.translated_name}}</p>
                             <div ng-repeat="file in data._files">
                                 <p class="md-body-2">
-                                    <a class="md-body-2" href="/file/{{file._id}}">{{file.name}}</a>
+                                    <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
                                     <md-button flex-gt-xs ng-click="removeFile(file._id)" class="md-primary">X</md-button>
                                 </p>
                             </div>
