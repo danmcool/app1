@@ -79,8 +79,15 @@
         </md-content>
     </md-sidenav>
 
-    <md-content ng-view>
-    </md-content>
+    <div layout="row">
+        <div style="width: 10%" hide-xs>
+        </div>
+        <div layout-padding flex>
+            <md-content flex ng-view class="fade"></md-content>
+        </div>
+        <div style="width: 10%" hide-xs>
+        </div>
+    </div>
 </body>
 
 </html>
