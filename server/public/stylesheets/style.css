@@ -84,3 +84,8 @@
 .fade.ng-enter-active {
     opacity: 1;
 }
+
+md-datepicker .md-datepicker-input {
+  width: calc(30vw - 64px);
+  max-width: calc(30vw - 64px);
+}
