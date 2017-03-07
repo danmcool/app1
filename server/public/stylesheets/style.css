@@ -89,3 +89,7 @@ md-datepicker .md-datepicker-input {
   width: calc(30vw - 64px);
   max-width: calc(30vw - 64px);
 }
+
+pre{
+    white-space: pre-wrap;
+}
