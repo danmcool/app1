@@ -63,6 +63,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             maps[mapId] = new google.maps.Map(document.getElementById(mapId), {
                 zoom: 2,
                 scrollwheel: false,
+                navigationControl: false,
+                mapTypeControl: false,
+                scaleControl: false,
+                draggable: false,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
         }

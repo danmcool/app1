@@ -13,7 +13,7 @@
                     <div ng-switch="field.display" flex="auto">
 
                         <div ng-switch-when="list">
-                            <md-list flex="auto" layout-padding infinite-scroll="getNextData()" infinite-scroll-distance="10">
+                            <md-list flex="auto" infinite-scroll="getNextData()" infinite-scroll-distance="10">
                                 <md-list-item class="md-3-line" ng-repeat="data in datas">
                                     <div class="md-list-item-text" layout="column">
                                         <div ng-switch="field.title_display">
@@ -111,7 +111,7 @@
                                     <p class="subtitle">{{data[field.name]}}</p>
                                 </div>
                                 <div ng-switch-when="false">
-                                    <md-input-container>
+                                    <md-input-container class="md-block">
                                         <label>{{field.translated_name}}</label>
                                         <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="data[field.name]" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max">
                                         <div ng-messages="dynamicForm.$field.name.$error" role="alert">
@@ -155,7 +155,7 @@
                             <div ng-switch="field.disabled">
                                 <div ng-switch-when="true">
                                     <p class="md-body-1">{{field.translated_name}}</p>
-                                    <p class="subtitle" style="white-space:pre">{{data[field.name]}}</p>
+                                    <p class="subtitle" style="white-space:pre-wrap">{{data[field.name]}}</p>
                                 </div>
                                 <div ng-switch-when="false">
                                     <md-input-container flex="auto" class="md-block">
@@ -181,9 +181,7 @@
                         <div ng-switch-when="file">
                             <div ng-switch="field.disabled">
                                 <div ng-switch-when="true">
-                                    <div layout-padding>
-                                        <p class="md-body-1">{{field.translated_name}}</p>
-                                    </div>
+                                    <p class="md-body-1">{{field.translated_name}}</p>
                                     <div ng-repeat="file in data._files">
                                         <a class="md-body-2" href="/file/{{file._id}}" target="_blank">
                                             <p class="subtitle">{{file.name}}</p>
@@ -191,9 +189,7 @@
                                     </div>
                                 </div>
                                 <div ng-switch-when="false">
-                                    <div layout-padding>
-                                        <p class="subtitle">{{field.translated_name}}</p>
-                                    </div>
+                                    <p class="subtitle">{{field.translated_name}}</p>
                                     <div ng-repeat="file in data._files">
                                         <p class="subtitle">
                                             <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
@@ -226,11 +222,9 @@
                         </div>
 
                         <div ng-switch-when="check">
-                            <div layout-padding>
-                                <md-input-container>
-                                    <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="data[field.name]">{{field.translated_name}}</md-checkbox>
-                                </md-input-container>
-                            </div>
+                            <md-input-container>
+                                <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="data[field.name]">{{field.translated_name}}</md-checkbox>
+                            </md-input-container>
                         </div>
 
                         <div ng-switch-when="calendar">
@@ -249,20 +243,18 @@
                         </div>
 
                         <div ng-switch-when="calculation" flex class="md-block">
-                            <div layout-padding>
-                                <p class="md-body-1">{{field.translated_name}}</p>
-                                <p class="subtitle">{{field.calculation_value}}</p>
-                            </div>
+                            <p class="md-body-1">{{field.translated_name}}</p>
+                            <p class="subtitle">{{field.calculation_value}}</p>
                         </div>
 
-                        <div ng-switch-when="email" flex class="md-block">
+                        <div ng-switch-when="email">
                             <div ng-switch="field.disabled">
                                 <div ng-switch-when="true">
                                     <p class="md-body-1">{{field.translated_name}}</p>
                                     <p class="subtitle">{{data[field.name]}}</p>
                                 </div>
                                 <div ng-switch-when="false">
-                                    <md-input-container>
+                                    <md-input-container class="md-block">
                                         <label>{{field.translated_name}}</label>
                                         <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="data[field.name]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" c="/^.+@.+\..+$/" />
                                         <div ng-messages="dynamicForm.$field.name.$error" role="alert">
@@ -278,9 +270,9 @@
                         <div ng-switch-when="address">
                             <div ng-switch="field.disabled">
                                 <div ng-switch-when="true">
-                                    <p class="md-body-1" layout-padding>{{field.translated_name}}</p>
-                                    <div layout="row">
-                                        <div flex="60" layout="column" layout-padding>
+                                    <p class="md-body-1">{{field.translated_name}}</p>
+                                    <div layout="row" layout-xs="column" layout-sm="column">
+                                        <div flex="60" flex-xs="100" flex-sm="100" layout="column">
                                             <div flex layout="row">
                                                 <div flex layout="column">
                                                     <p class="md-body-1">{{field.address_line1_translated_name}}</p>
@@ -288,11 +280,11 @@
                                                     <p class="md-body-1">{{field.address_city_translated_name}}</p>
                                                     <p class="subtitle">{{data[field.name].address_city}}</p>
                                                     <p class="md-body-1">{{field.address_state_translated_name}}</p>
-                                                    <p class="subtitle">{{data[field.name].address_state}}</p>
+                                                    <p class="subtitle">{{data[field.name].address_state?data[field.name].address_stateL:'&nbsp;'}}</p>
                                                 </div>
                                                 <div flex layout="column">
                                                     <p class="md-body-1">{{field.address_line2_translated_name}}</p>
-                                                    <p class="subtitle">{{data[field.name].address_line2}}</p>
+                                                    <p class="subtitle">{{data[field.name].address_line2?data[field.name].address_line2:'&nbsp;'}}</p>
                                                     <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
                                                     <p class="subtitle">{{data[field.name].address_postal_code}}</p>
                                                     <p class="md-body-1">{{field.address_country_translated_name}}</p>
@@ -300,12 +292,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div flex="40" id="map{{field.name}}" style="width:100%;height:350px;background-color:grey"></div>
+                                        <div flex="40" flex-xs="100" flex-sm="100" layout-align="center center" id="map{{field.name}}" style="width:100%;height:350px;background-color:grey"></div>
                                     </div>
                                 </div>
                                 <div ng-switch-when="false">
                                     <p class="subtitle" layout-padding>{{field.translated_name}}</p>
-                                    <br>
                                     <md-input-container class="md-block">
                                         <label>{{field.address_line1_translated_name}}</label>
                                         <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="data[field.name].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">

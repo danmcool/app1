@@ -2,7 +2,7 @@
     <md-card>
         <md-card-title>
             <span flex class="md-headline">{{sessionData.userData.company.properties.description}}</span>
-            <img ng-src="{{sessionData.userData.company.properties.logo_url}}" md-card-sm-image>
+            <img ng-src="{{sessionData.userData.company.properties.logo_url}}" md-card-sm-image style="max-height: 75px">
         </md-card-title>
     </md-card>
     <md-card ng-repeat="application in sessionData.applications">
