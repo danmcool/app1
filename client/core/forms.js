@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $mdDialog, Forms, Value, Share, Calendar, DataModels, Files, Datas, SessionService, MapService, Notify) {
+app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $route, $mdDialog, Forms, Value, Share, Calendar, DataModels, Files, Datas, SessionService, MapService, Notify) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function() {
@@ -251,19 +251,31 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
         return Math.random().toString(16).substr(2);
     };
 
-    var gotoNextForm = function(formula, nextFormId, data, newDataId) {
+    var gotoNextForm = function(formula, nextFormId, data) {
         if (nextFormId == 'home') {
             $location.url('/workflows/' + $scope.sessionData.application_id);
         } else {
-            var formUrl = (data._id ? data._id : '0');
-            formUrl = formUrl + '?nocache=' + rand();
-            if (formula) {
-                keys = Object.keys(formula);
-                for (i = 0, l = keys.length; i < l; i++) {
-                    formUrl = formUrl + '&' + keys[i] + '=' + data[formula[keys[i]]];
+            var formUrl;
+            if (data && data._id) {
+                formUrl = data._id;
+                if (formula) {
+                    keys = Object.keys(formula);
+                    if (keys.length > 0) {
+                        formUrl = formUrl + '?';
+                    }
+                    for (i = 0; i < keys.length; i++) {
+                        formUrl = formUrl + '&' + keys[i] + '=' + data[formula[keys[i]]];
+                    }
                 }
+            } else {
+                formUrl = '0';
             }
-            $location.url('/form/' + nextFormId + '/' + formUrl);
+            formUrl = '/form/' + nextFormId + '/' + formUrl;
+            if (formUrl != $location.path()) {
+                $location.url(formUrl);
+            } else {
+                $route.reload();
+            }
         }
     }
 
@@ -397,7 +409,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                     notify(data._user, emailTitle, emailHtml);
                 }
             }
-            gotoNextForm(formula, nextFormId, data, data._id);
+            gotoNextForm(formula, nextFormId, null);
         }).catch(function(res) {
             $scope.data = res.data;
         });
@@ -415,7 +427,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                     notify(data._user, emailTitle, emailHtml);
                 }
             }
-            gotoNextForm(formula, nextFormId, data);
+            gotoNextForm(formula, nextFormId, null);
         }).catch(function(res) {
             $scope.data = res.data;
             updateErrorAlert();
@@ -443,7 +455,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
                             notify(data._user, emailTitle, emailHtml);
                         }
                     }
-                    gotoNextForm(formula, nextFormId, data);
+                    gotoNextForm(formula, nextFormId, null);
                 })
                 .catch(function(res) {
                     /* show error*/
@@ -459,6 +471,16 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $md
             }
         }
         gotoNextForm(formula, nextFormId, data);
+    }
+    $scope.linkEmpty = function(formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+        if (notifyUser) {
+            if (notifyUser == 'current') {
+                notify($scope.sessionData.userData._id, emailTitle, emailHtml);
+            } else if (notifyUser == 'owner') {
+                notify(data._user, emailTitle, emailHtml);
+            }
+        }
+        gotoNextForm(formula, nextFormId, null);
     }
     $scope.associate = function(formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, data);

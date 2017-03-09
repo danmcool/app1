@@ -384,6 +384,9 @@
                             <div ng-switch-when="link">
                                 <md-button ng-click="link(action.formula, action.next_form_id, data, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
+                            <div ng-switch-when="link_empty">
+                                <md-button ng-click="linkEmpty(action.formula, action.next_form_id, data, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                            </div>
                             <div ng-switch-when="associate">
                                 <md-button ng-disabled="dynamicForm.$invalid" ng-click="associate(action.formula, action.next_form_id, action.set_value, data, action.item, action.datamodel, action.id_map, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
