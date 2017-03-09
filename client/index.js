@@ -237,7 +237,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         $scope.$watch(function() {
             return SessionService.getSessionData();
         }, function(newValue, oldValue) {
-            if (newValue !== oldValue) $scope.sessionData = newValue;
+            if (newValue != oldValue) $scope.sessionData = newValue;
         });
 
         UserStatus.get().$promise.then(function(result) {

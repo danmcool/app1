@@ -1,21 +1,27 @@
-<md-content layout-padding ng-controller="LoginCtrl">
-    <div layout-wrap layout-margin layout-align="center">
-        <md-toolbar layout="row" class="md-hue-1">
-            <div class="md-toolbar-tools">
-                <span>{{sessionData.appData.enter_credentials}}</span>
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex class="fade">
+            <div layout-wrap layout-margin layout-align="center">
+                <md-toolbar layout="row" class="md-hue-1">
+                    <div class="md-toolbar-tools">
+                        <span>{{sessionData.appData.enter_credentials}}</span>
+                    </div>
+                </md-toolbar>
+                <div style="height:20px"></div>
+                <form name="loginForm">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>{{sessionData.appData.user_name}}</label>
+                        <input ng-disabled="false" ng-required="true" name="user" ng-model="user">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>{{sessionData.appData.password}}</label>
+                        <input ng-disabled="false" ng-required="true" name="password" type="password" ng-model="password">
+                    </md-input-container>
+                    <md-button flex-gt-xs ng-disabled="loginForm.$invalid" type="submit" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
+                </form>
             </div>
-        </md-toolbar>
-        <div style="height:20px"></div>
-        <form name="loginForm">
-            <md-input-container class="md-block" flex-gt-xs>
-                <label>{{sessionData.appData.user_name}}</label>
-                <input ng-disabled="false" ng-required="true" name="user" ng-model="user">
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs>
-                <label>{{sessionData.appData.password}}</label>
-                <input ng-disabled="false" ng-required="true" name="password" type="password" ng-model="password">
-            </md-input-container>
-            <md-button flex-gt-xs ng-disabled="loginForm.$invalid" type="submit" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
-        </form>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
     </div>
 </md-content>
