@@ -1,4 +1,63 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $route, $mdDialog, Forms, Value, Share, Calendar, DataModels, Files, Datas, SessionService, MapService, Notify) {
+app1.factory('Forms', ['$resource',
+    function($resource) {
+        return $resource('/client/form/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Value', ['$resource',
+    function($resource) {
+        return $resource('/client/value/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Share', ['$resource',
+    function($resource) {
+        return $resource('/client/share', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Calendar', ['$resource',
+    function($resource) {
+        return $resource('/client/calendar', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('DataModels', ['$resource',
+    function($resource) {
+        return $resource('/api/datamodel/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Files', ['$resource',
+    function($resource) {
+        return $resource('/file/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Datas', ['$resource',
+    function($resource) {
+        return $resource('/data/:datamodel_id/:entry_id', {
+            datamodel_id: '@datamodel_id',
+            entry_id: '@entry_id'
+        }, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).controller('FormDetailsCtrl', function($scope, $routeParams, $location, $route, $mdDialog, Forms, Value, Share, Calendar, DataModels, Files, Datas, SessionService, MapService, Notify) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function() {
@@ -217,7 +276,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
 
     Forms.get({
         id: $routeParams.id
-    }, function(form, $resource) {
+    }, function(form) {
         $scope.form = form;
         var formDisplay = $scope.form.display;
         $scope.form.fields = [];
@@ -240,7 +299,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             Datas.get({
                 datamodel_id: $scope.form.datamodel._id,
                 entry_id: $routeParams.entry_id
-            }).$promise.then(function(data) {
+            }, function(data) {
                 $scope.data = data;
                 initComponents();
             });

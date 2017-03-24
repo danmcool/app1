@@ -11,6 +11,8 @@ var User = Metadata.User;
 var Company = Metadata.Company;
 var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
+var Workflow = Metadata.Workflow;
+var Form = Metadata.Form;
 
 var computePage = function(req) {
     return pageOptions = {
@@ -134,6 +136,117 @@ router.get('/application/', function(req, res, next) {
         res.json(apps);
     });
 });
+
+router.get('/design/application', function(req, res, next) {
+    var pageOptions = computePage(req);
+    Application.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+        apps) {
+        if (err) return next(err);
+        res.json(apps);
+    });
+});
+router.post('/design/application/', function(req, res, next) {
+    SessionCache.filterCompanyCode(req, {});
+    Application.create(req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/design/application/:id/', function(req, res, next) {
+    Application.findOne(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    })).populate('workflows').exec(function(err, apps) {
+        if (err) return next(err);
+        res.json(apps);
+    });
+});
+router.put('/design/application/:id', function(req, res, next) {
+    Application.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.delete('/design/application/:id', function(req, res, next) {
+    Application.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+
+router.post('/design/workflow/:id', function(req, res, next) {
+    SessionCache.filterCompanyCode(req, {});
+    Workflow.create(req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/design/workflow/:id', function(req, res, next) {
+    Workflow.findOne(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    })).populate('forms').exec(function(err,
+        object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.put('/design/workflow/:id', function(req, res, next) {
+    Workflow.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.delete('/design/workflow/:id', function(req, res, next) {
+    Workflow.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+
+router.post('/design/form', function(req, res, next) {
+    SessionCache.filterCompanyCode(req, {});
+    Form.create(req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/design/form/:id', function(req, res, next) {
+    Metadata.Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
+        _id: {
+            '$eq': req.params.id
+        }
+    })).populate('datamodel values').exec(function(err, formObject) {
+        if (err) return next(err);
+        if (!formObject) return res.status(400).json({
+            msg: 'Url is null!'
+        });
+        return res.status(200).json(formObject);
+    });
+});
+router.put('/form/:id', function(req, res, next) {
+    Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.delete('/form/:id', function(req, res, next) {
+    Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+
 
 router.put('/user/:id', function(req, res, next) {
     if (req.body.user) req.body.user = req.body.user.toLowerCase();

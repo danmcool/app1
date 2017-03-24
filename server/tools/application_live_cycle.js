@@ -18,7 +18,7 @@ var replaceFormDataModel = function(formId, oldDataModel, newDataModel) {
             }
         }, function(error) {
             if (error) console.log(error);
-        });;
+        });
     }
 }
 ApplicationLiveCycle.copyDataModel = function(currentDataModelId, _company_code, objectList, newFormId) {

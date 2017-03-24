@@ -65,7 +65,11 @@ var WorkflowSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
     icon: String,
-    startup_form_id: Schema.Types.ObjectId,
+    startup_form: Schema.Types.ObjectId,
+    forms: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Form'
+    }],
     _updated_at: {
         type: Date,
         default: Date.now

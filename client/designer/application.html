@@ -1,0 +1,23 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex layout="column" class="fade">
+
+            <md-list>
+                <md-list-item class="md-2-line" ng-click="edit(app._id)">
+                    <div class="md-list-item-text">
+                        <h3>{{sessionData.appData.new_workflow}}</h3>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-subheader class="md-no-sticky">{{sessionData.appData.choose_workflow}}</md-subheader>
+                <md-list-item class="md-2-line" ng-repeat="workflow in application.workflows" ng-click="edit(app._id)">
+                    <div class="md-list-item-text">
+                        <h3>{{workflow.translated_name}}</h3>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

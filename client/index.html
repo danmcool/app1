@@ -30,6 +30,9 @@
     <script src="core/workflows.js"></script>
     <script src="core/forms.js"></script>
     <script src="core/translation.js"></script>
+    <script src="designer/designer.js"></script>
+    <script src="designer/application.js"></script>
+    <script src="designer/workflow.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
 
     <md-toolbar md-scroll-shrink class="md-hue-2">
@@ -73,6 +76,7 @@
             <md-button ng-if="!sessionData.userData.title" ng-href="#login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
             <md-button ng-if="!sessionData.userData.title" ng-href="#register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="/admin" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.administration}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>

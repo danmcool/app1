@@ -1,0 +1,25 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex layout="column" class="fade">
+            <md-list>
+                <md-list-item class="md-2-line" ng-click="newApplication()">
+                    <div class="md-list-item-text">
+                        <h3>{{sessionData.appData.new_app}}</h3>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-subheader class="md-no-sticky">{{sessionData.appData.choose_app}}</md-subheader>
+                <md-list-item class="md-2-line" ng-repeat="app in applications" ng-click="edit(app._id)">
+                    <md-switch ng-model="app.enabled" ng-click="updateCompanyApps(app)" aria-label="Show App"></md-switch>
+                    <div class="md-list-item-text">
+                        <h3>{{app.translated_name}}</h3>
+                    </div>
+                    <md-icon class="md-secondary" ng-click="edit(app._id)" aria-label="Edit">edit</md-icon>
+                    <md-icon class="md-secondary" ng-click="delete(app)" aria-label="Delete">delete</md-icon>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

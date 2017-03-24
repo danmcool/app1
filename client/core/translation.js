@@ -8,6 +8,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Choose an application',
             fr: 'Choisir une application'
         },
+        new_app: {
+            en: 'New application...',
+            fr: 'Nouvelle application...'
+        },
+        new_app_name: {
+            en: 'Name of the application:',
+            fr: 'Nom de l`application:'
+        },
+        app_designer: {
+            en: 'Application Designer',
+            fr: 'Editeur d`application'
+        },
         home: {
             en: 'Home',
             fr: 'Accueil'
