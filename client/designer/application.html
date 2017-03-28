@@ -2,21 +2,44 @@
     <div layout="row">
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex layout="column" class="fade">
-
-            <md-list>
-                <md-list-item class="md-2-line" ng-click="edit(app._id)">
-                    <div class="md-list-item-text">
-                        <h3>{{sessionData.appData.new_workflow}}</h3>
-                    </div>
-                </md-list-item>
-                <md-divider></md-divider>
-                <md-subheader class="md-no-sticky">{{sessionData.appData.choose_workflow}}</md-subheader>
-                <md-list-item class="md-2-line" ng-repeat="workflow in application.workflows" ng-click="edit(app._id)">
-                    <div class="md-list-item-text">
-                        <h3>{{workflow.translated_name}}</h3>
-                    </div>
-                </md-list-item>
-            </md-list>
+            <form>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.new_app_name}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <md-icon ng-click="editText(application,'name', false)">language</md-icon>
+                </md-input-container>
+                <md-input-container>
+                    <label>{{sessionData.appData.app_icon}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <md-icon>{{application.icon}}</md-icon>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.app_description}}</label>
+                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4"></textarea>
+                    <md-icon ng-click="editText(application, 'description', true)">language</md-icon>
+                </md-input-container>
+                <md-list>
+                    <md-list-item class="md-2-line" ng-click="newWorkflow()">
+                        <div class="md-list-item-text">
+                            <h3>{{sessionData.appData.new_workflow}}</h3>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-subheader class="md-no-sticky">{{sessionData.appData.list_workflow}}</md-subheader>
+                    <md-list-item class="md-2-line" ng-repeat="workflow in application.workflows">
+                        <div class="md-list-item-text">
+                            <h3>{{workflow.translated_name}}</h3>
+                        </div>
+                        <md-button class="md-secondary" ng-click="editWorkflow(workflow._id)" aria-label="Edit">
+                            <md-icon>edit</md-icon>
+                        </md-button>
+                        <md-button class="md-secondary" ng-click="delete(workflow)" aria-label="Delete">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+                <md-button flex-gt-xs type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+            </form>
         </div>
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
     </div>

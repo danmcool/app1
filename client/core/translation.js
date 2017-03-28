@@ -4,21 +4,65 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Application ONE',
             fr: 'Application ONE'
         },
-        choose_app: {
-            en: 'Choose an application',
-            fr: 'Choisir une application'
-        },
         new_app: {
             en: 'New application...',
             fr: 'Nouvelle application...'
         },
         new_app_name: {
-            en: 'Name of the application:',
-            fr: 'Nom de l`application:'
+            en: 'Name of the application',
+            fr: 'Nom de l`application'
+        },
+        app_description: {
+            en: 'Application Description',
+            fr: 'Description de l`application'
+        },
+        app_icon: {
+            en: 'Icon:',
+            fr: 'Icône:'
+        },
+        list_app: {
+            en: 'Application List',
+            fr: 'Liste des applications'
         },
         app_designer: {
             en: 'Application Designer',
             fr: 'Editeur d`application'
+        },
+        text_translation: {
+            en: 'Text Translation',
+            fr: 'Traduction de texte'
+        },
+        new_workflow: {
+            en: 'New workflow...',
+            fr: 'Nouveau processus...'
+        },
+        new_workflow_name: {
+            en: 'Workflow Name',
+            fr: 'Nom du processus'
+        },
+        workflow_description: {
+            en: 'Workflow Description',
+            fr: 'Description du processus'
+        },
+        list_workflow: {
+            en: 'Workflow List',
+            fr: 'Liste des processus'
+        },
+        startup_form: {
+            en: 'Startup Form',
+            fr: 'Formulaire de démarrage'
+        },
+        new_form: {
+            en: 'New form...',
+            fr: 'Nouveau formulaire...'
+        },
+        new_form_name: {
+            en: 'Form Name',
+            fr: 'Nom du formulaire'
+        },
+        list_form: {
+            en: 'Form List',
+            fr: 'Liste des formulaires'
         },
         home: {
             en: 'Home',

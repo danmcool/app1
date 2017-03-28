@@ -177,7 +177,7 @@ router.delete('/design/application/:id', function(req, res, next) {
     });
 });
 
-router.post('/design/workflow/:id', function(req, res, next) {
+router.post('/design/workflow/', function(req, res, next) {
     SessionCache.filterCompanyCode(req, {});
     Workflow.create(req.body, function(err, object) {
         if (err) return next(err);

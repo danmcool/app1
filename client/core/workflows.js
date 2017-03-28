@@ -28,10 +28,10 @@ app1.controller('WorkflowsCtrl',
         }
 
         $scope.$watch(function() {
-            return SessionService.getSessionData();
+            return SessionService.getSessionData().applications;
         }, function(newValue, oldValue) {
             if (newValue != oldValue) {
-                $scope.sessionData = newValue;
+                $scope.sessionData = SessionService.getSessionData();
                 initWorkflows();
             }
         });

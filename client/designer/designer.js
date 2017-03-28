@@ -15,6 +15,8 @@ app1.factory('DesignApplication', ['$resource',
     }, function(newValue, oldValue) {
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
+            $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+            SessionService.setSessionData($scope.sessionData);
         }
     });
 
@@ -129,7 +131,7 @@ app1.factory('DesignApplication', ['$resource',
         });
     }
 
-    $scope.edit = function(application_id) {
-        $location.url('/application_edit/' + application_id);
+    $scope.edit = function(applicationId) {
+        $location.url('/application_edit/' + applicationId);
     }
 });

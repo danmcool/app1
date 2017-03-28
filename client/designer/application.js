@@ -6,7 +6,15 @@ app1.factory('DesignApplication', ['$resource',
             }
         });
     }
-]).controller('ApplicationEditCtrl', function($scope, SessionService, DesignApplication, $location, $routeParams) {
+]).factory('DesignWorkflow', ['$resource',
+    function($resource) {
+        return $resource('/client/design/workflow/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).controller('ApplicationEditCtrl', function($scope, SessionService, DesignApplication, DesignWorkflow, $location, $routeParams, $mdDialog) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function() {
         return SessionService.getSessionData();
@@ -18,15 +26,74 @@ app1.factory('DesignApplication', ['$resource',
 
     DesignApplication.get({
         id: $routeParams.id
-    }, function(result, err) {
-        for (var i = 0; i < result.workflows.length; i++) {
-            result.workflows[i].translated_name = SessionService.translate(result.workflows[i].name);
-            result.workflows[i].translated_description = SessionService.translate(result.workflows[i].description);
+    }, function(resultApp, err) {
+        for (var i = 0; i < resultApp.workflows.length; i++) {
+            resultApp.workflows[i].translated_name = SessionService.translate(resultApp.workflows[i].name);
+            resultApp.workflows[i].translated_description = SessionService.translate(resultApp.workflows[i].description);
         }
-        $scope.application = result;
+        $scope.application = resultApp;
     });
 
-    $scope.open = function(application_id) {
-        $location.url('/workflows/' + application_id);
+    $scope.editText = function(object, property, multipleLines) {
+        $mdDialog.show({
+            templateUrl: 'designer/text.html',
+            controller: 'TextCtrl',
+            locals: {
+                text: object[property],
+                multipleLines: multipleLines
+            },
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        }).then(function(result) {
+            object[property] = result;
+        });
+    };
+
+    $scope.editWorkflow = function(workflowId) {
+        DesignApplication.update({
+            id: $scope.application._id
+        }, $scope.application).$promise.then(function(res) {
+            SessionService.init();
+            $location.url('/workflow_edit/' + workflowId + '?application_id=' + $scope.application._id);
+        }).catch(function(res) {
+            $scope.application = res.application;
+            updateErrorAlert();
+        });
     }
+
+    $scope.newWorkflow = function() {
+        $mdDialog.show(
+            $mdDialog.prompt()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_workflow)
+            .textContent($scope.sessionData.appData.new_workflow_name)
+            .initialValue('My Workflow')
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)
+        ).then(function(result) {
+            var newWorkflow = new DesignWorkflow({
+                name: {
+                    en: result
+                }
+            });
+            newWorkflow.$save(function() {
+                newWorkflow.translated_name = newWorkflow.name.en;
+                $scope.application.workflows.push(newWorkflow);
+            });
+        });
+    }
+
+    $scope.save = function() {
+        DesignApplication.update({
+            id: $scope.application._id
+        }, $scope.application).$promise.then(function(res) {
+            SessionService.init();
+            $location.url('/designer');
+        }).catch(function(res) {
+            $scope.application = res.application;
+            updateErrorAlert();
+        });
+    }
+
 });
