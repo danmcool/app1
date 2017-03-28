@@ -40,7 +40,8 @@ router.post('/register', function(req, res) {
             });
             var company = {
                 name: req.body.company_name,
-                _company_code: req.body.code
+                _company_code: req.body.code,
+                applications: ['58209e223ee6583658eceedb','58223c8dfaa281219c13beaf','584185e59b20a92dd877ee9f','586bbda98983994e00fc9757']
             };
             Company.create(company, function(errCompany, newCompany) {
                 if (errCompany) return next(errCompany);
@@ -62,7 +63,6 @@ router.post('/register', function(req, res) {
                     };
                     UserProfile.create(userprofilePrivate, function(errUserProfilePrivate, newUserprofilePrivate) {
                         if (errUserProfilePrivate) return next(errUserProfile);
-
                         var user = {
                             user: userName,
                             password: Constants.InitialPasswordHash,
