@@ -280,29 +280,33 @@ app1.factory('Forms', ['$resource',
         $scope.form = form;
         var formDisplay = $scope.form.display;
         $scope.form.fields = [];
-        for (var i = 0; i < formDisplay.length; i++) {
-            for (var j = 0; j < formDisplay[i].blocks.length; j++) {
-                for (var k = 0; k < formDisplay[i].blocks[j].fields.length; k++) {
-                    $scope.form.fields.push(formDisplay[i].blocks[j].fields[k]);
+        if (formDisplay) {
+            for (var i = 0; i < formDisplay.length; i++) {
+                for (var j = 0; j < formDisplay[i].blocks.length; j++) {
+                    for (var k = 0; k < formDisplay[i].blocks[j].fields.length; k++) {
+                        $scope.form.fields.push(formDisplay[i].blocks[j].fields[k]);
+                    }
                 }
             }
         }
 
         initText();
-        if ($routeParams.entry_id == '0') {
-            $scope.data = new Datas({
-                datamodel_id: $scope.form.datamodel._id,
-                _files: []
-            });
-            initComponents();
-        } else {
-            Datas.get({
-                datamodel_id: $scope.form.datamodel._id,
-                entry_id: $routeParams.entry_id
-            }, function(data) {
-                $scope.data = data;
+        if ($scope.form.datamodel) {
+            if ($routeParams.entry_id == '0') {
+                $scope.data = new Datas({
+                    datamodel_id: $scope.form.datamodel._id,
+                    _files: []
+                });
                 initComponents();
-            });
+            } else {
+                Datas.get({
+                    datamodel_id: $scope.form.datamodel._id,
+                    entry_id: $routeParams.entry_id
+                }, function(data) {
+                    $scope.data = data;
+                    initComponents();
+                });
+            }
         }
     });
 
