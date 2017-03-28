@@ -115,9 +115,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 
     var init = function() {
         UserStatus.get().$promise.then(function(result) {
-            sessionData = {
-                applicationName: 'App1'
-            };
+            sessionData = {};
             sessionData.token = result.token;
             sessionData.userData = result.user;
             sessionData.userData.title = (result.user.firstname ? result.user.firstname : '') + ' ' + (result.user.lastname ? result.user.lastname : '') + ' @ ' + (result.user.company.name ? result.user.company.name : '');
@@ -130,7 +128,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                     apps[i].translated_name = translate(apps[i].name);
                     apps[i].translated_description = translate(apps[i].description);
                 }
-                sessionData.applicationName = sessionData.appData.home;
                 if ($location.path() == '/') {
                     $location.url('/applications');
                 }
@@ -287,9 +284,13 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 templateUrl: 'designer/application.html',
                 controller: 'ApplicationEditCtrl'
             })
-            .when('/workflow_edit', {
+            .when('/workflow_edit/:id', {
                 templateUrl: 'designer/workflow.html',
                 controller: 'WorkflowEditCtrl'
+            })
+            .when('/form_edit/:id', {
+                templateUrl: 'designer/form.html',
+                controller: 'FormEditCtrl'
             })
             .otherwise({
                 redirectTo: '/',
