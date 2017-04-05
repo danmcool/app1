@@ -126,6 +126,7 @@ app1.factory('DesignApplication', ['$resource',
     }
 
     $scope.updateCompanyApps = function(app) {
+        if (!app.active) return;
         var enabledApps = $scope.sessionData.userData.company.applications;
         if (app.enabled) {
             for (var i = 0; i < enabledApps.length; i++) {
