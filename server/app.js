@@ -9,7 +9,7 @@ var path = require('path');
 mongoose.Promise = global.Promise;
 
 // connect to mongo db -> apps is the name of app1 data
-mongoose.connect('mongodb://app1:123Apps@127.0.0.1/apps');
+mongoose.connect('mongodb://app1:123Apps@127.0.0.1:55055/apps');
 
 // require routes
 var api = require('./routes/api.js');
