@@ -1,20 +1,4 @@
-app1.factory('DesignApplication', ['$resource',
-    function($resource) {
-        return $resource('/client/design/application/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('DesignWorkflow', ['$resource',
-    function($resource) {
-        return $resource('/client/design/workflow/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).controller('ApplicationEditCtrl', function($scope, SessionService, DesignApplication, DesignWorkflow, $location, $routeParams, $mdDialog) {
+app1.controller('ApplicationEditCtrl', function($scope, SessionService, DesignApplication, DesignWorkflow, $location, $routeParams, $mdDialog) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function() {
         return SessionService.getSessionData();
@@ -27,11 +11,15 @@ app1.factory('DesignApplication', ['$resource',
     DesignApplication.get({
         id: $routeParams.id
     }, function(resultApp, err) {
-        for (var i = 0; i < resultApp.workflows.length; i++) {
-            resultApp.workflows[i].translated_name = SessionService.translate(resultApp.workflows[i].name);
-            resultApp.workflows[i].translated_description = SessionService.translate(resultApp.workflows[i].description);
+        if (resultApp.workflows) {
+            for (var i = 0; i < resultApp.workflows.length; i++) {
+                resultApp.workflows[i].translated_name = SessionService.translate(resultApp.workflows[i].name);
+                resultApp.workflows[i].translated_description = SessionService.translate(resultApp.workflows[i].description);
+            }
         }
         $scope.application = resultApp;
+        $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+        SessionService.setSessionData($scope.sessionData);
     });
 
     $scope.editText = function(object, property, multipleLines) {

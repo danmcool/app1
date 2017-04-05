@@ -81,6 +81,10 @@ var ApplicationSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
     icon: String,
+    active: {
+        type: Boolean,
+        default: false
+    },
     workflows: [{
         type: Schema.Types.ObjectId,
         ref: 'Workflow'

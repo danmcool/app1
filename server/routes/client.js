@@ -139,7 +139,7 @@ router.get('/application/', function(req, res, next) {
 
 router.get('/design/application', function(req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
+    Application.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function(err,
         apps) {
         if (err) return next(err);
         res.json(apps);
@@ -230,7 +230,7 @@ router.get('/design/form/:id', function(req, res, next) {
         return res.status(200).json(formObject);
     });
 });
-router.put('/form/:id', function(req, res, next) {
+router.put('/design/form/:id', function(req, res, next) {
     Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.body._id
     }), req.body, function(err, object) {
@@ -238,7 +238,7 @@ router.put('/form/:id', function(req, res, next) {
         res.json(object);
     });
 });
-router.delete('/form/:id', function(req, res, next) {
+router.delete('/design/form/:id', function(req, res, next) {
     Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), function(err, object) {
@@ -247,6 +247,40 @@ router.delete('/form/:id', function(req, res, next) {
     });
 });
 
+router.post('/design/datamodel', function(req, res, next) {
+    SessionCache.filterCompanyCode(req, {});
+    Form.create(req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/design/datamodel/:id', function(req, res, next) {
+    Metadata.Form.findOne(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    })).exec(function(err, formObject) {
+        if (err) return next(err);
+        if (!formObject) return res.status(400).json({
+            msg: 'Url is null!'
+        });
+        return res.status(200).json(formObject);
+    });
+});
+router.put('/design/datamodel/:id', function(req, res, next) {
+    Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.delete('/design/datamodel/:id', function(req, res, next) {
+    Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function(err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
 
 router.put('/user/:id', function(req, res, next) {
     if (req.body.user) req.body.user = req.body.user.toLowerCase();

@@ -2,16 +2,24 @@
     <div layout="row">
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex layout="column" class="fade">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.application}}</span>
+                </div>
+            </md-toolbar>
             <form>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_app_name}}</label>
                     <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                     <md-icon ng-click="editText(application,'name', false)">language</md-icon>
                 </md-input-container>
-                <md-input-container>
+                <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.app_icon}}</label>
                     <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                     <md-icon>{{application.icon}}</md-icon>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <md-switch ng-disabled="false" ng-required="false" ng-model="application.active">{{sessionData.appData.activate}}</md-switch>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.app_description}}</label>

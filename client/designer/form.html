@@ -2,45 +2,95 @@
     <div layout="row">
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex layout="column" class="fade">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.form}}</span>
+                </div>
+            </md-toolbar>
             <form>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_form_name}}</label>
                     <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="form.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                     <md-icon ng-click="editText(form,'name', false)">language</md-icon>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.datamodel}}</label>
+                    <md-select ng-model="form.datamodel">
+                        <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
                 <div ng-cloak layout="column">
                     <div ng-repeat="section in form.display" layout="row" layout-xs="column">
                         <div ng-repeat="block in section.blocks" layout="column" flex="auto">
                             <div ng-repeat="field in block.fields" flex="auto">
-                                <md-button flex="auto" ng-click="editField(field)">{{field.name}}</md-button>
+                                <md-card flex="auto" data="{section:{{$parent.$parent.$index}},block:{{$parent.$index}},field:{{$index}}}">
+                                    <md-card-title>
+                                        <md-card-title-text>
+                                            <span class="md-headline">{{field.name}}</span>
+                                            <span class="md-body-1">{{field.display}}</span>
+                                        </md-card-title-text>
+                                        <md-card-actions layout="row" layout-align="end center">
+                                            <md-button class="md-secondary" ng-click="editField(field)" aria-label="Edit">
+                                                <md-icon>edit</md-icon>
+                                            </md-button>
+                                            <md-button class="md-secondary" ng-click="deleteField(block.fields,$index)" aria-label="Delete">
+                                                <md-icon>delete</md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                    </md-card-title>
+                                </md-card>
                             </div>
                             <div flex="auto">
-                                <md-button flex="auto" ng-click="newField(block.fields)">
-                                    <md-icon>add</md-icon>
-                                </md-button>
+                                <md-card flex="auto" data="{section:{{$parent.$index}},block:{{$index}},field:-1}">
+                                    <md-card-title-text>
+                                        <span class="md-headline">{{sessionData.appData.add_field}}</span>
+                                    </md-card-title-text>
+                                    <md-card-actions layout="row" layout-align="end center">
+                                        <md-button class="md-secondary" ng-click="newField(block.fields)">
+                                            <md-icon>add</md-icon>
+                                        </md-button>
+                                    </md-card-actions>
+                                </md-card>
                             </div>
                         </div>
                         <div flex="auto">
-                            <md-button flex="auto" ng-click="newBlock(section.blocks)">
-                                <md-icon>add</md-icon>
-                            </md-button>
+                            <md-card flex="auto" data="{section:$index,block:-1,field:-1}">
+                                <md-card-title-text>
+                                    <span class="md-headline">{{sessionData.appData.add_block}}</span>
+                                </md-card-title-text>
+                                <md-card-actions layout="row" layout-align="end center">
+                                    <md-button class="md-secondary" ng-click="newBlock(section.blocks)">
+                                        <md-icon>add</md-icon>
+                                    </md-button>
+                                </md-card-actions>
+                            </md-card>
                         </div>
                     </div>
                     <div flex="auto">
-                        <md-button flex="auto" ng-click="newSection()">
-                            <md-icon>add</md-icon>
-                        </md-button>
+                        <md-card flex="auto" data="{section:-1,block:-1,field:-1}">
+                            <md-card-title-text>
+                                <span class="md-headline">{{sessionData.appData.add_section}}</span>
+                            </md-card-title-text>
+                            <md-card-actions layout="row" layout-align="end center">
+                                <md-button class="md-secondary" ng-click="newSection()">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                            </md-card-actions>
+                        </md-card>
                     </div>
                 </div>
                 <md-input-container flex="auto" class="md-block">
-                    <label>{{sessionData.appData.workflow_description}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4"></textarea>
-                    <md-icon ng-click="editText(application, 'description', true)">language</md-icon>
+                    <label>{{sessionData.appData.form_search_criteria}}</label>
+                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="form.search_criteria" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.form_sort_by}}</label>
+                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="form.sort_by" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                 </md-input-container>
                 <md-list>
                     <md-list-item class="md-2-line" ng-click="newWorkflow()">
                         <div class="md-list-item-text">
-                            <h3>{{sessionData.appData.new_workflow}}</h3>
+                            <h3>{{sessionData.appData.new_action}}</h3>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>

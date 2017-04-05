@@ -1,12 +1,4 @@
-app1.factory('DesignForm', ['$resource',
-    function($resource) {
-        return $resource('/client/design/workflow/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).controller('FormEditCtrl', function($scope, SessionService, DesignForm, $location, $routeParams, $mdDialog) {
+app1.controller('FormEditCtrl', function($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DataModels) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function() {
         return SessionService.getSessionData();
@@ -24,6 +16,8 @@ app1.factory('DesignForm', ['$resource',
         //    resultForm.actions[i].translated_description = SessionService.translate(resultForm.actions[i].description);
         //}
         $scope.form = resultForm;
+        $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+        SessionService.setSessionData($scope.sessionData);
     });
 
     $scope.editText = function(object, property, multipleLines) {
@@ -82,7 +76,13 @@ app1.factory('DesignForm', ['$resource',
             if (!$scope.form.display) {
                 $scope.form.display = [];
             }
-            $scope.form.display.push({'blocks':[{'fields':[{'name':result}]}]});
+            $scope.form.display.push({
+                'blocks': [{
+                    'fields': [{
+                        'name': result
+                    }]
+                }]
+            });
         });
     }
 
@@ -100,7 +100,11 @@ app1.factory('DesignForm', ['$resource',
             if (!$scope.form.display) {
                 $scope.form.display = [];
             }
-            blocks.push({'fields':[{'name':result}]});
+            blocks.push({
+                'fields': [{
+                    'name': result
+                }]
+            });
         });
     }
 
@@ -118,16 +122,18 @@ app1.factory('DesignForm', ['$resource',
             if (!$scope.form.display) {
                 $scope.form.display = [];
             }
-            fields.push({'name':result});
+            fields.push({
+                'name': result
+            });
         });
     }
 
     $scope.save = function() {
-        DesignWorkflow.update({
-            id: $scope.workflow._id
-        }, $scope.workflow).$promise.then(function(res) {
+        DesignForm.update({
+            id: $scope.form._id
+        }, $scope.form).$promise.then(function(res) {
             SessionService.init();
-            $location.url('/designer');
+            $location.url('/workflow_edit/' + $routeParams.workflow_id + '?application_id=' + $routeParams.application_id);
         }).catch(function(res) {
             $scope.application = res.application;
             updateErrorAlert();

@@ -1,20 +1,4 @@
-app1.factory('DesignWorkflow', ['$resource',
-    function($resource) {
-        return $resource('/client/design/workflow/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('DesignForm', ['$resource',
-    function($resource) {
-        return $resource('/client/design/form/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).controller('WorkflowEditCtrl', function($scope, SessionService, DesignWorkflow, DesignForm, $location, $routeParams, $mdDialog) {
+app1.controller('WorkflowEditCtrl', function($scope, SessionService, DesignWorkflow, DesignForm, $location, $routeParams, $mdDialog) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function() {
         return SessionService.getSessionData();
@@ -32,6 +16,8 @@ app1.factory('DesignWorkflow', ['$resource',
             resultWorkflow.forms[i].translated_description = SessionService.translate(resultWorkflow.forms[i].description);
         }
         $scope.workflow = resultWorkflow;
+        $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+        SessionService.setSessionData($scope.sessionData);
     });
 
     $scope.editText = function(object, property, multipleLines) {

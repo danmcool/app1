@@ -378,7 +378,11 @@
             <input type="text" ng-model="workflow.icon">
         </p>
         <p>Startup form id:
-            <input type="text" ng-model="workflow.startup_form_id">
+            <input type="text" ng-model="workflow.startup_form">
+        </p>
+        <p>Forms:
+            <br>
+            <textarea json-text ng-model="workflow.forms" rows="10" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin#/workflows">Cancel</a>
@@ -412,6 +416,9 @@
         </p>
         <p>Icon:
             <input type="text" ng-model="application.icon">
+        </p>
+        <p>Activate:
+            <input type="checkbox" ng-model="application.active">
         </p>
         <p>Workflows:
             <br>

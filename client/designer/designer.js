@@ -6,6 +6,22 @@ app1.factory('DesignApplication', ['$resource',
             }
         });
     }
+]).factory('DesignWorkflow', ['$resource',
+    function($resource) {
+        return $resource('/client/design/workflow/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('DesignForm', ['$resource',
+    function($resource) {
+        return $resource('/client/design/form/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
 ]).controller('DesignerCtrl', function($scope, SessionService, DesignApplication, Company, $mdDialog, $location) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.applications = [];

@@ -11,14 +11,14 @@
                 <md-divider></md-divider>
                 <md-subheader class="md-no-sticky">{{sessionData.appData.list_app}}</md-subheader>
                 <md-list-item class="md-2-line" ng-repeat="app in applications">
-                    <md-switch ng-model="app.enabled" ng-click="updateCompanyApps(app)" aria-label="Show App"></md-switch>
+                    <md-switch ng-disabled="!app.active" ng-model="app.enabled" ng-click="updateCompanyApps(app)" aria-label="Show App"></md-switch>
                     <div class="md-list-item-text">
                         <h3>{{app.translated_name}}</h3>
                     </div>
-                    <md-button class="md-secondary" ng-click="edit(app._id)" aria-label="Edit">
+                    <md-button class="md-secondary" ng-click="edit(app._id)" aria-label="Edit" ng-if="(app._company_code == sessionData.userData._company_code)">
                         <md-icon>edit</md-icon>
                     </md-button>
-                    <md-button class="md-secondary" ng-click="delete(app)" aria-label="Delete">
+                    <md-button class="md-secondary" ng-click="delete(app)" aria-label="Delete" ng-if="(app._company_code == sessionData.userData._company_code)">
                         <md-icon>delete</md-icon>
                     </md-button>
                 </md-list-item>

@@ -77,7 +77,66 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', function SessionService(UserStatus, Logout, AppTranslationService, Applications, $location) {
+]).factory('Forms', ['$resource',
+    function($resource) {
+        return $resource('/client/form/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Value', ['$resource',
+    function($resource) {
+        return $resource('/client/value/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Share', ['$resource',
+    function($resource) {
+        return $resource('/client/share', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Calendar', ['$resource',
+    function($resource) {
+        return $resource('/client/calendar', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('DataModels', ['$resource',
+    function($resource) {
+        return $resource('/client/datamodel/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Files', ['$resource',
+    function($resource) {
+        return $resource('/file/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Datas', ['$resource',
+    function($resource) {
+        return $resource('/data/:datamodel_id/:entry_id', {
+            datamodel_id: '@datamodel_id',
+            entry_id: '@entry_id'
+        }, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('SessionService', function SessionService(AppTranslationService, $location, $resource, Login, Logout, UserStatus, Applications) {
     var sessionData = {
         userData: {
             properties: {
@@ -113,33 +172,52 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         return sessionData;
     }
 
+    var initSessionData = function(userResult, gotoApps) {
+        sessionData = {};
+        sessionData.token = userResult.token;
+        sessionData.userData = userResult.user;
+        sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + ' @ ' + (userResult.user.company.name ? userResult.user.company.name : '');
+        sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
+        sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
+        Applications.query().$promise.then(function(appResult) {
+            sessionData.applications = appResult;
+            var apps = sessionData.applications;
+            for (var i = 0; i < apps.length; i++) {
+                apps[i].translated_name = translate(apps[i].name);
+                apps[i].translated_description = translate(apps[i].description);
+            }
+            if (gotoApps) {
+                sessionData.applicationName = sessionData.appData.home;
+                $location.url('/applications');
+            } else
+            if ($location.path() == '/') {
+                $location.url('/applications');
+            }
+        }).catch(function(error) {
+            // shows an error loading applications
+        });
+    }
     var init = function() {
-        UserStatus.get().$promise.then(function(result) {
-            sessionData = {};
-            sessionData.token = result.token;
-            sessionData.userData = result.user;
-            sessionData.userData.title = (result.user.firstname ? result.user.firstname : '') + ' ' + (result.user.lastname ? result.user.lastname : '') + ' @ ' + (result.user.company.name ? result.user.company.name : '');
-            sessionData.userData.name = (result.user.firstname ? result.user.firstname : '') + ' ' + (result.user.lastname ? result.user.lastname : '');
-            sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-            Applications.query().$promise.then(function(result) {
-                sessionData.applications = result;
-                var apps = sessionData.applications;
-                for (var i = 0; i < apps.length; i++) {
-                    apps[i].translated_name = translate(apps[i].name);
-                    apps[i].translated_description = translate(apps[i].description);
-                }
-                if ($location.path() == '/') {
-                    $location.url('/applications');
-                }
-            }).catch(function(error) {
-                // shows an error loading applications
-            });
+        UserStatus.get().$promise.then(function(userResult) {
+            initSessionData(userResult, false);
         }).catch(function(error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
             $location.url('/');
         });
     }
-    var logout = function(Logout) {
+    var login = function(user, password) {
+        var loginObject = new Login({
+            user: user,
+            password: password
+        });
+        loginObject.$save(function(userResult) {
+            initSessionData(userResult, true);
+        }).catch(function(error) {
+            sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
+            $location.url('/');
+        });
+    }
+    var logout = function() {
         Logout.get();
         sessionData = {
             userData: {
@@ -158,6 +236,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         getSessionData: getSessionData,
         translate: translate,
         init: init,
+        login: login,
         logout: logout
     }
 }).factory('MapService', function MapService() {

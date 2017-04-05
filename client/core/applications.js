@@ -8,6 +8,8 @@ app1.controller('ApplicationsCtrl', function($scope, SessionService, $location) 
     }, function(newValue, oldValue) {
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
+            $scope.sessionData.applicationName = $scope.sessionData.appData.home;
+            SessionService.setSessionData($scope.sessionData);
         }
     });
     $scope.open = function(application_id) {

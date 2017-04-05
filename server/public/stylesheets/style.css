@@ -24,6 +24,22 @@
 }
 */
 
+.field_card {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+}
+
+.new_card {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+}
+
 .animate-text {
     color: #eceff1;
     font-family: "Roboto";

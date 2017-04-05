@@ -1,70 +1,28 @@
-app1.factory('Forms', ['$resource',
-    function($resource) {
-        return $resource('/client/form/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('Value', ['$resource',
-    function($resource) {
-        return $resource('/client/value/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('Share', ['$resource',
-    function($resource) {
-        return $resource('/client/share', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('Calendar', ['$resource',
-    function($resource) {
-        return $resource('/client/calendar', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('DataModels', ['$resource',
-    function($resource) {
-        return $resource('/api/datamodel/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('Files', ['$resource',
-    function($resource) {
-        return $resource('/file/:id', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).factory('Datas', ['$resource',
-    function($resource) {
-        return $resource('/data/:datamodel_id/:entry_id', {
-            datamodel_id: '@datamodel_id',
-            entry_id: '@entry_id'
-        }, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).controller('FormDetailsCtrl', function($scope, $routeParams, $location, $route, $mdDialog, Forms, Value, Share, Calendar, DataModels, Files, Datas, SessionService, MapService, Notify) {
+app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, DataModels, Notify) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function() {
         return SessionService.getSessionData();
     }, function(newValue, oldValue) {
-        if (newValue != oldValue) $scope.sessionData = newValue;
+        if (newValue != oldValue) {
+            $scope.sessionData = newValue;
+            updateAppName();
+        }
     });
+
+    var updateAppName = function() {
+        var apps = $scope.sessionData.applications;
+        if (apps) {
+            for (var i = 0; i < apps.length; i++) {
+                if (apps[i]._id == $routeParams.application_id) {
+                    $scope.sessionData.applicationName = SessionService.translate(apps[i].name);
+                    $scope.sessionData.application_id = $routeParams.application_id;
+                    SessionService.setSessionData($scope.sessionData);
+                    break;
+                }
+            }
+        }
+    }
 
     $scope.data = {};
     $scope.form = {};
@@ -289,7 +247,7 @@ app1.factory('Forms', ['$resource',
                 }
             }
         }
-
+        updateAppName();
         initText();
         if ($scope.form.datamodel) {
             if ($routeParams.entry_id == '0') {
@@ -318,22 +276,18 @@ app1.factory('Forms', ['$resource',
         if (nextFormId == 'home') {
             $location.url('/workflows/' + $scope.sessionData.application_id);
         } else {
-            var formUrl;
+            var formUrl = '/form/' + nextFormId + '/';
             if (data && data._id) {
-                formUrl = data._id;
+                formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id;
                 if (formula) {
                     keys = Object.keys(formula);
-                    if (keys.length > 0) {
-                        formUrl = formUrl + '?';
-                    }
                     for (i = 0; i < keys.length; i++) {
                         formUrl = formUrl + '&' + keys[i] + '=' + data[formula[keys[i]]];
                     }
                 }
             } else {
-                formUrl = '0';
+                formUrl = formUrl + '0?application_id=' + $routeParams.application_id;
             }
-            formUrl = '/form/' + nextFormId + '/' + formUrl;
             if (formUrl != $location.path()) {
                 $location.url(formUrl);
             } else {
@@ -412,9 +366,10 @@ app1.factory('Forms', ['$resource',
     }
 
     var updateComponents = function(form, setValue, data) {
-        for (var i = 0; i < form.display.length; i++) {
-            if (form.display[i].display == 'feed') {
-                var field_name = form.display[i].name;
+        var formFields = $scope.form.fields;
+        for (var i = 0; i < formFields.length; i++) {
+            if (formFields[i].display == 'feed') {
+                var field_name = formFields[i].name;
                 if (form.newvalues[field_name] && form.newvalues[field_name].length > 0) {
                     if (!data[field_name]) {
                         data[field_name] = [];

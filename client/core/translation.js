@@ -64,6 +64,22 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Form List',
             fr: 'Liste des formulaires'
         },
+        form: {
+            en: 'Form',
+            fr: 'Formulaire'
+        },
+        workflow: {
+            en: 'Workflow',
+            fr: 'Processus'
+        },
+        application: {
+            en: 'Application',
+            fr: 'Application'
+        },
+        activate: {
+            en: 'Activate',
+            fr: 'Activer'
+        },
         home: {
             en: 'Home',
             fr: 'Accueil'
