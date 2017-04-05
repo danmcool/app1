@@ -431,6 +431,23 @@
         <button ng-click="update()">update</button>
         <a href="/admin#/applications">Cancel</a>
     </script>
+    <script type="text/ng-template" id="update.html">
+        <h1>Update has to be done only under ADMIN supervision!</h1>
+        <button ng-click="update()">update</button>
+        <p>Error:
+            <br>
+            <textarea ng-model="update.error" rows="3" cols="60"></textarea>
+        </p>
+        <p>Stdout:
+            <br>
+            <textarea ng-model="update.stdout" rows="3" cols="60"></textarea>
+        </p>
+        <p>Stderr:
+            <br>
+            <textarea ng-model="update.stderr" rows="3" cols="60"></textarea>
+        </p>
+        <a href="/admin">Cancel</a>
+    </script>
     <md-toolbar class="md-hue-2">
         <div class="md-toolbar-tools" ng-controller="AppCtrl">
             <md-button class="md-icon-button" aria-label="Administration" ng-click="toggleLeft()">
@@ -459,6 +476,7 @@
             <md-button ng-href="#sessions" class="md-primary" style="text-align: left" ng-click="close()">Sessions</md-button>
             <md-button ng-href="#companies" class="md-primary" style="text-align: left" ng-click="close()">Companies</md-button>
             <md-button ng-href="/" class="md-primary" style="text-align: left" ng-click="close()">Player</md-button>
+            <md-button ng-href="#update" class="md-primary" style="text-align: left" ng-click="close()">Update</md-button>
         </md-content>
     </md-sidenav>
     <md-content flex layout-padding ng-view>

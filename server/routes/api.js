@@ -1,3 +1,4 @@
+var exec = require('child_process').exec;
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -417,6 +418,16 @@ router.delete('/application/:id', function(req, res, next) {
         _id: req.params.id
     }), function(err, object) {
         if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/update', function(req, res, next) {
+    exec('git pull', function(error, stdout, stderr) {
+        object = {
+            error: error,
+            stdout: stdout,
+            stderr: stderr
+        };
         res.json(object);
     });
 });
