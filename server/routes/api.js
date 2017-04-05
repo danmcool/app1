@@ -422,6 +422,11 @@ router.delete('/application/:id', function(req, res, next) {
     });
 });
 router.get('/update', function(req, res, next) {
+    if (SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code != Constants.AdminCompany) {
+        return res.status(400).json({
+            error: 'Invalid user rights!'
+        });
+    }
     exec('git pull', function(error, stdout, stderr) {
         object = {
             error: error,
