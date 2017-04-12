@@ -29,6 +29,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
+]).factory('Password', ['$resource',
+    function($resource) {
+        return $resource('/authentication/password', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
 ]).factory('Company', ['$resource',
     function($resource) {
         return $resource('/client/company/:id', null, {

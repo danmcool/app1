@@ -1,10 +1,15 @@
-app1.controller('UserCtrl', function($scope, $location, $resource, SessionService, AppTranslationService) {
+app1.controller('UserCtrl', function($scope, $location, $resource, SessionService, AppTranslationService, User, Password) {
     var User = $resource('/client/user/:id', null, {
         'update': {
             method: 'PUT'
         }
     });
 
+    $scope.password = {
+        current: '',
+        new: '',
+        repeat: ''
+    };
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function() {
         return SessionService.getSessionData();
@@ -22,5 +27,19 @@ app1.controller('UserCtrl', function($scope, $location, $resource, SessionServic
             "properties": $scope.sessionData.userData.properties
         });
         $location.url('/applications');
+    }
+    $scope.changeUserPassword = function() {
+        Password.update({
+            old: $scope.password.old,
+            new: $scope.password.new
+        });
+        $location.url('/applications');
+    }
+    $scope.validatePassword = function() {
+        if ($scope.password.new == $scope.password.repeat) {
+            $scope.userPasswordForm.password_repeat.$setValidity('userPasswordForm.password_repeat.$error.match', true);
+        } else {
+            $scope.userPasswordForm.password_repeat.$setValidity('userPasswordForm.password_repeat.$error.match', false);
+        }
     }
 });

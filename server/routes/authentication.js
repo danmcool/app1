@@ -17,6 +17,47 @@ var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
 var Session = Metadata.Session;
 
+router.put('/password', function(req, res) {
+    if (!req.body.old || !req.body.new) {
+        return res.status(400).json({
+            msg: 'Password missing data!'
+        });
+    }
+    SessionCache.isActive(req.cookies[Constants.SessionCookie], function(active) {
+        if (active) {
+            var user = SessionCache.userData[req.cookies[Constants.SessionCookie]].user;
+            console.log(user);
+            crypto.pbkdf2(req.body.old, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function(errCryptoOld, keyOld) {
+                if (errCryptoOld) return next(errCryptoOld);
+                var hashPassword = keyOld.toString('hex');
+                crypto.pbkdf2(req.body.new, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function(errCryptoNew, keyNew) {
+                    if (errCryptoNew) return next(errCryptoNew);
+                    var newHashPassword = keyNew.toString('hex');
+                    User.findOneAndUpdate({
+                        user: user,
+                        password: hashPassword,
+                        validated: true
+                    }, {
+                        password: newHashPassword
+                    }).exec(function(errUser, userObject) {
+                        if (errUser) return res.status(401).json({
+                            errUser: info
+                        });
+                        if (!userObject) return res.status(401).json({
+                            err: 'Invalid user name or password!'
+                        });
+                        res.status(200).json({
+                            msg: 'Password changed!'
+                        });
+                    });
+                });
+            });
+        } else {
+            return res.status(401).redirect('/');
+        }
+    });
+});
+
 router.post('/register', function(req, res) {
     if (!req.body.email) {
         return res.status(400).json({
@@ -41,7 +82,7 @@ router.post('/register', function(req, res) {
             var company = {
                 name: req.body.company_name,
                 _company_code: req.body.code,
-                applications: ['58209e223ee6583658eceedb','58223c8dfaa281219c13beaf','584185e59b20a92dd877ee9f','586bbda98983994e00fc9757']
+                applications: ['58209e223ee6583658eceedb', '58223c8dfaa281219c13beaf', '584185e59b20a92dd877ee9f', '586bbda98983994e00fc9757']
             };
             Company.create(company, function(errCompany, newCompany) {
                 if (errCompany) return next(errCompany);

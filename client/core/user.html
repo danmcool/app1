@@ -3,13 +3,13 @@
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex class="fade">
             <div layout-wrap layout-margin layout-align="center">
-                <md-toolbar layout="row" class="md-hue-1">
-                    <div class="md-toolbar-tools">
-                        <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.user_settings}}</span>
-                    </div>
-                </md-toolbar>
-                <div style="height:20px"></div>
-                <form name="userForm">
+                <form name="userSettingsForm">
+                    <md-toolbar layout="row" class="md-hue-1">
+                        <div class="md-toolbar-tools">
+                            <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.user_settings}}</span>
+                        </div>
+                    </md-toolbar>
+                    <div style="height:20px"></div>
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>{{sessionData.appData.theme}}</label>
                         <md-select name="theme" ng-model="sessionData.userData.properties.theme" ng-disabled="false" ng-required="true">
@@ -26,7 +26,30 @@
                             <md-option value="fr">Francais</md-option>
                         </md-select>
                     </md-input-container>
-                    <md-button flex-gt-xs ng-disabled="userForm.$invalid" ng-click="saveUserData()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                    <md-button flex-gt-xs ng-disabled="userSettingsForm.$invalid" ng-click="saveUserData()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                </form>
+                <form name="userPasswordForm">
+                    <md-toolbar layout="row" class="md-hue-1">
+                        <div class="md-toolbar-tools">
+                            <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.change_password}}</span>
+                        </div>
+                    </md-toolbar>
+                    <div style="height:20px"></div>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>{{sessionData.appData.current_password}}</label>
+                        <input ng-disabled="false" ng-required="true" name="password_old" type="password" ng-model="password.old">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>{{sessionData.appData.new_password}}</label>
+                        <input ng-disabled="false" ng-required="true" ng-change="validatePassword()" id="password_new" name="password_new" type="password" ng-model="password.new">
+                        <span ng-show="userPasswordForm.password_repeat.$error.match">{{sessionData.appData.password_match}}</span>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>{{sessionData.appData.repeat_new_password}}</label>
+                        <input ng-disabled="false" ng-required="true" ng-change="validatePassword()" id="password_repeat" name="password_repeat" type="password" ng-model="password.repeat">
+                        <span class="error" ng-show="userPasswordForm.password_repeat.$error.match">{{sessionData.appData.password_match}}</span>
+                    </md-input-container>
+                    <md-button flex-gt-xs ng-disabled="userPasswordForm.$invalid" ng-click="changeUserPassword()" class="md-primary">{{sessionData.appData.save}}</md-button>
                 </form>
             </div>
         </div>

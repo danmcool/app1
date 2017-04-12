@@ -56,7 +56,7 @@ app.use(function(req, res, next) {
         nocache(req, res);
         next();
     } else {
-        SessionCache.isActive(req.cookies.app1_token, function(active) {
+        SessionCache.isActive(req.cookies[Constants.SessionCookie], function(active) {
             if (active) {
                 nocache(req, res);
                 next();

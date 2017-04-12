@@ -96,6 +96,26 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Password',
             fr: 'Mot de passe'
         },
+        change_password: {
+            en: 'Change Password',
+            fr: 'Changement du mot de passe'
+        },
+        current_password: {
+            en: 'Current password',
+            fr: 'Mot de passe actuel'
+        },
+        new_password: {
+            en: 'New Password',
+            fr: 'Nouvel mot de passe'
+        },
+        repeat_new_password: {
+            en: 'Repeat New Password',
+            fr: 'Répéter le nouvel mot de passe'
+        },
+        password_match: {
+            en: 'New password does not match!',
+            fr: 'Le nouveau mot de passe n`est pas identique!'
+        },
         company_code: {
             en: 'Company code',
             fr: 'Code société'
