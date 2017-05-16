@@ -1,5 +1,8 @@
 app1.controller('CompanyCtrl', function($scope, $location, SessionService, AppTranslationService, Company) {
     $scope.sessionData = SessionService.getSessionData();
+    $scope.sessionData.applicationName = 'App1';
+    SessionService.setSessionData($scope.sessionData);
+
     $scope.$watch(function() {
         return SessionService.getSessionData();
     }, function(newValue, oldValue) {
@@ -10,6 +13,8 @@ app1.controller('CompanyCtrl', function($scope, $location, SessionService, AppTr
                     id: $scope.sessionData.userData.company._id
                 });
             }
+            $scope.sessionData.applicationName = 'App1';
+            SessionService.setSessionData($scope.sessionData);
         }
     });
     if ($scope.sessionData.userData.company) {

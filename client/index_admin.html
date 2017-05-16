@@ -428,6 +428,9 @@
             <br>
             <textarea json-text ng-model="application.profiles" rows="6" cols="60"></textarea>
         </p>
+        <p>Default profile:
+            <input type="text" ng-model="application.default_profile">
+        </p>
         <button ng-click="update()">update</button>
         <a href="/admin#/applications">Cancel</a>
     </script>

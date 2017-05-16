@@ -139,4 +139,13 @@ app1.controller('FormEditCtrl', function($scope, $resource, $location, $routePar
             updateErrorAlert();
         });
     }
+
+    $scope.onDragEnter = function(event) {
+        element.classList.add('dash_line');
+    }
+
+    function onDragLeave(event) {
+        element.classList.remove('dash_line'); // this / e.target is previous target element.
+    }
+
 });

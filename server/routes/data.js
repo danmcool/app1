@@ -94,8 +94,8 @@ router.get('/:datamodelid/:id', function(req, res, next) {
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].properties.datamodels[req.params.datamodelid] && user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id]) {
-                remote_profile = user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
                 remote = true;
                 break;
             }
@@ -143,8 +143,8 @@ router.put('/:datamodelid/:id', function(req, res, next) {
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].properties.datamodels[req.params.datamodelid] && user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id]) {
-                remote_profile = user.remote_profiles[i].properties.datamodels[req.params.datamodelid][req.params.id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
                 remote = true;
                 break;
             }

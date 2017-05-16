@@ -22,6 +22,7 @@ app1.controller('WorkflowsCtrl',
                         $scope.workflows[i].translated_name = SessionService.translate($scope.workflows[i].name);
                         $scope.workflows[i].translated_description = SessionService.translate($scope.workflows[i].description);
                     }
+                    $scope.sessionData.showShareForm = false;
                     SessionService.setSessionData($scope.sessionData);
                 }
             }

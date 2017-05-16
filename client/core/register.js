@@ -1,12 +1,4 @@
-app1.factory('Register', ['$resource',
-    function($resource) {
-        return $resource('/authentication/register', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    }
-]).controller('RegisterCtrl', function($scope, $location, $mdDialog, Register, SessionService) {
+app1.controller('RegisterCtrl', function($scope, $location, $mdDialog, Register, SessionService) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.sessionData.applicationName = 'App1';
     SessionService.setSessionData($scope.sessionData);

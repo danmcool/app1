@@ -73,6 +73,9 @@
                                             </div>
                                             <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
                                                 <div ng-switch="action.action">
+                                                    <div ng-switch-when="modify_item">
+                                                        <md-button ng-click="modifyItem(action.formula, action.next_form_id, action.set_value, item._id, field.items, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                                    </div>
                                                     <div ng-switch-when="delete_item">
                                                         <md-button ng-click="deleteItem(action.formula, action.next_form_id, action.set_value, item._id, field.items, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
                                                     </div>
@@ -392,6 +395,9 @@
                             </div>
                             <div ng-switch-when="dissociate">
                                 <md-button ng-disabled="dynamicForm.$invalid" ng-click="dissociate(action.formula, action.next_form_id, action.set_value, data, action.item, action.datamodel, action.id_map, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                            </div>
+                            <div ng-switch-when="new_item">
+                                <md-button ng-click="newItem(action.formula, action.next_form_id, action.set_value, data, item_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="download">
                                 <md-button ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>

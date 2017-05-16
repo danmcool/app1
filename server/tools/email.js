@@ -15,7 +15,7 @@ var transporter = nodemailer.createTransport({
     debug: true // include SMTP traffic in the logs
 });
 
-Email.send2 = function(email_address, cc_email_address, subject, text, html, ical_content) {
+Email.send2 = function (email_address, cc_email_address, subject, text, html, ical_content) {
     var message = {
         from: Constants.EmailUserName,
         to: email_address,
@@ -30,7 +30,7 @@ Email.send2 = function(email_address, cc_email_address, subject, text, html, ica
     };
 
     console.log('Sending Mail');
-    transporter.sendMail(message, function(error, info) {
+    transporter.sendMail(message, function (error, info) {
         if (error) {
             console.log('Error occurred');
             console.log(error.message);
@@ -41,7 +41,7 @@ Email.send2 = function(email_address, cc_email_address, subject, text, html, ica
     });
 }
 
-Email.send = function(email_address, cc_email_address, subject, text, html) {
+Email.send = function (email_address, cc_email_address, subject, text, html) {
     email.send({
         host: Constants.EmailHost,
         port: Constants.EmailPort,
@@ -56,25 +56,25 @@ Email.send = function(email_address, cc_email_address, subject, text, html) {
         authentication: Constants.EmailAuthentication,
         username: Constants.EmailUserName,
         password: Constants.EmailPassword
-    }, function(err, result) {
+    }, function (err, result) {
         //if (err) return next(err);
     });
 }
 
-Email.sendValidation = function(email_address, user, company_code) {
+Email.sendValidation = function (emailAddress, user, companyCode, newPassword) {
     Email.send(
-        email_address,
+        emailAddress,
         '',
         'Registration validation for App1',
         'Automatic message from App1',
         '<span><p>Dear customer, thank-you for registering with our website, your initial password is: ' +
-        Constants.InitialPassword +
+        newPassword +
         '</p></span><br><span><p><b>Please validate your email by clicking on the following link</b></p></span><br><a href="http://' +
         Constants.WebAddress + '/authentication/validate?user=' + user + '&code=' +
-        company_code + '"><p><b>Validate registration</b></p></a>');
+        companyCode + '"><p><b>Validate registration</b></p></a>');
 }
 
-Email.sendSAMLNewUser = function(email_address, user, company_code) {
+Email.sendSAMLNewUser = function (email_address, user, company_code) {
     Email.send(
         email_address,
         '',
@@ -85,7 +85,7 @@ Email.sendSAMLNewUser = function(email_address, user, company_code) {
         '</p></span>');
 }
 
-Email.sendShare = function(email_address, cc_email_address, form_id, datamodel_id, data_id, profile_id) {
+Email.sendShare = function (email_address, cc_email_address, data_id, profile_id) {
     Email.send(
         email_address,
         cc_email_address,
@@ -96,11 +96,11 @@ Email.sendShare = function(email_address, cc_email_address, form_id, datamodel_i
         datamodel_id + '&data_id=' +
         data_id +
         '&profile_id=' +
-        profile_id + '">Open form</a><br><br><p>You are required to register on app1.cloud in order to access the form!</p>'+
+        profile_id + '">Open form</a><br><br><p>You are required to register on app1.cloud in order to access the form!</p>' +
         '<br><a href="http://app1.cloud">App1.Cloud</a>');
 }
 
-Email.sendCalendar = function(email_address, projectName, startDate, endDate, userName) {
+Email.sendCalendar = function (email_address, projectName, startDate, endDate, userName) {
     cal = ical({
         domain: 'app1.cloud',
         prodId: '//CloudApp1//calendar//EN',

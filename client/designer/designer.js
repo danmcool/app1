@@ -32,6 +32,7 @@ app1.factory('DesignApplication', ['$resource',
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
             $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+            $scope.sessionData.showShareForm = false;
             SessionService.setSessionData($scope.sessionData);
         }
     });
@@ -52,6 +53,7 @@ app1.factory('DesignApplication', ['$resource',
             $scope.applications = apps;
         }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+        $scope.sessionData.showShareForm = false;
         SessionService.setSessionData($scope.sessionData);
     });
 

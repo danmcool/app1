@@ -23,7 +23,7 @@
                     <div ng-repeat="section in form.display" layout="row" layout-xs="column">
                         <div ng-repeat="block in section.blocks" layout="column" flex="auto">
                             <div ng-repeat="field in block.fields" flex="auto">
-                                <md-card flex="auto" data="{section:{{$parent.$parent.$index}},block:{{$parent.$index}},field:{{$index}}}">
+                                <md-card flex="auto" data="{section:{{$parent.$parent.$index}},block:{{$parent.$index}},field:{{$index}}}" draggable="true" ondragstart="onDragStart" ondragenter="onDragEnter" ondragleave="onDragLeave">
                                     <md-card-title>
                                         <md-card-title-text>
                                             <span class="md-headline">{{field.name}}</span>

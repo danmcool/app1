@@ -65,7 +65,10 @@ var WorkflowSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
     icon: String,
-    startup_form: Schema.Types.ObjectId,
+    startup_form: {
+        type: Schema.Types.ObjectId,
+        ref: 'Form'
+    },
     forms: [{
         type: Schema.Types.ObjectId,
         ref: 'Form'
@@ -89,7 +92,15 @@ var ApplicationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Workflow'
     }],
-    profiles: Schema.Types.Mixed,
+    profiles: [{
+        type: Schema.Types.ObjectId,
+        ref: 'UserProfile'
+    }],
+    default_profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserProfile'
+    },
+    properties: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now

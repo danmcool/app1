@@ -15,7 +15,7 @@ var SessionCache = {
 var SamlServiceProviderCache = {};
 
 // clean server sessions
-setInterval(function() {
+setInterval(function () {
     var current_time = Date.now();
     Metadata.Session.remove({
         timeout: {
@@ -25,7 +25,7 @@ setInterval(function() {
 }, Constants.DBSessionTimerCleanup);
 
 // clean local cache to remove or update user data (to avoid using a message queue)
-setInterval(function() {
+setInterval(function () {
     var current_time = Date.now();
     var keys = Object.keys(SessionCache.userTimeout);
     for (var i = 0; i < keys.length; i++) {
@@ -35,23 +35,11 @@ setInterval(function() {
     }
 }, Constants.CacheSessionTimerCleanup);
 
-/*
-    var rand = function() {
-        return Math.random().toString(36).substr(2);
-    };
-    var tokenGenerator = function() {
-        return rand() + rand();
-    };
-    var token = tokenGenerator();
-    while (Session.users[token]) {
-        token = tokenGenerator();
-    }*/
-
-SessionCache.prepareUser = function(userObject) {
+SessionCache.prepareUser = function (userObject) {
     var strUser = JSON.stringify(userObject);
     if (userObject.user) strUser = strUser.replace(/@@user/g, userObject._id);
     if (userObject.manager) strUser = strUser.replace(/@@manager/g, userObject.manager);
-    strUser = strUser.replace(/@@public/g, '');
+    strUser = strUser.replace(/@@public/g, Constants.PublicUser + '@' + userObject._company_code);
     if (userObject.reports) strUser = strUser.replace(/'@@reports'/g, (userObject.reports ? (userObject.reports.length > 0 ? JSON.stringify(userObject.reports).replace(/]|[[]/g, '') : '\'\'') : '\'\''));
     if (userObject._company_code) strUser = strUser.replace(/@@company_code/g, userObject._company_code);
     var resUser = JSON.parse(strUser);
@@ -59,37 +47,47 @@ SessionCache.prepareUser = function(userObject) {
     return resUser;
 }
 
-SessionCache.cacheUser = function(token, userObject) {
+SessionCache.cacheUser = function (token, userObject) {
     SessionCache.userData[token] = SessionCache.prepareUser(userObject);
     SessionCache.touch(token);
 };
 
-SessionCache.update = function(token, userObject) {
+SessionCache.update = function (token, userObject) {
     SessionCache.userData[token] = SessionCache.prepareUser(userObject);
 };
 
-SessionCache.isActive = function(token, callback) {
-    if (SessionCache.userTimeout[token] && SessionCache.userTimeout[token] > Date.now()) {
+SessionCache.isActive = function (req, callback) {
+    var token = req.cookies[Constants.SessionCookie];
+    if (!token) {
+        callback(false);
+        return;
+    }
+    var current_time = Date.now();
+    if (SessionCache.userTimeout[token] && SessionCache.userTimeout[token] > current_time) {
         callback(true);
         return;
     }
-    Session.findOne({
-        _id: token,
+    Session.findOneAndUpdate({
+        _id: {
+            '$eq': token
+        },
         timeout: {
-            '$gt': Date.now()
+            '$gt': current_time
         }
-    }).exec(function(errSession, existingSession) {
+    }, {
+        timeout: current_time + Constants.MaxSessionTimeout
+    }).exec(function (errSession, existingSession) {
         if (errSession) return next(errSession);
         if (!existingSession) {
             callback(false);
             return;
         }
         User.findOne({
-            _id: existingSession.user,
-            validated: true
-        }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+                _id: existingSession.user,
+                validated: true
+            }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
             .populate('company profile remote_profiles').exec(
-                function(err, userObject) {
+                function (err, userObject) {
                     if (err) return next(err);
                     if (!userObject) return;
                     SessionCache.cacheUser(token, userObject);
@@ -98,16 +96,16 @@ SessionCache.isActive = function(token, callback) {
     });
 };
 
-SessionCache.touch = function(token) {
+SessionCache.touch = function (token) {
     SessionCache.userTimeout[token] = Date.now() + Constants.MaxSessionCacheTimeout;
 };
 
-SessionCache.removeUserCache = function(token) {
+SessionCache.removeUserCache = function (token) {
     delete SessionCache.userData[token];
     delete SessionCache.userTimeout[token];
 };
 
-SessionCache.filterCompanyCode = function(req, filter) {
+SessionCache.filterCompanyCode = function (req, filter) {
     var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {
@@ -122,7 +120,7 @@ SessionCache.filterCompanyCode = function(req, filter) {
     return filter;
 }
 
-SessionCache.filterApplicationCompanyCode = function(req, filter) {
+SessionCache.filterApplicationCompanyCode = function (req, filter) {
     var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
@@ -136,7 +134,7 @@ SessionCache.filterApplicationCompanyCode = function(req, filter) {
     return filter;
 }
 
-SessionCache.filterDataUserProfile = function(req, filter, datamodel_id, data_id) {
+SessionCache.filterDataUserProfile = function (req, filter, datamodel_id, data_id) {
     var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (req.body != null && req.body._company_code == null) req.body._company_code = company_code;
     if (company_code != Constants.AdminCompany) {

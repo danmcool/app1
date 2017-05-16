@@ -306,6 +306,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         SessionService.logout();
     };
 
+    $scope.notifyForm = function() {
+
+    }
+
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildDelayedToggler('right');
 
