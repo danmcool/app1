@@ -133,7 +133,6 @@ router.get('/application/', function (req, res, next) {
                 }
             }
             if (profileFound) {
-                console.log(profileFound);
                 for (var j = apps[i].workflows.length - 1; j >= 0; j--) {
                     if (!profileFound.profile.applications[apps[i]._id].workflows[apps[i].workflows[j]._id]) {
                         apps[i].workflows.splice(j, 1);

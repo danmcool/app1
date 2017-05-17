@@ -393,8 +393,6 @@ router.get('/open', function (req, res, next) {
                         if (err) return next(err);
                         userObject.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
                         SessionCache.cacheUser(newSession._id, userObject);
-                        console.log('new session' + newSession._id);
-
                         res.cookie(Constants.SessionCookie, newSession._id, {
                             maxAge: Constants.MaxSessionPublicTimeout,
                             httpOnly: true
