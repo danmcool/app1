@@ -1,5 +1,6 @@
 /* fallback */
 
+
 /*
 @font-face {
     font-family: 'Material Icons';
@@ -27,9 +28,11 @@
 [draggable] {
     cursor: move;
 }
+
 .dash_line {
     border: 3px dashed #333;
 }
+
 .field_card {
     border-radius: 25px;
     border: 2px solid #73AD21;
@@ -37,6 +40,7 @@
     width: 200px;
     height: 150px;
 }
+
 .new_card {
     border-radius: 25px;
     border: 2px solid #73AD21;
@@ -44,6 +48,7 @@
     width: 200px;
     height: 150px;
 }
+
 .animate-text {
     color: #eceff1;
     font-family: "Roboto";
@@ -56,14 +61,17 @@
     animation: type 4s steps(60, end);
     text-shadow: 3px 3px 5px #37474f;
 }
+
 .animate-text:nth-child(2) {
     animation: type2 8s steps(60, end);
 }
+
 @keyframes type {
     from {
         width: 0;
     }
 }
+
 @keyframes type2 {
     0% {
         width: 0;
@@ -75,52 +83,68 @@
         width: 100;
     }
 }
-.slide {} .slide.ng-enter {
+
+.slide {}
+
+.slide.ng-enter {
     -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
 .slide.ng-enter {
     left: 100%;
     top: 0;
 }
+
 .slide.ng-enter-active {
     left: 0;
     top: 0;
 }
+
 .fade {
     background-color: rgba(255, 255, 255, 0.85);
     opacity: 1;
 }
+
 .fade.ng-enter {
     -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
 .fade.ng-enter {
     opacity: 0;
 }
+
 .fade.ng-enter-active {
     opacity: 1;
 }
+
 .default {
     background-image: url(/images/background/default.png);
     background-position: left;
 }
+
 .user1 {
     background-image: url(/images/background/user1.png);
     background-position: left;
 }
+
 .user2 {
     background-image: url(/images/background/user2.png);
     background-position: left;
 }
+
 .user3 {
     background-image: url(/images/background/user3.png);
     background-position: left;
 }
+
 md-datepicker .md-datepicker-input {
-    width: calc(30vw - 64px);
-    max-width: calc(30vw - 64px);
+    width: calc(70vw - 64px);
+    max-width: calc(70vw - 64px);
 }
+
+
 /*.multi_bg_example {
   background-image: url(/images/background/linen.png), linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0));
   background-repeat: repeat, no-repeat;
