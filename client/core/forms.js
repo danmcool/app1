@@ -1,16 +1,31 @@
-app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, DataModels, Notify) {
+app1.controller('FormDetailsCtrl', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, DataModels, Notify) {
     $scope.sessionData = SessionService.getSessionData();
 
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         return SessionService.getSessionData();
-    }, function(newValue, oldValue) {
+    }, function (newValue, oldValue) {
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
             updateAppName();
         }
     });
 
-    var updateAppName = function() {
+    var resolvePath = function (object, path) {
+        return path.split('.').reduce(function (previous, current) {
+            return previous ? previous[current] : undefined
+        }, object || self)
+    }
+
+    var toString = function (object) {
+        if (object) {
+            object = object + '';
+        } else {
+            object = '';
+        }
+        return object;
+    }
+
+    var updateAppName = function () {
         var apps = $scope.sessionData.applications;
         if (apps) {
             for (var i = 0; i < apps.length; i++) {
@@ -35,7 +50,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
     $scope.currentFile = 0;
     $scope.filesCount = 0;
 
-    var getNextData = function() {
+    var getNextData = function () {
         if ($scope.stopScroll) return;
         if ($scope.tempStopScroll) return;
         if (!$scope.form.datamodel) return;
@@ -49,7 +64,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             skip: localSkip,
             limit: localLimit,
             sort_by: $scope.form.sort_by
-        }).$promise.then(function(items) {
+        }).$promise.then(function (items) {
             if (items.length < $scope.limit) $scope.stopScroll = true;
             for (var i = 0; i < items.length; i++) {
                 $scope.datas.push(items[i]);
@@ -58,7 +73,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         });
     }
 
-    var initText = function() {
+    var initText = function () {
         $scope.form.title = SessionService.translate($scope.form.name);
         if ($scope.form.actions) {
             for (var i = 0; i < $scope.form.actions.length; i++) {
@@ -94,7 +109,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
     }
 
-    var updateValuesForm = function(index, newValues) {
+    var updateValuesForm = function (index, newValues) {
         var formFields = $scope.form.fields[index];
         formFields.values = [];
         formFields.values_key = {};
@@ -107,7 +122,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 SessionService.translate(newValues[k]);
         }
     }
-    var updateValuesTitle = function(index, newValues) {
+    var updateValuesTitle = function (index, newValues) {
         var formFields = $scope.form.fields[index];
         formFields.title_values = {};
         for (k = 0; k < newValues.length; k++) {
@@ -115,7 +130,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 SessionService.translate(newValues[k]);
         }
     }
-    var updateValuesSubTitle = function(index, newValues) {
+    var updateValuesSubTitle = function (index, newValues) {
         var formFields = $scope.form.fields[index];
         formFields.subtitle_values = {};
         for (k = 0; k < newValues.length; k++) {
@@ -123,13 +138,13 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 SessionService.translate(newValues[k]);
         }
     }
-    var updateValuesItems = function(index, newValues) {
+    var updateValuesItems = function (index, newValues) {
         var formFields = $scope.form.fields[index];
         var valuesFieldName = formFields.items + '_values';
         formFields[valuesFieldName] = newValues;
         $scope.data[formFields.items] = newValues;
     }
-    var initComponents = function() {
+    var initComponents = function () {
         var formFields = $scope.form.fields;
         var formValues = $scope.form.values;
         for (var i = 0; i < formFields.length; i++) {
@@ -152,7 +167,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type
-                            }, itemValues).$promise.then(function(resValues) {
+                            }, itemValues).$promise.then(function (resValues) {
                                 updateValuesForm(resValues.index, resValues.values);
                             });
                         }
@@ -176,7 +191,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type
-                            }, itemValues).$promise.then(function(resValues) {
+                            }, itemValues).$promise.then(function (resValues) {
                                 updateValuesTitle(resValues.index, resValues.values);
                             });
                         }
@@ -189,7 +204,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type,
-                            }, itemValues).$promise.then(function(resValues) {
+                            }, itemValues).$promise.then(function (resValues) {
                                 updateValuesSubTitle(resValues.index, resValues.values);
                             });
                         }
@@ -221,7 +236,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type,
-                            }, itemValues).$promise.then(function(resValues) {
+                            }, itemValues).$promise.then(function (resValues) {
                                 updateValuesItems(resValues.index, resValues.values);
                             });
                         }
@@ -234,7 +249,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
 
     Forms.get({
         id: $routeParams.id
-    }, function(form) {
+    }, function (form) {
         $scope.form = form;
         var formDisplay = $scope.form.display;
         $scope.form.fields = [];
@@ -260,7 +275,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 Datas.get({
                     datamodel_id: $scope.form.datamodel._id,
                     entry_id: $routeParams.entry_id
-                }, function(data) {
+                }, function (data) {
                     $scope.data = data;
                     initComponents();
                 });
@@ -268,11 +283,11 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
     });
 
-    var rand = function() {
+    var rand = function () {
         return Math.random().toString(16).substr(2);
     };
 
-    var gotoNextForm = function(formula, nextFormId, data) {
+    var gotoNextForm = function (formula, nextFormId, data) {
         if (nextFormId == 'home') {
             $location.url('/workflows/' + $scope.sessionData.application_id);
         } else {
@@ -296,16 +311,16 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
     }
 
-    var uploadFile = function(file, signedRequest, url) {
+    var uploadFile = function (file, signedRequest, url) {
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', signedRequest);
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
                     $scope.currentFile++;
                     if ($scope.currentFile > $scope.filesCount) {
                         document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_done;
-                        setTimeout(function() {
+                        setTimeout(function () {
                             document.getElementById('file_upload').textContent = '';
                         }, 4 * 1000);
                     } else {
@@ -320,7 +335,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         };
         xhr.send(file);
     };
-    $scope.changeFiles = function(files) {
+    $scope.changeFiles = function (files) {
         if (files.length == 0) return;
         //$scope.dynamicForm.$setValidity({'Attachments': true});
         if (!$scope.data._files) $scope.data._files = [];
@@ -334,7 +349,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 'name': files[i].name,
                 'type': files[i].type
             });
-            file.$save().then(function(res) {
+            file.$save().then(function (res) {
                 for (var j = 0; j < $scope.files.length; j++) {
                     if ($scope.files[j].name == res.file.name) {
                         $scope.data._files.push({
@@ -348,16 +363,16 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             });
         }
     }
-    $scope.removeFile = function(fileId) {
+    $scope.removeFile = function (fileId) {
         var files = $scope.data._files;
         for (var i = 0; i < files.length; i++) {
             if (files[i]._id == fileId) {
                 files.splice(i, 1);
                 Files.remove({
-                    id: fileId
-                }).$promise
-                    .then(function(res) {})
-                    .catch(function(res) {
+                        id: fileId
+                    }).$promise
+                    .then(function (res) {})
+                    .catch(function (res) {
                         /* show error*/
                     })
                 break;
@@ -365,7 +380,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
     }
 
-    var updateComponents = function(form, setValue, data) {
+    var updateComponents = function (form, setValue, data) {
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
@@ -388,7 +403,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
     }
 
-    var updateErrorAlert = function() {
+    var updateErrorAlert = function () {
         $mdDialog.show(
             $mdDialog.alert()
             .parent(angular.element(document.body))
@@ -399,7 +414,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         );
     }
 
-    var notify = function(notifyUserId, emailTitle, emailHtml) {
+    var notify = function (notifyUserId, emailTitle, emailHtml) {
         if (notifyUserId && emailTitle && emailHtml) {
             var translatedEmail = SessionService.translate(emailHtml);
             var fieldList = translatedEmail.match(/@\w*@/g);
@@ -417,9 +432,9 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
     }
 
-    $scope.create = function(formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
+    $scope.create = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, data);
-        $scope.data.$save().then(function(res) {
+        $scope.data.$save().then(function (res) {
             if (notifyUser) {
                 if (notifyUser == 'current') {
                     notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -428,16 +443,16 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 }
             }
             gotoNextForm(formula, nextFormId, null);
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
         });
     }
-    $scope.modify = function(formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
+    $scope.modify = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function(res) {
+        }, data).$promise.then(function (res) {
             if (notifyUser) {
                 if (notifyUser == 'current') {
                     notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -446,12 +461,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 }
             }
             gotoNextForm(formula, nextFormId, null);
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
     }
-    $scope.delete = function(formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+    $scope.delete = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
         $mdDialog.show(
             $mdDialog.confirm()
             .parent(angular.element(document.body))
@@ -460,12 +475,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)
-        ).then(function() {
+        ).then(function () {
             Datas.remove({
-                datamodel_id: $scope.form.datamodel._id,
-                entry_id: data._id
-            }).$promise
-                .then(function(res) {
+                    datamodel_id: $scope.form.datamodel._id,
+                    entry_id: data._id
+                }).$promise
+                .then(function (res) {
                     if (notifyUser) {
                         if (notifyUser == 'current') {
                             notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -475,12 +490,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                     }
                     gotoNextForm(formula, nextFormId, null);
                 })
-                .catch(function(res) {
+                .catch(function (res) {
                     /* show error*/
                 });
         });
     }
-    $scope.link = function(formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+    $scope.link = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
         if (notifyUser) {
             if (notifyUser == 'current') {
                 notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -490,7 +505,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
         gotoNextForm(formula, nextFormId, data);
     }
-    $scope.linkEmpty = function(formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+    $scope.linkEmpty = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
         if (notifyUser) {
             if (notifyUser == 'current') {
                 notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -500,7 +515,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         }
         gotoNextForm(formula, nextFormId, null);
     }
-    $scope.associate = function(formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
+    $scope.associate = function (formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, data);
         if (datamodel == 'User') {
             data[actionItem].push($scope.sessionData.userData._id);
@@ -508,7 +523,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function(res) {
+        }, data).$promise.then(function (res) {
             if (notifyUser) {
                 if (notifyUser == 'current') {
                     notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -517,12 +532,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 }
             }
             gotoNextForm(formula, nextFormId, data);
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
     }
-    $scope.dissociate = function(formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
+    $scope.dissociate = function (formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, data);
         if (datamodel == 'User') {
             for (var i = data[actionItem].length - 1; i >= 0; i--) {
@@ -534,7 +549,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function(res) {
+        }, data).$promise.then(function (res) {
             if (notifyUser) {
                 if (notifyUser == 'current') {
                     notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -543,12 +558,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 }
             }
             gotoNextForm(formula, nextFormId, data);
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
     }
-    $scope.deleteItem = function(formula, nextFormId, setValue, itemId, fieldName, datamodel, notifyUser, emailTitle, emailHtml) {
+    $scope.deleteItem = function (formula, nextFormId, setValue, itemId, fieldName, datamodel, notifyUser, emailTitle, emailHtml) {
         $mdDialog.show(
             $mdDialog.confirm()
             .parent(angular.element(document.body))
@@ -557,7 +572,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)
-        ).then(function() {
+        ).then(function () {
             updateComponents($scope.form, setValue, $scope.data);
             if (datamodel == 'User') {
                 for (var i = $scope.data[fieldName].length - 1; i >= 0; i--) {
@@ -569,7 +584,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             Datas.update({
                 datamodel_id: $scope.form.datamodel._id,
                 entry_id: $scope.data._id
-            }, $scope.data).$promise.then(function(res) {
+            }, $scope.data).$promise.then(function (res) {
                 if (notifyUser) {
                     if (notifyUser == 'current') {
                         notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -580,13 +595,13 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                     }
                 }
                 gotoNextForm(formula, nextFormId, $scope.data);
-            }).catch(function(res) {
+            }).catch(function (res) {
                 $scope.data = res.data;
                 updateErrorAlert();
             });
         });
     }
-    $scope.moveItem = function(formula, nextFormId, setValue, itemId, fieldName, destinationFieldName, datamodel, notifyUser, emailTitle, emailHtml) {
+    $scope.moveItem = function (formula, nextFormId, setValue, itemId, fieldName, destinationFieldName, datamodel, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, $scope.data);
         if (datamodel == 'User') {
             for (var i = $scope.data[fieldName].length - 1; i >= 0; i--) {
@@ -599,7 +614,7 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, $scope.data).$promise.then(function(res) {
+        }, $scope.data).$promise.then(function (res) {
             if (notifyUser) {
                 if (notifyUser == 'current') {
                     notify($scope.sessionData.userData._id, emailTitle, emailHtml);
@@ -610,15 +625,15 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 }
             }
             gotoNextForm(formula, nextFormId, $scope.data);
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
     }
-    $scope.download = function(data, dataFields, fileName) {
+    $scope.download = function (data, dataFields, fileName) {
         var content = 'sep=,\n';
         for (var i = 0; i < dataFields.attributes.length; i++) {
-            content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + (data[dataFields.attributes[i]] + '').replace(/\"/g, '""') + '"' + '\n';
+            content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + toString(resolvePath(data, dataFields.attributes[i])).replace(/\"/g, '""') + '"' + '\n';
         }
         for (var i = 0; i < dataFields.items.length; i++) {
             content += '"' + dataFields.items[i].name + '"' + ',' + '"' + data[dataFields.items[i].name].length + '"' + '\n';
@@ -627,14 +642,30 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                     content += '"' + dataFields.items[i].attributes[j] + '"' + ',';
                 }
                 content += '\n';
-                for (var k = 0; k < data[dataFields.items[i].name].length; k++) {
+                var objectItems = resolvePath(data, dataFields.items[i].name);
+                for (var k = 0; k < objectItems.length; k++) {
                     for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
-                        content += '"' + (data[dataFields.items[i].name][k][dataFields.items[i].attributes[j]] + '').replace(/\"/g, '""') + '"' + ',';
+                        content += '"' + toString(resolvePath(objectItems[k], dataFields.items[i].attributes[j])).replace(/\"/g, '""') + '"' + ',';
                     }
                     content += '\n';
                 }
             }
         }
+        /*for (var i = 0; i < dataFields.details.length; i++) {
+                    content += '"' + dataFields.details[i].name + '"' + ',' + '"' + data[dataFields.details[i].name].length + '"' + '\n';
+                    if (data[dataFields.details[i].name].length > 0) {
+                        for (var j = 0; j < dataFields.details[i].attributes.length; j++) {
+                            content += '"' + dataFields.details[i].attributes[j] + '"' + ',';
+                        }
+                        content += '\n';
+                        for (var k = 0; k < data[dataFields.items[i].name].length; k++) {
+                            for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
+                                content += '"' + (data[dataFields.items[i].name][k][dataFields.items[i].attributes[j]] + '').replace(/\"/g, '""') + '"' + ',';
+                            }
+                            content += '\n';
+                        }
+                    }
+                }*/
         var downloadElement = document.createElement('a');
         downloadElement.setAttribute('target', '_blank'); //open file in new window
         if (Blob !== undefined) {
@@ -656,12 +687,12 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
             document.body.removeChild(downloadElement);
         }
     }
-    $scope.share = function(formula, nextFormId, setValue, constraint, email_field_name, form_id, data) {
+    $scope.share = function (formula, nextFormId, setValue, constraint, email_field_name, form_id, data) {
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function(res) {
+        }, data).$promise.then(function (res) {
             Share.get({
                 form_id: form_id,
                 datamodel_id: $scope.form.datamodel._id,
@@ -669,29 +700,29 @@ app1.controller('FormDetailsCtrl', function($scope, $routeParams, $location, $ro
                 email: data[email_field_name],
                 key: constraint.key,
                 value: constraint.value
-            }).$promise.then(function(res) {
+            }).$promise.then(function (res) {
                 gotoNextForm(formula, nextFormId, data);
             })
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
     }
-    $scope.calendar = function(formula, nextFormId, setValue, project_name_field, start_date_field, end_date_field, data) {
+    $scope.calendar = function (formula, nextFormId, setValue, project_name_field, start_date_field, end_date_field, data) {
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function(res) {
+        }, data).$promise.then(function (res) {
             Calendar.get({
                 project_name: data[project_name_field],
                 start_date: data[start_date_field],
                 end_date: data[end_date_field],
                 user_id: data._user
-            }).$promise.then(function(res) {
+            }).$promise.then(function (res) {
                 gotoNextForm(formula, nextFormId, data);
             })
-        }).catch(function(res) {
+        }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
