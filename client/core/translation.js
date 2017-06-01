@@ -17,8 +17,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Description de l`application'
         },
         app_icon: {
-            en: 'Icon:',
-            fr: 'Icône:'
+            en: 'Icon',
+            fr: 'Icône'
         },
         list_app: {
             en: 'Application List',

@@ -1,4 +1,4 @@
-var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll']).config(function($mdThemingProvider) {
+var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll']).config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
         .accentPalette('amber');
@@ -14,7 +14,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     $mdThemingProvider.alwaysWatchTheme(true);
     $mdThemingProvider.generateThemesOnDemand(false);
 }).factory('Applications', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/application/:id', null, {
             'update': {
                 method: 'PUT'
@@ -22,7 +22,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('User', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/user/:id', null, {
             'update': {
                 method: 'PUT'
@@ -30,7 +30,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Password', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/authentication/password', null, {
             'update': {
                 method: 'PUT'
@@ -38,7 +38,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Company', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/company/:id', null, {
             'update': {
                 method: 'PUT'
@@ -46,7 +46,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Login', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/authentication/login', null, {
             'update': {
                 method: 'PUT'
@@ -54,7 +54,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('UserStatus', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/authentication/status', null, {
             'update': {
                 method: 'PUT'
@@ -62,7 +62,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Logout', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/authentication/logout', null, {
             'update': {
                 method: 'PUT'
@@ -70,7 +70,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Register', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/authentication/register', null, {
             'update': {
                 method: 'PUT'
@@ -78,7 +78,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Notify', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/notify/:user_id', null, {
             'update': {
                 method: 'PUT'
@@ -86,7 +86,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Forms', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/form/:id', null, {
             'update': {
                 method: 'PUT'
@@ -94,7 +94,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Value', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/value/:id', null, {
             'update': {
                 method: 'PUT'
@@ -102,7 +102,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Share', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/share', null, {
             'update': {
                 method: 'PUT'
@@ -110,7 +110,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Calendar', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/calendar', null, {
             'update': {
                 method: 'PUT'
@@ -118,7 +118,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('DataModels', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/client/datamodel/:id', null, {
             'update': {
                 method: 'PUT'
@@ -126,7 +126,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Files', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/file/:id', null, {
             'update': {
                 method: 'PUT'
@@ -134,7 +134,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
 ]).factory('Datas', ['$resource',
-    function($resource) {
+    function ($resource) {
         return $resource('/data/:datamodel_id/:entry_id', {
             datamodel_id: '@datamodel_id',
             entry_id: '@entry_id'
@@ -155,19 +155,19 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         applicationName: 'App1',
         appData: {}
     };
-    var translate = function(text) {
+    var translate = function (text) {
         if (!text) return 'xxxxx';
         var translated_text = text[sessionData.userData.properties.language];
         if (translated_text) return translated_text;
         else return text['en'];
     }
-    var translateInternal = function(text, language) {
+    var translateInternal = function (text, language) {
         if (!text) return 'xxxxx';
         var translated_text = text[language];
         if (translated_text) return translated_text;
         else return text['en'];
     }
-    var setSessionData = function(newData) {
+    var setSessionData = function (newData) {
         if (newData.applications) {
             for (var i = 0; i < newData.applications.length; i++) {
                 newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.language);
@@ -176,18 +176,18 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }
         sessionData = newData;
     }
-    var getSessionData = function() {
+    var getSessionData = function () {
         return sessionData;
     }
 
-    var initSessionData = function(userResult, gotoApps) {
+    var initSessionData = function (userResult, gotoApps) {
         sessionData = {};
         sessionData.token = userResult.token;
         sessionData.userData = userResult.user;
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + ' @ ' + (userResult.user.company.name ? userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-        Applications.query().$promise.then(function(appResult) {
+        Applications.query().$promise.then(function (appResult) {
             sessionData.applications = appResult;
             var apps = sessionData.applications;
             for (var i = 0; i < apps.length; i++) {
@@ -201,31 +201,31 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             if ($location.path() == '/') {
                 $location.url('/applications');
             }
-        }).catch(function(error) {
+        }).catch(function (error) {
             // shows an error loading applications
         });
     }
-    var init = function() {
-        UserStatus.get().$promise.then(function(userResult) {
+    var init = function () {
+        UserStatus.get().$promise.then(function (userResult) {
             initSessionData(userResult, false);
-        }).catch(function(error) {
+        }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
             $location.url('/');
         });
     }
-    var login = function(user, password) {
+    var login = function (user, password) {
         var loginObject = new Login({
             user: user,
             password: password
         });
-        loginObject.$save(function(userResult) {
+        loginObject.$save(function (userResult) {
             initSessionData(userResult, true);
-        }).catch(function(error) {
+        }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
             $location.url('/');
         });
     }
-    var logout = function() {
+    var logout = function () {
         Logout.get();
         sessionData = {
             userData: {
@@ -266,7 +266,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({
             'address': address
-        }, function(results, status) {
+        }, function (results, status) {
             if (status === 'OK') {
                 maps[mapId].setCenter(results[0].geometry.location);
                 maps[mapId].setZoom(14);
@@ -283,30 +283,30 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         geocodeAddress: geocodeAddress,
         initMap: initMap
     }
-}).controller('AppCtrl', function($scope, $timeout, $mdSidenav, SessionService) {
+}).controller('AppCtrl', function ($scope, $timeout, $mdSidenav, SessionService) {
     $scope.sessionData = SessionService.getSessionData();
 
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         return SessionService.getSessionData();
-    }, function(newValue, oldValue) {
+    }, function (newValue, oldValue) {
         if (newValue != oldValue) $scope.sessionData = newValue;
     });
 
     SessionService.init();
 
-    $scope.closeLeft = function() {
+    $scope.closeLeft = function () {
         $mdSidenav('left').close();
     };
-    $scope.closeRight = function() {
+    $scope.closeRight = function () {
         $mdSidenav('right').close();
     };
 
-    $scope.logout = function() {
+    $scope.logout = function () {
         $mdSidenav('right').close();
         SessionService.logout();
     };
 
-    $scope.notifyForm = function() {
+    $scope.notifyForm = function () {
 
     }
 
@@ -320,7 +320,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             var context = $scope,
                 args = Array.prototype.slice.call(arguments);
             $timeout.cancel(timer);
-            timer = $timeout(function() {
+            timer = $timeout(function () {
                 timer = undefined;
                 func.apply(context, args);
             }, wait || 10);
@@ -328,12 +328,12 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 
     function buildDelayedToggler(navID) {
-        return debounce(function() {
+        return debounce(function () {
             $mdSidenav(navID).toggle();
         }, 200);
     }
 }).config(['$routeProvider',
-    function($routeProvider) {
+    function ($routeProvider) {
         $routeProvider
             .when('/form/:id/:entry_id', {
                 templateUrl: 'core/forms.html',

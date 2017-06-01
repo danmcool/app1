@@ -3,7 +3,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -11,13 +11,13 @@
 
 <body ng-app="app1" ng-cloak md-theme="{{sessionData.userData.properties.theme}}" ng-controller="AppCtrl" ng-class="sessionData.userData.properties.theme">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
 
     <script defer src="/javascripts/ng-infinite-scroll.min.js"></script>
     <script src="index.js"></script>
@@ -60,10 +60,10 @@
             <md-toolbar class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">{{sessionData.appData.app_title}}</h1>
             </md-toolbar>
-            <md-button ng-if="sessionData.userData.title" ng-href="#applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
+            <md-button ng-if="sessionData.userData.title" ng-href="#!applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
             </md-button>
             <div ng-repeat="application in sessionData.applications">
-                <md-button ng-href="#workflows/{{application._id}}" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{application.translated_name}}
+                <md-button ng-href="#!workflows/{{application._id}}" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{application.translated_name}}
                 </md-button>
             </div>
         </md-content>
@@ -77,12 +77,12 @@
             <md-toolbar ng-if="sessionData.userData.title" class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">{{sessionData.userData.title}}</h1>
             </md-toolbar>
-            <md-button ng-if="!sessionData.userData.title" ng-href="#welcome" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.welcome}}</md-button>
-            <md-button ng-if="!sessionData.userData.title" ng-href="#login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
-            <md-button ng-if="!sessionData.userData.title" ng-href="#register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
-            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
-            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
-            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!welcome" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.welcome}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#!user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>
         </md-content>
     </md-sidenav>
