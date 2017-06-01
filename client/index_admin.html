@@ -436,6 +436,9 @@
     </script>
     <script type="text/ng-template" id="update.html">
         <h1>Update has to be done only under ADMIN supervision!</h1>
+        <p>Repository:
+            <input type="text" ng-model="update.repository">
+        </p>
         <button ng-click="update()">update</button>
         <p>Error:
             <br>
@@ -457,8 +460,8 @@
                 <md-icon md-svg-icon="/icons/menu.svg"></md-icon>
             </md-button>
             <h2>
-        <span>Administration Tool</span>
-      </h2>
+                <span>Administration Tool</span>
+            </h2>
             <span flex></span>
         </div>
     </md-toolbar>

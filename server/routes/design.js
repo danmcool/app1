@@ -23,7 +23,7 @@ var computePage = function (req) {
 
 router.get('/application', function (req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
+    Application.find(SessionCache.filterApplicationCompanyCode(req, {})).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         apps) {
         if (err) return next(err);
         res.json(apps);

@@ -1,8 +1,8 @@
-angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive('jsonText', function() {
+angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive('jsonText', function () {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(scope, element, attr, ngModel) {
+        link: function (scope, element, attr, ngModel) {
             function into(input) {
                 return JSON.parse(input);
             }
@@ -15,7 +15,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         }
     };
 }).factory('Workflows',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/workflow/:id', null, {
             'update': {
                 method: 'PUT'
@@ -23,7 +23,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Applications',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/application/:id', null, {
             'update': {
                 method: 'PUT'
@@ -31,7 +31,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Forms',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/form/:id', null, {
             'update': {
                 method: 'PUT'
@@ -39,7 +39,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Values',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/value/:id', null, {
             'update': {
                 method: 'PUT'
@@ -47,7 +47,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('UserProfiles',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/userprofile/:id', null, {
             'update': {
                 method: 'PUT'
@@ -55,7 +55,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Sessions',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/session/:id', null, {
             'update': {
                 method: 'PUT'
@@ -63,7 +63,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Companies',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/company/:id', null, {
             'update': {
                 method: 'PUT'
@@ -71,7 +71,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Users',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/user/:id', null, {
             'update': {
                 method: 'PUT'
@@ -79,7 +79,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Files',
-    function($resource) {
+    function ($resource) {
         return $resource('/file/:id', null, {
             'update': {
                 method: 'PUT'
@@ -87,7 +87,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('DataModels',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/datamodel/:id', null, {
             'update': {
                 method: 'PUT'
@@ -95,7 +95,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).factory('Update',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/update', null, {
             'update': {
                 method: 'PUT'
@@ -103,24 +103,24 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         });
     }
 ).controller('WorkflowsCtrl',
-    function($scope, Workflows, $mdDialog) {
+    function ($scope, Workflows, $mdDialog) {
         $scope.workflows = Workflows.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newWorkflow || $scope.newWorkflow.length < 1) return;
             var workflow = new Workflows({
                 name: {
                     en: $scope.newWorkflow
                 }
             });
-            workflow.$save(function() {
+            workflow.$save(function () {
                 $scope.workflows.push(workflow);
                 $scope.newWorkflow = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -128,35 +128,35 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var workflow = $scope.workflows[index];
                 Workflows.remove({
                     id: workflow._id
-                }, function() {
+                }, function () {
                     $scope.workflows.splice(index, 1);
                 });
             });
         }
     }
 ).controller('ApplicationsCtrl',
-    function($scope, Applications, $mdDialog) {
+    function ($scope, Applications, $mdDialog) {
         $scope.applications = Applications.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newApplication || $scope.newApplication.length < 1) return;
             var application = new Applications({
                 name: {
                     en: $scope.newApplication
                 }
             });
-            application.$save(function() {
+            application.$save(function () {
                 $scope.applications.push(application);
                 $scope.newApplication = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -164,35 +164,35 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var application = $scope.applications[index];
                 Applications.remove({
                     id: application._id
-                }, function() {
+                }, function () {
                     $scope.applications.splice(index, 1);
                 });
             });
         }
     }
 ).controller('FormsCtrl',
-    function($scope, Forms, $mdDialog) {
+    function ($scope, Forms, $mdDialog) {
         $scope.forms = Forms.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newForm || $scope.newForm.length < 1) return;
             var form = new Forms({
                 name: {
                     en: $scope.newForm
                 }
             });
-            form.$save(function() {
+            form.$save(function () {
                 $scope.forms.push(form);
                 $scope.newForm = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -200,34 +200,34 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var form = $scope.forms[index];
                 Forms.remove({
                     id: form._id
-                }, function() {
+                }, function () {
                     $scope.forms.splice(index, 1);
                 });
             });
         }
     }
-).controller('ValuesCtrl', function($scope, Values, $mdDialog) {
+).controller('ValuesCtrl', function ($scope, Values, $mdDialog) {
     $scope.values = Values.query({
         skip: 0,
         limit: 100
     });
-    $scope.save = function() {
+    $scope.save = function () {
         if (!$scope.newValue || $scope.newValue.length < 1) return;
         var value = new Values({
             name: {
                 en: $scope.newValue
             }
         });
-        value.$save(function() {
+        value.$save(function () {
             $scope.values.push(value);
             $scope.newValue = '';
         });
     }
-    $scope.remove = function(index) {
+    $scope.remove = function (index) {
         $mdDialog.show(
             $mdDialog.confirm()
             .parent(angular.element(document.body))
@@ -235,34 +235,34 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
             .title('Remove object?')
             .ok('Yes')
             .cancel('No')
-        ).then(function() {
+        ).then(function () {
             var value = $scope.values[index];
             Values.remove({
                 id: value._id
-            }, function() {
+            }, function () {
                 $scope.values.splice(index, 1);
             });
         });
     }
 }).controller('UserProfilesCtrl',
-    function($scope, UserProfiles, $mdDialog) {
+    function ($scope, UserProfiles, $mdDialog) {
         $scope.userprofiles = UserProfiles.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newUserProfile || $scope.newUserProfile.length < 1) return;
             var userprofile = new UserProfiles({
                 name: {
                     en: $scope.newUserProfile
                 }
             });
-            userprofile.$save(function() {
+            userprofile.$save(function () {
                 $scope.userprofiles.push(userprofile);
                 $scope.newUserProfile = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -270,34 +270,34 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var userprofile = $scope.userprofiles[index];
                 UserProfiles.remove({
                     id: userprofile._id
-                }, function() {
+                }, function () {
                     $scope.userprofiles.splice(index, 1);
                 });
             });
         }
     }).controller('SessionsCtrl',
-    function($scope, Sessions, $mdDialog) {
+    function ($scope, Sessions, $mdDialog) {
         $scope.sessions = Sessions.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newSession || $scope.newSession.length < 1) return;
             var session = new Sessions({
                 name: {
                     en: $scope.newSession
                 }
             });
-            session.$save(function() {
+            session.$save(function () {
                 $scope.sessions.push(session);
                 $scope.newSession = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -305,34 +305,34 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var session = $scope.sessions[index];
                 Sessions.remove({
                     id: session._id
-                }, function() {
+                }, function () {
                     $scope.sessions.splice(index, 1);
                 });
             });
         }
     }
 ).controller('CompaniesCtrl',
-    function($scope, Companies, $mdDialog) {
+    function ($scope, Companies, $mdDialog) {
         $scope.companies = Companies.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newCompany || $scope.newCompany.length < 1) return;
             var company = new Companies({
                 name: $scope.newCompany,
                 _company_code: $scope.newCompany
             });
-            company.$save(function() {
+            company.$save(function () {
                 $scope.companies.push(company);
                 $scope.newCompany = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -340,33 +340,33 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var company = $scope.companies[index];
                 Companies.remove({
                     id: company._id
-                }, function() {
+                }, function () {
                     $scope.companies.splice(index, 1);
                 });
             });
         }
     }
 ).controller('UsersCtrl',
-    function($scope, Users, $mdDialog) {
+    function ($scope, Users, $mdDialog) {
         $scope.users = Users.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newUser || $scope.newUser.length < 1) return;
             var user = new Users({
                 user: $scope.newUser
             });
-            user.$save(function() {
+            user.$save(function () {
                 $scope.users.push(user);
                 $scope.newUser = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -374,33 +374,33 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var user = $scope.users[index];
                 Users.remove({
                     id: user._id
-                }, function() {
+                }, function () {
                     $scope.users.splice(index, 1);
                 });
             });
         }
     }
 ).controller('FilesCtrl',
-    function($scope, Files, $mdDialog) {
+    function ($scope, Files, $mdDialog) {
         $scope.files = Files.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newFile || $scope.newFile.length < 1) return;
             var file = new Files({
                 file: $scope.newFile
             });
-            file.$save(function() {
+            file.$save(function () {
                 $scope.files.push(file);
                 $scope.newFile = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -408,35 +408,35 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var user = $scope.files[index];
                 Files.remove({
                     id: file._id
-                }, function() {
+                }, function () {
                     $scope.files.splice(index, 1);
                 });
             });
         }
     }
 ).controller('DataModelsCtrl',
-    function($scope, DataModels, $mdDialog) {
+    function ($scope, DataModels, $mdDialog) {
         $scope.datamodels = DataModels.query({
             skip: 0,
             limit: 100
         });
-        $scope.save = function() {
+        $scope.save = function () {
             if (!$scope.newDataModel || $scope.newDataModel.length < 1) return;
             var datamodel = new DataModels({
                 name: {
                     en: $scope.newDataModel
                 }
             });
-            datamodel.$save(function() {
+            datamodel.$save(function () {
                 $scope.datamodels.push(datamodel);
                 $scope.newDataModel = '';
             });
         }
-        $scope.remove = function(index) {
+        $scope.remove = function (index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -444,170 +444,172 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .title('Remove object?')
                 .ok('Yes')
                 .cancel('No')
-            ).then(function() {
+            ).then(function () {
                 var datamodel = $scope.datamodels[index];
                 DataModels.remove({
                     id: datamodel._id
-                }, function() {
+                }, function () {
                     $scope.datamodels.splice(index, 1);
                 });
             });
         }
     }
 ).controller('WorkflowDetailsCtrl',
-    function($scope,
+    function ($scope,
         $routeParams, Workflows, $location) {
         $scope.workflow = Workflows.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Workflows.update({
                 id: $scope.workflow._id
-            }, $scope.workflow, function() {
+            }, $scope.workflow, function () {
                 $location.url('/workflows');
             });
         }
     }
 ).controller('ApplicationDetailsCtrl',
-    function($scope,
+    function ($scope,
         $routeParams, Applications, $location) {
         $scope.application = Applications.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Applications.update({
                 id: $scope.application._id
-            }, $scope.application, function() {
+            }, $scope.application, function () {
                 $location.url('/applications');
             });
         }
     }
 ).controller('DataModelDetailsCtrl',
-    function($scope,
+    function ($scope,
         $routeParams, DataModels, $location) {
         $scope.datamodel = DataModels.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             DataModels.update({
                 id: $scope.datamodel._id
-            }, $scope.datamodel, function() {
+            }, $scope.datamodel, function () {
                 $location.url('/datamodels');
             });
         }
     }
 ).controller('FormDetailsCtrl',
-    function($scope, $routeParams,
+    function ($scope, $routeParams,
         Forms, $location) {
         $scope.form = Forms.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Forms.update({
                 id: $scope.form._id
-            }, $scope.form, function() {
+            }, $scope.form, function () {
                 $location.url('/forms');
             });
         }
     }
 ).controller('ValueDetailsCtrl',
-    function($scope, $routeParams,
+    function ($scope, $routeParams,
         Values, $location) {
         $scope.value = Values.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Values.update({
                 id: $scope.value._id
-            }, $scope.value, function() {
+            }, $scope.value, function () {
                 $location.url('/values');
             });
         }
     }
 ).controller('UserProfileDetailsCtrl',
-    function($scope,
+    function ($scope,
         $routeParams, UserProfiles, $location) {
         $scope.userprofile = UserProfiles.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             UserProfiles.update({
                 id: $scope.userprofile._id
-            }, $scope.userprofile, function() {
+            }, $scope.userprofile, function () {
                 $location.url('/userprofiles');
             });
         }
     }
 ).controller('SessionDetailsCtrl',
-    function($scope,
+    function ($scope,
         $routeParams, Sessions, $location) {
         $scope.session = Sessions.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Sessions.update({
                 id: $scope.session._id
-            }, $scope.session, function() {
+            }, $scope.session, function () {
                 $location.url('/sessions');
             });
         }
     }
 ).controller('CompanyDetailsCtrl',
-    function($scope,
+    function ($scope,
         $routeParams, Companies, $location) {
         $scope.company = Companies.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Companies.update({
                 id: $scope.company._id
-            }, $scope.company, function() {
+            }, $scope.company, function () {
                 $location.url('/companies');
             });
         }
     }
 ).controller('UserDetailsCtrl',
-    function($scope, $routeParams,
+    function ($scope, $routeParams,
         Users, $location) {
         $scope.user = Users.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Users.update({
                 id: $scope.user._id
-            }, $scope.user, function() {
+            }, $scope.user, function () {
                 $location.url('/users');
             });
         }
     }
 ).controller('FileDetailsCtrl',
-    function($scope, $routeParams,
+    function ($scope, $routeParams,
         Files, $location) {
         $scope.file = Files.get({
             id: $routeParams.id
         });
-        $scope.update = function() {
+        $scope.update = function () {
             Files.update({
                 id: $scope.file._id
-            }, $scope.file, function() {
+            }, $scope.file, function () {
                 $location.url('/files');
             });
         }
     }
 ).controller('UpdateCtrl',
-    function($scope,
+    function ($scope,
         Update) {
-        $scope.update = function() {
-            Update.get(function(result) {
+        $scope.update = function () {
+            Update.update({}, {
+                repository: $scope.update.repository
+            }, function (result) {
                 $scope.update = result;
             });
         }
     }
-).controller('LeftCtrl', function($scope, $timeout, $mdSidenav, $log) {
-    $scope.close = function() {
+).controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+    $scope.close = function () {
         $mdSidenav('left').close();
     };
-}).controller('AppCtrl', function($scope, $timeout, $mdSidenav, $log) {
+}).controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.toggleLeft = buildDelayedToggler('left');
 
     function debounce(func, wait, context) {
@@ -616,7 +618,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
             var context = $scope,
                 args = Array.prototype.slice.call(arguments);
             $timeout.cancel(timer);
-            timer = $timeout(function() {
+            timer = $timeout(function () {
                 timer = undefined;
                 func.apply(context, args);
             }, wait || 10);
@@ -624,14 +626,14 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     }
 
     function buildDelayedToggler(navID) {
-        return debounce(function() {
-            $mdSidenav(navID).toggle().then(function() {
+        return debounce(function () {
+            $mdSidenav(navID).toggle().then(function () {
                 $log.debug('toggle ' + navID + ' is done');
             });
         }, 200);
     }
 }).config(['$routeProvider',
-    function($routeProvider) {
+    function ($routeProvider) {
         $routeProvider
             .when('/about', {
                 templateUrl: 'welcome.html'
