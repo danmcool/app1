@@ -12,60 +12,60 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://app1:123Apps@127.0.0.1:55055/apps');
 
 // require routes
-var api = require('./routes/api.js');
-var data = require('./routes/data.js');
-var file = require('./routes/file.js');
-var client = require('./routes/client.js');
-var design = require('./routes/design.js');
-var authentication = require('./routes/authentication.js');
+var api = require('./routes/api.min.js');
+var data = require('./routes/data.min.js');
+var file = require('./routes/file.min.js');
+var client = require('./routes/client.min.js');
+var design = require('./routes/design.min.js');
+var authentication = require('./routes/authentication.min.js');
 
 // init metadata and sessions
-require('./tools/init_objects.js');
+require('./tools/init_objects.min.js');
 
 // create instance of express
 var app = express();
 
-var SessionCache = require('./tools/session_cache.js');
-var Constants = require('./tools/constants.js');
+var SessionCache = require('./tools/session_cache.min.js');
+var Constants = require('./tools/constants.min.js');
 
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: false
+	extended: false
 }));
 app.use(cookieParser());
 
 function allowedPath(req) {
-    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client')) {
-        return false;
-    }
-    return true;
+	if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client')) {
+		return false;
+	}
+	return true;
 }
 
 function nocache(req, res) {
-    /*    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client') || req.path.startsWith('/authentication')) {
-            res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-            res.header('Expires', '-1');
-            res.header('Pragma', 'no-cache');
-        }*/
+	/*    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client') || req.path.startsWith('/authentication')) {
+	        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+	        res.header('Expires', '-1');
+	        res.header('Pragma', 'no-cache');
+	    }*/
 }
 
 app.use(function (req, res, next) {
-    if (allowedPath(req)) {
-        nocache(req, res);
-        next();
-    } else {
-        SessionCache.isActive(req, function (active) {
-            if (active) {
-                nocache(req, res);
-                next();
-            } else {
-                return res.status(401).redirect('/');
-            }
-        });
-    }
+	if (allowedPath(req)) {
+		nocache(req, res);
+		next();
+	} else {
+		SessionCache.isActive(req, function (active) {
+			if (active) {
+				nocache(req, res);
+				next();
+			} else {
+				return res.status(401).redirect('/');
+			}
+		});
+	}
 });
 
 // routes
@@ -80,25 +80,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../client', 'index.html'));
+	res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
 app.get('/admin', function (req, res) {
-    res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
+	res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
 });
 
 // error hndlers
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 app.use(function (err, req, res) {
-    res.status(err.status || 500);
-    res.end(JSON.stringify({
-        message: err.message,
-        error: {}
-    }));
+	res.status(err.status || 500);
+	res.end(JSON.stringify({
+		message: err.message,
+		error: {}
+	}));
 });
 
 module.exports = app;

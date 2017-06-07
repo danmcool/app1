@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "start": "node server/server.js"
+        "start": "node server/server.min.js"
     },
     "dependencies": {
         "aws-sdk": "^2.6.11",

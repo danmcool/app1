@@ -1,1 +1,1 @@
-app1.controller('WelcomeCtrl', function($scope) {});
+app1.controller('WelcomeCtrl', function () {});

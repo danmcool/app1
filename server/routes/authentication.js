@@ -5,11 +5,11 @@ var crypto = require('crypto');
 var fs = require('fs');
 var saml2 = require('saml2-js');
 
-var Metadata = require('../models/metadata.js');
-var Constants = require('../tools/constants.js');
-var Email = require('../tools/email.js');
-var SessionCache = require('../tools/session_cache.js');
-var ApplicationLiveCycle = require('../tools/application_live_cycle.js');
+var Metadata = require('../models/metadata.min.js');
+var Constants = require('../tools/constants.min.js');
+var Email = require('../tools/email.min.js');
+var SessionCache = require('../tools/session_cache.min.js');
+var ApplicationLiveCycle = require('../tools/application_live_cycle.min.js');
 
 var Company = Metadata.Company;
 var User = Metadata.User;
