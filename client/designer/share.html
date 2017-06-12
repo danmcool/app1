@@ -1,0 +1,22 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+	<div layout="row">
+		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+		<div layout-padding flex layout="column" class="fade">
+			<md-toolbar layout="row">
+				<div class="md-toolbar-tools">
+					<span md-colors="{'color': 'primary-50'}">{{sessionData.appData.public_share}}</span>
+				</div>
+			</md-toolbar>
+			<form>
+				<md-input-container flex="auto" class="md-block">
+					<label>{{sessionData.appData.select_application_profile}}</label>
+					<md-select ng-disabled="false" ng-required="true" aria-label="Application Profiles">
+						<md-option ng-repeat="profile in application.public_profiles" value="{{profile._id}}" ng-selected="data[field.name].currency == value._id">{{value.name}}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-button flex-gt-xs type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+			</form>
+		</div>
+		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+	</div>
+</md-content>

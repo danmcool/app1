@@ -374,6 +374,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			templateUrl: 'designer/application.html',
 			controller: 'ApplicationEditCtrl'
 		})
+		.when('/application_share/:id', {
+			templateUrl: 'designer/share.html',
+			controller: 'ApplicationShareCtrl'
+		})
 		.when('/workflow_edit/:id', {
 			templateUrl: 'designer/workflow.html',
 			controller: 'WorkflowEditCtrl'

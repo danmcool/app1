@@ -110,26 +110,37 @@ router.get('/application/', function (req, res, next) {
 	Application.find(SessionCache.filterApplicationCompanyCode(req, {
 		'_id': {
 			'$in': SessionCache.userData[req.cookies[Constants.SessionCookie]].company.applications
-		}
+		},
+		active: true
 	})).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err,
 		apps) {
 		if (err) return next(err);
 		var remoteProfiles = SessionCache.userData[req.cookies[Constants.SessionCookie]].remote_profiles;
+		var userToken = req.cookies[Constants.SessionCookie];
 		for (var i = apps.length - 1; i >= 0; i--) {
 			if (!apps[i].profiles || apps[i].profiles.length == 0) {
-				if (SessionCache.userData[req.cookies[Constants.SessionCookie]].profile.type == Constants.UserProfilePublic) {
+				if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
 					apps.splice(i, 1)
 				}
 				continue;
 			}
 			var profileFound;
-			if (SessionCache.userData[req.cookies[Constants.SessionCookie]].profile.type != Constants.UserProfilePublic) {
+			if (SessionCache.userData[userToken].profile.type != Constants.UserProfilePublic) {
 				profileFound = apps[i].default_profile;
 			}
 			for (var j = 0; j < remoteProfiles.length; j++) {
-				if (remoteProfiles[j].type == Constants.UserProfileApplication && remoteProfiles[j].profile.applications[apps[i]._id]) {
-					profileFound = remoteProfiles[j];
-					break;
+				if (remoteProfiles[j].profile.applications[apps[i]._id]) {
+					if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+						if (remoteProfiles[j].type == Constants.UserProfileShare) {
+							profileFound = remoteProfiles[j];
+							break;
+						}
+					} else {
+						if (remoteProfiles[j].type == Constants.UserProfileApplication) {
+							profileFound = remoteProfiles[j];
+							break;
+						}
+					}
 				}
 			}
 			if (profileFound) {
@@ -192,7 +203,7 @@ router.put('/company/:id', function (req, res, next) {
 	});
 });
 
-router.post('/share', function (req, res, next) {
+router.put('/share', function (req, res, next) {
 	if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
 		err: 'Not logged in!'
 	});
@@ -208,33 +219,67 @@ router.post('/share', function (req, res, next) {
 		if (!objectProfile) return res.status(400).json({
 			err: 'Invalid parameters!'
 		});
-		var userprofile = {
+		var userProfile = {
 			name: {
 				en: 'Share'
 			},
-			profile: {
-				applications: objectProfile.applications,
-				datamodels: {}
-			},
+			profile: objectProfile.profile,
 			properties: objectProfile.properties,
 			type: Constants.UserProfileShare,
 			_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
 		};
-		userprofile.profile.datamodels[req.query.datamodel_id] = {};
-		userprofile.profile.datamodels[req.query.datamodel_id][req.query.data_id] = {
-			_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
-			constraint: {
-				key: req.body.key,
-				value: req.body.value
-			}
-		}
-		UserProfile.create(userprofile, function (err, newUserprofile) {
-			if (err) return next(err);
-			res.status(200).json({
-				msg: 'Form shared successfully!'
+		if (objectProfile.properties.user && objectProfile.properties.user == Constants.UserProfilePublic) {
+			var appId = Object.keys(objectProfile.profile.applications)[0];
+			var workflowId = Object.keys(objectProfile.profile.applications[appId].workflows)[0];
+			var applicationsFilter = 'profile.applications.' + appId + '.workflows.' + workflowId;
+			var filter = {
+				'properties.user': Constants.UserProfilePublic,
+				_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
+				type: Constants.UserProfileShare
+			};
+			filter[applicationsFilter] = true;
+			console.log(filter);
+			UserProfile.findOne(filter, function (errExistingProfile, objectExistingProfile) {
+				if (errExistingProfile) return next(errExistingProfile);
+				if (!objectExistingProfile) {
+					console.log(userProfile);
+					UserProfile.create(userProfile, function (err, newUserprofile) {
+						if (err) return next(err);
+						res.status(200).json({
+							msg: 'Application shared successfully (new share)!',
+							share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+						});
+						Email.sendSharePublic(SessionCache.userData[req.cookies[Constants.SessionCookie]].email, newUserprofile._id);
+					});
+				} else {
+					res.status(200).json({
+						msg: 'Application shared successfully (existing share)!',
+						share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
+					});
+					Email.sendSharePublic(SessionCache.userData[req.cookies[Constants.SessionCookie]].email, objectExistingProfile._id);
+				}
 			});
-			Email.sendShare(req.body.email, SessionCache.userData[req.cookies[Constants.SessionCookie]].email, req.query.data_id, newUserprofile._id);
-		});
+		} else {
+			if (!userProfile.profile.datamodels) {
+				userProfile.profile.datamodels = {};
+			}
+			userProfile.profile.datamodels[req.query.datamodel_id] = {};
+			userProfile.profile.datamodels[req.query.datamodel_id][req.query.data_id] = {
+				_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
+				constraint: {
+					key: req.body.key,
+					value: req.body.value
+				}
+			}
+			UserProfile.create(userProfile, function (err, newUserprofile) {
+				if (err) return next(err);
+				res.status(200).json({
+					msg: 'Application shared successfully!',
+					share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+				});
+				Email.sendShare(req.body.email, SessionCache.userData[req.cookies[Constants.SessionCookie]].email, req.query.data_id, newUserprofile._id);
+			});
+		}
 	});
 });
 

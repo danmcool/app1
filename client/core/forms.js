@@ -432,7 +432,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 		}
 	}
 
-	$scope.create = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
+	$scope.create = function (formula, nextFormId, setValue, data, forwardId, notifyUser, emailTitle, emailHtml) {
 		updateComponents($scope.form, setValue, data);
 		$scope.data.$save().then(function (res) {
 			if (notifyUser) {
@@ -442,7 +442,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 					notify(data._user, emailTitle, emailHtml);
 				}
 			}
-			gotoNextForm(formula, nextFormId, null);
+			if (forwardId) {
+				gotoNextForm(formula, nextFormId, res);
+			} else {
+				gotoNextForm(formula, nextFormId, null);
+			}
 		}).catch(function (res) {
 			$scope.data = res.data;
 		});
@@ -693,7 +697,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 			datamodel_id: $scope.form.datamodel._id,
 			entry_id: data._id
 		}, data).$promise.then(function (res) {
-			Share.get({
+			Share.update({
 				form_id: form_id,
 				datamodel_id: $scope.form.datamodel._id,
 				data_id: data._id,

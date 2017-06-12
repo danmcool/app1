@@ -100,6 +100,14 @@ Email.sendShare = function (email_address, cc_email_address, data_id, profile_id
 		'<br><a href="http://app1.cloud">App1.Cloud</a>');
 }
 
+Email.sendSharePublic = function (email_address, profile_id) {
+	Email.send(
+		email_address, '', 'App1 - Shared workflow',
+		'Automatic message from App1',
+		'<span><p>Dear customer, please use the following link to share the application`s workflow:</p></span><br><a href="http://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">"http://' +
+		Constants.WebAddress + '/authentication/open?pid=' + profile_id + '"</a>');
+}
+
 Email.sendCalendar = function (email_address, projectName, startDate, endDate, userName) {
 	cal = ical({
 		domain: 'app1.cloud',

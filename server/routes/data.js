@@ -43,61 +43,123 @@ var getProfile = function (token, datamodelid) {
 }
 
 router.get('/:datamodelid/', function (req, res, next) {
-	var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
+	var token = req.cookies[Constants.SessionCookie];
+	var user = SessionCache.userData[token];
+	var profile = getProfile(token, req.params.datamodelid);
+	var remote_profile = {};
+	var remote = false;
+	if (user.remote_profiles && user.remote_profiles.length > 0) {
+		for (var i = 0; i < user.remote_profiles.length; i++) {
+			if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list) {
+				remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list;
+				remote = true;
+			}
+		}
+	}
 	if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].list) {
-		return res.status(401).json({
-			err: 'Not enough user rights!'
-		});
+		if (!remote) {
+			return res.status(401).json({
+				err: 'Not enough user rights!'
+			});
+		}
 	}
 	var pageOptions = computePage(req);
 	var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
 	var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
-	search_criteria._company_code = {
-		'$eq': profile.datamodels[req.params.datamodelid].list._company_code
-	};
-	if (profile.datamodels[req.params.datamodelid].list._user) {
-		search_criteria._user = {
-			'$in': profile.datamodels[req.params.datamodelid].list._user
+	if (remote) {
+		search_criteria._company_code = {
+			'$eq': remote_profile._company_code
 		};
+		if (remote_profile._user) {
+			search_criteria._user = {
+				'$in': remote_profile._user
+			};
+		}
+	} else {
+		search_criteria._company_code = {
+			'$eq': profile.datamodels[req.params.datamodelid].list._company_code
+		};
+		if (profile.datamodels[req.params.datamodelid].list._user) {
+			search_criteria._user = {
+				'$in': profile.datamodels[req.params.datamodelid].list._user
+			};
+		}
 	}
-	Metadata.Objects[req.params.datamodelid].find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit)
-		.sort(sort_by).exec(function (err, objects) {
-			if (err) return next(err);
-			res.json(objects);
-		});
+	Metadata.Objects[req.params.datamodelid].find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
+		if (err) return next(err);
+		res.json(objects);
+	});
 });
 
 router.post('/:datamodelid/', function (req, res, next) {
-	var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
+	var token = req.cookies[Constants.SessionCookie];
+	var user = SessionCache.userData[token];
+	var profile = getProfile(token, req.params.datamodelid);
+	var remote_profile = {};
+	var remote = false;
+	if (user.remote_profiles && user.remote_profiles.length > 0) {
+		for (var i = 0; i < user.remote_profiles.length; i++) {
+			if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
+				if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+					remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+					remote = true;
+					break;
+				} else {
+					if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create) {
+						remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create;
+						remote = true;
+					}
+				}
+
+			}
+		}
+	}
 	if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].create) {
-		return res.status(401).json({
-			err: 'Not enough user rights!'
-		});
+		if (!remote) {
+			return res.status(401).json({
+				err: 'Not enough user rights!'
+			});
+		}
 	}
 	if (req.body) {
 		req.body._updated_at = Date.now();
-		req.body._company_code = profile.datamodels[req.params.datamodelid].create._company_code;
-		req.body._user = profile.datamodels[req.params.datamodelid].create._user[0];
+		if (remote) {
+			req.body._company_code = remote_profile._company_code;
+			req.body._user = remote_profile._user[0];
+		} else {
+			req.body._company_code = profile.datamodels[req.params.datamodelid].create._company_code;
+			req.body._user = profile.datamodels[req.params.datamodelid].create._user[0];
+		}
 	}
 	Metadata.Objects[req.params.datamodelid].create(req.body, function (err, object) {
 		if (err) return next(err);
 		res.status(200).json({
-			'msg': 'Data: entry created!'
+			msg: 'Data: entry created!',
+			_id: object._id
 		});
 	});
 });
 
 router.get('/:datamodelid/:id', function (req, res, next) {
-	var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-	var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
+	var token = req.cookies[Constants.SessionCookie];
+	var user = SessionCache.userData[token];
+	var profile = getProfile(token, req.params.datamodelid);
 	var remote_profile = {};
 	var remote = false;
 	if (user.remote_profiles && user.remote_profiles.length > 0) {
 		for (var i = 0; i < user.remote_profiles.length; i++) {
-			if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
-				remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
-				remote = true;
-				break;
+			if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
+				if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+					remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+					remote = true;
+					break;
+				} else {
+					if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read) {
+						remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read;
+						remote = true;
+					}
+				}
+
 			}
 		}
 	}
@@ -137,8 +199,9 @@ router.get('/:datamodelid/:id', function (req, res, next) {
 });
 
 router.put('/:datamodelid/:id', function (req, res, next) {
-	var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-	var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
+	var token = req.cookies[Constants.SessionCookie];
+	var user = SessionCache.userData[token];
+	var profile = getProfile(token, req.params.datamodelid);
 	var remote_profile = {};
 	var remote = false;
 	if (user.remote_profiles && user.remote_profiles.length > 0) {

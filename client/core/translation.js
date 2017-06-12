@@ -28,6 +28,22 @@ app1.factory('AppTranslationService', function AppTranslationService() {
 			en: 'Application Designer',
 			fr: 'Editeur d`application'
 		},
+		share_url: {
+			en: 'Share URL',
+			fr: 'URL pour le partage'
+		},
+		public_share: {
+			en: 'Public Share',
+			fr: 'Partage publique'
+		},
+		no_public_profile: {
+			en: 'No public profile available',
+			fr: 'Pas de profile publique disponible'
+		},
+		error: {
+			en: 'Error',
+			fr: 'Erreur'
+		},
 		text_translation: {
 			en: 'Text Translation',
 			fr: 'Traduction de texte'

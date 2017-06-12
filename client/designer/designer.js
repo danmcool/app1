@@ -16,7 +16,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			method: 'PUT'
 		}
 	});
-}]).controller('DesignerCtrl', ['$scope', 'SessionService', 'DesignApplication', 'Company', '$mdDialog', '$location', function ($scope, SessionService, DesignApplication, Company, $mdDialog, $location) {
+}]).controller('DesignerCtrl', ['$scope', 'SessionService', 'DesignApplication', 'Company', 'Share', '$mdDialog', '$location', function ($scope, SessionService, DesignApplication, Company, Share, $mdDialog, $location) {
 	$scope.sessionData = SessionService.getSessionData();
 	$scope.applications = [];
 
@@ -74,7 +74,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 		});
 	}
 
-	$scope.delete = function (app) {
+	$scope.delete = function (appId) {
 		$mdDialog.show(
 			$mdDialog.confirm()
 			.parent(angular.element(document.body))
@@ -85,26 +85,19 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			.cancel($scope.sessionData.appData.cancel)
 		).then(function () {
 			DesignApplication.remove({
-				id: app._id
+				id: appId
 			}).$promise.then(function (res) {
-				if (!app.enabled) {
-					for (var i = 0; i < $scope.applications.length; i++) {
-						if ($scope.applications[i]._id == app._id) {
-							$scope.applications.splice(i, 1);
-							break;
-						}
+				for (var i = 0; i < $scope.applications.length; i++) {
+					if ($scope.applications[i]._id == appId) {
+						$scope.applications.splice(i, 1);
+						break;
 					}
-				} else {
+				}
+				if (app.enabled) {
 					var enabledApps = $scope.sessionData.userData.company.applications;
 					for (var i = 0; i < enabledApps.length; i++) {
-						if (app._id == enabledApps[i]) {
+						if (appId == enabledApps[i]) {
 							enabledApps.splice(i, 1);
-							break;
-						}
-					}
-					for (var i = 0; i < $scope.applications.length; i++) {
-						if (app._id == $scope.applications[i]._id) {
-							$scope.applications.splice(i, 1);
 							break;
 						}
 					}
@@ -146,5 +139,36 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 
 	$scope.edit = function (applicationId) {
 		$location.url('/application_edit/' + applicationId);
+	}
+	$scope.share = function (application) {
+		var publicProfileFound = false;
+		for (var i = 0; i < application.profiles.length; i++) {
+			if (application.profiles[i].properties && application.profiles[i].properties.user == 'public') {
+				publicProfileFound = true;
+				Share.update({
+					app_profile_id: application.profiles[i]._id
+				}).$promise.then(function (res) {
+					$mdDialog.show(
+						$mdDialog.confirm()
+						.parent(angular.element(document.body))
+						.clickOutsideToClose(true)
+						.title($scope.sessionData.appData.share_url)
+						.textContent(res.data.share_url)
+						.ok($scope.sessionData.appData.ok)
+					);
+				}).catch(function (res) {});
+				break;
+			}
+		}
+		if (!publicProfileFound) {
+			$mdDialog.show(
+				$mdDialog.alert()
+				.parent(angular.element(document.body))
+				.clickOutsideToClose(true)
+				.title($scope.sessionData.appData.error)
+				.textContent($scope.sessionData.appData.no_public_profile)
+				.ok($scope.sessionData.appData.ok)
+			);
+		}
 	}
 }]);
