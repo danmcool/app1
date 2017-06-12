@@ -247,7 +247,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
 	}
 	search_criteria._updated_at = Date.parse(req.body._updated_at);
 	req.body._updated_at = Date.now();
-	Metadata.Objects[req.params.datamodelid].findOneAndUpdate(search_criteria, req.body, function (err, object) {
+	Metadata.Objects[req.params.datamodelid].findOneAndUpdate(search_criteria, req.bodyW, function (err, object) {
 		if (err) return next(err);
 		if (object) {
 			res.status(200).json({

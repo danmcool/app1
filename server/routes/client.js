@@ -168,20 +168,8 @@ router.put('/user/:id', function (req, res, next) {
 		if (err) return res.status(400).json({
 			errUser: err
 		});
-		User.findOne({
-				_id: req.params.id
-			}, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
-			.populate('company profile remote_profiles').exec(
-				function (errUser, userObject) {
-					if (errUser) return res.status(400).json({
-						errUser: info
-					});
-					if (!userObject) return res.status(400).json({
-						err: 'Invalid user name!'
-					});
-					SessionCache.update(req.cookies[Constants.SessionCookie], userObject);
-					res.json(userObject);
-				});
+		res.json(object);
+		SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
 	});
 });
 
@@ -200,6 +188,7 @@ router.put('/company/:id', function (req, res, next) {
 	}), req.body, function (err, object) {
 		if (err) return next(err);
 		res.json(object);
+		SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
 	});
 });
 

@@ -127,6 +127,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 		} else {
 			enabledApps.push(app._id);
 		}
+		$scope.sessionData.userData.company.applications = enabledApps;
 		Company.update({
 			id: $scope.sessionData.userData.company._id
 		}, {
