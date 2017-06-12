@@ -87,7 +87,7 @@ router.post('/register', function (req, res) {
 			var company = {
 				name: req.body.company_name,
 				_company_code: req.body.code,
-				applications: ['58209e223ee6583658eceedb', '58223c8dfaa281219c13beaf', '584185e59b20a92dd877ee9f', '586bbda98983994e00fc9757']
+				applications: ['593d6a2b09290d1e3e9d9863', '58223c8dfaa281219c13beaf', '584185e59b20a92dd877ee9f', '586bbda98983994e00fc9757']
 			};
 			Company.create(company, function (errCompany, newCompany) {
 				if (errCompany) return next(errCompany);

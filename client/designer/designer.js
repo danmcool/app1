@@ -146,14 +146,16 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			if (application.profiles[i].properties && application.profiles[i].properties.user == 'public') {
 				publicProfileFound = true;
 				Share.update({
-					app_profile_id: application.profiles[i]._id
+					app_profile_id: application.profiles[i]._id,
+					app_name: application.name.en,
+					profile_name: application.profiles[i].name.en
 				}).$promise.then(function (res) {
 					$mdDialog.show(
 						$mdDialog.confirm()
 						.parent(angular.element(document.body))
 						.clickOutsideToClose(true)
 						.title($scope.sessionData.appData.share_url)
-						.textContent(res.data.share_url)
+						.textContent(res.share_url)
 						.ok($scope.sessionData.appData.ok)
 					);
 				}).catch(function (res) {});
