@@ -156,6 +156,12 @@ router.get('/application/', function (req, res, next) {
 });
 
 router.put('/user/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+		return res.status(401).json({
+			errUser: 'Not enough user rights'
+		});
+	}
 	var newUserProperties = {
 		properties: req.body.properties
 	};
@@ -169,11 +175,17 @@ router.put('/user/:id', function (req, res, next) {
 			errUser: err
 		});
 		res.json(object);
-		SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
+		SessionCache.removeUserCache(userToken);
 	});
 });
 
 router.get('/company/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+		return res.status(401).json({
+			errUser: 'Not enough user rights'
+		});
+	}
 	Company.findOne(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	}), function (err, object) {
@@ -183,19 +195,28 @@ router.get('/company/:id', function (req, res, next) {
 });
 
 router.put('/company/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+		return res.status(401).json({
+			errUser: 'Not enough user rights'
+		});
+	}
 	Company.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
 		_id: req.body._id
 	}), req.body, function (err, object) {
 		if (err) return next(err);
 		res.json(object);
-		SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
+		SessionCache.removeUserCache(userToken);
 	});
 });
 
 router.put('/share', function (req, res, next) {
-	if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
-		err: 'Not logged in!'
-	});
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	if (!req.body.app_profile_id) {
 		return res.status(400).json({
 			err: 'Invalid parameters!'
@@ -215,7 +236,7 @@ router.put('/share', function (req, res, next) {
 			profile: objectProfile.profile,
 			properties: objectProfile.properties,
 			type: Constants.UserProfileShare,
-			_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+			_company_code: SessionCache.userData[userToken]._company_code
 		};
 		if (objectProfile.properties.user && objectProfile.properties.user == Constants.UserProfilePublic) {
 			var appId = Object.keys(objectProfile.profile.applications)[0];
@@ -223,29 +244,27 @@ router.put('/share', function (req, res, next) {
 			var applicationsFilter = 'profile.applications.' + appId + '.workflows.' + workflowId;
 			var filter = {
 				'properties.user': Constants.UserProfilePublic,
-				_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
+				_company_code: SessionCache.userData[userToken]._company_code,
 				type: Constants.UserProfileShare
 			};
 			filter[applicationsFilter] = true;
-			console.log(filter);
 			UserProfile.findOne(filter, function (errExistingProfile, objectExistingProfile) {
 				if (errExistingProfile) return next(errExistingProfile);
 				if (!objectExistingProfile) {
-					console.log(userProfile);
 					UserProfile.create(userProfile, function (err, newUserprofile) {
 						if (err) return next(err);
 						res.status(200).json({
 							msg: 'Application shared successfully (new share)!',
 							share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
 						});
-						Email.sendSharePublic(SessionCache.userData[req.cookies[Constants.SessionCookie]].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
+						Email.sendSharePublic(SessionCache.userData[userToken].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
 					});
 				} else {
 					res.status(200).json({
 						msg: 'Application shared successfully (existing share)!',
 						share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
 					});
-					Email.sendSharePublic(SessionCache.userData[req.cookies[Constants.SessionCookie]].email, objectExistingProfile._id, req.body.app_name, req.body.profile_name);
+					Email.sendSharePublic(SessionCache.userData[userToken].email, objectExistingProfile._id, req.body.app_name, req.body.profile_name);
 				}
 			});
 		} else {
@@ -254,7 +273,7 @@ router.put('/share', function (req, res, next) {
 			}
 			userProfile.profile.datamodels[req.query.datamodel_id] = {};
 			userProfile.profile.datamodels[req.query.datamodel_id][req.query.data_id] = {
-				_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
+				_company_code: SessionCache.userData[userToken]._company_code,
 				constraint: {
 					key: req.body.key,
 					value: req.body.value
@@ -266,7 +285,7 @@ router.put('/share', function (req, res, next) {
 					msg: 'Application shared successfully!',
 					share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
 				});
-				Email.sendShare(req.body.email, SessionCache.userData[req.cookies[Constants.SessionCookie]].email, req.query.data_id, newUserprofile._id);
+				Email.sendShare(req.body.email, SessionCache.userData[userToken].email, req.query.data_id, newUserprofile._id);
 			});
 		}
 	});
@@ -274,9 +293,6 @@ router.put('/share', function (req, res, next) {
 
 
 router.get('/calendar', function (req, res, next) {
-	if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
-		err: 'Not logged in!'
-	});
 	if (!req.query.project_name || !req.query.start_date || !req.query.end_date || !req.query.user_id) return res.status(400).json({
 		err: 'Invalid parameters!'
 	});
@@ -297,9 +313,6 @@ router.get('/calendar', function (req, res, next) {
 });
 
 router.put('/notify/:user_id', function (req, res, next) {
-	if (!req.cookies[Constants.SessionCookie]) return res.status(401).json({
-		err: 'Not logged in!'
-	});
 	if (!req.body.email_title || !req.body.email_html) return res.status(400).json({
 		err: 'Invalid parameters!'
 	});

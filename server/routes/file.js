@@ -24,7 +24,7 @@ router.get('/', function (req, res, next) {
 	}
 	var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
 	search_criteria._company_code = {
-		'$eq': SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+		'$eq': SessionCache.userData[userToken]._company_code
 	};
 	var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
 	Metadata.File.find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (

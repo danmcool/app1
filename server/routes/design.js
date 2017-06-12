@@ -22,6 +22,12 @@ var computePage = function (req) {
 }
 
 router.get('/application', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	var pageOptions = computePage(req);
 	Application.find(SessionCache.filterApplicationCompanyCode(req, {})).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
 		apps) {
@@ -30,6 +36,12 @@ router.get('/application', function (req, res, next) {
 	});
 });
 router.post('/application/', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	SessionCache.filterCompanyCode(req, {});
 	Application.create(req.body, function (err, object) {
 		if (err) return next(err);
@@ -37,6 +49,12 @@ router.post('/application/', function (req, res, next) {
 	});
 });
 router.get('/application/:id/', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Application.findOne(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	})).populate('workflows').exec(function (err, apps) {
@@ -45,6 +63,12 @@ router.get('/application/:id/', function (req, res, next) {
 	});
 });
 router.put('/application/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Application.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
 		_id: req.body._id
 	}), req.body, function (err, object) {
@@ -53,6 +77,12 @@ router.put('/application/:id', function (req, res, next) {
 	});
 });
 router.delete('/application/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Application.findOneAndRemove(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	}), function (err, object) {
@@ -62,6 +92,12 @@ router.delete('/application/:id', function (req, res, next) {
 });
 
 router.post('/workflow/', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	SessionCache.filterCompanyCode(req, {});
 	Workflow.create(req.body, function (err, object) {
 		if (err) return next(err);
@@ -69,6 +105,12 @@ router.post('/workflow/', function (req, res, next) {
 	});
 });
 router.get('/workflow/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Workflow.findOne(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	})).populate('forms').exec(function (err,
@@ -78,6 +120,12 @@ router.get('/workflow/:id', function (req, res, next) {
 	});
 });
 router.put('/workflow/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Workflow.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
 		_id: req.body._id
 	}), req.body, function (err, object) {
@@ -86,6 +134,12 @@ router.put('/workflow/:id', function (req, res, next) {
 	});
 });
 router.delete('/workflow/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Workflow.findOneAndRemove(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	}), function (err, object) {
@@ -95,6 +149,12 @@ router.delete('/workflow/:id', function (req, res, next) {
 });
 
 router.post('/form', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	SessionCache.filterCompanyCode(req, {});
 	Form.create(req.body, function (err, object) {
 		if (err) return next(err);
@@ -102,6 +162,12 @@ router.post('/form', function (req, res, next) {
 	});
 });
 router.get('/form/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Metadata.Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
 		_id: {
 			'$eq': req.params.id
@@ -115,6 +181,12 @@ router.get('/form/:id', function (req, res, next) {
 	});
 });
 router.put('/form/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
 		_id: req.body._id
 	}), req.body, function (err, object) {
@@ -123,6 +195,12 @@ router.put('/form/:id', function (req, res, next) {
 	});
 });
 router.delete('/form/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	}), function (err, object) {
@@ -132,6 +210,12 @@ router.delete('/form/:id', function (req, res, next) {
 });
 
 router.post('/datamodel', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	SessionCache.filterCompanyCode(req, {});
 	Form.create(req.body, function (err, object) {
 		if (err) return next(err);
@@ -139,6 +223,12 @@ router.post('/datamodel', function (req, res, next) {
 	});
 });
 router.get('/datamodel/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Metadata.Form.findOne(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	})).exec(function (err, formObject) {
@@ -150,6 +240,12 @@ router.get('/datamodel/:id', function (req, res, next) {
 	});
 });
 router.put('/datamodel/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
 		_id: req.body._id
 	}), req.body, function (err, object) {
@@ -158,6 +254,12 @@ router.put('/datamodel/:id', function (req, res, next) {
 	});
 });
 router.delete('/datamodel/:id', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
 	Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	}), function (err, object) {
