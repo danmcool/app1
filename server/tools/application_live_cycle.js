@@ -3,8 +3,8 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 var ApplicationLiveCycle = {};
-var Metadata = require('../models/metadata.min.js');
-var Constants = require('../tools/constants.min.js');
+var Metadata = require('../models/metadata.js');
+var Constants = require('../tools/constants.js');
 
 var replaceFormDataModel = function (formId, oldDataModel, newDataModel) {
 	//console.log(formId + '-'+oldDataModel+'-'+newDataModel);

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
-var Metadata = require('../models/metadata.min.js');
-var Constants = require('../tools/constants.min.js');
+var Metadata = require('../models/metadata.js');
+var Constants = require('../tools/constants.js');
 var Session = Metadata.Session;
 var User = Metadata.User;
 

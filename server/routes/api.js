@@ -4,9 +4,9 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Metadata = require('../models/metadata.min.js');
-var SessionCache = require('../tools/session_cache.min.js');
-var Constants = require('../tools/constants.min.js');
+var Metadata = require('../models/metadata.js');
+var SessionCache = require('../tools/session_cache.js');
+var Constants = require('../tools/constants.js');
 
 var computePage = function (req) {
 	return pageOptions = {

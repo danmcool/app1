@@ -4,8 +4,8 @@ var saml2 = require('saml2-js');
 
 var Schema = mongoose.Schema;
 
-var Metadata = require('../models/metadata.min.js');
-var SessionCache = require('../tools/session_cache.min.js');
+var Metadata = require('../models/metadata.js');
+var SessionCache = require('../tools/session_cache.js');
 
 // upload existing data models into memory at run-time (create schema, etc)
 var DataModel = Metadata.DataModel;

@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-var Metadata = require('../models/metadata.min.js');
-var SessionCache = require('../tools/session_cache.min.js');
-var Constants = require('../tools/constants.min.js');
-var Email = require('../tools/email.min.js');
+var Metadata = require('../models/metadata.js');
+var SessionCache = require('../tools/session_cache.js');
+var Constants = require('../tools/constants.js');
+var Email = require('../tools/email.js');
 
 var DataModel = Metadata.DataModel;
 var User = Metadata.User;

@@ -12,21 +12,21 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://app1:123Apps@127.0.0.1:55055/apps');
 
 // require routes
-var api = require('./routes/api.min.js');
-var data = require('./routes/data.min.js');
-var file = require('./routes/file.min.js');
-var client = require('./routes/client.min.js');
-var design = require('./routes/design.min.js');
-var authentication = require('./routes/authentication.min.js');
+var api = require('./routes/api.js');
+var data = require('./routes/data.js');
+var file = require('./routes/file.js');
+var client = require('./routes/client.js');
+var design = require('./routes/design.js');
+var authentication = require('./routes/authentication.js');
 
 // init metadata and sessions
-require('./tools/init_objects.min.js');
+require('./tools/init_objects.js');
 
 // create instance of express
 var app = express();
 
-var SessionCache = require('./tools/session_cache.min.js');
-var Constants = require('./tools/constants.min.js');
+var SessionCache = require('./tools/session_cache.js');
+var Constants = require('./tools/constants.js');
 
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));

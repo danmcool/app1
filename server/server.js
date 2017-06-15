@@ -6,7 +6,7 @@ http.createServer(function (req, res) {
 	res.end();
 }).listen(80);
 
-var app = require('./app.min.js');
+var app = require('./app.js');
 var fs = require('fs');
 var https = require('https');
 var ssl = {
