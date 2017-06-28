@@ -309,6 +309,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
 		cancel: {
 			en: 'Cancel',
 			fr: 'Annuler'
+		},
+		search_text: {
+			en: 'Search...',
+			fr: 'Rechercher...'
 		}
 	};
 	var translate = function translate(language) {

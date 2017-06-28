@@ -3,9 +3,13 @@
 		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
 		<div layout-padding flex class="fade">
 
-			<md-toolbar layout="row">
-				<div class="md-toolbar-tools">
-					<span md-colors="{'color': 'primary-50'}">{{form.title}}</span>
+			<md-toolbar>
+				<div class="md-toolbar-tools" layout="row">
+					<span flex="95" md-colors="{'color': 'primary-50'}">{{form.title}}</span>
+					<md-input-container ng-if="show_search">
+						<label md-colors="{'color': 'primary-50'}">{{sessionData.appData.search_text}}</label>
+						<input flex="95" md-colors="{'border-color': 'primary-100'}" ng-model="search" name="SearchText">
+					</md-input-container>
 				</div>
 			</md-toolbar>
 			<form ng-cloak name="dynamicForm" layout="column">

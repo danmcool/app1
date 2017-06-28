@@ -49,6 +49,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 	$scope.files = [];
 	$scope.currentFile = 0;
 	$scope.filesCount = 0;
+	$scope.search = '';
+	$scope.initial_search = {};
+	$scope.show_search = false;
 
 	var getNextData = function () {
 		if ($scope.stopScroll) return;
@@ -181,6 +184,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 				var data = $scope.data;
 				formFields[i].calculation_value = eval(formFields[i].calculation);
 			} else if (formFields[i].display == 'list') {
+				$scope.show_search = true;
 				for (var j = 0; j < formValues.length; j++) {
 					if (formFields[i].title_listofvalues == formValues[j]._id) {
 						if (formValues[j].type == 'list') {
@@ -251,6 +255,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 		id: $routeParams.id
 	}, function (form) {
 		$scope.form = form;
+		$scope.initial_search = form.search_criteria;
 		var formDisplay = $scope.form.display;
 		$scope.form.fields = [];
 		if (formDisplay) {
