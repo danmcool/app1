@@ -49,9 +49,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 	$scope.files = [];
 	$scope.currentFile = 0;
 	$scope.filesCount = 0;
-	$scope.search = '';
-	$scope.initial_search = {};
+	$scope.search_criteria = '';
 	$scope.show_search = false;
+	$scope.search_fields = [];
+	$scope.search_text = '';
 
 	var getNextData = function () {
 		if ($scope.stopScroll) return;
@@ -63,7 +64,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 		$scope.tempStopScroll = true;
 		Datas.query({
 			datamodel_id: $scope.form.datamodel._id,
-			search_criteria: $scope.form.search_criteria,
+			search_criteria: $scope.search_criteria,
+			search_text: $scope.search_text,
+			search_fields: $scope.search_fields,
 			skip: localSkip,
 			limit: localLimit,
 			sort_by: $scope.form.sort_by
@@ -214,12 +217,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 						}
 					}
 				}
-				if (!$scope.form.search_criteria) $scope.form.search_criteria = '';
-				$scope.form.search_criteria = $scope.form.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
+				if ($scope.form.search_criteria) {
+					$scope.search_criteria = $scope.form.search_criteria;
+				}
+				$scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
 				var keysOfParameters = Object.keys($routeParams);
 				for (k = 0, l = keysOfParameters.length; k < l; k++) {
-					$scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
+					$scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
 						keysOfParameters[k]]);
+				}
+				if (formFields[i].search_fields) {
+					$scope.search_fields = formFields[i].search_fields;
 				}
 				getNextData();
 				//} else if (formFields[i].display == 'editor') {
@@ -255,7 +263,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 		id: $routeParams.id
 	}, function (form) {
 		$scope.form = form;
-		$scope.initial_search = form.search_criteria;
 		var formDisplay = $scope.form.display;
 		$scope.form.fields = [];
 		if (formDisplay) {
@@ -735,5 +742,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 			$scope.data = res.data;
 			updateErrorAlert();
 		});
+	}
+
+	$scope.search = function (search_text) {
+		if (!$scope.search_fields || $scope.search_fields.length == 0) {
+			return;
+		}
+		$scope.search_text = search_text;
+		$scope.skip = 0;
+		$scope.limit = 10;
+		$scope.stopScroll = false;
+		$scope.tempStopScroll = false;
+		$scope.datas = [];
+		getNextData();
 	}
 }]);

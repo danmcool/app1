@@ -181,6 +181,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 	}
 
 	var initSessionData = function (userResult, gotoApps) {
+		var language = window.navigator.userLanguage || window.navigator.language;
+		//alert(language);
 		sessionData = {};
 		sessionData.token = userResult.token;
 		sessionData.userData = userResult.user;

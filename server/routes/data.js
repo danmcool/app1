@@ -13,6 +13,10 @@ var computePage = function (req) {
 	}
 }
 
+function escapeRegex(text) {
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
 var getDefaultProfile = function (userType) {
 	if (userType == Constants.UserProfileAdministrator) {
 		return Constants.UserProfileAdministratorDefault;
@@ -84,6 +88,15 @@ router.get('/:datamodelid/', function (req, res, next) {
 				'$in': profile.datamodels[req.params.datamodelid].list._user
 			};
 		}
+	}
+	if (req.query.search_text && req.query.search_text != '') {
+		var search_new_value = [];
+		for (var i = 0; i < req.query.search_fields.length; i++) {
+			var search_field = {}
+			search_field[req.query.search_fields[i]] = new RegExp(escapeRegex(req.query.search_text), 'gi');
+			search_new_value.push(search_field);
+		}
+		search_criteria['$or'] = search_new_value;
 	}
 	Metadata.Objects[req.params.datamodelid].find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
 		if (err) return next(err);
