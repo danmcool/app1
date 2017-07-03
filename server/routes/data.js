@@ -89,16 +89,23 @@ router.get('/:datamodelid/', function (req, res, next) {
 			};
 		}
 	}
+	var searchScoreProjection = {};
 	if (req.query.search_text && req.query.search_text != '') {
-		var search_new_value = [];
-		for (var i = 0; i < req.query.search_fields.length; i++) {
-			var search_field = {}
-			search_field[req.query.search_fields[i]] = new RegExp(escapeRegex(req.query.search_text), 'gi');
-			search_new_value.push(search_field);
+		search_criteria['$text'] = {
+			'$search': req.query.search_text
+		};
+		searchScoreProjection = {
+			score: {
+				'$meta': 'textScore'
+			}
 		}
-		search_criteria['$or'] = search_new_value;
+		sort_by = {
+			'score': {
+				'$meta': 'textScore'
+			}
+		};
 	}
-	Metadata.Objects[req.params.datamodelid].find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
+	Metadata.Objects[req.params.datamodelid].find(search_criteria, searchScoreProjection).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
 		if (err) return next(err);
 		res.json(objects);
 	});

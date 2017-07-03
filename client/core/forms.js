@@ -51,7 +51,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 	$scope.filesCount = 0;
 	$scope.search_criteria = '';
 	$scope.show_search = false;
-	$scope.search_fields = [];
 	$scope.search_text = '';
 
 	var getNextData = function () {
@@ -66,7 +65,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 			datamodel_id: $scope.form.datamodel._id,
 			search_criteria: $scope.search_criteria,
 			search_text: $scope.search_text,
-			search_fields: $scope.search_fields,
 			skip: localSkip,
 			limit: localLimit,
 			sort_by: $scope.form.sort_by
@@ -225,9 +223,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 				for (k = 0, l = keysOfParameters.length; k < l; k++) {
 					$scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
 						keysOfParameters[k]]);
-				}
-				if (formFields[i].search_fields) {
-					$scope.search_fields = formFields[i].search_fields;
 				}
 				getNextData();
 				//} else if (formFields[i].display == 'editor') {
@@ -745,9 +740,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 	}
 
 	$scope.search = function (search_text) {
-		if (!$scope.search_fields || $scope.search_fields.length == 0) {
-			return;
-		}
+		if (!search_text) {
+			search_text = ''
+		};
 		$scope.search_text = search_text;
 		$scope.skip = 0;
 		$scope.limit = 10;
