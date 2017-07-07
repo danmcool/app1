@@ -7,6 +7,22 @@ var Schema = mongoose.Schema;
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 
+var prepareIndex = function (translation, path, index) {
+	if (typeof (translation) != 'object') return;
+	var keys = Object.keys(translation);
+	if (path != '') {
+		path = path + '.';
+	}
+	for (var i = 0; i < keys.length; i++) {
+		var field = path + keys[i];
+		if (translation[keys[i]] && translation[keys[i]].index) {
+			index.fields[field] = 'text';
+			index.options.weights[field] = translation[keys[i]].index_weight;
+		}
+		prepareIndex(translation[keys[i]], field, index);
+	}
+}
+
 // upload existing data models into memory at run-time (create schema, etc)
 var DataModel = Metadata.DataModel;
 DataModel.find(function (err, objects) {
@@ -27,6 +43,16 @@ DataModel.find(function (err, objects) {
 			console.log(e);
 			modelSchema = new Schema({});
 		}
+		var index = {
+			fields: {},
+			options: {
+				name: '_search',
+				weights: {}
+			}
+		};
+		var translation = objects[i].translation ? objects[i].translation : {};
+		prepareIndex(translation, '', index);
+		modelSchema.index(index.fields, index.options);
 		Metadata.Objects[objects[i]._id] = mongoose.model('data' + objects[i]._id, modelSchema);
 	}
 });

@@ -13,10 +13,6 @@ var computePage = function (req) {
 	}
 }
 
-function escapeRegex(text) {
-	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
-
 var getDefaultProfile = function (userType) {
 	if (userType == Constants.UserProfileAdministrator) {
 		return Constants.UserProfileAdministratorDefault;
