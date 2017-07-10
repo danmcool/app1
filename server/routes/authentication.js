@@ -157,7 +157,7 @@ router.post('/register', function (req, res) {
 									User.create(publicUser, function (errNewPublicUser, newPublicUser) {
 										if (errNewPublicUser) return next(errNewPublicUser);
 										res.status(200).json({
-											msg: 'Registration: please check your email to validate the registration!'
+											msg: 'Registration: please check your email inbox to validate the registration!'
 										});
 										Email.sendValidation(newUser.email, newUser.user, newUser._company_code, newPassword);
 									});
