@@ -143,9 +143,8 @@ router.get('/application/', function (req, res, next) {
 					}
 				}
 			}
-			if (profileFound) {
+			if (profileFound && profileFound.profile.applications[apps[i]._id]) {
 				for (var j = apps[i].workflows.length - 1; j >= 0; j--) {
-					console.log(apps[i]._id);
 					if (!profileFound.profile.applications[apps[i]._id].workflows[apps[i].workflows[j]._id]) {
 						apps[i].workflows.splice(j, 1);
 					}
