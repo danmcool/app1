@@ -133,6 +133,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			}
 		});
     }
+]).factory('FileUrl', ['$resource',
+    function ($resource) {
+		return $resource('/file/url/:id', null, {
+			'update': {
+				method: 'PUT'
+			}
+		});
+    }
 ]).factory('Datas', ['$resource',
     function ($resource) {
 		return $resource('/data/:datamodel_id/:entry_id', {

@@ -17,6 +17,28 @@ var s3Instance = new AWS.S3({
 	}
 });
 
+router.get('/url/:id', function (req, res, next) {
+	Metadata.File.findOne(SessionCache.filterCompanyCode(req, {
+		_id: req.params.id
+	}), function (err, object) {
+		if (err) return next(err);
+		if (!object) return res.status(401).json({
+			'msg': 'Cannot find file object!'
+		});
+		var params = {
+			Key: req.body._company_code + '/' + object._id + '/' + object.name
+		};
+		s3Instance.getSignedUrl('getObject', params, function (err, url) {
+			if (err) return next(err);
+			if (!url) return res.status(400).json({
+				'msg': 'Url is null!'
+			});
+			res.json({
+				'url': url
+			});
+		});
+	});
+});
 router.get('/', function (req, res, next) {
 	var pageOptions = {
 		skip: parseInt(req.query.skip) || 0,

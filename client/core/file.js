@@ -1,4 +1,4 @@
-app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionService', function ($scope, $routeParams, $location, SessionService) {
+app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionService', 'FileUrl', function ($scope, $routeParams, $location, SessionService, FileUrl) {
 	$scope.sessionData = SessionService.getSessionData();
 
 	var initFile = function () {
@@ -18,7 +18,11 @@ app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionServ
 				}
 				SessionService.setSessionData($scope.sessionData);
 			}
-			document.getElementById('iframe_file').src = 'https://docs.google.com/viewer?url=' + encodeURI('https://app1.cloud/file/' + $routeParams.iframe_file) + '&embedded=true';
+			FileUrl.get({
+				id: $routeParams.iframe_file
+			}, function (file) {
+				document.getElementById('iframe_file').src = 'https://docs.google.com/viewer?url=' + encodeURI(file.url) + '&embedded=true';
+			});
 		}
 	}
 
@@ -32,4 +36,4 @@ app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionServ
 	});
 
 	initFile();
-}]);
+			}]);
