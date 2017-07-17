@@ -92,6 +92,22 @@ app1.factory('AppTranslationService', function AppTranslationService() {
 			en: 'Application',
 			fr: 'Application'
 		},
+		url: {
+			en: 'Link',
+			fr: 'Lien'
+		},
+		application_url: {
+			en: 'Web application link',
+			fr: 'Lien application web'
+		},
+		file: {
+			en: 'File',
+			fr: 'Fichier'
+		},
+		app_wkf_type: {
+			en: 'Please choose a type',
+			fr: 'Veuillez choisir le type'
+		},
 		activate: {
 			en: 'Activate',
 			fr: 'Activer'

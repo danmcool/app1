@@ -26,16 +26,18 @@
 	<script defer src="core/register.min.js"></script>
 	<script defer src="core/user.min.js"></script>
 	<script defer src="core/company.min.js"></script>
-	<script defer src="core/applications.min.js"></script>
+	<script defer src="core/applications.js"></script>
+	<script defer src="core/url.js"></script>
+	<script defer src="core/file.js"></script>
 	<script defer src="core/workflows.min.js"></script>
-	<script defer src="core/forms.js"></script>
+	<script defer src="core/forms.min.js"></script>
 	<script defer src="core/translation.min.js"></script>
-	<script defer src="designer/designer.min.js"></script>
-	<script defer src="designer/text.min.js"></script>
-	<script defer src="designer/application.min.js"></script>
-	<script defer src="designer/workflow.min.js"></script>
-	<script defer src="designer/form.min.js"></script>
-	<script defer src="designer/share.min.js"></script>
+	<script defer src="designer/designer.js"></script>
+	<script defer src="designer/text.js"></script>
+	<script defer src="designer/application.js"></script>
+	<script defer src="designer/workflow.js"></script>
+	<script defer src="designer/form.js"></script>
+	<script defer src="designer/share.js"></script>
 	<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
 
 	<script>
@@ -81,7 +83,7 @@
 			<md-button ng-if="sessionData.userData.title" ng-href="#!applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
 			</md-button>
 			<div ng-repeat="application in sessionData.applications">
-				<md-button ng-href="#!workflows/{{application._id}}" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{application.translated_name}}
+				<md-button class="md-primary" style="text-align: left" ng-click="open(application)">{{application.translated_name}}
 				</md-button>
 			</div>
 		</md-content>

@@ -83,11 +83,17 @@ Metadata.Workflow = mongoose.model('Workflow', WorkflowSchema);
 var ApplicationSchema = new Schema({
 	name: Schema.Types.Mixed,
 	description: Schema.Types.Mixed,
-	icon: String,
+	icon: Schema.Types.Mixed,
 	active: {
 		type: Boolean,
 		default: false
 	},
+	type: String, // app/link/file
+	file: {
+		type: Schema.Types.ObjectId,
+		ref: 'File'
+	},
+	url: String,
 	workflows: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Workflow'

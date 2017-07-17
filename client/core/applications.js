@@ -12,7 +12,13 @@ app1.controller('ApplicationsCtrl', ['$scope', 'SessionService', '$location', fu
 			SessionService.setSessionData($scope.sessionData);
 		}
 	});
-	$scope.open = function (application_id) {
-		$location.url('/workflows/' + application_id);
+	$scope.open = function (application) {
+		if (application.type == 'url') {
+			$location.url('/url/' + application._id + '?iframe_url=' + application.url);
+		} else if (application.type == 'file') {
+			$location.url('/file/' + application._id + '?iframe_file=' + application.file);
+		} else {
+			$location.url('/workflows/' + application._id);
+		}
 	}
 }]);

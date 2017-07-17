@@ -62,13 +62,13 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			.ok($scope.sessionData.appData.ok)
 			.cancel($scope.sessionData.appData.cancel)
 		).then(function (result) {
+			var name = {};
+			name[$scope.sessionData.userData.properties.language] = result;
 			var newApp = new DesignApplication({
-				name: {
-					en: result
-				}
+				name: name
 			});
 			newApp.$save(function () {
-				newApp.translated_name = newApp.name.en;
+				newApp.translated_name = result;
 				$scope.applications.push(newApp);
 			});
 		});

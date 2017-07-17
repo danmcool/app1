@@ -1,27 +1,27 @@
 <md-content flex="auto" ng-class="sessionData.userData.properties.theme">
-    <div layout="row">
-        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
-        <div layout-padding flex layout="column" class="fade">
-            <md-card>
-                <md-card-title>
-                    <span flex class="md-headline">{{sessionData.userData.company.properties.description}}</span>
-                    <img ng-src="{{sessionData.userData.company.properties.logo_url}}" md-card-sm-image style="max-height: 75px">
-                </md-card-title>
-            </md-card>
-            <md-card ng-repeat="application in sessionData.applications" ng-click="open(application._id)">
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{application.translated_name}}</span>
-                        <span class="md-body-1">{{application.translated_description}}</span>
-                    </md-card-title-text>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button class="md-fab md-primary" aria-label="Open">
-                            <md-icon>{{application.icon}}</md-icon>
-                        </md-button>
-                    </md-card-actions>
-                </md-card-title>
-            </md-card>
-        </div>
-        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
-    </div>
+	<div layout="row">
+		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+		<div layout-padding flex layout="column" class="fade">
+			<md-card>
+				<md-card-title>
+					<span flex class="md-headline">{{sessionData.userData.company.properties.description}}</span>
+					<img ng-src="{{sessionData.userData.company.properties.logo_url}}" md-card-sm-image style="max-height: 75px">
+				</md-card-title>
+			</md-card>
+			<md-card ng-repeat="application in sessionData.applications" ng-click="open(application)">
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline">{{application.translated_name}}</span>
+						<span class="md-body-1">{{application.translated_description}}</span>
+					</md-card-title-text>
+					<md-card-actions layout="row" layout-align="end center">
+						<md-button class="md-fab md-primary" aria-label="Open">
+							<md-icon>{{application.icon}}</md-icon>
+						</md-button>
+					</md-card-actions>
+				</md-card-title>
+			</md-card>
+		</div>
+		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+	</div>
 </md-content>

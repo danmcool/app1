@@ -1,4 +1,4 @@
-app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignApplication', 'DesignWorkflow', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignApplication, DesignWorkflow, $location, $routeParams, $mdDialog) {
+app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignApplication', 'DesignWorkflow', 'Files', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignApplication, DesignWorkflow, Files, $location, $routeParams, $mdDialog) {
 	$scope.sessionData = SessionService.getSessionData();
 	$scope.$watch(function () {
 		return SessionService.getSessionData();
@@ -23,6 +23,9 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 	});
 
 	$scope.editText = function (object, property, multipleLines) {
+		if (!object[property]) {
+			object[property] = {};
+		}
 		$mdDialog.show({
 			templateUrl: 'designer/text.html',
 			controller: 'TextCtrl',
@@ -60,13 +63,13 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 			.ok($scope.sessionData.appData.ok)
 			.cancel($scope.sessionData.appData.cancel)
 		).then(function (result) {
+			var name = {};
+			name[$scope.sessionData.userData.properties.language] = result;
 			var newWorkflow = new DesignWorkflow({
-				name: {
-					en: result
-				}
+				name: name
 			});
 			newWorkflow.$save(function () {
-				newWorkflow.translated_name = newWorkflow.name.en;
+				newWorkflow.translated_name = result;
 				$scope.application.workflows.push(newWorkflow);
 			});
 		});
@@ -84,4 +87,49 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 		});
 	}
 
+	var uploadFile = function (file, signedRequest, url) {
+		const xhr = new XMLHttpRequest();
+		xhr.open('PUT', signedRequest);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4) {
+				if (xhr.status == 200) {
+					document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_done;
+					setTimeout(function () {
+						document.getElementById('file_upload').textContent = '';
+					}, 4 * 1000);
+				} else {
+					alert('Could not upload file.');
+				}
+			}
+		};
+		xhr.send(file);
+	};
+	$scope.changeFile = function (files) {
+		if (files.length != 1) return;
+		//$scope.dynamicForm.$setValidity({'Attachments': true});
+		document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' 1/1';
+		var file = new Files({
+			'name': files[0].name,
+			'type': files[0].type
+		});
+		file.$save().then(function (res) {
+			$scope.application.file = {
+				'_id': res.file._id,
+				'name': res.file.name,
+				'type': res.file.type
+			};
+			uploadFile(files[0], res.signedRequest, res.url);
+		});
+	}
+	$scope.removeFile = function (fileId) {
+		Files.remove({
+				id: fileId
+			}).$promise
+			.then(function (res) {
+				$scope.application.file = null;
+			})
+			.catch(function (res) {
+				/* show error*/
+			})
+	}
 }]);
