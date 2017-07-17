@@ -21,7 +21,8 @@ app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionServ
 			FileUrl.get({
 				id: $routeParams.iframe_file
 			}, function (file) {
-				document.getElementById('iframe_file').src = 'https://docs.google.com/viewer?url=' + encodeURI(file.url) + '&embedded=true';
+				document.getElementById('iframe_file').src = 'https://docs.google.com/viewer?url=' +
+					encodeURIComponent(file.url).replace(/'/g, "%27").replace(/"/g, "%22") + '&embedded=true';
 			});
 		}
 	}
