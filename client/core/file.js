@@ -18,7 +18,7 @@ app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionServ
 				}
 				SessionService.setSessionData($scope.sessionData);
 			}
-			document.getElementById('iframe_file').src = 'https://docs.google.com/viewer?url=https://app1.cloud/file/' + $routeParams.iframe_file + '&embedded=true';
+			document.getElementById('iframe_file').src = 'https://docs.google.com/viewer?url=' + encodeURI('https://app1.cloud/file/' + $routeParams.iframe_file) + '&embedded=true';
 		}
 	}
 
