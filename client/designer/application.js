@@ -71,7 +71,15 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 			newWorkflow.$save(function () {
 				newWorkflow.translated_name = result;
 				$scope.application.workflows.push(newWorkflow);
-				$location.url('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
+				DesignApplication.update({
+					id: $scope.application._id
+				}, $scope.application).$promise.then(function (res) {
+					SessionService.init();
+					$location.url('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
+				}).catch(function (res) {
+					$scope.application = res.application;
+					updateErrorAlert();
+				});
 			});
 		});
 	}
