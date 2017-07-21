@@ -1,4 +1,4 @@
-app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow', 'DesignForm', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignWorkflow, DesignForm, $location, $routeParams, $mdDialog) {
+app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow', 'DesignForm', 'Files', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignWorkflow, DesignForm, Files, $location, $routeParams, $mdDialog) {
 	$scope.sessionData = SessionService.getSessionData();
 	$scope.$watch(function () {
 		return SessionService.getSessionData();
@@ -66,6 +66,7 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
 			newForm.$save(function () {
 				newForm.translated_name = newForm.name.en;
 				$scope.workflow.forms.push(newForm);
+				$location.url('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
 			});
 		});
 	}
@@ -80,5 +81,50 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
 			$scope.application = res.application;
 			updateErrorAlert();
 		});
+	}
+
+	$scope.uploadFile = function (file, signedRequest, url) {
+		const xhr = new XMLHttpRequest();
+		xhr.open('PUT', signedRequest);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4) {
+				if (xhr.status == 200) {
+					document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_done;
+					setTimeout(function () {
+						document.getElementById('file_upload').textContent = '';
+					}, 4 * 1000);
+				} else {
+					alert('Could not upload file.');
+				}
+			}
+		};
+		xhr.send(file);
+	};
+	$scope.changeFile = function (files) {
+		if (files.length != 1) return;
+		document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' 1/1';
+		var file = new Files({
+			'name': files[0].name,
+			'type': files[0].type
+		});
+		file.$save().then(function (res) {
+			$scope.workflow.file = {
+				'_id': res.file._id,
+				'name': res.file.name,
+				'type': res.file.type
+			};
+			$scope.uploadFile(files[0], res.signedRequest, res.url);
+		});
+	}
+	$scope.removeFile = function (fileId) {
+		Files.remove({
+				id: fileId
+			}).$promise
+			.then(function (res) {
+				$scope.workflow.file = null;
+			})
+			.catch(function (res) {
+				/* show error*/
+			})
 	}
 }]);

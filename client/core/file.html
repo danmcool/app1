@@ -2,7 +2,15 @@
 	<div layout="row">
 		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
 		<div flex layout="column" class="fade">
+			<md-toolbar>
+				<div class="md-toolbar-tools" layout="row" ng-if="workflow">
+					<span flex="95" md-colors="{'color': 'primary-50'}">{{workflow_translated_name}}</span>
+				</div>
+			</md-toolbar>
 			<iframe id="iframe_file" style="height:600px"></iframe>
+			<div layout="row" layout-align="end" flex ng-if="workflow">
+				<md-button ng-disabled="false" ng-click="home()" class="md-primary">{{sessionData.appData.home}}</md-button>
+			</div>
 		</div>
 		<div hide-xs flex-sm="10 " flex-gt-sm="15 "></div>
 	</div>

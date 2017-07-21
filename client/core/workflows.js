@@ -36,8 +36,14 @@ app1.controller('WorkflowsCtrl', ['$scope', '$routeParams', '$location', 'Sessio
 		}
 	});
 
-	$scope.open = function (formId) {
-		$location.url('/form/' + formId + '/0?application_id=' + $routeParams.application_id);
+	$scope.open = function (workflow) {
+		if (workflow.type == 'url') {
+			$location.url('/url/' + $routeParams.application_id + '?iframe_url=' + workflow.url + '&workflow_id=' + workflow._id);
+		} else if (workflow.type == 'file') {
+			$location.url('/file/' + $routeParams.application_id + '?iframe_file=' + workflow.file + '&workflow_id=' + workflow._id);
+		} else {
+			$location.url('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id);
+		}
 	}
 
 	initWorkflows();

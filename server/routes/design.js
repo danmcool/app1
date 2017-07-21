@@ -113,7 +113,7 @@ router.get('/workflow/:id', function (req, res, next) {
 	}
 	Workflow.findOne(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
-	})).populate('forms').exec(function (err,
+	})).populate('file forms').exec(function (err,
 		object) {
 		if (err) return next(err);
 		res.json(object);

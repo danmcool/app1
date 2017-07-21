@@ -71,6 +71,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 			newWorkflow.$save(function () {
 				newWorkflow.translated_name = result;
 				$scope.application.workflows.push(newWorkflow);
+				$location.url('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
 			});
 		});
 	}
@@ -87,7 +88,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 		});
 	}
 
-	var uploadFile = function (file, signedRequest, url) {
+	$scope.uploadFile = function (file, signedRequest, url) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('PUT', signedRequest);
 		xhr.onreadystatechange = function () {
@@ -106,7 +107,6 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 	};
 	$scope.changeFile = function (files) {
 		if (files.length != 1) return;
-		//$scope.dynamicForm.$setValidity({'Attachments': true});
 		document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' 1/1';
 		var file = new Files({
 			'name': files[0].name,
@@ -118,7 +118,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 				'name': res.file.name,
 				'type': res.file.type
 			};
-			uploadFile(files[0], res.signedRequest, res.url);
+			$scope.uploadFile(files[0], res.signedRequest, res.url);
 		});
 	}
 	$scope.removeFile = function (fileId) {

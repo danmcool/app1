@@ -19,6 +19,10 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 }]).controller('DesignerCtrl', ['$scope', 'SessionService', 'DesignApplication', 'Company', 'Share', '$mdDialog', '$location', function ($scope, SessionService, DesignApplication, Company, Share, $mdDialog, $location) {
 	$scope.sessionData = SessionService.getSessionData();
 	$scope.applications = [];
+	$scope.skip = 0;
+	$scope.limit = 10;
+	$scope.stopScroll = false;
+	$scope.tempStopScroll = false;
 
 	$scope.$watch(function () {
 		return SessionService.getSessionData();
@@ -26,30 +30,46 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 		if (newValue != oldValue) {
 			$scope.sessionData = newValue;
 			$scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
-			$scope.sessionData.showShareForm = false;
 			SessionService.setSessionData($scope.sessionData);
 		}
 	});
 
-	DesignApplication.query(function (apps) {
-		if (apps && apps.length > 0) {
-			for (var i = 0; i < apps.length; i++) {
-				var companyApps = $scope.sessionData.userData.company.applications;
-				for (var j = 0; j < companyApps.length; j++) {
-					if (apps[i]._id == companyApps[j]) {
-						apps[i].enabled = true;
-						break;
-					}
-				}
-				apps[i].translated_name = SessionService.translate(apps[i].name);
-				apps[i].translated_description = SessionService.translate(apps[i].description);
+	$scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+	SessionService.setSessionData($scope.sessionData);
+
+	$scope.getNextApps = function () {
+		if ($scope.stopScroll) return;
+		if ($scope.tempStopScroll) return;
+		var localLimit = $scope.limit;
+		var localSkip = $scope.skip;
+		$scope.skip += $scope.limit;
+		$scope.tempStopScroll = true;
+		DesignApplication.query({
+			skip: localSkip,
+			limit: localLimit,
+		}, function (apps) {
+			if (apps.length < $scope.limit) {
+				$scope.stopScroll = true;
 			}
-			$scope.applications = apps;
-		}
-		$scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
-		$scope.sessionData.showShareForm = false;
-		SessionService.setSessionData($scope.sessionData);
-	});
+			if (apps && apps.length > 0) {
+				for (var i = 0; i < apps.length; i++) {
+					var companyApps = $scope.sessionData.userData.company.applications;
+					for (var j = 0; j < companyApps.length; j++) {
+						if (apps[i]._id == companyApps[j]) {
+							apps[i].enabled = true;
+							break;
+						}
+					}
+					apps[i].translated_name = SessionService.translate(apps[i].name);
+					apps[i].translated_description = SessionService.translate(apps[i].description);
+					$scope.applications.push(apps[i]);
+				}
+			}
+			$scope.tempStopScroll = false;
+		});
+	}
+
+	$scope.getNextApps();
 
 	$scope.newApplication = function () {
 		$mdDialog.show(
@@ -70,11 +90,12 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			newApp.$save(function () {
 				newApp.translated_name = result;
 				$scope.applications.push(newApp);
+				$location.url('/application_edit/' + newApp._id);
 			});
 		});
 	}
 
-	$scope.delete = function (appId) {
+	$scope.delete = function (app) {
 		$mdDialog.show(
 			$mdDialog.confirm()
 			.parent(angular.element(document.body))
@@ -85,10 +106,10 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			.cancel($scope.sessionData.appData.cancel)
 		).then(function () {
 			DesignApplication.remove({
-				id: appId
+				id: app._id
 			}).$promise.then(function (res) {
 				for (var i = 0; i < $scope.applications.length; i++) {
-					if ($scope.applications[i]._id == appId) {
+					if ($scope.applications[i]._id == app._id) {
 						$scope.applications.splice(i, 1);
 						break;
 					}
@@ -96,7 +117,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 				if (app.enabled) {
 					var enabledApps = $scope.sessionData.userData.company.applications;
 					for (var i = 0; i < enabledApps.length; i++) {
-						if (appId == enabledApps[i]) {
+						if (app._id == enabledApps[i]) {
 							enabledApps.splice(i, 1);
 							break;
 						}

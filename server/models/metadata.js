@@ -65,6 +65,12 @@ var WorkflowSchema = new Schema({
 	name: Schema.Types.Mixed,
 	description: Schema.Types.Mixed,
 	icon: String,
+	type: String, // workflow/url/file
+	file: {
+		type: Schema.Types.ObjectId,
+		ref: 'File'
+	},
+	url: String,
 	startup_form: {
 		type: Schema.Types.ObjectId,
 		ref: 'Form'
@@ -84,11 +90,11 @@ var ApplicationSchema = new Schema({
 	name: Schema.Types.Mixed,
 	description: Schema.Types.Mixed,
 	icon: Schema.Types.Mixed,
+	type: String, // application/url/file
 	active: {
 		type: Boolean,
 		default: false
 	},
-	type: String, // app/link/file
 	file: {
 		type: Schema.Types.ObjectId,
 		ref: 'File'

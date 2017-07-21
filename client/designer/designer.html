@@ -1,7 +1,7 @@
 <md-content flex="auto" ng-class="sessionData.userData.properties.theme">
 	<div layout="row">
 		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
-		<div layout-padding flex layout="column" class="fade">
+		<div layout-padding flex="auto" layout="column" class="fade" infinite-scroll="getNextApps()" infinite-scroll-distance="10">
 			<md-card>
 				<md-card-title>
 					<md-card-title-text>
@@ -28,7 +28,7 @@
 					<md-button class="md-fab md-primary" ng-click="edit(app._id)" aria-label="Edit" ng-if="(app._company_code == sessionData.userData._company_code)">
 						<md-icon>edit</md-icon>
 					</md-button>
-					<md-button class="md-fab md-primary" ng-click="delete(app._id)" aria-label="Delete" ng-if="(app._company_code == sessionData.userData._company_code)">
+					<md-button class="md-fab md-primary" ng-click="delete(app)" aria-label="Delete" ng-if="(app._company_code == sessionData.userData._company_code)">
 						<md-icon>delete</md-icon>
 					</md-button>
 					<md-button class="md-fab md-primary" ng-click="share(app)" aria-label="Share">

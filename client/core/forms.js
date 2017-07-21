@@ -53,7 +53,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 	$scope.show_search = false;
 	$scope.search_text = '';
 
-	var getNextData = function () {
+	$scope.getNextData = function () {
 		if ($scope.stopScroll) return;
 		if ($scope.tempStopScroll) return;
 		if (!$scope.form.datamodel) return;
@@ -224,7 +224,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 					$scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
 						keysOfParameters[k]]);
 				}
-				getNextData();
+				$scope.getNextData();
 				//} else if (formFields[i].display == 'editor') {
 				//if (formFields[i].disabled) {
 				//    $scope.data[formFields[i].name] = $scope.data[formFields[i].name].replace(/\n/g, '<br>');
@@ -318,7 +318,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 		}
 	}
 
-	var uploadFile = function (file, signedRequest, url) {
+	$scope.uploadFile = function (file, signedRequest, url) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('PUT', signedRequest);
 		xhr.onreadystatechange = function () {
@@ -364,7 +364,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 							'name': res.file.name,
 							'type': res.file.type
 						});
-						uploadFile(files[j], res.signedRequest, res.url);
+						$scope.uploadFile(files[j], res.signedRequest, res.url);
 					}
 				}
 			});
@@ -749,6 +749,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 		$scope.stopScroll = false;
 		$scope.tempStopScroll = false;
 		$scope.datas = [];
-		getNextData();
+		$scope.getNextData();
 	}
 }]);
