@@ -2,8 +2,8 @@
 	<div layout="row">
 		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
 		<div flex layout="column" class="fade">
-			<md-toolbar>
-				<div class="md-toolbar-tools" layout="row" ng-if="workflow">
+			<md-toolbar ng-if="workflow">
+				<div class="md-toolbar-tools" layout="row">
 					<span flex="95" md-colors="{'color': 'primary-50'}">{{workflow_translated_name}}</span>
 				</div>
 			</md-toolbar>

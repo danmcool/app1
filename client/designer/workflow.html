@@ -104,7 +104,9 @@
 						</md-input-container>
 					</div>
 				</div>
-				<md-button flex-gt-xs type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+				<div layout="row" layout-align="end" flex>
+					<md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+				</div>
 			</form>
 		</div>
 		<div hide-xs flex-sm="10" flex-gt-sm="15"></div>
