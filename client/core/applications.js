@@ -14,11 +14,11 @@ app1.controller('ApplicationsCtrl', ['$scope', 'SessionService', '$location', fu
 	});
 	$scope.open = function (application) {
 		if (application.type == 'url') {
-			$location.url('/url/' + application._id + '?iframe_url=' + application.url);
+			SessionService.location('/url/' + application._id + '?iframe_url=' + application.url);
 		} else if (application.type == 'file') {
-			$location.url('/file/' + application._id + '?iframe_file=' + application.file);
+			SessionService.location('/file/' + application._id + '?iframe_file=' + application.file);
 		} else {
-			$location.url('/workflows/' + application._id);
+			SessionService.location('/workflows/' + application._id);
 		}
 	}
 }]);

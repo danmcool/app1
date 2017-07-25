@@ -15,7 +15,7 @@
 				</md-input-container>
 				<md-input-container flex="auto" class="md-block">
 					<label>{{sessionData.appData.datamodel}}</label>
-					<md-select ng-model="form.datamodel">
+					<md-select ng-model="form.datamodel._id">
 						<md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
 					</md-select>
 				</md-input-container>

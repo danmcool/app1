@@ -28,7 +28,7 @@ app1.controller('CompanyCtrl', ['$scope', '$location', 'SessionService', 'AppTra
 			id: $scope.company._id
 		}, $scope.company).$promise.then(function () {
 			SessionService.init();
-			$location.url('/applications');
+			SessionService.location('/applications');
 		});
 	}
 }]);

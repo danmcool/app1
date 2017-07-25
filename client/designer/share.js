@@ -27,7 +27,7 @@ app1.controller('ApplicationShareCtrl', ['$scope', 'SessionService', 'DesignAppl
 			id: $scope.application._id
 		}, $scope.application).$promise.then(function (res) {
 			SessionService.init();
-			$location.url('/designer');
+			SessionService.location('/designer');
 		}).catch(function (res) {
 			$scope.application = res.application;
 			updateErrorAlert();

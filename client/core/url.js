@@ -5,7 +5,7 @@ app1.controller('UrlCtrl', ['$scope', '$routeParams', '$location', 'SessionServi
 
 	var initUrl = function () {
 		if ($routeParams.url_iframe == 'undefined' || $routeParams.application_id == 'undefined') {
-			$location.url('/applications');
+			SessionService.location('/applications');
 		} else {
 			$scope.sessionData.application_id = $routeParams.application_id;
 			if ($scope.sessionData.applications) {
@@ -44,7 +44,7 @@ app1.controller('UrlCtrl', ['$scope', '$routeParams', '$location', 'SessionServi
 	});
 
 	$scope.home = function () {
-		$location.url('/workflows/' + $routeParams.application_id);
+		SessionService.location('/workflows/' + $routeParams.application_id);
 	}
 
 	initUrl();

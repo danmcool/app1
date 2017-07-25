@@ -45,7 +45,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 			id: $scope.application._id
 		}, $scope.application).$promise.then(function (res) {
 			SessionService.init();
-			$location.url('/workflow_edit/' + workflowId + '?application_id=' + $scope.application._id);
+			SessionService.location('/workflow_edit/' + workflowId + '?application_id=' + $scope.application._id);
 		}).catch(function (res) {
 			$scope.application = res.application;
 			updateErrorAlert();
@@ -75,7 +75,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 					id: $scope.application._id
 				}, $scope.application).$promise.then(function (res) {
 					SessionService.init();
-					$location.url('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
+					SessionService.location('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
 				}).catch(function (res) {
 					$scope.application = res.application;
 					updateErrorAlert();
@@ -89,7 +89,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
 			id: $scope.application._id
 		}, $scope.application).$promise.then(function (res) {
 			SessionService.init();
-			$location.url('/designer');
+			SessionService.location('/designer');
 		}).catch(function (res) {
 			$scope.application = res.application;
 			updateErrorAlert();

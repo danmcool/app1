@@ -16,6 +16,12 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			method: 'PUT'
 		}
 	});
+}]).factory('DesignDataModel', ['$resource', function ($resource) {
+	return $resource('/client/design/datamodel/:id', null, {
+		'update': {
+			method: 'PUT'
+		}
+	});
 }]).controller('DesignerCtrl', ['$scope', 'SessionService', 'DesignApplication', 'Company', 'Share', '$mdDialog', '$location', function ($scope, SessionService, DesignApplication, Company, Share, $mdDialog, $location) {
 	$scope.sessionData = SessionService.getSessionData();
 	$scope.applications = [];
@@ -90,7 +96,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 			newApp.$save(function () {
 				newApp.translated_name = result;
 				$scope.applications.push(newApp);
-				$location.url('/application_edit/' + newApp._id);
+				SessionService.location('/application_edit/' + newApp._id);
 			});
 		});
 	}
@@ -160,7 +166,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 	}
 
 	$scope.edit = function (applicationId) {
-		$location.url('/application_edit/' + applicationId);
+		SessionService.location('/application_edit/' + applicationId);
 	}
 	$scope.share = function (application) {
 		var publicProfileFound = false;

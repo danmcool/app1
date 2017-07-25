@@ -21,7 +21,7 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
 				.textContent(res.msg)
 				.ok('Got it!')
 			).then(function () {
-				$location.url('/');
+				SessionService.location('/');
 			});
 		}).catch(function (res) {
 			$mdDialog.show(

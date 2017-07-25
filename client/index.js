@@ -117,14 +117,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			}
 		});
     }
-]).factory('DataModels', ['$resource',
-    function ($resource) {
-		return $resource('/client/datamodel/:id', null, {
-			'update': {
-				method: 'PUT'
-			}
-		});
-    }
 ]).factory('Files', ['$resource',
     function ($resource) {
 		return $resource('/file/:id', null, {
@@ -152,7 +144,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			}
 		});
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', 'Login', 'Logout', 'UserStatus', 'Applications', function SessionService(AppTranslationService, $location, $resource, Login, Logout, UserStatus, Applications) {
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications) {
 	var sessionData = {
 		userData: {
 			properties: {
@@ -206,10 +198,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			}
 			if (gotoApps) {
 				sessionData.applicationName = sessionData.appData.home;
-				$location.url('/applications');
+				location('/applications');
 			} else
 			if ($location.path() == '/') {
-				$location.url('/applications');
+				location('/applications');
 			}
 		}).catch(function (error) {
 			// shows an error loading applications
@@ -220,7 +212,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			initSessionData(userResult, false);
 		}).catch(function (error) {
 			sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-			$location.url('/');
+			location('/');
 		});
 	}
 	var login = function (user, password) {
@@ -232,7 +224,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			initSessionData(userResult, true);
 		}).catch(function (error) {
 			sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-			$location.url('/');
+			location('/');
 		});
 	}
 	var logout = function () {
@@ -247,7 +239,13 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 			applicationName: 'App1'
 		};
 		sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-		$location.url('/');
+		location('/');
+	}
+	var location = function (url, noScroll) {
+		$location.url(url);
+		if (noScroll) {} else {
+			$window.scrollTo(0, 0);
+		}
 	}
 	return {
 		setSessionData: setSessionData,
@@ -255,7 +253,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 		translate: translate,
 		init: init,
 		login: login,
-		logout: logout
+		logout: logout,
+		location: location
 	}
 }]).factory('MapService', function MapService() {
 	var maps = {};
@@ -316,17 +315,13 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 		SessionService.logout();
 	};
 
-	$scope.notifyForm = function () {
-
-	}
-
 	$scope.open = function (application) {
 		if (application.type == 'url') {
-			$location.url('/url/' + application._id + '?iframe_url=' + application.url);
+			SessionService.location('/url/' + application._id + '?iframe_url=' + application.url);
 		} else if (application.type == 'file') {
-			$location.url('/file/' + application._id + '?iframe_file=' + application.file);
+			SessionService.location('/file/' + application._id + '?iframe_file=' + application.file);
 		} else {
-			$location.url('/workflows/' + application._id);
+			SessionService.location('/workflows/' + application._id);
 		}
 		$scope.closeLeft();
 	}

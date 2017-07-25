@@ -5,7 +5,7 @@ app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionServ
 
 	var initFile = function () {
 		if ($routeParams.iframe_file == 'undefined' || $routeParams.application_id == 'undefined') {
-			$location.url('/applications');
+			SessionService.location('/applications');
 		} else {
 			$scope.sessionData.application_id = $routeParams.application_id;
 			if ($scope.sessionData.applications) {
@@ -49,7 +49,7 @@ app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionServ
 	});
 
 	$scope.home = function () {
-		$location.url('/workflows/' + $routeParams.application_id);
+		SessionService.location('/workflows/' + $routeParams.application_id);
 	}
 
 	initFile();

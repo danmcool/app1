@@ -3,7 +3,7 @@ app1.controller('WorkflowsCtrl', ['$scope', '$routeParams', '$location', 'Sessio
 
 	var initWorkflows = function () {
 		if ($routeParams.application_id == 'undefined') {
-			$location.url('/applications');
+			SessionService.location('/applications');
 		} else {
 			$scope.sessionData.application_id = $routeParams.application_id;
 			if ($scope.sessionData.applications) {
@@ -38,11 +38,11 @@ app1.controller('WorkflowsCtrl', ['$scope', '$routeParams', '$location', 'Sessio
 
 	$scope.open = function (workflow) {
 		if (workflow.type == 'url') {
-			$location.url('/url/' + $routeParams.application_id + '?iframe_url=' + workflow.url + '&workflow_id=' + workflow._id);
+			SessionService.location('/url/' + $routeParams.application_id + '?iframe_url=' + workflow.url + '&workflow_id=' + workflow._id);
 		} else if (workflow.type == 'file') {
-			$location.url('/file/' + $routeParams.application_id + '?iframe_file=' + workflow.file + '&workflow_id=' + workflow._id);
+			SessionService.location('/file/' + $routeParams.application_id + '?iframe_file=' + workflow.file + '&workflow_id=' + workflow._id);
 		} else {
-			$location.url('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id);
+			SessionService.location('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id);
 		}
 	}
 

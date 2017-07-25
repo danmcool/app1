@@ -27,14 +27,14 @@ app1.controller('UserCtrl', ['$scope', '$location', 'SessionService', 'AppTransl
 		}, {
 			"properties": $scope.sessionData.userData.properties
 		});
-		$location.url('/applications');
+		SessionService.location('/applications');
 	}
 	$scope.changeUserPassword = function () {
 		Password.update({
 			old: $scope.password.old,
 			new: $scope.password.new
 		});
-		$location.url('/applications');
+		SessionService.location('/applications');
 	}
 	$scope.validatePassword = function () {
 		if ($scope.password.new == $scope.password.repeat) {

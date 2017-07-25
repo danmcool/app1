@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'DataModels', 'Notify', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, DataModels, Notify) {
+app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify) {
 	$scope.sessionData = SessionService.getSessionData();
 
 	$scope.$watch(function () {
@@ -296,7 +296,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
 	var gotoNextForm = function (formula, nextFormId, data) {
 		if (nextFormId == 'home') {
-			$location.url('/workflows/' + $scope.sessionData.application_id);
+			SessionService.location('/workflows/' + $scope.sessionData.application_id);
 		} else {
 			var formUrl = '/form/' + nextFormId + '/';
 			if (data && data._id) {
@@ -311,7 +311,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 				formUrl = formUrl + '0?application_id=' + $routeParams.application_id;
 			}
 			if (formUrl != $location.path()) {
-				$location.url(formUrl);
+				SessionService.location(formUrl);
 			} else {
 				$route.reload();
 			}

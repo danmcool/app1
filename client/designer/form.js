@@ -1,4 +1,4 @@
-app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DataModels', function ($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DataModels) {
+app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
 	$scope.sessionData = SessionService.getSessionData();
 	$scope.$watch(function () {
 		return SessionService.getSessionData();
@@ -20,6 +20,13 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 		SessionService.setSessionData($scope.sessionData);
 	});
 
+	DesignDataModel.query(function (datamodels) {
+		for (var i = 0; i < datamodels.length; i++) {
+			datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+		}
+		$scope.datamodels = datamodels;
+	});
+
 	$scope.editText = function (object, property, multipleLines) {
 		$mdDialog.show({
 			templateUrl: 'designer/text.html',
@@ -36,7 +43,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 	};
 
 	$scope.editAction = function (formId) {
-		$location.url('/form_edit/' + formId);
+		SessionService.location('/form_edit/' + formId);
 	}
 
 	$scope.newAction = function () {
@@ -133,7 +140,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 			id: $scope.form._id
 		}, $scope.form).$promise.then(function (res) {
 			SessionService.init();
-			$location.url('/workflow_edit/' + $routeParams.workflow_id + '?application_id=' + $routeParams.application_id);
+			SessionService.location('/workflow_edit/' + $routeParams.workflow_id + '?application_id=' + $routeParams.application_id);
 		}).catch(function (res) {
 			$scope.application = res.application;
 			updateErrorAlert();

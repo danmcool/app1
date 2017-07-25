@@ -168,7 +168,7 @@ router.get('/form/:id', function (req, res, next) {
 			err: 'Not enough user rights'
 		});
 	}
-	Metadata.Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
+	Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
 		_id: {
 			'$eq': req.params.id
 		}
@@ -209,6 +209,20 @@ router.delete('/form/:id', function (req, res, next) {
 	});
 });
 
+router.get('/datamodel', function (req, res, next) {
+	var userToken = req.cookies[Constants.SessionCookie];
+	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+		return res.status(401).json({
+			err: 'Not enough user rights'
+		});
+	}
+	var pageOptions = computePage(req);
+	DataModel.find(SessionCache.filterApplicationCompanyCode(req, {})).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
+		datamodels) {
+		if (err) return next(err);
+		res.json(datamodels);
+	});
+});
 router.post('/datamodel', function (req, res, next) {
 	var userToken = req.cookies[Constants.SessionCookie];
 	if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
@@ -217,7 +231,7 @@ router.post('/datamodel', function (req, res, next) {
 		});
 	}
 	SessionCache.filterCompanyCode(req, {});
-	Form.create(req.body, function (err, object) {
+	DataModel.create(req.body, function (err, object) {
 		if (err) return next(err);
 		res.json(object);
 	});
@@ -229,7 +243,7 @@ router.get('/datamodel/:id', function (req, res, next) {
 			err: 'Not enough user rights'
 		});
 	}
-	Metadata.Form.findOne(SessionCache.filterCompanyCode(req, {
+	DataModel.findOne(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	})).exec(function (err, formObject) {
 		if (err) return next(err);
@@ -246,7 +260,7 @@ router.put('/datamodel/:id', function (req, res, next) {
 			err: 'Not enough user rights'
 		});
 	}
-	Form.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+	DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
 		_id: req.body._id
 	}), req.body, function (err, object) {
 		if (err) return next(err);
@@ -260,7 +274,7 @@ router.delete('/datamodel/:id', function (req, res, next) {
 			err: 'Not enough user rights'
 		});
 	}
-	Form.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+	DataModel.findOneAndRemove(SessionCache.filterCompanyCode(req, {
 		_id: req.params.id
 	}), function (err, object) {
 		if (err) return next(err);
