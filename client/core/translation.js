@@ -329,6 +329,38 @@ app1.factory('AppTranslationService', function AppTranslationService() {
 		search_text: {
 			en: 'Search...',
 			fr: 'Rechercher...'
+		},
+		form_search_criteria: {
+			en: 'Search Criteria',
+			fr: 'Critères de recherche'
+		},
+		form_sort_by: {
+			en: 'Sort By',
+			fr: 'Trier après'
+		},
+		datamodel: {
+			en: 'Data Model',
+			fr: 'Modèle de données'
+		},
+		form_display: {
+			en: 'Display Layout',
+			fr: 'Disposition de l`affichage'
+		},
+		form_actions: {
+			en: 'Actions',
+			fr: 'Actions'
+		},
+		new_action: {
+			en: 'New Action...',
+			fr: 'Nouvelle action...'
+		},
+		form_values: {
+			en: 'Data Values',
+			fr: 'Valeurs de données'
+		},
+		new_value: {
+			en: 'New Data Value...',
+			fr: 'Nouvelle valeur de données...'
 		}
 	};
 	var translate = function translate(language) {

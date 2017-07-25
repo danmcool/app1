@@ -46,14 +46,14 @@ var FormSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'DataModel'
 	},
+	search_criteria: String,
+	sort_by: String,
 	display: Schema.Types.Mixed, //[{text:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
+	actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
 	values: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Value'
     }],
-	search_criteria: String,
-	sort_by: String,
-	actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
 	_updated_at: {
 		type: Date,
 		default: Date.now

@@ -16,6 +16,12 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 		//    resultForm.actions[i].translated_description = SessionService.translate(resultForm.actions[i].description);
 		//}
 		$scope.form = resultForm;
+		for (var i = 0; i < $scope.form.actions.length; i++) {
+			$scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+		}
+		for (var i = 0; i < $scope.form.values.length; i++) {
+			$scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+		}
 		$scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
 		SessionService.setSessionData($scope.sessionData);
 	});
