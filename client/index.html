@@ -2,112 +2,113 @@
 <html lang="en">
 
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-	<link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
 <body ng-app="app1" ng-cloak md-theme="{{sessionData.userData.properties.theme}}" ng-controller="AppCtrl" ng-class="sessionData.userData.properties.theme">
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
 
-	<script defer src="/javascripts/ng-infinite-scroll.min.js"></script>
-	<script src="index.min.js"></script>
-	<script defer src="core/welcome.min.js"></script>
-	<script defer src="core/login.min.js"></script>
-	<script defer src="core/register.min.js"></script>
-	<script defer src="core/user.min.js"></script>
-	<script defer src="core/company.min.js"></script>
-	<script defer src="core/applications.js"></script>
-	<script defer src="core/url.js"></script>
-	<script defer src="core/file.js"></script>
-	<script defer src="core/workflows.min.js"></script>
-	<script defer src="core/forms.min.js"></script>
-	<script defer src="core/translation.min.js"></script>
-	<script defer src="designer/designer.js"></script>
-	<script defer src="designer/text.js"></script>
-	<script defer src="designer/application.js"></script>
-	<script defer src="designer/workflow.js"></script>
-	<script defer src="designer/form.js"></script>
-	<script defer src="designer/share.js"></script>
-	<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
+    <script defer src="/javascripts/ng-infinite-scroll.min.js"></script>
+    <script src="index.min.js"></script>
+    <script defer src="core/welcome.min.js"></script>
+    <script defer src="core/login.min.js"></script>
+    <script defer src="core/register.min.js"></script>
+    <script defer src="core/user.min.js"></script>
+    <script defer src="core/company.min.js"></script>
+    <script defer src="core/applications.js"></script>
+    <script defer src="core/url.min.js"></script>
+    <script defer src="core/file.min.js"></script>
+    <script defer src="core/workflows.min.js"></script>
+    <script defer src="core/forms.min.js"></script>
+    <script defer src="core/translation.min.js"></script>
+    <script defer src="designer/designer.min.js"></script>
+    <script defer src="designer/text.min.js"></script>
+    <script defer src="designer/application.min.js"></script>
+    <script defer src="designer/workflow.min.js"></script>
+    <script defer src="designer/form.min.js"></script>
+    <script defer src="designer/share.min.js"></script>
+    <script defer src="designer/display.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
 
-	<script>
-		(function(i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r;
-			i[r] = i[r] || function() {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date();
-			a = s.createElement(o),
-				m = s.getElementsByTagName(o)[0];
-			a.async = 1;
-			a.src = g;
-			m.parentNode.insertBefore(a, m)
-		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-		ga('create', 'UA-100961550-1', 'auto');
-		ga('send', 'pageview');
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-100961550-1', 'auto');
+        ga('send', 'pageview');
 
-	</script>
+    </script>
 
-	<md-toolbar md-scroll-shrink class="md-hue-2">
-		<div class="md-toolbar-tools">
-			<md-button class="md-icon-button" aria-label="Menu" ng-click="toggleLeft()">
-				<md-icon>menu</md-icon>
-			</md-button>
-			<h2>
-				<span>{{sessionData.applicationName}}</span>
-			</h2>
-			<span flex></span>
-			<md-button class="md-icon-button" aria-label="Alert" ng-click="alertForm()" ng-if="sessionData.showAlertForm">
-				<md-icon>share</md-icon>
-			</md-button>
-			<md-button class="md-icon-button" aria-label="User" ng-click="toggleRight()">
-				<md-icon>person</md-icon>
-			</md-button>
-		</div>
-	</md-toolbar>
+    <md-toolbar md-scroll-shrink class="md-hue-2">
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleLeft()">
+                <md-icon>menu</md-icon>
+            </md-button>
+            <h2>
+                <span>{{sessionData.applicationName}}</span>
+            </h2>
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="Alert" ng-click="alertForm()" ng-if="sessionData.showAlertForm">
+                <md-icon>share</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="User" ng-click="toggleRight()">
+                <md-icon>person</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
 
-	<md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
-		<md-content layout-padding layout="column">
-			<md-toolbar class="md-theme-indigo">
-				<h1 class="md-toolbar-tools">{{sessionData.appData.app_title}}</h1>
-			</md-toolbar>
-			<md-button ng-if="sessionData.userData.title" ng-href="#!applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
-			</md-button>
-			<div ng-repeat="application in sessionData.applications">
-				<md-button class="md-primary" style="text-align: left" ng-click="open(application)">{{application.translated_name}}
-				</md-button>
-			</div>
-		</md-content>
-	</md-sidenav>
+    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
+        <md-content layout-padding layout="column">
+            <md-toolbar class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.appData.app_title}}</h1>
+            </md-toolbar>
+            <md-button ng-if="sessionData.userData.title" ng-href="#!applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
+            </md-button>
+            <div ng-repeat="application in sessionData.applications">
+                <md-button class="md-primary" style="text-align: left" ng-click="open(application)">{{application.translated_name}}
+                </md-button>
+            </div>
+        </md-content>
+    </md-sidenav>
 
-	<md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
-		<md-content layout-padding layout="column">
-			<md-toolbar ng-if="!sessionData.userData.title" class="md-theme-indigo">
-				<h1 class="md-toolbar-tools">{{sessionData.appData.user}}</h1>
-			</md-toolbar>
-			<md-toolbar ng-if="sessionData.userData.title" class="md-theme-indigo">
-				<h1 class="md-toolbar-tools">{{sessionData.userData.title}}</h1>
-			</md-toolbar>
-			<md-button ng-if="!sessionData.userData.title" ng-href="#!welcome" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.welcome}}</md-button>
-			<md-button ng-if="!sessionData.userData.title" ng-href="#!login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
-			<md-button ng-if="!sessionData.userData.title" ng-href="#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
-			<md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
-			<md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
-			<md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#!user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
-			<md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>
-		</md-content>
-	</md-sidenav>
+    <md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
+        <md-content layout-padding layout="column">
+            <md-toolbar ng-if="!sessionData.userData.title" class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.appData.user}}</h1>
+            </md-toolbar>
+            <md-toolbar ng-if="sessionData.userData.title" class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.userData.title}}</h1>
+            </md-toolbar>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!welcome" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.welcome}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#!user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
+            <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>
+        </md-content>
+    </md-sidenav>
 
-	<md-content flex ng-view></md-content>
+    <md-content flex ng-view></md-content>
 </body>
 
 </html>
