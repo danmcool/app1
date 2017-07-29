@@ -1,4 +1,4 @@
-app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $routeParams, SessionService, DesignForm, DesignDataModel) {
+app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -10,6 +10,73 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', 'SessionServic
     $scope.section_index = $routeParams.section;
     $scope.block_index = $routeParams.block;
     $scope.field_index = $routeParams.field;
+
+    $scope.display_type = {
+        list: {
+            en: 'List',
+            fr: 'Liste'
+        },
+        item: {
+            en: 'Detail List',
+            fr: 'Liste des détails'
+        },
+        shorttext: {
+            en: 'Text',
+            fr: 'Texte'
+        },
+        number: {
+            en: 'Number',
+            fr: 'Nombre'
+        },
+        currency: {
+            en: 'Amount',
+            fr: 'Montant'
+        },
+        editor: {
+            en: 'Text Editor',
+            fr: 'Editeur texte'
+        },
+        feed: {
+            en: 'Discussion Feed',
+            fr: 'Fil de discussion'
+        },
+        file: {
+            en: 'File',
+            fr: 'Fichier'
+        },
+        selection: {
+            en: 'Selection',
+            fr: 'Selection'
+        },
+        check: {
+            en: 'Check',
+            fr: 'Contrôle'
+        },
+        calendar: {
+            en: 'Calendar',
+            fr: 'Calendrier'
+        },
+        calculation: {
+            en: 'Formula',
+            fr: 'Formule'
+        },
+        email: {
+            en: 'Email',
+            fr: 'Courriel'
+        },
+        address: {
+            en: 'Address',
+            fr: 'Adresse'
+        }
+    }
+    var keysOfText = Object.keys($scope.display_type);
+    $scope.display_types = [];
+    for (i = 0; i < keysOfText.length; i++) {
+        $scope.display_types.push({
+            translated_name: SessionService.translate($scope.display_type[keysOfText[i]]),
+            type: keysOfText[i]
+        });
+    }
 
     DesignForm.get({
         id: $routeParams.id
@@ -33,5 +100,43 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', 'SessionServic
         }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
-    });
+    })
+
+    $scope.editText = function (object, property, multipleLines) {
+        if (!object[property]) object[property] = {};
+        $mdDialog.show({
+            templateUrl: 'designer/text.html',
+            controller: 'TextCtrl',
+            locals: {
+                text: object[property],
+                multipleLines: multipleLines
+            },
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        }).then(function (result) {
+            object[property] = result;
+        });
+    }
+
+    $scope.save = function () {
+        DesignForm.update({
+            id: $scope.form._id
+        }, $scope.form).$promise.then(function (res) {
+            SessionService.init();
+            SessionService.location('/form_edit/' + formId + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
+        }).catch(function (res) {
+            updateErrorAlert();
+        });
+    }
+
+    var updateErrorAlert = function () {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_document_version)
+            .textContent($scope.sessionData.appData.already_modified_document)
+            .ok($scope.sessionData.appData.ok)
+        );
+    }
 }]);

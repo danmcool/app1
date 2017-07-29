@@ -8,17 +8,11 @@
                 </div>
             </md-toolbar>
             <form name="displayForm">
-                <div layout="row" flex="auto">
-                    <md-input-container flex="90" class="md-block">
-                        <label>{{sessionData.appData.field_name}}</label>
-                        <input type="text" ng-disabled="false" ng-required="false" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
-                    </md-input-container>
-                    <div layout="row" layout-align="end center">
-                        <md-button layout-align="end" class="md-fab md-primary" ng-click="editText(workflow, 'name', false)" aria-label="Edit Language">
-                            <md-icon>language</md-icon>
-                        </md-button>
-                    </div>
-                </div>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.field_name}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <md-icon ng-click="editText(field,'text',false)">language</md-icon>
+                </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <md-checkbox ng-model="field.disabled">{{sessionData.appData.field_disabled}}</md-checkbox>
                 </md-input-container>
@@ -34,7 +28,7 @@
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.field_display}}</label>
                     <md-select ng-model="field.display">
-                        <md-option ng-repeat="display in displays">{{display.translated_name}}</md-option>
+                        <md-option ng-repeat="display in display_types" ng-value="display.type">{{display.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">

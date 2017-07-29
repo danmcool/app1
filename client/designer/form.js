@@ -6,7 +6,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
         }
-    });
+    })
 
     DesignForm.get({
         id: $routeParams.id
@@ -24,16 +24,19 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
-    });
+    })
 
     DesignDataModel.query(function (datamodels) {
         for (var i = 0; i < datamodels.length; i++) {
             datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
         }
         $scope.datamodels = datamodels;
-    });
+    })
 
     $scope.editText = function (object, property, multipleLines) {
+        if (!object[property]) {
+            object[property] = {};
+        }
         $mdDialog.show({
             templateUrl: 'designer/text.html',
             controller: 'TextCtrl',
@@ -46,16 +49,15 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }).then(function (result) {
             object[property] = result;
         });
-    };
+    }
 
     $scope.editField = function (section, block, field) {
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {
             SessionService.init();
-            SessionService.location('/form_display_edit/' + $scope.form._id + '?section=' + section + '&block=' + block + '&field=' + field);
+            SessionService.location('/form_display_edit/' + $scope.form._id + '?section=' + section + '&block=' + block + '&field=' + field + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
         }).catch(function (res) {
-            $scope.application = res.application;
             updateErrorAlert();
         });
     }
@@ -161,7 +163,6 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             SessionService.init();
             SessionService.location('/workflow_edit/' + $routeParams.workflow_id + '?application_id=' + $routeParams.application_id);
         }).catch(function (res) {
-            $scope.application = res.application;
             updateErrorAlert();
         });
     }
