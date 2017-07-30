@@ -85,18 +85,24 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.form.translated_name = SessionService.translate($scope.form.name);
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
         $scope.datamodel_keys = [];
-        var datamodelkeys = Object.keys($scope.form.datamodel.translation);
-        for (var i = 0; i < datamodelkeys.length; i++) {
-            $scope.datamodel_keys.push({
-                translated_name: SessionService.translate($scope.form.datamodel.translation[datamodelkeys[i]]),
-                id: datamodelkeys[i]
-            });
+        if ($scope.form.datamodel) {
+            var datamodelkeys = Object.keys($scope.form.datamodel.translation);
+            for (var i = 0; i < datamodelkeys.length; i++) {
+                $scope.datamodel_keys.push({
+                    translated_name: SessionService.translate($scope.form.datamodel.translation[datamodelkeys[i]]),
+                    id: datamodelkeys[i]
+                });
+            }
         }
-        for (var i = 0; i < $scope.form.actions.length; i++) {
-            $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+        if ($scope.form.actions) {
+            for (var i = 0; i < $scope.form.actions.length; i++) {
+                $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+            }
         }
-        for (var i = 0; i < $scope.form.values.length; i++) {
-            $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+        if ($scope.form.values) {
+            for (var i = 0; i < $scope.form.values.length; i++) {
+                $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+            }
         }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
@@ -123,7 +129,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {
             SessionService.init();
-            SessionService.location('/form_edit/' + formId + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
+            SessionService.location('/form_edit/' + $scope.form._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
         }).catch(function (res) {
             updateErrorAlert();
         });

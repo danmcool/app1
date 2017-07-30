@@ -6,7 +6,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
         }
-    })
+    });
 
     DesignForm.get({
         id: $routeParams.id
@@ -16,22 +16,26 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         //    resultForm.actions[i].translated_description = SessionService.translate(resultForm.actions[i].description);
         //}
         $scope.form = resultForm;
-        for (var i = 0; i < $scope.form.actions.length; i++) {
-            $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+        if ($scope.form.actions) {
+            for (var i = 0; i < $scope.form.actions.length; i++) {
+                $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+            }
         }
-        for (var i = 0; i < $scope.form.values.length; i++) {
-            $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+        if ($scope.form.values) {
+            for (var i = 0; i < $scope.form.values.length; i++) {
+                $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+            }
         }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
-    })
+    });
 
     DesignDataModel.query(function (datamodels) {
         for (var i = 0; i < datamodels.length; i++) {
             datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
         }
         $scope.datamodels = datamodels;
-    })
+    });
 
     $scope.editText = function (object, property, multipleLines) {
         if (!object[property]) {
@@ -49,23 +53,23 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }).then(function (result) {
             object[property] = result;
         });
-    }
+    };
 
     $scope.editField = function (section, block, field) {
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {
             SessionService.init();
-            SessionService.location('/form_display_edit/' + $scope.form._id + '?section=' + section + '&block=' + block + '&field=' + field + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
+            SessionService.location('/form_display_edit/' + $scope.form._id + '?section=' + section + '&block=' + block + '&field=' + field + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
         }).catch(function (res) {
             updateErrorAlert();
         });
-    }
+    };
 
     $scope.editAction = function (formId) {
         SessionService.init();
         SessionService.location('/form_edit/' + formId);
-    }
+    };
 
     $scope.newAction = function () {
         $mdDialog.show(
@@ -88,7 +92,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 $scope.application.workflows.push(newWorkflow);
             });
         });
-    }
+    };
 
     $scope.newSection = function () {
         $mdDialog.show(
@@ -112,7 +116,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 }]
             });
         });
-    }
+    };
 
     $scope.newBlock = function (blocks) {
         $mdDialog.show(
@@ -134,7 +138,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 }]
             });
         });
-    }
+    };
 
     $scope.newField = function (fields) {
         $mdDialog.show(
