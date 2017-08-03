@@ -401,6 +401,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         field_listofvalues: {
             en: 'List of values',
             fr: 'Liste de valeurs'
+        },
+        field_list_title: {
+            en: 'First line',
+            fr: 'Premiere ligne'
+        },
+        field_list_subtitle: {
+            en: 'Second line',
+            fr: 'Deuxieme ligne'
+        },
+        field_list_date: {
+            en: 'Date format',
+            fr: 'Format date'
         }
     };
     var translate = function translate(language) {

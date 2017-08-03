@@ -1,23 +1,133 @@
-app1.controller('ActionCtrl', ['$scope', '$mdDialog', 'SessionService', 'text', 'multipleLines', function ($scope, $mdDialog, SessionService, text, multipleLines) {
-	$scope.sessionData = SessionService.getSessionData();
-	$scope.$watch(function () {
-		return SessionService.getSessionData();
-	}, function (newValue, oldValue) {
-		if (newValue != oldValue) {
-			$scope.sessionData = newValue;
-		}
-	});
+app1.controller('FormActionCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
+    $scope.sessionData = SessionService.getSessionData();
+    $scope.$watch(function () {
+        return SessionService.getSessionData();
+    }, function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $scope.sessionData = newValue;
+        }
+    });
 
-	$scope.text = text;
-	$scope.multipleLines = multipleLines;
+    $scope.action_type = {
+        create: {
+            en: 'Create',
+            fr: 'Creer'
+        },
+        modify: {
+            en: 'Modify',
+            fr: 'Modifier'
+        },
+        delete: {
+            en: 'Delete',
+            fr: 'Supprimer'
+        },
+        link: {
+            en: 'Link',
+            fr: 'Lien'
+        },
+        link_empty: {
+            en: 'Empty link',
+            fr: 'Lien vide'
+        },
+        associate: {
+            en: 'Add user to list',
+            fr: 'Ajouter l`utilisateur a une liste'
+        },
+        dissociate: {
+            en: 'Remove user from list',
+            fr: 'Supprimer l`utilisateur de la liste'
+        },
+        new_item: {
+            en: 'Add new element',
+            fr: 'Ajouter un nouvel element'
+        },
+        download: {
+            en: 'Download data',
+            fr: 'Telecharger les donnees'
+        },
+        share: {
+            en: 'Share',
+            fr: 'Partager'
+        },
+        calendar: {
+            en: 'Send calendar',
+            fr: 'Envoyer calendrier'
+        }
+    }
 
-	$scope.hide = function () {
-		$mdDialog.hide();
-	};
-	$scope.cancel = function () {
-		$mdDialog.cancel();
-	};
-	$scope.answer = function () {
-		$mdDialog.hide(text);
-	};
+    var keysOfActionType = Object.keys($scope.action_type);
+    $scope.action_types = [];
+    for (i = 0; i < keysOfActionType.length; i++) {
+        $scope.action_types.push({
+            translated_name: SessionService.translate($scope.action_type[keysOfActionType[i]]),
+            type: keysOfActionType[i]
+        });
+    }
+
+    DesignForm.get({
+        id: $routeParams.id
+    }, function (resultForm, err) {
+        $scope.form = resultForm;
+        $scope.action = scope.form.actions[$routeParams.action];
+        $scope.datamodel_keys = [];
+        if ($scope.form.datamodel) {
+            var datamodelkeys = Object.keys($scope.form.datamodel.translation);
+            for (var i = 0; i < datamodelkeys.length; i++) {
+                $scope.datamodel_keys.push({
+                    translated_name: SessionService.translate($scope.form.datamodel.translation[datamodelkeys[i]]),
+                    id: datamodelkeys[i]
+                });
+            }
+        }
+        if ($scope.form.actions) {
+            for (var i = 0; i < $scope.form.actions.length; i++) {
+                $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+            }
+        }
+        if ($scope.form.values) {
+            for (var i = 0; i < $scope.form.values.length; i++) {
+                $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+            }
+        }
+        $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
+        SessionService.setSessionData($scope.sessionData);
+    })
+
+    $scope.editText = function (object, property, multipleLines) {
+        if (!object[property]) object[property] = {};
+        $mdDialog.show({
+            templateUrl: 'designer/text.html',
+            controller: 'TextCtrl',
+            locals: {
+                text: object[property],
+                multipleLines: multipleLines
+            },
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        }).then(function (result) {
+            object[property] = result;
+        });
+    }
+
+    $scope.save = function () {
+        DesignForm.update({
+            id: $scope.form._id
+        }, $scope.form).$promise.then(function (res) {
+            SessionService.init();
+            SessionService.location('/form_edit/' + $scope.form._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
+        }).catch(function (res) {
+            updateErrorAlert();
+        });
+    }
+
+    var updateErrorAlert = function () {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_document_version)
+            .textContent($scope.sessionData.appData.already_modified_document)
+            .ok($scope.sessionData.appData.ok)
+        );
+    }
 }]);

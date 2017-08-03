@@ -69,12 +69,35 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             fr: 'Adresse'
         }
     }
-    var keysOfText = Object.keys($scope.display_type);
+    $scope.title_display_type = {
+        text: {
+            en: 'Text',
+            fr: 'Texte'
+        },
+        value: {
+            en: 'Value',
+            fr: 'Valeur'
+        },
+        currency: {
+            en: 'Amount',
+            fr: 'Montant'
+        }
+    }
+
+    var keysOfDisplayType = Object.keys($scope.display_type);
     $scope.display_types = [];
-    for (i = 0; i < keysOfText.length; i++) {
+    for (i = 0; i < keysOfDisplayType.length; i++) {
         $scope.display_types.push({
-            translated_name: SessionService.translate($scope.display_type[keysOfText[i]]),
-            type: keysOfText[i]
+            translated_name: SessionService.translate($scope.display_type[keysOfDisplayType[i]]),
+            type: keysOfDisplayType[i]
+        });
+    }
+    var keysOfTitleDisplayType = Object.keys($scope.title_display_type);
+    $scope.title_display_types = [];
+    for (i = 0; i < keysOfTitleDisplayType.length; i++) {
+        $scope.title_display_types.push({
+            translated_name: SessionService.translate($scope.title_display_type[keysOfTitleDisplayType[i]]),
+            type: keysOfTitleDisplayType[i]
         });
     }
 

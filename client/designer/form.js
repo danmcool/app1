@@ -26,13 +26,15 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
             }
         }
-        for (var i = 0; i < $scope.form.display.length; i++) {
-            for (var j = 0; j < $scope.form.display[i].blocks.length; j++) {
-                for (var k = 0; k < $scope.form.display[i].blocks[j].fields.length; k++) {
-                    if ($scope.form.display[i].blocks[j].fields[k].text) {
-                        $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.display[i].blocks[j].fields[k].text);
-                    } else {
-                        $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].blocks[j].fields[k].name])
+        if ($scope.form.display) {
+            for (var i = 0; i < $scope.form.display.length; i++) {
+                for (var j = 0; j < $scope.form.display[i].blocks.length; j++) {
+                    for (var k = 0; k < $scope.form.display[i].blocks[j].fields.length; k++) {
+                        if ($scope.form.display[i].blocks[j].fields[k].text) {
+                            $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.display[i].blocks[j].fields[k].text);
+                        } else {
+                            $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].blocks[j].fields[k].name])
+                        }
                     }
                 }
             }
