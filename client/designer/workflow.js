@@ -61,10 +61,10 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)
         ).then(function (result) {
+            var name = {};
+            name[$scope.sessionData.userData.properties.language] = result;
             var newForm = new DesignForm({
-                name: {
-                    en: result
-                }
+                name: name
             });
             newForm.$save(function () {
                 newForm.translated_name = newForm.name.en;

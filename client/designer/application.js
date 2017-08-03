@@ -117,14 +117,14 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         if (files.length != 1) return;
         document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' 1/1';
         var file = new Files({
-            'name': files[0].name,
-            'type': files[0].type
+            name: files[0].name,
+            type: files[0].type
         });
         file.$save().then(function (res) {
             $scope.application.file = {
-                '_id': res.file._id,
-                'name': res.file.name,
-                'type': res.file.type
+                _id: res.file._id,
+                name: res.file.name,
+                type: res.file.type
             };
             $scope.uploadFile(files[0], res.signedRequest, res.url);
         });

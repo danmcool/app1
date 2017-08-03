@@ -26,6 +26,17 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
             }
         }
+        for (var i = 0; i < $scope.form.display.length; i++) {
+            for (var j = 0; j < $scope.form.display[i].blocks.length; j++) {
+                for (var k = 0; k < $scope.form.display[i].blocks[j].fields.length; k++) {
+                    if ($scope.form.display[i].blocks[j].fields[k].text) {
+                        $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.display[i].blocks[j].fields[k].text);
+                    } else {
+                        $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].blocks[j].fields[k].name])
+                    }
+                }
+            }
+        }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
     });
@@ -64,6 +75,18 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }).catch(function (res) {
             updateErrorAlert();
         });
+    };
+
+    $scope.deleteField = function (section, block, field) {
+        if ($scope.form.display[section].blocks[block].fields.length > 0) {
+            $scope.form.display[section].blocks[block].fields.splice(field, 1);
+        }
+        if ($scope.form.display[section].blocks[block].fields.length == 0) {
+            $scope.form.display[section].blocks.splice(block, 1);
+        }
+        if ($scope.form.display[section].blocks.length == 0) {
+            $scope.form.display.splice(section, 1);
+        }
     };
 
     $scope.editAction = function (formId) {
@@ -108,10 +131,13 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             if (!$scope.form.display) {
                 $scope.form.display = [];
             }
+            var text = {};
+            text[$scope.sessionData.userData.properties.language] = result;
             $scope.form.display.push({
-                'blocks': [{
-                    'fields': [{
-                        'name': result
+                blocks: [{
+                    fields: [{
+                        text: text,
+                        translated_name: result
                     }]
                 }]
             });
@@ -132,9 +158,12 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             if (!$scope.form.display) {
                 $scope.form.display = [];
             }
+            var text = {};
+            text[$scope.sessionData.userData.properties.language] = result;
             blocks.push({
-                'fields': [{
-                    'name': result
+                fields: [{
+                    text: text,
+                    translated_name: result
                 }]
             });
         });
@@ -154,8 +183,11 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             if (!$scope.form.display) {
                 $scope.form.display = [];
             }
+            var text = {};
+            text[$scope.sessionData.userData.properties.language] = result;
             fields.push({
-                'name': result
+                text: text,
+                translated_name: result
             });
         });
     }
@@ -178,5 +210,4 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     function onDragLeave(event) {
         element.classList.remove('dash_line'); // this / e.target is previous target element.
     }
-
 }]);
