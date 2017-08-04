@@ -1,4 +1,10 @@
 app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
+    var swap = function (arr, i, j) {
+        var tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -68,15 +74,18 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         });
     };
 
-    $scope.editField = function (section, block, field) {
+    var saveFormForward = function (url) {
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {
-            SessionService.init();
-            SessionService.location('/form_display_edit/' + $scope.form._id + '?section=' + section + '&block=' + block + '&field=' + field + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
+            SessionService.location(url);
         }).catch(function (res) {
             updateErrorAlert();
         });
+    }
+
+    $scope.editField = function (section, block, field) {
+        saveFormForward('/form_display_edit/' + $scope.form._id + '?section=' + section + '&block=' + block + '&field=' + field + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
     };
 
     $scope.deleteField = function (section, block, field) {
@@ -91,10 +100,13 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }
     };
 
-    $scope.editAction = function (formId) {
-        SessionService.init();
-        SessionService.location('/form_edit/' + formId);
+    $scope.editAction = function (action) {
+        saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + action + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
     };
+
+    $scope.deleteAction = function (action) {
+        $scope.form.actions.splice(action, 1);
+    }
 
     $scope.newAction = function () {
         $mdDialog.show(
@@ -102,19 +114,19 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             .parent(angular.element(document.body))
             .clickOutsideToClose(true)
             .title($scope.sessionData.appData.new_workflow)
-            .textContent($scope.sessionData.appData.new_workflow_name)
-            .initialValue('My Form')
+            .textContent($scope.sessionData.appData.new_action_name)
+            .initialValue('My Action')
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)
         ).then(function (result) {
-            var newWorkflow = new DesignWorkflow({
-                name: {
-                    en: result
-                }
-            });
-            newWorkflow.$save(function () {
-                newWorkflow.translated_name = newWorkflow.name.en;
-                $scope.application.workflows.push(newWorkflow);
+            if (!$scope.form.actions) {
+                $scope.form.actions = [];
+            }
+            var name = {};
+            name[$scope.sessionData.userData.properties.language] = result;
+            $scope.form.actions.push({
+                name: name,
+                translated_name: result
             });
         });
     };
@@ -195,14 +207,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     }
 
     $scope.save = function () {
-        DesignForm.update({
-            id: $scope.form._id
-        }, $scope.form).$promise.then(function (res) {
-            SessionService.init();
-            SessionService.location('/workflow_edit/' + $routeParams.workflow_id + '?application_id=' + $routeParams.application_id);
-        }).catch(function (res) {
-            updateErrorAlert();
-        });
+        saveFormForward('/workflow_edit/' + $routeParams.workflow_id + '?application_id=' + $routeParams.application_id);
     }
 
     $scope.onDragEnter = function (event) {
@@ -211,5 +216,16 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 
     function onDragLeave(event) {
         element.classList.remove('dash_line'); // this / e.target is previous target element.
+    }
+
+    var updateErrorAlert = function () {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_document_version)
+            .textContent($scope.sessionData.appData.already_modified_document)
+            .ok($scope.sessionData.appData.ok)
+        );
     }
 }]);

@@ -375,8 +375,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Nouveau bloc...'
         },
         field_editor: {
-            en: 'Element Properties',
-            fr: 'Propriétés de l`élément'
+            en: 'Element',
+            fr: 'Elément'
         },
         field_name: {
             en: 'Text',
@@ -413,6 +413,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         field_list_date: {
             en: 'Date format',
             fr: 'Format date'
+        },
+        action_editor: {
+            en: 'Action',
+            fr: 'Action'
+        },
+        action_type: {
+            en: 'Type',
+            fr: 'Type'
+        },
+        new_action_name: {
+            en: 'Action Name',
+            fr: 'Nom de l`action'
         }
     };
     var translate = function translate(language) {

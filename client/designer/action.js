@@ -1,4 +1,4 @@
-app1.controller('FormActionCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
+app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignWorkflow', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignWorkflow) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -68,7 +68,7 @@ app1.controller('FormActionCtrl', ['$scope', '$routeParams', '$mdDialog', 'Sessi
         id: $routeParams.id
     }, function (resultForm, err) {
         $scope.form = resultForm;
-        $scope.action = scope.form.actions[$routeParams.action];
+        $scope.action = $scope.form.actions[$routeParams.action];
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
             var datamodelkeys = Object.keys($scope.form.datamodel.translation);
@@ -89,9 +89,29 @@ app1.controller('FormActionCtrl', ['$scope', '$routeParams', '$mdDialog', 'Sessi
                 $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
             }
         }
+        $scope.action = $scope.form.actions[$routeParams.action];
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
     })
+
+    DesignWorkflow.get({
+        id: $routeParams.workflow_id
+    }, function (resultWorkflow, err) {
+        for (var i = 0; i < resultWorkflow.forms.length; i++) {
+            resultWorkflow.forms[i].translated_name = SessionService.translate(resultWorkflow.forms[i].name);
+            resultWorkflow.forms[i].translated_description = SessionService.translate(resultWorkflow.forms[i].description);
+        }
+        $scope.forms = resultWorkflow.forms;
+        var form_home = {
+            _id: 'home',
+            name: {
+                en: 'Application Home',
+                fr: 'Accueil de l`application'
+            }
+        };
+        form_home.translated_name = SessionService.translate(form_home.name);
+        $scope.forms.push(form_home);
+    });
 
     $scope.editText = function (object, property, multipleLines) {
         if (!object[property]) object[property] = {};
@@ -119,6 +139,19 @@ app1.controller('FormActionCtrl', ['$scope', '$routeParams', '$mdDialog', 'Sessi
             updateErrorAlert();
         });
     }
+
+    $scope.toggle = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        } else {
+            list.push(item);
+        }
+    };
+
+    $scope.exists = function (item, list) {
+        return list.indexOf(item) > -1;
+    };
 
     var updateErrorAlert = function () {
         $mdDialog.show(
