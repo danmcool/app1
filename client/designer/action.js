@@ -69,6 +69,9 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
     }, function (resultForm, err) {
         $scope.form = resultForm;
         $scope.action = $scope.form.actions[$routeParams.action];
+        if (!$scope.action.formula) {
+            $scope.action.formula = [];
+        }
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
             var datamodelkeys = Object.keys($scope.form.datamodel.translation);
@@ -140,18 +143,18 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         });
     }
 
-    $scope.toggle = function (item, list) {
-        var idx = list.indexOf(item);
+    $scope.toggleInFormula = function (item) {
+        var idx = $scope.action.formula.indexOf(item.id);
         if (idx > -1) {
-            list.splice(idx, 1);
+            $scope.action.formula.splice(idx, 1);
         } else {
-            list.push(item);
+            $scope.action.formula.push(item.id);
         }
-    };
+    }
 
-    $scope.exists = function (item, list) {
-        return list.indexOf(item) > -1;
-    };
+    $scope.existsInFormula = function (item) {
+        return $scope.action.formula.indexOf(item.id) > -1;
+    }
 
     var updateErrorAlert = function () {
         $mdDialog.show(

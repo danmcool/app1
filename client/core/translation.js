@@ -425,6 +425,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         new_action_name: {
             en: 'Action Name',
             fr: 'Nom de l`action'
+        },
+        action_formula: {
+            en: 'Send value',
+            fr: 'Envoyer valeur'
         }
     };
     var translate = function translate(language) {

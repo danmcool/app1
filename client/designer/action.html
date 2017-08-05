@@ -28,16 +28,28 @@
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">
-                            <legend>Using &lt;md-checkbox&gt; with &lt;ng-checked&gt; </legend>
+                            <legend>{{sessionData.appData.action_formula}}</legend>
                             <div layout="row" layout-wrap flex>
-                                <div flex="50" ng-repeat="item in items">
-                                    <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
-                                        {{ item }} <span ng-if="exists(item, selected)">selected</span>
+                                <div flex="50" ng-repeat="datafield in datamodel_keys">
+                                    <md-checkbox ng-checked="existsInFormula(datafield)" ng-click="toggleInFormula(datafield)">
+                                        {{datafield.translated_name}}
                                     </md-checkbox>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
+                </div>
+                <div flex layout="row">
+                    <md-input-container flex="auto" class="md-block">
+                        <label>{{sessionData.appData.field_datafield}}</label>
+                        <md-select ng-model="action.set_value.name">
+                            <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex="auto" class="md-block">
+                        <label>{{sessionData.appData.value}}</label>
+                        <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.set_value.value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    </md-input-container>
                 </div>
                 <div layout="row" layout-align="end" flex>
                     <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
