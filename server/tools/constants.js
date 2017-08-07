@@ -102,7 +102,10 @@ const Constants = {
 	ValuesTypeQuery: 'query',
 	ValuesRelationUserManager: 'user_manager',
 	ValuesRelationUserReports: 'user_reports',
-	ValuesRelationUserList: 'user_list'
+	ValuesRelationUserList: 'user_list',
+
+    DataModelPrefix: 'data',
+    DataModelUserData: 'userdata'
 }
 
 module.exports = Constants;

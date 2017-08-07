@@ -304,7 +304,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 				if (formula) {
 					keys = Object.keys(formula);
 					for (i = 0; i < keys.length; i++) {
-						formUrl = formUrl + '&' + keys[i] + '=' + data[formula[keys[i]]];
+						formUrl = formUrl + '&' + formula[keys[i]] + '=' + data[formula[keys[i]]];
 					}
 				}
 			} else {
