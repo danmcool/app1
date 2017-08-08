@@ -1,4 +1,4 @@
-app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
+app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignValue', function ($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignValue) {
     var swap = function (arr, i, j) {
         var tmp = arr[i];
         arr[i] = arr[j];
@@ -108,13 +108,20 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         $scope.form.actions.splice(action, 1);
     }
 
+    $scope.editValue = function (value) {
+        saveFormForward('/form_value_edit/' + value._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
+    };
+
+    $scope.deleteValue = function (value) {
+        $scope.form.values.splice(value, 1);
+    }
+
     $scope.newAction = function () {
         $mdDialog.show(
             $mdDialog.prompt()
             .parent(angular.element(document.body))
             .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_workflow)
-            .textContent($scope.sessionData.appData.new_action_name)
+            .title($scope.sessionData.appData.new_action)
             .initialValue('My Action')
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)
@@ -127,6 +134,35 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             $scope.form.actions.push({
                 name: name,
                 translated_name: result
+            });
+            saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + ($scope.form.actions.length - 1) + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
+        });
+    };
+
+    $scope.newValue = function () {
+        $mdDialog.show(
+            $mdDialog.prompt()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_value)
+            .initialValue('My Value')
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)
+        ).then(function (result) {
+            var name = {};
+            name[$scope.sessionData.userData.properties.language] = result;
+            var newValue = new DesignValue({
+                name: name
+            });
+            newValue.$save(function () {
+                if (!$scope.form.values) {
+                    $scope.form.values = [];
+                }
+                $scope.form.values.push({
+                    name: name,
+                    _id: newValue._id
+                });
+                saveFormForward('/form_value_edit/' + newValue._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
             });
         });
     };

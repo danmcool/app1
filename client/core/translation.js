@@ -422,6 +422,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Type',
             fr: 'Type'
         },
+        new_action: {
+            en: 'New Action...',
+            fr: 'Nouvelle action...'
+        },
         new_action_name: {
             en: 'Action Name',
             fr: 'Nom de l`action'
@@ -429,6 +433,30 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         action_formula: {
             en: 'Send value',
             fr: 'Envoyer valeur'
+        },
+        value_editor: {
+            en: 'Value',
+            fr: 'Valeur'
+        },
+        new_value: {
+            en: 'New Value...',
+            fr: 'Nouvelle valuer...'
+        },
+        new_value_name: {
+            en: 'Value Name',
+            fr: 'Nom de la valeur'
+        },
+        value_type: {
+            en: 'Type',
+            fr: 'Type'
+        },
+        value_user_relation_type: {
+            en: 'Relation type',
+            fr: 'Type de relation'
+        },
+        add_value_list: {
+            en: 'Add new value',
+            fr: 'Ajouter une nouvelle valeur'
         }
     };
     var translate = function translate(language) {

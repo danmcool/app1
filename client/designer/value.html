@@ -1,41 +1,51 @@
-<md-dialog aria-label="Translate Text">
-    <form ng-cloak>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>{{sessionData.appData.text_translation}}</h2>
-            </div>
-        </md-toolbar>
-        <md-dialog-content>
-            <div class="md-dialog-content">
-                <div ng-if="!multipleLines">
-                    <md-input-container flex="auto" class="md-block">
-                        <label>English</label>
-                        <input type="text" ng-disabled="false" ng-required="false" name="" ng-model="text.en" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="3">
-                    </md-input-container>
-                    <md-input-container flex="auto" class="md-block">
-                        <label>Francais</label>
-                        <input type="text" ng-disabled="false" ng-required="false" name="" ng-model="text.fr" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="3">
-                    </md-input-container>
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex layout="column" class="fade">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.value_editor}}</span>
                 </div>
-                <div ng-if="multipleLines">
-                    <md-input-container flex="auto" class="md-block">
-                        <label>English</label>
-                        <textarea ng-disabled="false" ng-required="false" name="" ng-model="text.en" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4"></textarea>
-                    </md-input-container>
-                    <md-input-container flex="auto" class="md-block">
-                        <label>Francais</label>
-                        <textarea ng-disabled="false" ng-required="false" name="" ng-model="text.fr" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4"></textarea>
-                    </md-input-container>
+            </md-toolbar>
+            <form name="valueForm">
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.new_value_name}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <md-icon ng-click="editText(value,'name',false)">language</md-icon>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.value_type}}</label>
+                    <md-select ng-model="value.type">
+                        <md-option ng-repeat="value in value_types" ng-value="value.type">{{value.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <div ng-switch="value.type" flex="auto">
+                    <div ng-switch-when="list">
+                        <div ng-repeat="value_item in value.values">
+                            <md-input-container flex="auto" class="md-block">
+                                <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value_item.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value_item,'name',false)">
+                                <md-icon ng-click="deleteValue($index)">delete</md-icon>
+                            </md-input-container>
+                        </div>
+                        <md-input-container flex="auto" class="md-block">
+                            <md-button ng-click="addValue()" class="md-primary">{{sessionData.appData.add_value_list}}</md-button>
+                        </md-input-container>
+                    </div>
+                    <div ng-switch-when="user">
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.value_user_relation_type}}</label>
+                            <md-select ng-model="value.values.relation">
+                                <md-option ng-repeat="relation in value_relation_user_types" ng-value="relation.type">{{relation.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div ng-switch-when="query"></div>
                 </div>
-            </div>
-        </md-dialog-content>
-        <md-dialog-actions layout="row">
-            <md-button ng-click="cancel()">
-                {{sessionData.appData.cancel}}
-            </md-button>
-            <md-button ng-click="answer(text)">
-                {{sessionData.appData.ok}}
-            </md-button>
-        </md-dialog-actions>
-    </form>
-</md-dialog>
+                <div layout="row" layout-align="end" flex>
+                    <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                </div>
+            </form>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

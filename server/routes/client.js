@@ -53,7 +53,7 @@ router.put('/value/:id', function (req, res, next) {
 			userParams = {
 				_company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
 				_id: {
-					'$in': SessionCache.userData[req.cookies[Constants.SessionCookie]].reports
+					'$in': SessionCache.userData[req.cookies[Constants.SessionCookie]].manager
 				}
 			};
 		} else if (req.body.relation == Constants.ValuesRelationUserList) {

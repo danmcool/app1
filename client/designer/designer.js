@@ -16,6 +16,12 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
             method: 'PUT'
         }
     });
+}]).factory('DesignValue', ['$resource', function ($resource) {
+    return $resource('/client/design/value/:id', null, {
+        'update': {
+            method: 'PUT'
+        }
+    });
 }]).factory('DesignDataModel', ['$resource', function ($resource) {
     return $resource('/client/design/datamodel/:id', null, {
         'update': {

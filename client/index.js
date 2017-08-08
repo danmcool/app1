@@ -418,6 +418,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             templateUrl: 'designer/action.html',
             controller: 'FormActionEditCtrl'
         })
+        .when('/form_value_edit/:id', {
+            templateUrl: 'designer/value.html',
+            controller: 'FormValueEditCtrl'
+        })
         .otherwise({
             redirectTo: '/',
             templateUrl: 'core/welcome.html',
