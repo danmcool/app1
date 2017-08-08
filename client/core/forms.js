@@ -120,7 +120,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         for (k = 0; k < newValues.length; k++) {
             formFields.values.push({
                 '_id': newValues[k]._id,
-                'name': SessionService.translate(newValues[k])
+                'name': SessionService.translate(newValues[k].name)
             });
             formFields.values_key[newValues[k]._id] =
                 SessionService.translate(newValues[k]);
