@@ -60,6 +60,63 @@
                                 </md-input-container>
                             </div>
                         </div>
+                        <div ng-repeat="action in field.item_actions">
+                            <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.new_action_name}}</label>
+                                <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                                <md-icon ng-click="editText(action,'name',false)">language</md-icon>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.next_form}}</label>
+                                <md-select ng-model="action.next_form_id">
+                                    <md-option ng-repeat="form in forms" ng-value="form._id">{{form.translated_name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <div ng-repeat="item_action in field.item_actions">
+                                <div ng-if="field.display=='list'">
+                                    <md-input-container flex="auto" class="md-block">
+                                        <label>{{sessionData.appData.action_type}}</label>
+                                        <md-select ng-model="item_action.action">
+                                            <md-option ng-repeat="action in list_action_types" ng-value="action.type">{{action.translated_name}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div ng-if="field.display=='item'">
+                                    <md-input-container flex="auto" class="md-block">
+                                        <label>{{sessionData.appData.action_type}}</label>
+                                        <md-select ng-model="item_action.action">
+                                            <md-option ng-repeat="action in item_action_types" ng-value="action.type">{{action.translated_name}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                            <div flex layout="column">
+                                <div>
+                                    <fieldset class="standard">
+                                        <legend>{{sessionData.appData.action_formula}}</legend>
+                                        <div layout="row" layout-wrap flex>
+                                            <div flex="50" ng-repeat="datafield in datamodel_keys">
+                                                <md-checkbox ng-checked="existsInFormula(datafield)" ng-click="toggleInFormula(datafield)">
+                                                    {{datafield.translated_name}}
+                                                </md-checkbox>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div flex layout="row">
+                                <md-input-container flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_datafield}}</label>
+                                    <md-select ng-model="action.set_value.name">
+                                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.value}}</label>
+                                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.set_value.value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                                </md-input-container>
+                            </div>
+                        </div>
                     </div>
                     <div ng-switch-when="shorttext|number|editor|feed|file|check|calendar|calculation|email|address" ng-switch-when-separator="|">
                         <div layout="row" layout-xs="column">

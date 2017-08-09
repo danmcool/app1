@@ -1,4 +1,4 @@
-app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel) {
+app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignWorkflow', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignWorkflow) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -101,6 +101,57 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         });
     }
 
+    $scope.list_action_type = {
+        modify: {
+            en: 'Modify',
+            fr: 'Modifier'
+        },
+        delete: {
+            en: 'Delete',
+            fr: 'Supprimer'
+        },
+        link: {
+            en: 'Link',
+            fr: 'Lien'
+        }
+    }
+
+    $scope.item_action_type = {
+        modify_item: {
+            en: 'Modify',
+            fr: 'Modifier'
+        },
+        delete_item: {
+            en: 'Delete',
+            fr: 'Supprimer'
+        },
+        link_item: {
+            en: 'Link',
+            fr: 'Lien'
+        },
+        move_item: {
+            en: 'Move Item',
+            fr: 'Deplacer element'
+        }
+    }
+
+    var keysOfListActionType = Object.keys($scope.list_action_type);
+    $scope.list_action_types = [];
+    for (i = 0; i < keysOfListActionType.length; i++) {
+        $scope.list_action_types.push({
+            translated_name: SessionService.translate($scope.list_action_type[keysOfListActionType[i]]),
+            type: keysOfListActionType[i]
+        });
+    }
+    var keysOfItemActionType = Object.keys($scope.item_action_type);
+    $scope.item_action_types = [];
+    for (i = 0; i < keysOfItemActionType.length; i++) {
+        $scope.item_action_types.push({
+            translated_name: SessionService.translate($scope.item_action_type[keysOfItemActionType[i]]),
+            type: keysOfItemActionType[i]
+        });
+    }
+
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {
@@ -130,6 +181,25 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
     })
+
+    DesignWorkflow.get({
+        id: $routeParams.workflow_id
+    }, function (resultWorkflow, err) {
+        for (var i = 0; i < resultWorkflow.forms.length; i++) {
+            resultWorkflow.forms[i].translated_name = SessionService.translate(resultWorkflow.forms[i].name);
+            resultWorkflow.forms[i].translated_description = SessionService.translate(resultWorkflow.forms[i].description);
+        }
+        $scope.forms = resultWorkflow.forms;
+        var form_home = {
+            _id: 'home',
+            name: {
+                en: 'Application Home',
+                fr: 'Accueil de l`application'
+            }
+        };
+        form_home.translated_name = SessionService.translate(form_home.name);
+        $scope.forms.push(form_home);
+    });
 
     $scope.editText = function (object, property, multipleLines) {
         if (!object[property]) object[property] = {};
