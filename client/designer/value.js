@@ -60,9 +60,6 @@ app1.controller('FormValueEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'Se
         id: $routeParams.id
     }, function (resultForm, err) {
         $scope.value = resultForm;
-        if (!$scope.value.values) {
-            $scope.value.values = {};
-        }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
     })
@@ -98,8 +95,24 @@ app1.controller('FormValueEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'Se
     }
 
     $scope.addValue = function () {
+        if (!$scope.value.values) {
+            $scope.value.values = [];
+        }
+        var newId = $scope.value.values.length;
+        var found;
+        var i;
+        do {
+            found = false;
+            for (i = 0; i < $scope.value.values.length; i++) {
+                if ($scope.value.values[i]._id == newId) {
+                    found = true;
+                    newId = newId + 1;
+                    break;
+                }
+            }
+        } while (found);
         $scope.value.values.push({
-            _id: $scope.value.values.length
+            _id: newId
         });
     }
 
