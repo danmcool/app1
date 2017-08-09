@@ -10,8 +10,7 @@
             <form name="valueForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_value_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
-                    <md-icon ng-click="editText(value,'name',false)">language</md-icon>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value,'name',false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.value_type}}</label>

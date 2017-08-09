@@ -8,38 +8,18 @@
                 </div>
             </md-toolbar>
             <form name="wkfForm">
-                <div layout="row" flex="auto">
-                    <md-input-container flex="90" class="md-block">
-                        <label>{{sessionData.appData.new_workflow_name}}</label>
-                        <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
-                    </md-input-container>
-                    <div layout="row" layout-align="end center">
-                        <md-button layout-align="end" class="md-fab md-primary" ng-click="editText(workflow, 'name', false)" aria-label="Edit Language">
-                            <md-icon>language</md-icon>
-                        </md-button>
-                    </div>
-                </div>
-                <div layout="row" flex="auto">
-                    <md-input-container flex="90" class="md-block">
-                        <label>{{sessionData.appData.workflow_description}}</label>
-                        <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4"></textarea>
-                    </md-input-container>
-                    <div layout="row" layout-align="end center">
-                        <md-button layout-align="end" class="md-fab md-primary" ng-click="editText(workflow, 'description', true)" aria-label="Edit Language">
-                            <md-icon>language</md-icon>
-                        </md-button>
-                    </div>
-                </div>
                 <md-input-container flex="auto" class="md-block">
-                    <div layout="row">
-                        <div flex="60">
-                            <label>{{sessionData.appData.app_icon}}</label>
-                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
-                        </div>
-                        <div layout="row" layout-align="end center">
-                            <md-icon>{{workflow.icon}}</md-icon>
-                        </div>
-                    </div>
+                    <label>{{sessionData.appData.new_workflow_name}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(workflow, 'name', false)">
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.workflow_description}}</label>
+                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(workflow, 'description', true)"></textarea>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.app_icon}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <md-icon>{{workflow.icon}}</md-icon>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <p>{{sessionData.appData.app_wkf_type}}</p>
