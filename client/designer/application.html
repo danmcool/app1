@@ -17,15 +17,9 @@
                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(application, 'description', false)"></textarea>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
-                    <div layout="row">
-                        <div flex="60">
-                            <label>{{sessionData.appData.app_icon}}</label>
-                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
-                        </div>
-                        <div layout="row" layout-align="end center">
-                            <md-icon>{{application.icon}}</md-icon>
-                        </div>
-                    </div>
+                    <label>{{sessionData.appData.app_icon}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="application.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <md-icon>{{application.icon}}</md-icon>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <md-switch ng-disabled="false" ng-required="false" ng-model="application.active">{{sessionData.appData.activate}}</md-switch>
