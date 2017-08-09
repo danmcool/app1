@@ -20,6 +20,7 @@
                 </md-input-container>
                 <div ng-switch="value.type" flex="auto">
                     <div ng-switch-when="list">
+                        <md-subheader>{{sessionData.appData.field_listofvalues}}</md-subheader>
                         <div ng-repeat="value_item in value.values">
                             <md-input-container flex="auto" class="md-block">
                                 <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value_item.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value_item,'name',false)">
