@@ -52,8 +52,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.search_criteria = '';
     $scope.show_search = false;
     $scope.search_text = '';
+    $scope.formLoaded = false;
 
     $scope.getNextData = function () {
+        if (!$scope.formLoaded) return;
         if ($scope.stopScroll) return;
         if ($scope.tempStopScroll) return;
         if (!$scope.form.datamodel) return;
@@ -224,6 +226,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
                         keysOfParameters[k]]);
                 }
+                $scope.formLoaded = true;
                 $scope.getNextData();
                 //} else if (formFields[i].display == 'editor') {
                 //if (formFields[i].disabled) {
