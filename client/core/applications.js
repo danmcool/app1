@@ -14,6 +14,7 @@ app1.controller('ApplicationsCtrl', ['$scope', 'SessionService', '$location', fu
     });
 
     $scope.open = function (application) {
+        SessionService.openApp(application._id);
         if (application.type == 'url') {
             SessionService.location('/url/' + application._id + '?iframe_url=' + application.url);
         } else if (application.type == 'file') {

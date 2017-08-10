@@ -144,7 +144,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications) {
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications, User) {
     var sessionData = {
         userData: {
             properties: {
@@ -192,9 +192,28 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         Applications.query().$promise.then(function (appResult) {
             sessionData.applications = appResult;
             var apps = sessionData.applications;
+            var saveUserData = false;
+            if (!sessionData.userData.properties.app_score) {
+                sessionData.userData.properties.app_score = {};
+                saveUserData = true;
+            }
             for (var i = 0; i < apps.length; i++) {
                 apps[i].translated_name = translate(apps[i].name);
                 apps[i].translated_description = translate(apps[i].description);
+                if (!sessionData.userData.properties.app_score[apps[i]._id]) {
+                    sessionData.userData.properties.app_score[apps[i]._id] = 75.00;
+                    saveUserData = true;
+                }
+            }
+            apps.sort(function (app_1, app_2) {
+                return sessionData.userData.properties.app_score[app_2._id] - sessionData.userData.properties.app_score[app_1._id];
+            });
+            if (saveUserData) {
+                User.update({
+                    id: $scope.sessionData.userData._id
+                }, {
+                    properties: $scope.sessionData.userData.properties
+                });
             }
             if (gotoApps) {
                 sessionData.applicationName = sessionData.appData.home;
@@ -213,6 +232,20 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
             location('/');
+        });
+    }
+    var openApp = function (appId) {
+        for (var i = 0; i < sessionData.applications.length; i++) {
+            sessionData.userData.properties.app_score[sessionData.applications[i]._id] *= 0.99;
+        }
+        sessionData.userData.properties.app_score[appId] = Math.min(100.00, sessionData.userData.properties.app_score[appId] * 1.02);
+        sessionData.applications.sort(function (app_1, app_2) {
+            return sessionData.userData.properties.app_score[app_2._id] - sessionData.userData.properties.app_score[app_1._id];
+        });
+        User.update({
+            id: sessionData.userData._id
+        }, {
+            properties: sessionData.userData.properties
         });
     }
     var login = function (user, password) {
@@ -252,6 +285,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         getSessionData: getSessionData,
         translate: translate,
         init: init,
+        openApp: openApp,
         login: login,
         logout: logout,
         location: location
@@ -316,6 +350,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     };
 
     $scope.open = function (application) {
+        SessionService.openApp(application._id);
         if (application.type == 'url') {
             SessionService.location('/url/' + application._id + '?iframe_url=' + application.url);
         } else if (application.type == 'file') {
