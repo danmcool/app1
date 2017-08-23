@@ -14,6 +14,16 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }
     });
 
+    $scope.field_id_list = {};
+    var computeNewId = function () {
+        var keysOfIdList = Object.keys($scope.field_id_list);
+        var newId = keysOfIdList.length;
+        do {
+            newId = newId + 1;
+        } while ($scope.field_id_list[newId]);
+        return newId;
+    }
+
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {
@@ -36,10 +46,14 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             for (var i = 0; i < $scope.form.display.length; i++) {
                 for (var j = 0; j < $scope.form.display[i].blocks.length; j++) {
                     for (var k = 0; k < $scope.form.display[i].blocks[j].fields.length; k++) {
+                        if (!$scope.form.display[i].blocks[j].fields[k].id) {
+                            $scope.form.display[i].blocks[j].fields[k].id = computeNewId();
+                        }
+                        $scope.field_id_list[$scope.form.display[i].blocks[j].fields[k].id] = true;
                         if ($scope.form.display[i].blocks[j].fields[k].text) {
                             $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.display[i].blocks[j].fields[k].text);
                         } else {
-                            $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.datamodel.translation[$scope.form.display[i].blocks[j].fields[k].name])
+                            $scope.form.display[i].blocks[j].fields[k].translated_name = SessionService.translate($scope.form.datamodel.projection[$scope.form.display[i].blocks[j].fields[k].name])
                         }
                     }
                 }
@@ -187,7 +201,8 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 blocks: [{
                     fields: [{
                         text: text,
-                        translated_name: result
+                        translated_name: result,
+                        id: computeNewId()
                     }]
                 }]
             });
@@ -213,7 +228,8 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             blocks.push({
                 fields: [{
                     text: text,
-                    translated_name: result
+                    translated_name: result,
+                    id: computeNewId()
                 }]
             });
         });
@@ -237,7 +253,8 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             text[$scope.sessionData.userData.properties.language] = result;
             fields.push({
                 text: text,
-                translated_name: result
+                translated_name: result,
+                id: computeNewId()
             });
         });
     }

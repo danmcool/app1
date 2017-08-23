@@ -160,10 +160,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
-            var datamodelkeys = Object.keys($scope.form.datamodel.translation);
+            var datamodelkeys = Object.keys($scope.form.datamodel.projection);
             for (var i = 0; i < datamodelkeys.length; i++) {
                 $scope.datamodel_keys.push({
-                    translated_name: SessionService.translate($scope.form.datamodel.translation[datamodelkeys[i]]),
+                    translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]]),
                     id: datamodelkeys[i]
                 });
             }
@@ -217,7 +217,30 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         });
     }
 
+    $scope.addActionList = function (field) {
+        $mdDialog.show(
+            $mdDialog.prompt()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_action)
+            .initialValue('My Action')
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)
+        ).then(function (result) {
+            if (!field.item_actions) {
+                field.item_actions = [];
+            }
+            var name = {};
+            name[$scope.sessionData.userData.properties.language] = result;
+            field.item_actions.push({
+                name: name,
+                translated_name: result
+            });
+        });
+    }
+
     $scope.save = function () {
+        $scope.field.path = $scope.form.datamodel.projection[$scope.field.projectionid].path;
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {

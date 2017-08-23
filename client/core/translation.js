@@ -350,10 +350,6 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Actions',
             fr: 'Actions'
         },
-        new_action: {
-            en: 'New Action...',
-            fr: 'Nouvelle action...'
-        },
         form_values: {
             en: 'Data Values',
             fr: 'Valeurs de données'

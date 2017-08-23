@@ -74,10 +74,10 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         }
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
-            var datamodelkeys = Object.keys($scope.form.datamodel.translation);
+            var datamodelkeys = Object.keys($scope.form.datamodel.projection);
             for (var i = 0; i < datamodelkeys.length; i++) {
                 $scope.datamodel_keys.push({
-                    translated_name: SessionService.translate($scope.form.datamodel.translation[datamodelkeys[i]]),
+                    translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]]),
                     id: datamodelkeys[i]
                 });
             }

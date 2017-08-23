@@ -279,7 +279,7 @@ router.get('/datamodel', function (req, res, next) {
         });
     }
     var pageOptions = computePage(req);
-    DataModel.find(SessionCache.filterApplicationCompanyCode(req, {})).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
+    DataModel.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         datamodels) {
         if (err) return next(err);
         res.json(datamodels);

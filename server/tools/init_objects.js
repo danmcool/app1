@@ -8,19 +8,19 @@ var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
 var SessionCache = require('../tools/session_cache.js');
 
-var prepareIndex = function (translation, path, index) {
-    if (typeof (translation) != 'object') return;
-    var keys = Object.keys(translation);
+var prepareIndex = function (projection, path, index) {
+    if (typeof (projection) != 'object') return;
+    var keys = Object.keys(projection);
     if (path != '') {
         path = path + '.';
     }
     for (var i = 0; i < keys.length; i++) {
         var field = path + keys[i];
-        if (translation[keys[i]] && translation[keys[i]].index) {
+        if (projection[keys[i]] && projection[keys[i]].index) {
             index.fields[field] = 'text';
-            index.options.weights[field] = translation[keys[i]].index_weight;
+            index.options.weights[field] = projection[keys[i]].index_weight;
         }
-        prepareIndex(translation[keys[i]], field, index);
+        prepareIndex(projection[keys[i]], field, index);
     }
 }
 
@@ -30,33 +30,36 @@ DataModel.find(function (err, objects) {
     if (err) return next(err);
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
-        try {
-            var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : '{}');
-            datamodel._updated_at = 'Date';
-            datamodel._company_code = 'String';
-            datamodel._user = 'String';
-            datamodel._files = [{
-                type: Schema.Types.ObjectId,
-                ref: 'File'
+        var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : '{}');
+        if (datamodel._ref == Constants.DataModelUserId) {
+            Metadata.Objects[objects[i]._id] = Metadata.User;
+        } else {
+            try {
+                datamodel._updated_at = 'Date';
+                datamodel._company_code = 'String';
+                datamodel._user = 'String';
+                datamodel._files = [{
+                    type: Schema.Types.ObjectId,
+                    ref: 'File'
             }];
-            modelSchema = new Schema(datamodel);
-        } catch (e) {
-            console.log(e);
-            modelSchema = new Schema({});
-        }
-        var index = {
-            fields: {},
-            options: {
-                name: '_search',
-                weights: {}
+                modelSchema = new Schema(datamodel);
+            } catch (e) {
+                console.log(e);
+                modelSchema = new Schema({});
             }
-        };
-        var translation = objects[i].translation ? objects[i].translation : {};
-        prepareIndex(translation, '', index);
-        modelSchema.index(index.fields, index.options);
-        Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema);
+            var index = {
+                fields: {},
+                options: {
+                    name: '_search',
+                    weights: {}
+                }
+            };
+            var projection = objects[i].projection ? objects[i].projection : {};
+            prepareIndex(projection, '', index);
+            modelSchema.index(index.fields, index.options);
+            Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema);
+        }
     }
-    Metadata.Objects[Constants.DataModelUserData] = Metadata.User;
 });
 
 // initialize saml service provider
