@@ -457,6 +457,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             templateUrl: 'designer/value.html',
             controller: 'FormValueEditCtrl'
         })
+        .when('/datamodel', {
+            templateUrl: 'datamodel/datamodel.html',
+            controller: 'DatamodelCtrl'
+        })
+        .when('/datamodel/:id', {
+            templateUrl: 'datamodel/datamodeledit.html',
+            controller: 'DatamodelEditCtrl'
+        })
         .otherwise({
             redirectTo: '/',
             templateUrl: 'core/welcome.html',

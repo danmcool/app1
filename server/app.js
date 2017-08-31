@@ -10,7 +10,7 @@ mongoose.Promise = global.Promise;
 
 // connect to mongo db -> apps is the name of app1 data
 mongoose.connect('mongodb://app1:123Apps@127.0.0.1:55055/apps', {
-	useMongoClient: true
+    useMongoClient: true
 });
 
 // require routes
@@ -35,46 +35,46 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended: false
+    extended: false
 }));
 app.use(cookieParser());
 
 function allowedPath(req) {
-	if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client')) {
-		return false;
-	}
-	return true;
+    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client')) {
+        return false;
+    }
+    return true;
 }
 
 function nocache(req, res) {
-	/*    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client') || req.path.startsWith('/authentication')) {
-	        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-	        res.header('Expires', '-1');
-	        res.header('Pragma', 'no-cache');
-	    }*/
+    /*    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client') || req.path.startsWith('/authentication')) {
+            res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+            res.header('Expires', '-1');
+            res.header('Pragma', 'no-cache');
+        }*/
 }
 
 app.use(function (req, res, next) {
-	if (allowedPath(req)) {
-		nocache(req, res);
-		next();
-	} else {
-		SessionCache.isActive(req, function (active) {
-			if (active) {
-				nocache(req, res);
-				next();
-			} else {
-				return res.status(401).redirect('/');
-			}
-		});
-	}
+    if (allowedPath(req)) {
+        nocache(req, res);
+        next();
+    } else {
+        SessionCache.isActive(req, function (active) {
+            if (active) {
+                nocache(req, res);
+                next();
+            } else {
+                return res.status(401).redirect('/');
+            }
+        });
+    }
 });
 
 // routes
 app.use('/data', data);
 app.use('/file', file);
-app.use('/client', client);
 app.use('/authentication', authentication);
+app.use('/client', client);
 app.use('/api', api);
 app.use('/client/design', design);
 
@@ -82,25 +82,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.get('/', function (req, res) {
-	res.sendFile(path.join(__dirname, '../client', 'index.html'));
+    res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
 app.get('/admin', function (req, res) {
-	res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
+    res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
 });
 
 // error hndlers
 app.use(function (req, res, next) {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 app.use(function (err, req, res) {
-	res.status(err.status || 500);
-	res.end(JSON.stringify({
-		message: err.message,
-		error: {}
-	}));
+    res.status(err.status || 500);
+    res.end(JSON.stringify({
+        message: err.message,
+        error: {}
+    }));
 });
 
 module.exports = app;

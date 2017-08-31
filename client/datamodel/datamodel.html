@@ -1,0 +1,36 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex="auto" layout="column" class="fade" infinite-scroll="getNextDatamodels()" infinite-scroll-distance="10">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{sessionData.appData.new_datamodel}}</span>
+                    </md-card-title-text>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-fab md-primary" ng-click="newDatamodel()" aria-label="New Datamodel">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </md-card-actions>
+                </md-card-title>
+            </md-card>
+            <md-card ng-repeat="datamodel in datamodels">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{datamodel.translated_name}}</span>
+                        <span class="md-body-1">{{datamodel.translated_description}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button class="md-fab md-primary" ng-click="editDatamodel(datamodel._id)" aria-label="Edit" ng-if="(datamodel._company_code == sessionData.userData._company_code)">
+                        <md-icon>edit</md-icon>
+                    </md-button>
+                    <md-button class="md-fab md-primary" ng-click="delete(datamodel._id)" aria-label="Delete" ng-if="(datamodel._company_code == sessionData.userData._company_code)">
+                        <md-icon>delete</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

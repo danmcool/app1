@@ -19,7 +19,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.resolvePathUpdate = function (object, path, value) {
         path.split('.').reduce(function (previous, current, index, array) {
             if (index < array.length - 1) {
-                (previous ? previous[current] : undefined);
+                if (!previous) {
+                    previous = {};
+                }
+                if (!previous[current]) {
+                    previous[current] = {};
+                }
             } else {
                 previous[current] = value;
             }

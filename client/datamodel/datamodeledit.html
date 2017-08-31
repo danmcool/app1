@@ -1,0 +1,44 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex layout="column" class="fade">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.datamodel}}</span>
+                </div>
+            </md-toolbar>
+            <form name="datamodelForm">
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.new_datamodel_name}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(datamodel,'name',false)">
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.datamodel_description}}</label>
+                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(datamodel,'description',true)"></textarea>
+                </md-input-container>
+                <md-subheader>{{sessionData.appData.datamodel_field_list}}</md-subheader>
+                <div ng-repeat="field in datamodel_keys">
+                    <md-input-container flex="auto" class="md-block">
+                        <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'name',false)" aria-label="field">
+                        <md-icon ng-click="deleteValue($index)">delete</md-icon>
+                    </md-input-container>
+                    <div align="row" flex="30">
+                        <md-input-container flex="auto">
+                            <label>{{sessionData.appData.field_display}}</label>
+                            <md-select ng-model="field.type">
+                                <md-option ng-repeat="field_type in field_types" ng-value="field_type.type">{{field_type.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+                <md-input-container flex="auto" class="md-block">
+                    <md-button ng-click="newField()" class="md-primary">{{sessionData.appData.datamodel_add_field}}</md-button>
+                </md-input-container>
+                <div layout="row" layout-align="end" flex>
+                    <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                </div>
+            </form>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

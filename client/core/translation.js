@@ -26,7 +26,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         app_designer: {
             en: 'Application Designer',
-            fr: 'Editeur d`application'
+            fr: 'Concepteur d`application'
         },
         share_url: {
             en: 'Share URL',
@@ -453,6 +453,38 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         add_value_list: {
             en: 'Add new value',
             fr: 'Ajouter une nouvelle valeur'
+        },
+        datamodel_designer: {
+            en: 'Data Modeler',
+            fr: 'Modélisateur de données'
+        },
+        new_datamodel: {
+            en: 'New data model...',
+            fr: 'Noveau model de données...'
+        },
+        new_datamodel_name: {
+            en: 'Name of the data model',
+            fr: 'Nom du model de données'
+        },
+        datamodel_description: {
+            en: 'Description',
+            fr: 'Description'
+        },
+        datamodel_field_list: {
+            en: 'List of data fields',
+            fr: 'Liste de champs de données'
+        },
+        datamodel_add_field: {
+            en: 'Add field',
+            fr: 'Ajouter champ'
+        },
+        datamodel_field_name: {
+            en: 'Technical name',
+            fr: 'Nom technique'
+        },
+        datamodel_field_type: {
+            en: 'Field type',
+            fr: 'Type champ'
         }
     };
     var translate = function translate(language) {

@@ -41,6 +41,9 @@
     <script defer src="designer/display.min.js"></script>
     <script defer src="designer/action.min.js"></script>
     <script defer src="designer/value.min.js"></script>
+    <script defer src="datamodel/datamodel.js"></script>
+    <script defer src="datamodel/datamodeledit.js"></script>
+    <script defer src="datamodel/new.js"></script>
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBYlR8autVBB3IcSOQ8H-ZgCPsvtLnGg"></script>
 
     <script>
@@ -104,6 +107,7 @@
             <md-button ng-if="!sessionData.userData.title" ng-href="#!login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
             <md-button ng-if="!sessionData.userData.title" ng-href="#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!datamodel" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.datamodel_designer}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#!user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>

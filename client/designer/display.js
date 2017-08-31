@@ -18,7 +18,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         },
         item: {
             en: 'Detail List',
-            fr: 'Liste des détails'
+            fr: 'Liste de détails'
         },
         shorttext: {
             en: 'Text',
