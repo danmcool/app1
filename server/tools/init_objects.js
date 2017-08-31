@@ -30,7 +30,7 @@ DataModel.find(function (err, objects) {
     if (err) return next(err);
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
-        var datamodel = JSON.parse(objects[i].datamodel ? objects[i].datamodel : '{}');
+        var datamodel = JSON.parse(objects[i].datamodel);
         if (datamodel._ref == Constants.DataModelUserId) {
             Metadata.Objects[objects[i]._id] = Metadata.User;
         } else {

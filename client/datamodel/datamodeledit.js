@@ -59,6 +59,10 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         address: {
             en: 'Address',
             fr: 'Adresse'
+        },
+        node: {
+            en: 'Node',
+            fr: 'Noeud'
         }
     }
     var keysOfFieldType = Object.keys($scope.field_type);
@@ -81,7 +85,10 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
                 var datamodelkeys = Object.keys($scope.datamodel.projection);
                 for (var i = 0; i < datamodelkeys.length; i++) {
                     $scope.datamodel_keys.push({
-                        translated_name: SessionService.translate($scope.datamodel.projection[datamodelkeys[i]]),
+                        path: $scope.datamodel.projection[datamodelkeys[i]].path,
+                        technical_name: $scope.datamodel.projection[datamodelkeys[i]].path,
+                        type: $scope.datamodel.projection[datamodelkeys[i]].type,
+                        translated_name: SessionService.translate($scope.datamodel.projection[datamodelkeys[i]].name),
                         id: datamodelkeys[i]
                     });
                 }
@@ -93,6 +100,10 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
                 projection: {}
             };
         }
+        $scope.datamodel_keys.sort(function (a, b) {
+            if (a.path.trim().localeCompare(b.path.trim()) == 0) return a.technical_name.trim().localeCompare(b.technical_name.trim());
+            return a.path.trim().localeCompare(b.path.trim());
+        });
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
     });
@@ -127,7 +138,7 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         });
     }
 
-    $scope.newField = function () {
+    $scope.newField = function (path) {
         $mdDialog.show({
             templateUrl: 'datamodel/new.html',
             controller: 'NewFieldCtrl',
@@ -142,45 +153,28 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             do {
                 newId = newId + 1;
             } while ($scope.datamodel.projection[newId]);
-            result.path = '';
+            result.path = path;
             $scope.datamodel.projection[newId] = result;
-            var dmObject = $scope.resolvePathObject($scope.datamodel.datamodel, result.path);
-            if (result.type == 'text') {
-                dmObject[result.technical_name] = 'String';
-            } else if (result.type == 'number') {
-                dmObject[result.technical_name] = 'Number';
-            } else if (result.type == 'boolean') {
-                dmObject[result.technical_name] = 'Boolean';
-            } else if (result.type == 'date') {
-                dmObject[result.technical_name] = 'Date';
-            } else if (result.type == 'currency') {
-                dmObject[result.technical_name] = {
-                    value: 'Number',
-                    currency: 'String'
-                };
-            } else if (result.type == 'feed') {
-                dmObject[result.technical_name] = [{
-                    from: 'String',
-                    date: 'Date',
-                    text: 'String'
-                }];
-            } else if (result.type == 'text') {} else if (result.type == 'text') {} else if (result.type == 'text') {} else if (result.type == 'text') {} else if (result.type == 'text') {}
-
-            var datamodelkeys = Object.keys($scope.datamodel.projection);
-            for (var i = 0; i < datamodelkeys.length; i++) {
-                $scope.datamodel_keys.push({
-                    translated_name: SessionService.translate($scope.datamodel.projection[datamodelkeys[i]]),
-                    id: datamodelkeys[i]
-                });
-            }
+            $scope.datamodel_keys.push({
+                path: result.path,
+                technical_name: result.technical_name,
+                type: result.type,
+                translated_name: '',
+                id: newId
+            });
+            $scope.datamodel_keys.sort(function (a, b) {
+                if (a.path.trim().localeCompare(b.path.trim()) == 0) return a.technical_name.trim().localeCompare(b.technical_name.trim());
+                return a.path.trim().localeCompare(b.path.trim());
+            });
         });
     }
 
     $scope.save = function () {
+        $scope.datamodel.datamodel = '' + $scope.datamodel.datamodel;
         DesignDataModel.update({
             id: $scope.datamodel._id
         }, $scope.datamodel).$promise.then(function (res) {
-            SessionService.location('/datamodel_edit/');
+            SessionService.location('/datamodel/');
         }).catch(function (res) {
             $scope.datamodel = res.datamodel;
             updateErrorAlert();

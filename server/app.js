@@ -1,6 +1,5 @@
 // dependencies
 var express = require('express');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -32,7 +31,6 @@ var Constants = require('./tools/constants.js');
 
 // define middleware
 app.use(express.static(path.join(__dirname, '../client')));
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
@@ -101,6 +99,10 @@ app.use(function (err, req, res) {
         message: err.message,
         error: {}
     }));
+});
+
+process.on('uncaughtException', function (err) {
+    console.log(err);
 });
 
 module.exports = app;
