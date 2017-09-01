@@ -8,7 +8,6 @@ var Metadata = {
 var DataModelSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
-    datamodel: Schema.Types.Mixed,
     projection: Schema.Types.Mixed,
     _updated_at: {
         type: Date,

@@ -297,7 +297,7 @@ router.post('/datamodel', function (req, res, next) {
         });
     }
     SessionCache.filterCompanyCode(req, {});
-    if (datamodel.properties && datamodel.properties.reference == Constants.DataModelUserId) {
+    if (req.body.properties && req.body.properties.reference == Constants.DataModelUserId) {
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
             Metadata.Objects[object._id] = Metadata.User;
@@ -345,26 +345,35 @@ router.put('/datamodel/:id', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    delete mongoose.connection.models['data' + req.body._id];
-    delete mongoose.modelSchemas['data' + req.body._id];
-    delete Metadata.Objects[req.body._id];
-    var modelSchema;
-    try {
-        modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection));
-    } catch (e) {
-        console.log(e);
-        modelSchema = new Schema({});
-        res.status(400);
-        return res.json(req.body);
+    if (req.body.properties && req.body.properties.reference == Constants.DataModelUserId) {
+        DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+            _id: req.body._id
+        }), req.body, function (err, object) {
+            if (err) return next(err);
+            return res.json(object);
+        });
+    } else {
+        delete mongoose.connection.models['data' + req.body._id];
+        delete mongoose.modelSchemas['data' + req.body._id];
+        delete Metadata.Objects[req.body._id];
+        var modelSchema;
+        try {
+            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection));
+        } catch (e) {
+            console.log(e);
+            modelSchema = new Schema({});
+            res.status(400);
+            return res.json(req.body);
+        }
+        Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
+        module.exports = Metadata;
+        DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+            _id: req.body._id
+        }), req.body, function (err, object) {
+            if (err) return next(err);
+            return res.json(object);
+        });
     }
-    Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
-    module.exports = Metadata;
-    DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
-        _id: req.body._id
-    }), req.body, function (err, object) {
-        if (err) return next(err);
-        return res.json(object);
-    });
 });
 router.delete('/datamodel/:id', function (req, res, next) {
     var userToken = req.cookies[Constants.SessionCookie];
@@ -377,9 +386,11 @@ router.delete('/datamodel/:id', function (req, res, next) {
         _id: req.params.id
     }), function (err, object) {
         if (err) return next(err);
-        delete mongoose.connection.models['data' + req.params._id];
-        delete mongoose.modelSchemas['data' + req.params._id];
-        delete Metadata.Objects[req.params._id];
+        if (req.body.properties && !req.body.properties.reference) {
+            delete mongoose.connection.models['data' + req.params._id];
+            delete mongoose.modelSchemas['data' + req.params._id];
+            delete Metadata.Objects[req.params._id];
+        }
         res.json(object);
     });
 });

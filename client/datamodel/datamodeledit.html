@@ -18,16 +18,14 @@
                 </md-input-container>
                 <md-subheader>{{sessionData.appData.datamodel_field_list}}</md-subheader>
                 <div ng-repeat="field in datamodel_keys">
-                    <md-input-container flex="auto" class="md-block">
-                        <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'name',false)" aria-label="field">
-                        <md-icon ng-click="deleteValue($index)">delete</md-icon>
-                    </md-input-container>
-                    <div align="row" flex="30">
-                        <md-input-container flex="auto">
-                            <label>{{sessionData.appData.field_display}}</label>
-                            <md-select ng-model="field.type">
-                                <md-option ng-repeat="field_type in field_types" ng-value="field_type.type">{{field_type.translated_name}}</md-option>
-                            </md-select>
+                    <div align="row" flex="auto">
+                        <span class="md-subhead"><i>{{field_type[field.type].translated_name}}</i></span>
+                        <span class="md-title">{{field.full_path}}</span>
+                    </div>
+                    <div align="row" flex="auto">
+                        <md-input-container flex="auto" class="md-block">
+                            <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
+                            <md-icon ng-if="field.type=='node'" ng-click="addChild(field.path, field.technical_name)">add</md-icon>
                         </md-input-container>
                     </div>
                 </div>
