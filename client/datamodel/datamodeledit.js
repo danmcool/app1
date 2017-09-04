@@ -78,14 +78,9 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
                 var datamodelkeys = Object.keys($scope.datamodel.projection);
                 for (var i = 0; i < datamodelkeys.length; i++) {
                     var field = $scope.datamodel.projection[datamodelkeys[i]];
-                    $scope.datamodel_keys.push({
-                        path: field.path,
-                        technical_name: field.technical_name,
-                        full_path: (field.path == '' ? field.technical_name : field.path + '.' + field.technical_name),
-                        type: field.type,
-                        name: field.name,
-                        id: datamodelkeys[i]
-                    });
+                    field.id = datamodelkeys[i];
+                    field.full_path = (field.path == '' ? field.technical_name : field.path + '.' + field.technical_name);
+                    $scope.datamodel_keys.push(field);
                 }
             } else {
                 $scope.datamodel.projection = {};
@@ -149,7 +144,7 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         });
     }
 
-    $scope.addChild = function (parent_path, parent_name) {
+    $scope.newField = function (parent_path, parent_name) {
         $mdDialog.show({
             templateUrl: 'datamodel/new.html',
             controller: 'NewFieldCtrl',
@@ -165,50 +160,11 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
                 newId = newId + 1;
             } while ($scope.datamodel.projection[newId]);
             result.path = (parent_path == '' ? parent_name : parent_path + '.' + parent_name);
+            result.full_path = (result.path == '' ? result.technical_name : result.path + '.' + result.technical_name);
             $scope.datamodel.projection[newId] = result;
-            $scope.datamodel_keys.push({
-                path: result.path,
-                technical_name: result.technical_name,
-                full_path: (result.path == '' ? result.technical_name : result.path + '.' + result.technical_name),
-                type: result.type,
-                name: result.name,
-                id: newId
-            });
+            $scope.datamodel_keys.push($scope.datamodel.projection[newId]);
             $scope.datamodel_keys.sort(function (a, b) {
-                if (a.path.trim().localeCompare(b.path.trim()) == 0) return a.technical_name.trim().localeCompare(b.technical_name.trim());
-                return a.path.trim().localeCompare(b.path.trim());
-            });
-        });
-    }
-
-    $scope.newField = function (path) {
-        $mdDialog.show({
-            templateUrl: 'datamodel/new.html',
-            controller: 'NewFieldCtrl',
-            locals: {
-                field_types: $scope.field_types
-            },
-            parent: angular.element(document.body),
-            clickOutsideToClose: true
-        }).then(function (result) {
-            var keysOfIdList = Object.keys($scope.datamodel.projection);
-            var newId = keysOfIdList.length;
-            do {
-                newId = newId + 1;
-            } while ($scope.datamodel.projection[newId]);
-            result.path = path;
-            $scope.datamodel.projection[newId] = result;
-            $scope.datamodel_keys.push({
-                path: result.path,
-                technical_name: result.technical_name,
-                full_path: (result.path == '' ? result.technical_name : result.path + '.' + result.technical_name),
-                type: result.type,
-                name: result.name,
-                id: newId
-            });
-            $scope.datamodel_keys.sort(function (a, b) {
-                if (a.path.trim().localeCompare(b.path.trim()) == 0) return a.technical_name.trim().localeCompare(b.technical_name.trim());
-                return a.path.trim().localeCompare(b.path.trim());
+                return a.full_path.trim().localeCompare(b.full_path.trim());
             });
         });
     }

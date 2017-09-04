@@ -485,6 +485,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         datamodel_field_type: {
             en: 'Field type',
             fr: 'Type champ'
+        },
+        datamodel_field_index: {
+            en: 'Searcheable',
+            fr: 'Rechercheable'
+        },
+        datamodel_field_index_weight: {
+            en: 'Importance',
+            fr: 'Importance'
         }
     };
     var translate = function translate(language) {

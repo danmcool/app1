@@ -18,19 +18,26 @@
                 </md-input-container>
                 <md-subheader>{{sessionData.appData.datamodel_field_list}}</md-subheader>
                 <div ng-repeat="field in datamodel_keys">
-                    <div align="row" flex="auto">
+                    <div align="row" flex="auto" layout-padding>
                         <span class="md-subhead"><i>{{field_type[field.type].translated_name}}</i></span>
                         <span class="md-title">{{field.full_path}}</span>
                     </div>
+                    <md-input-container flex="auto">
+                        <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
+                    </md-input-container>
+                    <md-slider-container ng-if="field.index">
+                        <md-slider min="1" max="10" ng-model="field.index_weight" aria-label="weight"></md-slider>
+                        <label>{{field.index_weight}}</label>
+                    </md-slider-container>
                     <div align="row" flex="auto">
                         <md-input-container flex="auto" class="md-block">
                             <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
-                            <md-icon ng-if="field.type=='node'" ng-click="addChild(field.path, field.technical_name)">add</md-icon>
+                            <md-icon ng-if="field.type=='node'" ng-click="newField(field.path, field.technical_name)">add</md-icon>
                         </md-input-container>
                     </div>
                 </div>
                 <md-input-container flex="auto" class="md-block">
-                    <md-button ng-click="newField('')" class="md-primary">{{sessionData.appData.datamodel_add_field}}</md-button>
+                    <md-button ng-click="newField('','')" class="md-primary">{{sessionData.appData.datamodel_add_field}}</md-button>
                 </md-input-container>
                 <div layout="row" layout-align="end" flex>
                     <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>

@@ -271,7 +271,7 @@
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
                                                 <label>{{field.translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" c="/^.+@.+\..+$/" />
+                                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long and look like an e-mail address.

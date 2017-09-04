@@ -105,7 +105,8 @@ const Constants = {
     ValuesRelationUserList: 'user_list',
 
     DataModelPrefix: 'data',
-    DataModelUserId: 'userdata'
+    DataModelUserId: 'userdata',
+    DataModelIndexName: '_search'
 }
 
 module.exports = Constants;

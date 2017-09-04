@@ -308,12 +308,21 @@ router.post('/datamodel', function (req, res, next) {
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
             var modelSchema;
+            var index = {
+                fields: {},
+                options: {
+                    name: Constants.DataModelIndexName,
+                    weights: {}
+                }
+            };
             try {
-                modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection));
+                modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
             } catch (e) {
                 console.log(e);
                 modelSchema = new Schema({});
             }
+
+            modelSchema.index(index.fields, index.options);
             Metadata.Objects[object._id] = mongoose.model('data' + object._id, modelSchema);
             module.exports = Metadata;
             return res.json(object);
@@ -357,14 +366,22 @@ router.put('/datamodel/:id', function (req, res, next) {
         delete mongoose.modelSchemas['data' + req.body._id];
         delete Metadata.Objects[req.body._id];
         var modelSchema;
+        var index = {
+            fields: {},
+            options: {
+                name: Constants.DataModelIndexName,
+                weights: {}
+            }
+        };
         try {
-            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection));
+            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
         } catch (e) {
             console.log(e);
             modelSchema = new Schema({});
             res.status(400);
             return res.json(req.body);
         }
+        modelSchema.index(index.fields, index.options);
         Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
         module.exports = Metadata;
         DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {

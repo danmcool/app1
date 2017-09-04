@@ -67,9 +67,8 @@ app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel',
                 name: name
             });
             newDatamodel.$save(function () {
-                SessionService.location('/datamodel');
+                SessionService.location('/datamodel/' + newDatamodel._id);
             });
         });
     }
-
 }]);
