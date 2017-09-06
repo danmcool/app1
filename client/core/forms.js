@@ -421,21 +421,19 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
-                var field_name = formFields[i].name;
-                if (form.newvalues[field_name] && form.newvalues[field_name].length > 0) {
-                    if (!data[field_name]) {
-                        data[field_name] = [];
+                if (form.newvalues[formFields[i].id] && form.newvalues[formFields[i].id].length > 0) {
+                    if (!$scope.localdata[formFields[i].id]) {
+                        $scope.localdata[formFields[i].id] = [];
                     }
-                    data[field_name].push({
-                        'text': form.newvalues[field_name],
-                        'from': $scope.sessionData.userData.name,
-                        'user': $scope.sessionData.userData.user,
-                        'date': Date.now()
+                    $scope.localdata[formFields[i].id].push({
+                        text: form.newvalues[formFields[i].id],
+                        from: $scope.sessionData.userData.name,
+                        user: $scope.sessionData.userData.user,
+                        date: Date.now()
                     });
                 }
-            } else {
-                $scope.resolvePathUpdate(data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
             }
+            $scope.resolvePathUpdate(data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
         }
         if (setValue) {
             data[setValue.name] = setValue.value;
@@ -783,4 +781,4 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.datas = [];
         $scope.getNextData();
     }
-            }]);
+}]);

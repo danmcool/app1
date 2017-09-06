@@ -5,8 +5,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Application ONE'
         },
         new_app: {
-            en: 'New application...',
-            fr: 'Nouvelle application...'
+            en: 'New application',
+            fr: 'Nouvelle application'
         },
         new_app_name: {
             en: 'Name of the application',
@@ -49,8 +49,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Traduction de texte'
         },
         new_workflow: {
-            en: 'New workflow...',
-            fr: 'Nouveau processus...'
+            en: 'New workflow',
+            fr: 'Nouveau processus'
         },
         new_workflow_name: {
             en: 'Workflow Name',
@@ -69,8 +69,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Formulaire de démarrage'
         },
         new_form: {
-            en: 'New form...',
-            fr: 'Nouveau formulaire...'
+            en: 'New form',
+            fr: 'Nouveau formulaire'
         },
         new_form_name: {
             en: 'Form Name',
@@ -257,8 +257,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Accueil'
         },
         uploading_in_progress: {
-            en: 'Uploading in progress...',
-            fr: 'Téléchargement en cours...'
+            en: 'Uploading in progress',
+            fr: 'Téléchargement en cours'
         },
         uploading_done: {
             en: 'Uploading finished successfully!',
@@ -327,8 +327,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Annuler'
         },
         search_text: {
-            en: 'Search...',
-            fr: 'Rechercher...'
+            en: 'Search',
+            fr: 'Rechercher'
         },
         form_search_criteria: {
             en: 'Search Criteria',
@@ -355,20 +355,20 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Valeurs de données'
         },
         new_value: {
-            en: 'New Data Value...',
-            fr: 'Nouvelle valeur de données...'
+            en: 'New Data Value',
+            fr: 'Nouvelle valeur de données'
         },
         new_field: {
-            en: 'New Element...',
-            fr: 'Nouvel élément...'
+            en: 'New Element',
+            fr: 'Nouvel élément'
         },
         new_section: {
-            en: 'New Section...',
-            fr: 'Nouvelle section...'
+            en: 'New Section',
+            fr: 'Nouvelle section'
         },
         new_block: {
-            en: 'New Block...',
-            fr: 'Nouveau bloc...'
+            en: 'New Block',
+            fr: 'Nouveau bloc'
         },
         field_editor: {
             en: 'Element',
@@ -395,8 +395,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Type d`affichage'
         },
         field_listofvalues: {
-            en: 'List of values',
-            fr: 'Liste de valeurs'
+            en: 'Values',
+            fr: 'Valeurs'
         },
         field_list_title: {
             en: 'First line',
@@ -418,9 +418,17 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Type',
             fr: 'Type'
         },
+        action_forward_id: {
+            en: 'Forward Object Id',
+            fr: 'Transmettre l`identifiant de l`objet'
+        },
+        action_next_form: {
+            en: 'Next Form',
+            fr: 'Formulaire suivant'
+        },
         new_action: {
-            en: 'New Action...',
-            fr: 'Nouvelle action...'
+            en: 'New Action',
+            fr: 'Nouvelle action'
         },
         new_action_name: {
             en: 'Action Name',
@@ -435,8 +443,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Valeur'
         },
         new_value: {
-            en: 'New Value...',
-            fr: 'Nouvelle valuer...'
+            en: 'New Value',
+            fr: 'Nouvelle valuer'
         },
         new_value_name: {
             en: 'Value Name',
@@ -459,20 +467,20 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Modélisateur de données'
         },
         new_datamodel: {
-            en: 'New data model...',
-            fr: 'Noveau model de données...'
+            en: 'New data model',
+            fr: 'Noveau model de données'
         },
         new_datamodel_name: {
-            en: 'Name of the data model',
-            fr: 'Nom du model de données'
+            en: 'Name',
+            fr: 'Nom'
         },
         datamodel_description: {
             en: 'Description',
             fr: 'Description'
         },
         datamodel_field_list: {
-            en: 'List of data fields',
-            fr: 'Liste de champs de données'
+            en: 'Data fields',
+            fr: 'Champs de données'
         },
         datamodel_add_field: {
             en: 'Add field',

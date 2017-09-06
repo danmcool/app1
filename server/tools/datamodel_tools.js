@@ -51,6 +51,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
         } else if (projectionItem.type == 'feed') {
             currentField[projectionItem.technical_name] = [{
                 from: 'String',
+                user: 'String',
                 date: 'Date',
                 text: 'String'
             }];
