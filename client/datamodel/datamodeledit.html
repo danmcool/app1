@@ -21,14 +21,17 @@
                     <div align="row" flex="auto" layout-padding>
                         <span class="md-subhead"><i>{{field_type[field.type].translated_name}}</i></span>
                         <span class="md-title">{{field.full_path}}</span>
+                        <md-icon ng-click="deleteField(field.full_path)">delete</md-icon>
                     </div>
-                    <md-input-container flex="auto">
-                        <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
-                    </md-input-container>
-                    <md-slider-container ng-if="field.index">
-                        <md-slider min="1" max="10" ng-model="field.index_weight" aria-label="weight"></md-slider>
-                        <label>{{field.index_weight}}</label>
-                    </md-slider-container>
+                    <div ng-if="field.type=='text'||field.type=='number'">
+                        <md-input-container flex="auto">
+                            <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
+                        </md-input-container>
+                        <md-slider-container ng-if="field.index">
+                            <md-slider min="1" max="10" ng-model="field.index_weight" aria-label="weight"></md-slider>
+                            <label>{{field.index_weight}}</label>
+                        </md-slider-container>
+                    </div>
                     <div align="row" flex="auto">
                         <md-input-container flex="auto" class="md-block">
                             <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">

@@ -83,14 +83,14 @@ DatamodelTools.buildDataModel = function (projection, index) {
 
         if (projectionItem.path == '' && projectionItem.technical_name == '_updated_at') {
             addedUpdated = true;
-            projectionItem.type = 'Date';
+            projectionItem.full_path = '_updated_at';
+            projectionItem.type = 'date';
         }
         if (projectionItem.path == '' && projectionItem.technical_name == '_user') {
             addedUser = true;
-            projectionItem.type = {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            };
+            projectionItem.full_path = '_user';
+            projectionItem.type = 'reference';
+            projectionItem.ref = 'User';
         }
     }
     datamodel._updated_at = 'Date';
@@ -103,6 +103,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
     if (!addedUpdated) {
         projection[newId(projection)] = {
             path: '',
+            full_path: '_updated_at',
             technical_name: '_updated_at',
             type: 'date',
             name: {
@@ -115,6 +116,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
     if (!addedUser) {
         projection[newId(projection)] = {
             path: '',
+            full_path: '_user',
             technical_name: '_user',
             type: 'reference',
             ref: 'User',
