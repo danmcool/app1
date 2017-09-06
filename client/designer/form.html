@@ -28,7 +28,7 @@
                         <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="form.sort_by" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                     </md-input-container>
                 </div>
-                <md-subheader>{{sessionData.appData.form_display}}</md-subheader>
+                <md-header layout-padding>{{sessionData.appData.form_display}}</md-header>
                 <div ng-cloak layout="column">
                     <div ng-repeat="section in form.display" layout="row" layout-xs="column">
                         <div ng-repeat="block in section.blocks" layout="column" flex="auto">
@@ -97,7 +97,7 @@
                 </div>
                 <div layout="row" layout-xs="column">
                     <div flex>
-                        <md-subheader>{{sessionData.appData.form_actions}}</md-subheader>
+                        <md-header layout-padding>{{sessionData.appData.form_actions}}</md-header>
                         <md-card>
                             <md-card-title>
                                 <md-card-title-text>
@@ -127,7 +127,7 @@
                         </md-card>
                     </div>
                     <div flex>
-                        <md-subheader>{{sessionData.appData.form_values}}</md-subheader>
+                        <md-header layout-padding>{{sessionData.appData.form_values}}</md-header>
                         <md-card>
                             <md-card-title>
                                 <md-card-title-text>

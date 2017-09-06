@@ -18,7 +18,7 @@
                     <div ng-switch-when="list|item" ng-switch-when-separator="|">
                         <div layout="row" layout-xs="column">
                             <div flex>
-                                <md-subheader>{{sessionData.appData.field_list_title}}</md-subheader>
+                                <md-header layout-padding>{{sessionData.appData.field_list_title}}</md-header>
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_display}}</label>
                                     <md-select ng-model="field.title_display">
@@ -39,7 +39,7 @@
                                 </md-input-container>
                             </div>
                             <div flex>
-                                <md-subheader>{{sessionData.appData.field_list_subtitle}}</md-subheader>
+                                <md-header layout-padding>{{sessionData.appData.field_list_subtitle}}</md-header>
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_display}}</label>
                                     <md-select ng-model="field.subtitle_display">
@@ -60,7 +60,7 @@
                                 </md-input-container>
                             </div>
                         </div>
-                        <md-subheader>{{sessionData.appData.form_actions}}</md-subheader>
+                        <md-header layout-padding>{{sessionData.appData.form_actions}}</md-header>
                         <div ng-repeat="action in field.item_actions">
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.new_action_name}}</label>

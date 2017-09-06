@@ -16,11 +16,13 @@
                     <label>{{sessionData.appData.datamodel_description}}</label>
                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(datamodel,'description',true)"></textarea>
                 </md-input-container>
-                <md-header>{{sessionData.appData.datamodel_field_list}}</md-header>
-                <div ng-repeat="field in datamodel_keys">
-                    <div align="row" flex="auto" layout-padding>
-                        <span class="md-subhead"><i>{{field_type[field.type].translated_name}}</i></span>
-                        <span class="md-title">{{field.full_path}}</span>
+                <md-header layout-padding>{{sessionData.appData.datamodel_field_list}}</md-header>
+                <div ng-repeat="field in datamodel_keys" layout-padding>
+                    <div layout="row">
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.new_datamodel_name}}</label>
+                            <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
+                        </md-input-container>
                         <md-button ng-if="field.type=='node'" class="md-fab md-primary" aria-label="NewField" ng-click="newField(field.path, field.technical_name)">
                             <md-icon>add</md-icon>
                         </md-button>
@@ -28,17 +30,20 @@
                             <md-icon>delete</md-icon>
                         </md-button>
                     </div>
-                    <md-input-container flex="auto" class="md-block">
-                        <label>{{sessionData.appData.new_datamodel_name}}</label>
-                        <input type="text" ng-disabled="false" ng-required="false" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
-                    </md-input-container>
-                    <md-input-container flex="auto" class="md-block" ng-if="field.type=='text'||field.type=='number'">
-                        <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
-                        <md-slider-container>
-                            <md-slider ng-if="field.index" flex="50" min="1" max="10" ng-model="field.index_weight" aria-label="weight"></md-slider>
-                            <p ng-if="field.index" class="md-body" flex="20">{{field.index_weight}}</p>
+                    <div layout="row">
+                        <span class="md-subhead" layout-padding><i>{{field_type[field.type].translated_name}}</i></span>
+                        <span class="md-title" layout-padding>{{field.full_path}}</span>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex="auto" class="md-block" ng-if="field.type=='text'||field.type=='number'">
+                            <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
+                        </md-input-container>
+                        <md-slider-container flex="70" ng-if="(field.type=='text'||field.type=='number')&&field.index">
+                            <md-slider min="1" max="10" ng-model="field.index_weight" aria-label="weight"></md-slider>
+                            <p ng-if="field.index" class="md-body">{{field.index_weight}}</p>
                         </md-slider-container>
-                    </md-input-container>
+                    </div>
+                    <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}"></md-divider>
                 </div>
                 <md-input-container flex="auto" class="md-block">
                     <md-button ng-click="newField('','')" class="md-fab md-primary">

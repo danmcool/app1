@@ -20,15 +20,21 @@
                 </md-input-container>
                 <div ng-switch="value.type" flex="auto">
                     <div ng-switch-when="list">
-                        <md-subheader>{{sessionData.appData.field_listofvalues}}</md-subheader>
+                        <md-header layout-padding>{{sessionData.appData.field_listofvalues}}</md-header>
                         <div ng-repeat="value_item in value.values">
-                            <md-input-container flex="auto" class="md-block">
-                                <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value_item.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value_item,'name',false)">
-                                <md-icon ng-click="deleteValue($index)">delete</md-icon>
-                            </md-input-container>
+                            <div layout="row">
+                                <md-input-container flex="auto" class="md-block">
+                                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value_item.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value_item,'name',false)">
+                                </md-input-container>
+                                <md-button ng-click="deleteValue($index)" class="md-fab md-primary">
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </div>
                         </div>
                         <md-input-container flex="auto" class="md-block">
-                            <md-button ng-click="addValue()" class="md-primary">{{sessionData.appData.add_value_list}}</md-button>
+                            <md-button ng-click="addValue()" class="md-fab md-primary">
+                                <md-icon>add</md-icon>
+                            </md-button>
                         </md-input-container>
                     </div>
                     <div ng-switch-when="user">
