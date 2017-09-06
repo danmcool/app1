@@ -30,7 +30,7 @@
                                             <div class="md-list-item-text" layout="column">
                                                 <div ng-switch="field.title_display">
                                                     <div ng-switch-when="text">
-                                                        <h3>{{resolvePath(data,field.title)}}</h3>
+                                                        <h3>{{resolvePath(data,field.title_full_path)}}</h3>
                                                     </div>
                                                     <div ng-switch-when="value">
                                                         <h3>{{field.title_values[data[field.title]]}}</h3>
@@ -41,7 +41,7 @@
                                                 </div>
                                                 <div ng-switch="field.subtitle_display">
                                                     <div ng-switch-when="text">
-                                                        <h4>{{resolvePath(data,field.subtitle)}}</h4>
+                                                        <h4>{{resolvePath(data,field.subtitle_full_path)}}</h4>
                                                     </div>
                                                     <div ng-switch-when="value">
                                                         <h4>{{field.subtitle_values[data[field.subtitle]]}}</h4>

@@ -7,22 +7,7 @@ var Schema = mongoose.Schema;
 var Metadata = require('../models/metadata.js');
 var Constants = require('../tools/constants.js');
 var SessionCache = require('../tools/session_cache.js');
-
-var prepareIndex = function (projection, path, index) {
-    if (typeof (projection) != 'object') return;
-    var keys = Object.keys(projection);
-    if (path != '') {
-        path = path + '.';
-    }
-    for (var i = 0; i < keys.length; i++) {
-        var field = path + keys[i];
-        if (projection[keys[i]] && projection[keys[i]].index) {
-            index.fields[field] = 'text';
-            index.options.weights[field] = projection[keys[i]].index_weight;
-        }
-        prepareIndex(projection[keys[i]], field, index);
-    }
-}
+var DatamodelTools = require('../tools/datamodel_tools.js');
 
 // upload existing data models into memory at run-time (create schema, etc)
 var DataModel = Metadata.DataModel;
@@ -30,37 +15,24 @@ DataModel.find(function (err, objects) {
     if (err) return next(err);
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
-        var datamodel = {};
-        try {
-            datamodel = JSON.parse(objects[i].datamodel);
-        } catch (e) {
-            console.log(e);
-        }
-        if (datamodel._ref == Constants.DataModelUserId) {
+        if (objects[i]._ref == Constants.DataModelUserId) {
             Metadata.Objects[objects[i]._id] = Metadata.User;
         } else {
+            var modelSchema;
+            var index = {
+                fields: {},
+                options: {
+                    name: Constants.DataModelIndexName,
+                    weights: {}
+                }
+            };
             try {
-                datamodel._updated_at = 'Date';
-                datamodel._company_code = 'String';
-                datamodel._user = 'String';
-                datamodel._files = [{
-                    type: Schema.Types.ObjectId,
-                    ref: 'File'
-            }];
-                modelSchema = new Schema(datamodel);
+                modelSchema = new Schema(DatamodelTools.buildDataModel(objects[i].projection, index));
             } catch (e) {
                 console.log(e);
                 modelSchema = new Schema({});
             }
-            var index = {
-                fields: {},
-                options: {
-                    name: '_search',
-                    weights: {}
-                }
-            };
-            var projection = objects[i].projection ? objects[i].projection : {};
-            prepareIndex(projection, '', index);
+            console.log(index);
             modelSchema.index(index.fields, index.options);
             Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema);
         }

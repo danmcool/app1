@@ -164,6 +164,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             for (var i = 0; i < datamodelkeys.length; i++) {
                 $scope.datamodel_keys.push({
                     translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
+                    full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
                     id: datamodelkeys[i]
                 });
             }
@@ -240,7 +241,15 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     }
 
     $scope.save = function () {
-        $scope.field.full_path = ($scope.form.datamodel.projection[$scope.field.projectionid].path == '' ? $scope.form.datamodel.projection[$scope.field.projectionid].technical_name : $scope.form.datamodel.projection[$scope.field.projectionid].path + '.' + $scope.form.datamodel.projection[$scope.field.projectionid].technical_name);
+        if ($scope.field.projectionid) {
+            $scope.field.full_path = ($scope.form.datamodel.projection[$scope.field.projectionid].path == '' ? $scope.form.datamodel.projection[$scope.field.projectionid].technical_name : $scope.form.datamodel.projection[$scope.field.projectionid].path + '.' + $scope.form.datamodel.projection[$scope.field.projectionid].technical_name);
+        }
+        if ($scope.field.title) {
+            $scope.field.title_full_path = ($scope.form.datamodel.projection[$scope.field.title].path == '' ? $scope.form.datamodel.projection[$scope.field.title].technical_name : $scope.form.datamodel.projection[$scope.field.title].path + '.' + $scope.form.datamodel.projection[$scope.field.title].technical_name);
+        }
+        if ($scope.field.subtitle) {
+            $scope.field.subtitle_full_path = ($scope.form.datamodel.projection[$scope.field.subtitle].path == '' ? $scope.form.datamodel.projection[$scope.field.subtitle].technical_name : $scope.form.datamodel.projection[$scope.field.subtitle].path + '.' + $scope.form.datamodel.projection[$scope.field.subtitle].technical_name);
+        }
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {
