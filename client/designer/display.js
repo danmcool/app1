@@ -240,7 +240,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     }
 
     $scope.save = function () {
-        $scope.field.path = $scope.form.datamodel.projection[$scope.field.projectionid].path;
+        $scope.field.full_path = ($scope.form.datamodel.projection[$scope.field.projectionid].path == '' ? $scope.form.datamodel.projection[$scope.field.projectionid].technical_name : $scope.form.datamodel.projection[$scope.field.projectionid].path + '.' + $scope.form.datamodel.projection[$scope.field.projectionid].technical_name);
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {

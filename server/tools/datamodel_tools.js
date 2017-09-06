@@ -54,16 +54,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
                 date: 'Date',
                 text: 'String'
             }];
-        } else if (projectionItem.type == 'address') {
-            currentField[projectionItem.technical_name] = {
-                address_line1: 'String',
-                address_line2: 'String',
-                address_city: 'String',
-                address_state: 'String',
-                address_postal_code: 'String',
-                address_country: 'String'
-            }
-        } else if (projectionItem.type == 'node') {
+        } else if (projectionItem.type == 'address' || projectionItem.type == 'node') {
             currentField[projectionItem.technical_name] = {};
         } else if (projectionItem.type == 'file') {
             currentField[projectionItem.technical_name] = [{

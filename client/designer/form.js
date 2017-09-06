@@ -253,6 +253,8 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             text[$scope.sessionData.userData.properties.language] = result;
             fields.push({
                 text: text,
+                disabled: false,
+                mandatory: false,
                 translated_name: result,
                 id: computeNewId()
             });

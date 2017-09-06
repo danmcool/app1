@@ -128,7 +128,6 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             clickOutsideToClose: true
         }).then(function (result) {
             object[property] = result;
-            $scope.datamodel.projection[object.id][property] = result;
         });
     };
 
@@ -144,6 +143,14 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         });
     }
 
+    var computeNewId = function () {
+        var newId = Object.keys($scope.datamodel.projection).length;
+        do {
+            newId = newId + 1;
+        } while ($scope.datamodel.projection[newId]);
+        return newId;
+    }
+
     $scope.newField = function (parent_path, parent_name) {
         $mdDialog.show({
             templateUrl: 'datamodel/new.html',
@@ -154,15 +161,85 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             parent: angular.element(document.body),
             clickOutsideToClose: true
         }).then(function (result) {
-            var keysOfIdList = Object.keys($scope.datamodel.projection);
-            var newId = keysOfIdList.length;
-            do {
-                newId = newId + 1;
-            } while ($scope.datamodel.projection[newId]);
+            var newId = computeNewId();
             result.path = (parent_path == '' ? parent_name : parent_path + '.' + parent_name);
             result.full_path = (result.path == '' ? result.technical_name : result.path + '.' + result.technical_name);
             $scope.datamodel.projection[newId] = result;
             $scope.datamodel_keys.push($scope.datamodel.projection[newId]);
+            if (result.type == 'address') {
+                var newIdL1 = computeNewId();
+                $scope.datamodel.projection[newIdL1] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'address_line1',
+                    full_path: result.full_path + '.address_line1',
+                    name: {
+                        en: 'Address Line 1',
+                        fr: 'Adresse ligne 1'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdL1]);
+                var newIdL2 = computeNewId();
+                $scope.datamodel.projection[newIdL2] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'address_line2',
+                    full_path: result.full_path + '.address_line2',
+                    name: {
+                        en: 'Address Line 2',
+                        fr: 'Adresse ligne 2'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdL2]);
+                var newIdCty = computeNewId();
+                $scope.datamodel.projection[newIdCty] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'address_city',
+                    full_path: result.full_path + '.address_city',
+                    name: {
+                        en: 'City',
+                        fr: 'Ville'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdCty]);
+                var newIdSta = computeNewId();
+                $scope.datamodel.projection[newIdSta] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'address_state',
+                    full_path: result.full_path + '.address_state',
+                    name: {
+                        en: 'State',
+                        fr: 'Region'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdSta]);
+                var newIdPos = computeNewId();
+                $scope.datamodel.projection[newIdPos] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'address_postal_code',
+                    full_path: result.full_path + '.address_postal_code',
+                    name: {
+                        en: 'Postal Code',
+                        fr: 'Code Postal'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdPos]);
+                var newIdCou = computeNewId();
+                $scope.datamodel.projection[newIdCou] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'address_country',
+                    full_path: result.full_path + '.address_country',
+                    name: {
+                        en: 'Country',
+                        fr: 'Pays'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdCou]);
+            }
             $scope.datamodel_keys.sort(function (a, b) {
                 return a.full_path.trim().localeCompare(b.full_path.trim());
             });

@@ -105,12 +105,25 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             var fields = $scope.form.fields;
             for (var i = 0; i < fields.length; i++) {
                 if (fields[i].display == 'address') {
-                    fields[i].address_line1_translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name].address_line1);
-                    fields[i].address_line2_translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name].address_line2);
-                    fields[i].address_city_translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name].address_city);
-                    fields[i].address_state_translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name].address_state);
-                    fields[i].address_postal_code_translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name].address_postal_code);
-                    fields[i].address_country_translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name].address_country);
+                    var projectionKeys = Object.keys($scope.form.datamodel.projection);
+                    for (var j = 0; j < projectionKeys.length; j++) {
+                        var childField = $scope.form.datamodel.projection[projectionKeys[j]];
+                        if (childField.path == fields[i].full_path) {
+                            if (childField.technical_name == 'address_line1') {
+                                fields[i].address_line1_translated_name = SessionService.translate(childField.name);
+                            } else if (childField.technical_name == 'address_line2') {
+                                fields[i].address_line2_translated_name = SessionService.translate(childField.name);
+                            } else if (childField.technical_name == 'address_city') {
+                                fields[i].address_city_translated_name = SessionService.translate(childField.name);
+                            } else if (childField.technical_name == 'address_state') {
+                                fields[i].address_state_translated_name = SessionService.translate(childField.name);
+                            } else if (childField.technical_name == 'address_postal_code') {
+                                fields[i].address_postal_code_translated_name = SessionService.translate(childField.name);
+                            } else if (childField.technical_name == 'address_country') {
+                                fields[i].address_country_translated_name = SessionService.translate(childField.name);
+                            }
+                        }
+                    }
                 } else if (fields[i].display == 'list' || fields[i].display == 'item') {
                     if (fields[i].item_actions) {
                         for (var j = 0; j < fields[i].item_actions.length; j++) {
@@ -118,7 +131,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                     }
                 }
-                if (fields[i].text) {
+                if (fields[i].text && fields[i].text.trim() != '') {
                     fields[i].translated_name = SessionService.translate(fields[i].text);
                 } else {
                     fields[i].translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].name]);
@@ -170,7 +183,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var formValues = $scope.form.values;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'address') {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].name);
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 if (formFields[i].disabled) {
                     var field_name = formFields[i].name;
                     MapService.initMap('map' + field_id);
@@ -179,7 +192,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
             } else if (formFields[i].display == 'selection' || formFields[i].display == 'currency') {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].name);
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
@@ -198,9 +211,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             } else if (formFields[i].display == 'calendar') {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].name);
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 if ($scope.localdata[formFields[i].id]) {
-                    $scope.localdata[formFields[i].id] = new Date($scope.localdata[formFields[i].id]);
+                    $scope.localdata[formFields[i].id] = new Date($scope.localdata[formFields[i].full_path]);
                 }
             } else if (formFields[i].display == 'calculation') {
                 var data = $scope.data;
@@ -268,7 +281,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             } else {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].name);
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
             }
         }
     }
@@ -772,4 +785,4 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.datas = [];
         $scope.getNextData();
     }
-}]);
+            }]);
