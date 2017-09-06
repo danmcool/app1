@@ -128,7 +128,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
         }
     }
 
-    console.log(datamodel);
     return datamodel;
 }
 

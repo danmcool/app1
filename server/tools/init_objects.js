@@ -32,7 +32,6 @@ DataModel.find(function (err, objects) {
                 console.log(e);
                 modelSchema = new Schema({});
             }
-            console.log(index);
             modelSchema.index(index.fields, index.options);
             Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema);
         }
