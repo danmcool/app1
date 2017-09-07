@@ -327,6 +327,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         initMap: initMap
     }
 }).controller('AppCtrl', ['$scope', '$timeout', '$mdSidenav', 'SessionService', function ($scope, $timeout, $mdSidenav, SessionService) {
+    SessionService.init();
+
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function () {
@@ -334,8 +336,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }, function (newValue, oldValue) {
         if (newValue != oldValue) $scope.sessionData = newValue;
     });
-
-    SessionService.init();
 
     $scope.closeLeft = function () {
         $mdSidenav('left').close();

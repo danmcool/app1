@@ -33,7 +33,7 @@ DataModel.find(function (err, objects) {
                 modelSchema = new Schema({});
             }
             modelSchema.index(index.fields, index.options);
-            Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema);
+            Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema, Constants.DataModelPrefix + objects[i]._id);
         }
     }
 });

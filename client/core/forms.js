@@ -19,12 +19,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.resolvePathUpdate = function (object, path, value) {
         path.split('.').reduce(function (previous, current, index, array) {
             if (index < array.length - 1) {
-                if (!previous) {
-                    previous = {};
-                }
                 if (!previous[current]) {
                     previous[current] = {};
                 }
+                return previous[current];
             } else {
                 previous[current] = value;
             }
@@ -421,7 +419,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
-                if (form.newvalues[formFields[i].id] && form.newvalues[formFields[i].id].length > 0) {
+                if (form.newvalues && form.newvalues[formFields[i].id] && form.newvalues[formFields[i].id].length > 0) {
                     if (!$scope.localdata[formFields[i].id]) {
                         $scope.localdata[formFields[i].id] = [];
                     }

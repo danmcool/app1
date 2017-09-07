@@ -82,7 +82,7 @@ router.post('/datamodel/', function (req, res, next) {
                 console.log(e);
                 modelSchema = new Schema({});
             }
-            Metadata.Objects[object._id] = mongoose.model('data' + object._id, modelSchema);
+            Metadata.Objects[object._id] = mongoose.model('data' + object._id, modelSchema, 'data' + object._id);
             module.exports = Metadata;
             return res.json(object);
         });
@@ -157,7 +157,7 @@ router.put('/datamodel/:id', function (req, res, next) {
             res.status(400);
             return res.json(req.body);
         }
-        Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema);
+        Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema, 'data' + req.body._id);
         module.exports = Metadata;
         DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
             _id: req.body._id

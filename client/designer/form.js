@@ -21,6 +21,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         do {
             newId = newId + 1;
         } while ($scope.field_id_list[newId]);
+        $scope.field_id_list[newId] = true;
         return newId;
     }
 
@@ -202,6 +203,8 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                     fields: [{
                         text: text,
                         translated_name: result,
+                        disabled: false,
+                        mandatory: false,
                         id: computeNewId()
                     }]
                 }]
@@ -229,6 +232,8 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 fields: [{
                     text: text,
                     translated_name: result,
+                    disabled: false,
+                    mandatory: false,
                     id: computeNewId()
                 }]
             });
@@ -253,9 +258,9 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             text[$scope.sessionData.userData.properties.language] = result;
             fields.push({
                 text: text,
+                translated_name: result,
                 disabled: false,
                 mandatory: false,
-                translated_name: result,
                 id: computeNewId()
             });
         });

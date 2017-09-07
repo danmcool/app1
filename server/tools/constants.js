@@ -104,7 +104,7 @@ const Constants = {
     ValuesRelationUserReports: 'user_reports',
     ValuesRelationUserList: 'user_list',
 
-    DataModelPrefix: 'data',
+    DataModelPrefix: 'datas',
     DataModelUserId: 'userdata',
     DataModelIndexName: '_search'
 }

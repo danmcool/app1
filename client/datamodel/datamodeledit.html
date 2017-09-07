@@ -39,7 +39,7 @@
                             <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
                         </md-input-container>
                         <md-slider-container flex="70" ng-if="(field.type=='text'||field.type=='number')&&field.index">
-                            <md-slider min="1" max="10" ng-model="field.index_weight" aria-label="weight"></md-slider>
+                            <md-slider min="1" max="10" ng-model="field.index_weight" aria-label="weight" ng-init="(field.index_weight?field.index_weight:(field.index_weight=1))"></md-slider>
                             <p ng-if="field.index" class="md-body">{{field.index_weight}}</p>
                         </md-slider-container>
                     </div>
