@@ -25,15 +25,11 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
             en: 'Link',
             fr: 'Lien'
         },
-        link_empty: {
-            en: 'Empty link',
-            fr: 'Lien vide'
-        },
-        associate: {
+        subscribe: {
             en: 'Add user to list',
             fr: 'Ajouter l`utilisateur a une liste'
         },
-        dissociate: {
+        unsubscribe: {
             en: 'Remove user from list',
             fr: 'Supprimer l`utilisateur de la liste'
         },

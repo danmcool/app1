@@ -449,7 +449,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         );
     }
 
-    var notify = function (notifyUserId, emailTitle, emailHtml) {
+    var notify = function (notifyUser, emailTitle, emailHtml, itmeId) {
+        if (!notifyUser) return;
+        var notifyUserId;
+        if (notifyUser == 'current') {
+            notifyUserId = $scope.sessionData.userData._id;
+        } else if (notifyUser == 'owner') {
+            notifyUserId = $scope.data._user;
+        } else if (notifyUser == 'item') {
+            notifyUserId = itemId;
+        } else {
+            return;
+        }
         if (notifyUserId && emailTitle && emailHtml) {
             var translatedEmail = SessionService.translate(emailHtml);
             var fieldList = translatedEmail.match(/@\w*@/g);
@@ -467,45 +478,153 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    $scope.create = function (formula, nextFormId, setValue, data, forwardId, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, data);
+    $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
+        updateComponents($scope.form, setValue, $scope.data);
         $scope.data.$save().then(function (res) {
-            if (notifyUser) {
-                if (notifyUser == 'current') {
-                    notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                } else if (notifyUser == 'owner') {
-                    notify(data._user, emailTitle, emailHtml);
-                }
-            }
-            if (forwardId) {
-                gotoNextForm(formula, nextFormId, res);
-            } else {
-                gotoNextForm(formula, nextFormId, null);
-            }
+            notify(notifyUser, emailTitle, emailHtml);
+            gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }).catch(function (res) {
             $scope.data = res.data;
         });
     }
-    $scope.modify = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, data);
+    $scope.modify = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
+        updateComponents($scope.form, setValue, $scope.data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
+            entry_id: $scope.data._id
         }, data).$promise.then(function (res) {
-            if (notifyUser) {
-                if (notifyUser == 'current') {
-                    notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                } else if (notifyUser == 'owner') {
-                    notify(data._user, emailTitle, emailHtml);
-                }
-            }
-            gotoNextForm(formula, nextFormId, null);
+            notify(notifyUser, emailTitle, emailHtml);
+            gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
     }
-    $scope.delete = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+    $scope.delete = function (formula, nextFormId, notifyUser, emailTitle, emailHtml) {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.confirmation)
+            .textContent($scope.sessionData.appData.removal_confirmation)
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)
+        ).then(function () {
+            Datas.remove({
+                    datamodel_id: $scope.form.datamodel._id,
+                    entry_id: $scope.data._id
+                }).$promise
+                .then(function (res) {
+                    notify(notifyUser, emailTitle, emailHtml);
+                    gotoNextForm(formula, nextFormId, null);
+                })
+                .catch(function (res) {
+                    /* show error*/
+                });
+        });
+    }
+    $scope.link = function (formula, nextFormId, forwardId, notifyUser, emailTitle, emailHtml) {
+        notify(notifyUser, emailTitle, emailHtml);
+        gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
+    }
+    $scope.subscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
+        updateComponents($scope.form, setValue, $scope.data);
+        $scope.resolvePath($scope.data, actionItem).push($scope.sessionData.userData._id);
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: data._id
+        }, data).$promise.then(function (res) {
+            notify(notifyUser, emailTitle, emailHtml);
+            gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
+        }).catch(function (res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
+    }
+    $scope.unsubscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
+        updateComponents($scope.form, setValue, $scope.data);
+        var itemList = $scope.resolvePath($scope.data, itemPath);
+        for (var i = itemList.length - 1; i >= 0; i--) {
+            if (itemList[i] == $scope.sessionData.userData._id || itemList[i]._id == $scope.sessionData.userData._id) {
+                itemList.splice(i, 1);
+            }
+        }
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: $scope.data._id
+        }, data).$promise.then(function (res) {
+            notify(notifyUser, emailTitle, emailHtml);
+            gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
+        }).catch(function (res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
+    }
+
+    $scope.deleteItem = function (formula, nextFormId, setValue, itemPath, itemId, notifyUser, emailTitle, emailHtml) {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.confirmation)
+            .textContent($scope.sessionData.appData.removal_confirmation)
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)
+        ).then(function () {
+            updateComponents($scope.form, setValue, $scope.data);
+            var itemList = $scope.resolvePath($scope.data, itemPath);
+            for (var i = itemList.length - 1; i >= 0; i--) {
+                if (itemList[i] == itemId || itemList[i]._id == itemId) {
+                    itemList.splice(i, 1);
+                }
+            }
+            Datas.update({
+                datamodel_id: $scope.form.datamodel._id,
+                entry_id: $scope.data._id
+            }, $scope.data).$promise.then(function (res) {
+                notify(notifyUser, emailTitle, emailHtml, itemId);
+                gotoNextForm(formula, nextFormId, $scope.data);
+            }).catch(function (res) {
+                $scope.data = res.data;
+                updateErrorAlert();
+            });
+        });
+    }
+    $scope.moveItem = function (formula, nextFormId, setValue, itemPath, itemId, destinationItemPath, notifyUser, emailTitle, emailHtml) {
+        updateComponents($scope.form, setValue, $scope.data);
+        var itemList = $scope.resolvePath($scope.data, itemPath);
+        for (var i = itemList.length - 1; i >= 0; i--) {
+            if (itemList[i] == itemId || itemList[i]._id == itemId) {
+                itemList.splice(i, 1);
+            }
+        }
+        $scope.resolvePath($scope.data, destinationItemPath).push(itemId);
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: $scope.data._id
+        }, $scope.data).$promise.then(function (res) {
+            notify(notifyUser, emailTitle, emailHtml, itemId);
+            gotoNextForm(formula, nextFormId, $scope.data);
+        }).catch(function (res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
+    }
+
+    $scope.modifyList = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
+        updateComponents($scope.form, setValue, data);
+        Datas.update({
+            datamodel_id: $scope.form.datamodel._id,
+            entry_id: data._id
+        }, data).$promise.then(function (res) {
+            notify(notifyUser, emailTitle, emailHtml);
+            gotoNextForm(formula, nextFormId, res);
+        }).catch(function (res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
+    }
+    $scope.deleteList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
         $mdDialog.show(
             $mdDialog.confirm()
             .parent(angular.element(document.body))
@@ -520,13 +639,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     entry_id: data._id
                 }).$promise
                 .then(function (res) {
-                    if (notifyUser) {
-                        if (notifyUser == 'current') {
-                            notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                        } else if (notifyUser == 'owner') {
-                            notify(data._user, emailTitle, emailHtml);
-                        }
-                    }
+                    notify(notifyUser, emailTitle, emailHtml);
                     gotoNextForm(formula, nextFormId, null);
                 })
                 .catch(function (res) {
@@ -534,141 +647,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 });
         });
     }
-    $scope.link = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
-        if (notifyUser) {
-            if (notifyUser == 'current') {
-                notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-            } else if (notifyUser == 'owner') {
-                notify(data._user, emailTitle, emailHtml);
-            }
-        }
+    $scope.linkList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+        notify(notifyUser, emailTitle, emailHtml);
         gotoNextForm(formula, nextFormId, data);
     }
-    $scope.linkEmpty = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
-        if (notifyUser) {
-            if (notifyUser == 'current') {
-                notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-            } else if (notifyUser == 'owner') {
-                notify(data._user, emailTitle, emailHtml);
-            }
-        }
-        gotoNextForm(formula, nextFormId, null);
-    }
-    $scope.associate = function (formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, data);
-        if (datamodel == 'User') {
-            data[actionItem].push($scope.sessionData.userData._id);
-        } else {}
-        Datas.update({
-            datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
-        }, data).$promise.then(function (res) {
-            if (notifyUser) {
-                if (notifyUser == 'current') {
-                    notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                } else if (notifyUser == 'owner') {
-                    notify(data._user, emailTitle, emailHtml);
-                }
-            }
-            gotoNextForm(formula, nextFormId, data);
-        }).catch(function (res) {
-            $scope.data = res.data;
-            updateErrorAlert();
-        });
-    }
-    $scope.dissociate = function (formula, nextFormId, setValue, data, actionItem, datamodel, idMap, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, data);
-        if (datamodel == 'User') {
-            for (var i = data[actionItem].length - 1; i >= 0; i--) {
-                if (data[actionItem][i] == $scope.sessionData.userData._id || data[actionItem][i]._id == $scope.sessionData.userData._id) {
-                    data[actionItem].splice(i, 1);
-                }
-            }
-        } else {}
-        Datas.update({
-            datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
-        }, data).$promise.then(function (res) {
-            if (notifyUser) {
-                if (notifyUser == 'current') {
-                    notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                } else if (notifyUser == 'owner') {
-                    notify(data._user, emailTitle, emailHtml);
-                }
-            }
-            gotoNextForm(formula, nextFormId, data);
-        }).catch(function (res) {
-            $scope.data = res.data;
-            updateErrorAlert();
-        });
-    }
-    $scope.deleteItem = function (formula, nextFormId, setValue, itemId, fieldName, datamodel, notifyUser, emailTitle, emailHtml) {
-        $mdDialog.show(
-            $mdDialog.confirm()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.confirmation)
-            .textContent($scope.sessionData.appData.removal_confirmation)
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function () {
-            updateComponents($scope.form, setValue, $scope.data);
-            if (datamodel == 'User') {
-                for (var i = $scope.data[fieldName].length - 1; i >= 0; i--) {
-                    if ($scope.data[fieldName][i]._id == itemId || $scope.data[fieldName][i]._id == itemId) {
-                        $scope.data[fieldName].splice(i, 1);
-                    }
-                }
-            } else {}
-            Datas.update({
-                datamodel_id: $scope.form.datamodel._id,
-                entry_id: $scope.data._id
-            }, $scope.data).$promise.then(function (res) {
-                if (notifyUser) {
-                    if (notifyUser == 'current') {
-                        notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                    } else if (notifyUser == 'owner') {
-                        notify($scope.data._user, emailTitle, emailHtml);
-                    } else if (notifyUser == 'item') {
-                        notify(itemId, emailTitle, emailHtml);
-                    }
-                }
-                gotoNextForm(formula, nextFormId, $scope.data);
-            }).catch(function (res) {
-                $scope.data = res.data;
-                updateErrorAlert();
-            });
-        });
-    }
-    $scope.moveItem = function (formula, nextFormId, setValue, itemId, fieldName, destinationFieldName, datamodel, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, $scope.data);
-        if (datamodel == 'User') {
-            for (var i = $scope.data[fieldName].length - 1; i >= 0; i--) {
-                if ($scope.data[fieldName][i] == itemId || $scope.data[fieldName][i]._id == itemId) {
-                    $scope.data[fieldName].splice(i, 1);
-                }
-            }
-            $scope.data[destinationFieldName].push(itemId);
-        } else {}
-        Datas.update({
-            datamodel_id: $scope.form.datamodel._id,
-            entry_id: $scope.data._id
-        }, $scope.data).$promise.then(function (res) {
-            if (notifyUser) {
-                if (notifyUser == 'current') {
-                    notify($scope.sessionData.userData._id, emailTitle, emailHtml);
-                } else if (notifyUser == 'owner') {
-                    notify($scope.data._user, emailTitle, emailHtml);
-                } else if (notifyUser == 'item') {
-                    notify(itemId, emailTitle, emailHtml);
-                }
-            }
-            gotoNextForm(formula, nextFormId, $scope.data);
-        }).catch(function (res) {
-            $scope.data = res.data;
-            updateErrorAlert();
-        });
-    }
+
     $scope.download = function (data, dataFields, fileName) {
         var content = 'sep=,\n';
         for (var i = 0; i < dataFields.attributes.length; i++) {

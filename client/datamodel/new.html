@@ -1,5 +1,5 @@
 <md-dialog aria-label="New Field">
-    <form ng-cloak>
+    <form ng-cloak name="formNew">
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>{{sessionData.appData.datamodel_add_field}}</h2>
@@ -23,7 +23,7 @@
             <md-button ng-click="cancel()">
                 {{sessionData.appData.cancel}}
             </md-button>
-            <md-button ng-click="answer(technical_name)">
+            <md-button ng-disabled="formNew.$invalid" ng-click="answer(technical_name)">
                 {{sessionData.appData.ok}}
             </md-button>
         </md-dialog-actions>

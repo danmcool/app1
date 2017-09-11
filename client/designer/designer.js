@@ -97,7 +97,8 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
             var name = {};
             name[$scope.sessionData.userData.properties.language] = result;
             var newApp = new DesignApplication({
-                name: name
+                name: name,
+                icon: 'clear'
             });
             newApp.$save(function () {
                 newApp.translated_name = result;

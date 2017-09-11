@@ -55,13 +55,13 @@
                                             <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
                                                 <div ng-switch="action.action">
                                                     <div ng-switch-when="delete">
-                                                        <md-button ng-click="delete(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
+                                                        <md-button ng-click="deleteList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                                     </div>
                                                     <div ng-switch-when="link">
-                                                        <md-button ng-click="link(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
+                                                        <md-button ng-click="linkList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                                     </div>
                                                     <div ng-switch-when="modify">
-                                                        <md-button ng-click="modify(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
+                                                        <md-button ng-click="modifyList(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -384,25 +384,22 @@
                     <div ng-repeat="action in form.actions">
                         <div ng-switch="action.action">
                             <div ng-switch-when="create">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, data, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="modify">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, data, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="delete">
-                                <md-button ng-click="delete(action.formula, action.next_form_id, data, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-click="delete(action.formula, action.next_form_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="link">
-                                <md-button ng-click="link(action.formula, action.next_form_id, data, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-click="link(action.formula, action.next_form_id, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
-                            <div ng-switch-when="link_empty">
-                                <md-button ng-click="linkEmpty(action.formula, action.next_form_id, data, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                            <div ng-switch-when="subscribe">
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="subscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
-                            <div ng-switch-when="associate">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="associate(action.formula, action.next_form_id, action.set_value, data, action.item, action.datamodel, action.id_map, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="dissociate">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="dissociate(action.formula, action.next_form_id, action.set_value, data, action.item, action.datamodel, action.id_map, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                            <div ng-switch-when="unsubscribe">
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="unsubscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="new_item">
                                 <md-button ng-click="newItem(action.formula, action.next_form_id, action.set_value, data, item_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>

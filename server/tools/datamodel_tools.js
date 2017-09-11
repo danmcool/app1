@@ -31,9 +31,37 @@ DatamodelTools.buildDataModel = function (projection, index) {
     var datamodelkeys = Object.keys(projection);
     var addedUpdated = false;
     var addedUser = false;
+    var addedFile = false;
     for (var i = 0; i < datamodelkeys.length; i++) {
         var projectionItem = projection[datamodelkeys[i]];
         var currentField = resolvePathObject(datamodel, projectionItem.path);
+
+        if (projectionItem.index) {
+            var fullPath = (projectionItem.path == '' ? projectionItem.technical_name : projectionItem.path + '.' + projectionItem.technical_name);
+            index.fields[fullPath] = 'text';
+            index.options.weights[fullPath] = projectionItem.index_weight;
+        }
+
+        if (projectionItem.path == '' && projectionItem.technical_name == '_updated_at') {
+            addedUpdated = true;
+            projectionItem.full_path = '_updated_at';
+            projectionItem.type = 'date';
+            continue;
+        }
+        if (projectionItem.path == '' && projectionItem.technical_name == '_user') {
+            addedUser = true;
+            projectionItem.full_path = '_user';
+            projectionItem.type = 'reference';
+            projectionItem.ref = 'User';
+            continue;
+        }
+        if (projectionItem.path == '' && projectionItem.technical_name == '_file') {
+            addedFile = true;
+            projectionItem.full_path = '_file';
+            projectionItem.type = 'item';
+            projectionItem.ref = 'File';
+            continue;
+        }
 
         if (projectionItem.type == 'text') {
             currentField[projectionItem.technical_name] = 'String';
@@ -75,30 +103,16 @@ DatamodelTools.buildDataModel = function (projection, index) {
         } else {
             //console.log('Type error for datamodel - ' + projectionItem.type);
         }
-
-        if (projectionItem.index) {
-            var fullPath = (projectionItem.path == '' ? projectionItem.technical_name : projectionItem.path + '.' + projectionItem.technical_name);
-            index.fields[fullPath] = 'text';
-            index.options.weights[fullPath] = projectionItem.index_weight;
-        }
-
-        if (projectionItem.path == '' && projectionItem.technical_name == '_updated_at') {
-            addedUpdated = true;
-            projectionItem.full_path = '_updated_at';
-            projectionItem.type = 'date';
-        }
-        if (projectionItem.path == '' && projectionItem.technical_name == '_user') {
-            addedUser = true;
-            projectionItem.full_path = '_user';
-            projectionItem.type = 'reference';
-            projectionItem.ref = 'User';
-        }
     }
     datamodel._updated_at = 'Date';
     datamodel._company_code = 'String';
     datamodel._user = {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    }
+    datamodel._file = {
+        type: Schema.Types.ObjectId,
+        ref: 'File'
     }
 
     if (!addedUpdated) {
@@ -124,6 +138,20 @@ DatamodelTools.buildDataModel = function (projection, index) {
             name: {
                 en: 'User',
                 fr: 'Utilisateur'
+            }
+        }
+    }
+
+    if (!addedFile) {
+        projection[newId(projection)] = {
+            path: '',
+            full_path: '_file',
+            technical_name: '_file',
+            type: 'item',
+            ref: 'File',
+            name: {
+                en: 'Files',
+                fr: 'Fichiers'
             }
         }
     }

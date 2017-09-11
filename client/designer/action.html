@@ -10,22 +10,28 @@
             <form name="actionForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_action_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(action,'name',false)">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(action,'name',false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.action_next_form}}</label>
-                    <md-select ng-model="action.next_form_id">
+                    <md-select ng-model="action.next_form_id" ng-required="true">
                         <md-option ng-repeat="form in forms" ng-value="form._id">{{form.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.action_type}}</label>
-                    <md-select ng-model="action.action">
+                    <md-select ng-model="action.action" ng-required="true">
                         <md-option ng-repeat="action in action_types" ng-value="action.type">{{action.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
-                <md-input-container flex="auto" class="md-block" ng-if="action.action=='create'">
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='create'||action.action=='modify'||action.action=='link'||action.action=='subscribe'||action.action=='unsubscribe'">
                     <md-checkbox ng-model="action.forward_id">{{sessionData.appData.action_forward_id}}</md-checkbox>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='subscribe'||action.action=='unsubscribe'">
+                    <label>{{sessionData.appData.action_subscription_list}}</label>
+                    <md-select ng-model="action.item_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                    </md-select>
                 </md-input-container>
                 <div flex layout="column">
                     <div>
@@ -41,6 +47,8 @@
                         </fieldset>
                     </div>
                 </div>
+                <md-divider layout-padding></md-divider>
+                <md-header>{{sessionData.appData.action_set_value}}</md-header>
                 <div flex layout="row">
                     <md-input-container flex="auto" class="md-block">
                         <label>{{sessionData.appData.field_datafield}}</label>
@@ -54,7 +62,7 @@
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="end" flex>
-                    <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                    <md-button ng-disabled="actionForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
                 </div>
             </form>
         </div>

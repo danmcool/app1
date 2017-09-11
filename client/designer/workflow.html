@@ -10,20 +10,20 @@
             <form name="wkfForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_workflow_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(workflow, 'name', false)">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(workflow, 'name', false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.workflow_description}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(workflow, 'description', true)"></textarea>
+                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(workflow, 'description', true)"></textarea>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.app_icon}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="workflow.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                     <md-icon>{{workflow.icon}}</md-icon>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <p>{{sessionData.appData.app_wkf_type}}</p>
-                    <md-radio-group ng-model="workflow.type">
+                    <md-radio-group ng-model="workflow.type" ng-required="true">
                         <md-radio-button value="workflow">{{sessionData.appData.workflow}}</md-radio-button>
                         <md-radio-button value="url">{{sessionData.appData.url}}</md-radio-button>
                         <md-radio-button value="file">{{sessionData.appData.file}}</md-radio-button>
@@ -33,7 +33,7 @@
                     <div ng-switch-when="workflow">
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.startup_form}}</label>
-                            <md-select ng-model="workflow.startup_form">
+                            <md-select ng-model="workflow.startup_form" ng-required="(workflow.forms.length > 0)">
                                 <md-option ng-repeat="form in workflow.forms" ng-value="form._id">{{form.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
@@ -90,7 +90,7 @@
                     </div>
                 </div>
                 <div layout="row" layout-align="end" flex>
-                    <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                    <md-button ng-disabled="wkfForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
                 </div>
             </form>
         </div>

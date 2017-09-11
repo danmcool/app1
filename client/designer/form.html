@@ -7,14 +7,14 @@
                     <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.form}}</span>
                 </div>
             </md-toolbar>
-            <form>
+            <form name="formForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_form_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="form.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(form,'name',false)">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="form.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(form,'name',false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.datamodel}}</label>
-                    <md-select ng-model="form.datamodel._id">
+                    <md-select ng-model="form.datamodel._id" ng-required="true">
                         <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div layout="row" layout-align="end" flex>
-                    <md-button type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                    <md-button ng-disabled="formForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
                 </div>
             </form>
         </div>

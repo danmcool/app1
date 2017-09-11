@@ -426,6 +426,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Next Form',
             fr: 'Formulaire suivant'
         },
+        action_subscription_list: {
+            en: 'Subscription List',
+            fr: 'Liste de souscription'
+        },
         new_action: {
             en: 'New Action',
             fr: 'Nouvelle action'
@@ -433,6 +437,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         new_action_name: {
             en: 'Action Name',
             fr: 'Nom de l`action'
+        },
+        action_set_value: {
+            en: 'Modify value',
+            fr: 'Modifier la valeur'
         },
         action_formula: {
             en: 'Send value',

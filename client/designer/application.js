@@ -66,7 +66,8 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
             var name = {};
             name[$scope.sessionData.userData.properties.language] = result;
             var newWorkflow = new DesignWorkflow({
-                name: name
+                name: name,
+                icon: 'clear'
             });
             newWorkflow.$save(function () {
                 newWorkflow.translated_name = result;

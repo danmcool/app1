@@ -305,23 +305,25 @@ router.post('/datamodel', function (req, res, next) {
             return res.json(object);
         });
     } else {
+        var modelSchema;
+        var index = {
+            fields: {},
+            options: {
+                name: Constants.DataModelIndexName,
+                weights: {}
+            }
+        };
+        try {
+            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
+        } catch (e) {
+            console.log(e);
+            modelSchema = new Schema({});
+            res.status(400);
+            return res.json(req.body);
+        }
+
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
-            var modelSchema;
-            var index = {
-                fields: {},
-                options: {
-                    name: Constants.DataModelIndexName,
-                    weights: {}
-                }
-            };
-            try {
-                modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
-            } catch (e) {
-                console.log(e);
-                modelSchema = new Schema({});
-            }
-
             modelSchema.index(index.fields, index.options);
             Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + req.body._id);
             module.exports = Metadata;
@@ -329,7 +331,6 @@ router.post('/datamodel', function (req, res, next) {
         });
     }
 });
-
 router.get('/datamodel/:id', function (req, res, next) {
     var userToken = req.cookies[Constants.SessionCookie];
     if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
@@ -362,43 +363,35 @@ router.put('/datamodel/:id', function (req, res, next) {
             return res.json(object);
         });
     } else {
+        var modelSchema;
+        var index = {
+            fields: {},
+            options: {
+                name: Constants.DataModelIndexName,
+                weights: {}
+            }
+        }
+        try {
+            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
+        } catch (e) {
+            console.log(e);
+            modelSchema = new Schema({});
+            res.status(400);
+            return res.json(req.body);
+        }
         DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
             _id: req.body._id
         }), req.body, function (err, object) {
             if (err) return next(err);
-            console.log(Constants.DataModelPrefix + req.body._id);
 
-            var collections = mongoose.connections[0].collections;
-            var names = [];
-            Object.keys(collections).forEach(function (k) {
-                names.push(k);
-            });
-            console.log(names);
-
-            if (mongoose.connections[0].collections[Constants.DataModelPrefix + req.body._id]) {
-                mongoose.connections[0].collections[Constants.DataModelPrefix + req.body._id].dropIndex(Constants.DataModelIndexName);
+            if (mongoose.connections[0].collections[Constants.DataModelPrefix + object._id]) {
+                mongoose.connections[0].collections[Constants.DataModelPrefix + object._id].dropIndex(Constants.DataModelIndexName);
             }
-            delete mongoose.connection.models[Constants.DataModelPrefix + req.body._id];
-            delete mongoose.modelSchemas[Constants.DataModelPrefix + req.body._id];
-            delete Metadata.Objects[req.body._id];
-            var modelSchema;
-            var index = {
-                fields: {},
-                options: {
-                    name: Constants.DataModelIndexName,
-                    weights: {}
-                }
-            }
-            try {
-                modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
-            } catch (e) {
-                console.log(e);
-                modelSchema = new Schema({});
-                res.status(400);
-                return res.json(req.body);
-            }
+            delete mongoose.connection.models[Constants.DataModelPrefix + object._id];
+            delete mongoose.modelSchemas[Constants.DataModelPrefix + object._id];
+            delete Metadata.Objects[object._id];
             modelSchema.index(index.fields, index.options);
-            Metadata.Objects[req.body._id] = mongoose.model(Constants.DataModelPrefix + req.body._id, modelSchema, Constants.DataModelPrefix + req.body._id);
+            Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + object._id);
             module.exports = Metadata;
 
             return res.json(object);
@@ -416,7 +409,7 @@ router.delete('/datamodel/:id', function (req, res, next) {
         _id: req.params.id
     }), function (err, object) {
         if (err) return next(err);
-        if (req.body.properties && !req.body.properties.reference) {
+        if (object.properties && !object.properties.reference) {
             delete mongoose.connection.models[Constants.DataModelPrefix + req.params._id];
             delete mongoose.modelSchemas[Constants.DataModelPrefix + req.params._id];
             delete Metadata.Objects[req.params._id];
