@@ -52,8 +52,8 @@
                 <div flex layout="row">
                     <md-input-container flex="auto" class="md-block">
                         <label>{{sessionData.appData.field_datafield}}</label>
-                        <md-select ng-model="action.set_value.name">
-                            <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                        <md-select ng-model="action.set_value.full_path">
+                            <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                         </md-select>
                     </md-input-container>
                     <md-input-container flex="auto" class="md-block">
