@@ -175,9 +175,6 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         $mdDialog.show({
             templateUrl: 'datamodel/new.html',
             controller: 'NewFieldCtrl',
-            locals: {
-                field_types: $scope.field_types
-            },
             parent: angular.element(document.body),
             clickOutsideToClose: true
         }).then(function (result) {

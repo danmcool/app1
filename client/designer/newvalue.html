@@ -1,0 +1,27 @@
+<md-dialog aria-label="New Field">
+    <form ng-cloak name="formNew">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{sessionData.appData.add_value_list}}</h2>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.value_editor}}</label>
+                    <md-select ng-model="value_id" ng-required="true">
+                        <md-option ng-repeat="value in values" ng-value="value.id">{{value.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">
+                {{sessionData.appData.cancel}}
+            </md-button>
+            <md-button ng-disabled="formNew.$invalid" ng-click="answer(value_id)">
+                {{sessionData.appData.ok}}
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

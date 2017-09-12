@@ -1,4 +1,4 @@
-app1.controller('NewFieldCtrl', ['$scope', '$mdDialog', 'SessionService', 'field_types', function ($scope, $mdDialog, SessionService) {
+app1.controller('NewFieldCtrl', ['$scope', '$mdDialog', 'SessionService', function ($scope, $mdDialog, SessionService) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();

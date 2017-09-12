@@ -148,20 +148,35 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     };
 
     $scope.newValue = function () {
-        var name = {};
-        name[$scope.sessionData.userData.properties.language] = '';
-        var newValue = new DesignValue({
-            name: name
-        });
-        newValue.$save(function () {
-            if (!$scope.form.values) {
-                $scope.form.values = [];
+        $mdDialog.show({
+            templateUrl: 'designer/newvalue.html',
+            controller: 'NewValueCtrl',
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        }).then(function (result) {
+            if (result == '') {
+                var name = {};
+                name[$scope.sessionData.userData.properties.language] = '';
+                var newValue = new DesignValue({
+                    name: name
+                });
+                newValue.$save(function () {
+                    if (!$scope.form.values) {
+                        $scope.form.values = [];
+                    }
+                    $scope.form.values.push({
+                        name: name,
+                        _id: newValue._id
+                    });
+                    saveFormForward('/form_value_edit/' + newValue._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
+                });
+            } else {
+                $scope.form.values.push({
+                    name: '',
+                    _id: result
+                });
+                saveFormForward('/form_value_edit/' + result + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
             }
-            $scope.form.values.push({
-                name: name,
-                _id: newValue._id
-            });
-            saveFormForward('/form_value_edit/' + newValue._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
         });
     };
 

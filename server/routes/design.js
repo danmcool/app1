@@ -214,6 +214,19 @@ router.delete('/form/:id', function (req, res, next) {
     });
 });
 
+router.get('/value', function (req, res, next) {
+    var userToken = req.cookies[Constants.SessionCookie];
+    if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+        return res.status(401).json({
+            err: 'Not enough user rights'
+        });
+    }
+    var pageOptions = computePage(req);
+    Value.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, value) {
+        if (err) return next(err);
+        res.json(value);
+    });
+});
 router.post('/value', function (req, res, next) {
     var userToken = req.cookies[Constants.SessionCookie];
     if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
