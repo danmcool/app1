@@ -38,11 +38,7 @@ router.post('/datamodel/', function (req, res, next) {
         });
     }
     SessionCache.filterCompanyCode(req, {});
-    var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : '{}');
-    if (datamodel._ref == Constants.DataModelUserId) {
-        if (!req.body.projection) {
-            req.body.projection = {};
-        }
+    if (req.body.properties && (req.body.properties.reference == Constants.DataModelUserId || req.body.properties.reference == Constants.DataModelFileId)) {
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
             Metadata.Objects[object._id] = Metadata.User;
@@ -50,39 +46,26 @@ router.post('/datamodel/', function (req, res, next) {
             return res.json(object);
         });
     } else {
-        datamodel._updated_at = 'Date';
-        datamodel._company_code = 'String';
-        datamodel._user = 'String';
-        datamodel._files = [{
-            type: Schema.Types.ObjectId,
-            ref: 'File'
-        }];
-        req.body.datamodel = JSON.stringify(datamodel);
-        if (!req.body.projection) {
-            req.body.projection = {};
+        var modelSchema;
+        var index = {
+            fields: {},
+            options: {
+                name: Constants.DataModelIndexName,
+                weights: {}
+            }
+        };
+        try {
+            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
+        } catch (e) {
+            console.log(e);
+            modelSchema = new Schema({});
+            res.status(400);
+            return res.json(req.body);
         }
-        req.body.projection['_file'] = {
-            en: 'Files',
-            fr: 'Fichiers'
-        };
-        req.body.projection['_updated_at'] = {
-            en: 'Updated at',
-            fr: 'Mis a jour à'
-        };
-        req.body.projection['_user'] = {
-            en: 'User',
-            fr: 'Utilisateur'
-        };
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
-            var modelSchema;
-            try {
-                modelSchema = new Schema(object.datamodel);
-            } catch (e) {
-                console.log(e);
-                modelSchema = new Schema({});
-            }
-            Metadata.Objects[object._id] = mongoose.model('data' + object._id, modelSchema, 'data' + object._id);
+            modelSchema.index(index.fields, index.options);
+            Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + req.body._id);
             module.exports = Metadata;
             return res.json(object);
         });
@@ -109,60 +92,44 @@ router.put('/datamodel/:id', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var datamodel = JSON.parse(req.body.datamodel ? req.body.datamodel : '{}');
-    if (datamodel._ref == Constants.DataModelUserId) {
-        if (!req.body.projection) {
-            req.body.projection = {};
-        }
+    if (req.body.properties && (req.body.properties.reference == Constants.DataModelUserId || req.body.properties.reference == Constants.DataModelFileId)) {
         DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
             _id: req.body._id
         }), req.body, function (err, object) {
             if (err) return next(err);
             return res.json(object);
         });
-
     } else {
-        delete mongoose.connection.models['data' + req.body._id];
-        delete mongoose.modelSchemas['data' + req.body._id];
-        delete Metadata.Objects[req.body._id];
         var modelSchema;
-        datamodel._updated_at = 'Date';
-        datamodel._company_code = 'String';
-        datamodel._user = 'String';
-        datamodel._files = [{
-            type: Schema.Types.ObjectId,
-            ref: 'File'
-        }];
-        req.body.datamodel = JSON.stringify(datamodel);
-        if (!req.body.projection) {
-            req.body.projection = {};
+        var index = {
+            fields: {},
+            options: {
+                name: Constants.DataModelIndexName,
+                weights: {}
+            }
         }
-        req.body.projection['_file'] = {
-            en: 'Files',
-            fr: 'Fichiers'
-        };
-        req.body.projection['_updated_at'] = {
-            en: 'Updated at',
-            fr: 'Mis a jour à'
-        };
-        req.body.projection['_user'] = {
-            en: 'User',
-            fr: 'Utilisateur'
-        };
         try {
-            modelSchema = new Schema(datamodel);
+            modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
         } catch (e) {
             console.log(e);
             modelSchema = new Schema({});
             res.status(400);
             return res.json(req.body);
         }
-        Metadata.Objects[req.body._id] = mongoose.model('data' + req.body._id, modelSchema, 'data' + req.body._id);
-        module.exports = Metadata;
         DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
             _id: req.body._id
         }), req.body, function (err, object) {
             if (err) return next(err);
+
+            if (mongoose.connections[0].collections[Constants.DataModelPrefix + object._id]) {
+                mongoose.connections[0].collections[Constants.DataModelPrefix + object._id].dropIndex(Constants.DataModelIndexName);
+            }
+            delete mongoose.connection.models[Constants.DataModelPrefix + object._id];
+            delete mongoose.modelSchemas[Constants.DataModelPrefix + object._id];
+            delete Metadata.Objects[object._id];
+            modelSchema.index(index.fields, index.options);
+            Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + object._id);
+            module.exports = Metadata;
             return res.json(object);
         });
     }

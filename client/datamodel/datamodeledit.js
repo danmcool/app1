@@ -99,8 +99,14 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         limit: 500,
     }, function (datamodels) {
         for (var i = 0; i < datamodels.length; i++) {
-            if (datamodels[i].properties && datamodels[i].properties.reference && datamodels[i].properties.reference == 'userdata') {
-                datamodels[i].corrected_ref = 'User';
+            if (datamodels[i].properties) {
+                if (datamodels[i].properties.reference == 'userdata') {
+                    datamodels[i].corrected_ref = 'User';
+                } else if (datamodels[i].properties.reference == 'filedata') {
+                    datamodels[i].corrected_ref = 'File';
+                } else {
+                    datamodels[i].corrected_ref = 'datas' + datamodels[i]._id;
+                }
             } else {
                 datamodels[i].corrected_ref = 'datas' + datamodels[i]._id;
             }

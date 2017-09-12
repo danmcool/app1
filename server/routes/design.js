@@ -297,7 +297,7 @@ router.post('/datamodel', function (req, res, next) {
         });
     }
     SessionCache.filterCompanyCode(req, {});
-    if (req.body.properties && req.body.properties.reference == Constants.DataModelUserId) {
+    if (req.body.properties && (req.body.properties.reference == Constants.DataModelUserId || req.body.properties.reference == Constants.DataModelFileId)) {
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
             Metadata.Objects[object._id] = Metadata.User;
@@ -321,7 +321,6 @@ router.post('/datamodel', function (req, res, next) {
             res.status(400);
             return res.json(req.body);
         }
-
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
             modelSchema.index(index.fields, index.options);
@@ -355,7 +354,7 @@ router.put('/datamodel/:id', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    if (req.body.properties && req.body.properties.reference == Constants.DataModelUserId) {
+    if (req.body.properties && (req.body.properties.reference == Constants.DataModelUserId || req.body.properties.reference == Constants.DataModelFileId)) {
         DataModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
             _id: req.body._id
         }), req.body, function (err, object) {
@@ -393,7 +392,6 @@ router.put('/datamodel/:id', function (req, res, next) {
             modelSchema.index(index.fields, index.options);
             Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + object._id);
             module.exports = Metadata;
-
             return res.json(object);
         });
     }

@@ -106,6 +106,7 @@ const Constants = {
 
     DataModelPrefix: 'datas',
     DataModelUserId: 'userdata',
+    DataModelFileId: 'filedata',
     DataModelIndexName: '_search'
 }
 
