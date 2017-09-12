@@ -121,20 +121,20 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }
     };
 
-    $scope.editAction = function (action) {
-        saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + action + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
+    $scope.editAction = function (actionIndex) {
+        saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + actionIndex + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
     };
 
-    $scope.deleteAction = function (action) {
-        $scope.form.actions.splice(action, 1);
+    $scope.deleteAction = function (actionIndex) {
+        $scope.form.actions.splice(actionIndex, 1);
     }
 
     $scope.editValue = function (value) {
         saveFormForward('/form_value_edit/' + value._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
     };
 
-    $scope.deleteValue = function (value) {
-        $scope.form.values.splice(value, 1);
+    $scope.deleteValue = function (valueIndex) {
+        $scope.form.values.splice(valueIndex, 1);
     }
 
     $scope.newAction = function () {
