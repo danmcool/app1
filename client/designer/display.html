@@ -67,7 +67,7 @@
                                 <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(action,'name',false,100)">
                             </md-input-container>
                             <md-input-container flex="auto" class="md-block">
-                                <label>{{sessionData.appData.next_form}}</label>
+                                <label>{{sessionData.appData.action_next_form}}</label>
                                 <md-select ng-model="action.next_form_id" ng-required="true">
                                     <md-option ng-repeat="form in forms" ng-value="form._id">{{form.translated_name}}</md-option>
                                 </md-select>
@@ -107,8 +107,8 @@
                             <div flex layout="row">
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
-                                    <md-select ng-model="action.set_value.name">
-                                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                    <md-select ng-model="action.set_value.full_path">
+                                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container flex="auto" class="md-block">

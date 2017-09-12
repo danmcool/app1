@@ -54,13 +54,13 @@
                                             </div>
                                             <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
                                                 <div ng-switch="action.action">
-                                                    <div ng-switch-when="delete">
+                                                    <div ng-switch-when="delete_list">
                                                         <md-button ng-click="deleteList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                                     </div>
-                                                    <div ng-switch-when="link">
+                                                    <div ng-switch-when="link_list">
                                                         <md-button ng-click="linkList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                                     </div>
-                                                    <div ng-switch-when="modify">
+                                                    <div ng-switch-when="modify_list">
                                                         <md-button ng-click="modifyList(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
                                                     </div>
                                                 </div>

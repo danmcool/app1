@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var Constants = require('../tools/constants.js');
+
 var Metadata = {
     Objects: {}
 };
@@ -9,6 +11,7 @@ var DataModelSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
     projection: Schema.Types.Mixed,
+    properties: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now
@@ -204,6 +207,24 @@ var UserSchema = new Schema({
     },
     _company_code: String
 });
+var indexUser = {
+    fields: {
+        firstname: 'text',
+        lastname: 'text',
+        email: 'text',
+        '$**': 'text'
+    },
+    options: {
+        name: Constants.DataModelIndexName,
+        weights: {
+            firstname: 5,
+            lastname: 5,
+            email: 3,
+            '$**': 2
+        }
+    }
+};
+UserSchema.index(indexUser.fields, indexUser.options);
 Metadata.User = mongoose.model('User', UserSchema);
 
 module.exports = Metadata;

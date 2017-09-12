@@ -53,34 +53,23 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
     }
 
     $scope.newWorkflow = function () {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_workflow)
-            .textContent($scope.sessionData.appData.new_workflow_name)
-            .initialValue('My Workflow')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            var newWorkflow = new DesignWorkflow({
-                name: name,
-                icon: 'clear'
-            });
-            newWorkflow.$save(function () {
-                newWorkflow.translated_name = result;
-                $scope.application.workflows.push(newWorkflow);
-                DesignApplication.update({
-                    id: $scope.application._id
-                }, $scope.application).$promise.then(function (res) {
-                    SessionService.init();
-                    SessionService.location('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
-                }).catch(function (res) {
-                    $scope.application = res.application;
-                    updateErrorAlert();
-                });
+        var name = {};
+        name[$scope.sessionData.userData.properties.language] = '';
+        var newWorkflow = new DesignWorkflow({
+            name: name,
+            icon: 'clear'
+        });
+        newWorkflow.$save(function () {
+            newWorkflow.translated_name = '';
+            $scope.application.workflows.push(newWorkflow);
+            DesignApplication.update({
+                id: $scope.application._id
+            }, $scope.application).$promise.then(function (res) {
+                SessionService.init();
+                SessionService.location('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
+            }).catch(function (res) {
+                $scope.application = res.application;
+                updateErrorAlert();
             });
         });
     }

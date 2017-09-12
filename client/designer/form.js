@@ -28,20 +28,20 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {
-        //for (var i = 0; i < resultForm.actions.length; i++) {
-        //    resultForm.actions[i].translated_name = SessionService.translate(resultForm.actions[i].name);
-        //    resultForm.actions[i].translated_description = SessionService.translate(resultForm.actions[i].description);
-        //}
         $scope.form = resultForm;
         if ($scope.form.actions) {
             for (var i = 0; i < $scope.form.actions.length; i++) {
                 $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
             }
+        } else {
+            $scope.form.actions = [];
         }
         if ($scope.form.values) {
             for (var i = 0; i < $scope.form.values.length; i++) {
                 $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
             }
+        } else {
+            $scope.form.values = [];
         }
         if ($scope.form.display) {
             for (var i = 0; i < $scope.form.display.length; i++) {
@@ -59,12 +59,18 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                     }
                 }
             }
+        } else {
+            $scope.form.display = [];
         }
+
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);
     });
 
-    DesignDataModel.query(function (datamodels) {
+    DesignDataModel.query({
+        skip: 0,
+        limit: 500,
+    }, function (datamodels) {
         for (var i = 0; i < datamodels.length; i++) {
             datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
         }
@@ -132,137 +138,78 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     }
 
     $scope.newAction = function () {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_action)
-            .initialValue('My Action')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            if (!$scope.form.actions) {
-                $scope.form.actions = [];
-            }
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            $scope.form.actions.push({
-                name: name,
-                translated_name: result
-            });
-            saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + ($scope.form.actions.length - 1) + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
+        var name = {};
+        name[$scope.sessionData.userData.properties.language] = '';
+        $scope.form.actions.push({
+            name: name,
+            translated_name: ''
         });
+        saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + ($scope.form.actions.length - 1) + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
     };
 
     $scope.newValue = function () {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_value)
-            .initialValue('My Value')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            var newValue = new DesignValue({
-                name: name
+        var name = {};
+        name[$scope.sessionData.userData.properties.language] = '';
+        var newValue = new DesignValue({
+            name: name
+        });
+        newValue.$save(function () {
+            if (!$scope.form.values) {
+                $scope.form.values = [];
+            }
+            $scope.form.values.push({
+                name: name,
+                _id: newValue._id
             });
-            newValue.$save(function () {
-                if (!$scope.form.values) {
-                    $scope.form.values = [];
-                }
-                $scope.form.values.push({
-                    name: name,
-                    _id: newValue._id
-                });
-                saveFormForward('/form_value_edit/' + newValue._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
-            });
+            saveFormForward('/form_value_edit/' + newValue._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
         });
     };
 
     $scope.newSection = function () {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_field)
-            .textContent($scope.sessionData.appData.new_field_name)
-            .initialValue('New Field')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            if (!$scope.form.display) {
-                $scope.form.display = [];
-            }
-            var text = {};
-            text[$scope.sessionData.userData.properties.language] = result;
-            $scope.form.display.push({
-                blocks: [{
-                    fields: [{
-                        text: text,
-                        translated_name: result,
-                        disabled: false,
-                        mandatory: false,
-                        id: computeNewId()
+        if (!$scope.form.display) {
+            $scope.form.display = [];
+        }
+        var text = {};
+        text[$scope.sessionData.userData.properties.language] = '';
+        $scope.form.display.push({
+            blocks: [{
+                fields: [{
+                    text: text,
+                    translated_name: '',
+                    disabled: false,
+                    mandatory: false,
+                    id: computeNewId()
                     }]
                 }]
-            });
         });
     };
 
     $scope.newBlock = function (blocks) {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_field)
-            .textContent($scope.sessionData.appData.new_field_name)
-            .initialValue('New Field')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            if (!$scope.form.display) {
-                $scope.form.display = [];
-            }
-            var text = {};
-            text[$scope.sessionData.userData.properties.language] = result;
-            blocks.push({
-                fields: [{
-                    text: text,
-                    translated_name: result,
-                    disabled: false,
-                    mandatory: false,
-                    id: computeNewId()
+        if (!$scope.form.display) {
+            $scope.form.display = [];
+        }
+        var text = {};
+        text[$scope.sessionData.userData.properties.language] = '';
+        blocks.push({
+            fields: [{
+                text: text,
+                translated_name: '',
+                disabled: false,
+                mandatory: false,
+                id: computeNewId()
                 }]
-            });
         });
     };
 
     $scope.newField = function (fields) {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_field)
-            .textContent($scope.sessionData.appData.new_field_name)
-            .initialValue('New Field')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            if (!$scope.form.display) {
-                $scope.form.display = [];
-            }
-            var text = {};
-            text[$scope.sessionData.userData.properties.language] = result;
-            fields.push({
-                text: text,
-                translated_name: result,
-                disabled: false,
-                mandatory: false,
-                id: computeNewId()
-            });
+        var text = {};
+        text[$scope.sessionData.userData.properties.language] = '';
+        fields.push({
+            text: text,
+            translated_name: '',
+            disabled: false,
+            mandatory: false,
+            id: computeNewId()
         });
     }
 

@@ -416,6 +416,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     var updateComponents = function (form, setValue, data) {
+        data._user = $scope.sessionData.userData.user;
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
@@ -430,11 +431,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         date: Date.now()
                     });
                 }
+            } else if (formFields[i].display != 'list' && formFields[i].display != 'item') {
+                $scope.resolvePathUpdate(data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
             }
-            $scope.resolvePathUpdate(data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
         }
         if (setValue) {
-            data[setValue.name] = setValue.value;
+            $scope.resolvePathUpdate(data, setValue.full_path, setValue.value);
         }
     }
 
@@ -492,7 +494,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, data).$promise.then(function (res) {
+        }, $scope.data).$promise.then(function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }).catch(function (res) {
@@ -533,7 +535,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function (res) {
+        }, $scope.data).$promise.then(function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
         }).catch(function (res) {
@@ -552,7 +554,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, data).$promise.then(function (res) {
+        }, $scope.data).$promise.then(function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
         }).catch(function (res) {

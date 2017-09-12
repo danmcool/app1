@@ -15,7 +15,7 @@ DataModel.find(function (err, objects) {
     if (err) return next(err);
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
-        if (objects[i]._ref == Constants.DataModelUserId) {
+        if (objects[i].properties && objects[i].properties.reference == Constants.DataModelUserId) {
             Metadata.Objects[objects[i]._id] = Metadata.User;
         } else {
             var modelSchema;

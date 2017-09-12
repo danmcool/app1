@@ -51,33 +51,22 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
     }
 
     $scope.newForm = function () {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_workflow)
-            .textContent($scope.sessionData.appData.new_workflow_name)
-            .initialValue('My Form')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            var newForm = new DesignForm({
-                name: name
-            });
-            newForm.$save(function () {
-                newForm.translated_name = newForm.name.en;
-                $scope.workflow.forms.push(newForm);
-                DesignWorkflow.update({
-                    id: $scope.workflow._id
-                }, $scope.workflow).$promise.then(function (res) {
-                    SessionService.init();
-                    SessionService.location('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
-                }).catch(function (res) {
-                    $scope.workflow = res.workflow;
-                    updateErrorAlert();
-                });
+        var name = {};
+        name[$scope.sessionData.userData.properties.language] = '';
+        var newForm = new DesignForm({
+            name: name
+        });
+        newForm.$save(function () {
+            newForm.translated_name = newForm.name.en;
+            $scope.workflow.forms.push(newForm);
+            DesignWorkflow.update({
+                id: $scope.workflow._id
+            }, $scope.workflow).$promise.then(function (res) {
+                SessionService.init();
+                SessionService.location('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
+            }).catch(function (res) {
+                $scope.workflow = res.workflow;
+                updateErrorAlert();
             });
         });
     }

@@ -102,15 +102,15 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     }
 
     $scope.list_action_type = {
-        modify: {
+        modify_list: {
             en: 'Modify',
             fr: 'Modifier'
         },
-        delete: {
+        delete_list: {
             en: 'Delete',
             fr: 'Supprimer'
         },
-        link: {
+        link_list: {
             en: 'Link',
             fr: 'Lien'
         }

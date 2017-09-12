@@ -84,27 +84,16 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
     $scope.getNextApps();
 
     $scope.newApplication = function () {
-        $mdDialog.show(
-            $mdDialog.prompt()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_app)
-            .textContent($scope.sessionData.appData.new_app_name)
-            .initialValue('My App')
-            .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            var newApp = new DesignApplication({
-                name: name,
-                icon: 'clear'
-            });
-            newApp.$save(function () {
-                newApp.translated_name = result;
-                $scope.applications.push(newApp);
-                SessionService.location('/application_edit/' + newApp._id);
-            });
+        var name = {};
+        name[$scope.sessionData.userData.properties.language] = '';
+        var newApp = new DesignApplication({
+            name: name,
+            icon: 'clear'
+        });
+        newApp.$save(function () {
+            newApp.translated_name = '';
+            $scope.applications.push(newApp);
+            SessionService.location('/application_edit/' + newApp._id);
         });
     }
 

@@ -44,13 +44,13 @@
             <textarea json-text ng-model="datamodel.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{datamodel._id}}</p>
-        <p>Datamodel:
-            <br>
-            <textarea ng-model="datamodel.datamodel" rows="6" cols="60"></textarea>
-        </p>
         <p>Projection:
             <br>
             <textarea json-text ng-model="datamodel.projection" rows="6" cols="60"></textarea>
+        </p>
+        <p>Properties:
+            <br>
+            <textarea json-text ng-model="datamodel.properties" rows="6" cols="60"></textarea>
         </p>
         <button ng-click="update()">update</button>
         <a href="/admin#/datamodels">Cancel</a>

@@ -78,7 +78,6 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
                 var datamodelkeys = Object.keys($scope.datamodel.projection);
                 for (var i = 0; i < datamodelkeys.length; i++) {
                     var field = $scope.datamodel.projection[datamodelkeys[i]];
-                    field.id = datamodelkeys[i];
                     field.full_path = (field.path == '' ? field.technical_name : field.path + '.' + field.technical_name);
                     $scope.datamodel_keys.push(field);
                 }
@@ -93,6 +92,21 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         $scope.datamodel_keys.sort(function (a, b) {
             return a.full_path.trim().localeCompare(b.full_path.trim());
         });
+    });
+
+    DesignDataModel.query({
+        skip: 0,
+        limit: 500,
+    }, function (datamodels) {
+        for (var i = 0; i < datamodels.length; i++) {
+            if (datamodels[i].properties && datamodels[i].properties.reference && datamodels[i].properties.reference == 'userdata') {
+                datamodels[i].corrected_ref = 'User';
+            } else {
+                datamodels[i].corrected_ref = 'datas' + datamodels[i]._id;
+            }
+            datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+        }
+        $scope.datamodels = datamodels;
     });
 
     $scope.editText = function (object, property, multipleLines, id) {
