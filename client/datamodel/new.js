@@ -26,6 +26,10 @@ app1.controller('NewFieldCtrl', ['$scope', '$mdDialog', 'SessionService', functi
             en: 'Date',
             fr: 'Date'
         },
+        period: {
+            en: 'Period',
+            fr: 'Période'
+        },
         currency: {
             en: 'Amount',
             fr: 'Montant'

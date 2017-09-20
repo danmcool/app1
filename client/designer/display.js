@@ -44,6 +44,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             en: 'File',
             fr: 'Fichier'
         },
+        image: {
+            en: 'Image',
+            fr: 'Image'
+        },
         selection: {
             en: 'Selection',
             fr: 'Selection'
@@ -55,6 +59,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         calendar: {
             en: 'Calendar',
             fr: 'Calendrier'
+        },
+        appointment: {
+            en: 'Appointment',
+            fr: 'Rendez-vous'
         },
         calculation: {
             en: 'Formula',

@@ -124,7 +124,7 @@
                             </md-button>
                         </md-input-container>
                     </div>
-                    <div ng-switch-when="shorttext|number|editor|feed|file|check|calendar|calculation|email|address" ng-switch-when-separator="|">
+                    <div ng-switch-when="shorttext|number|editor|feed|file|image|check|calendar|appointment|calculation|email|address" ng-switch-when-separator="|">
                         <div layout="row" layout-xs="column">
                             <md-input-container flex="auto" class="md-block">
                                 <md-checkbox ng-model="field.disabled">{{sessionData.appData.field_disabled}}</md-checkbox>
@@ -135,7 +135,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
-                            <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>

@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
+var DatamodelTools = require('../tools/datamodel_tools.js');
 
 var computePage = function (req) {
     return pageOptions = {

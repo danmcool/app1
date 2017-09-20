@@ -139,11 +139,6 @@
     background-position: left;
 }
 
-md-datepicker .md-datepicker-input {
-    width: calc(70vw - 64px);
-    max-width: calc(70vw - 64px);
-}
-
 
 /*.multi_bg_example {
   background-image: url(/images/background/linen.png), linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0));

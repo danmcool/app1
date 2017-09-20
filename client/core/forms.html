@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div ng-switch-when="item">
-                                    <p class="md-body-1">{{field.translated_name}}</p>
+                                    <md-header layout-padding>{{field.translated_name}}</md-header>
                                     <md-list flex="auto">
                                         <md-list-item class="md-3-line" ng-repeat="item in field[field.items+'_values']">
                                             <div class="md-list-item-text" layout="column">
@@ -182,7 +182,7 @@
                                 </div>
 
                                 <div ng-switch-when="feed">
-                                    <p class="md-body-1">{{field.translated_previous}}</p>
+                                    <md-header layout-padding>{{field.translated_previous}}</md-header>
                                     <div ng-repeat="existing_feed in localdata[field.id]">
                                         <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
                                         <p class="subtitle">{{existing_feed.text}}</p>
@@ -197,23 +197,45 @@
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
-                                            <div ng-repeat="file in data._files">
+                                            <div ng-repeat="file in localdata[field.id]">
                                                 <a class="md-body-2" href="/file/{{file._id}}" target="_blank">
                                                     <p class="subtitle">{{file.name}}</p>
                                                 </a>
                                             </div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <p class="md-body-1">{{field.translated_name}}</p>
-                                            <div ng-repeat="file in data._files">
+                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <div ng-repeat="file in files[field.id]">
                                                 <p class="subtitle">
                                                     <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
-                                                    <md-button ng-click="removeFile(file._id)" class="md-primary">X</md-button>
+                                                    <md-button ng-click="removeFile(file._id, field.id)" class="md-primary">X</md-button>
                                                 </p>
                                             </div>
-                                            <p class="md-body-1" id="file_upload"></p>
+                                            <p class="md-body-1" id="file_upload_{{field.id}}"></p>
                                             <md-input-container ng-if="!field.disabled" class="md-block">
-                                                <input multiple accept="image/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" name="{{field.translated_name}}" ng-model="form.newvalues[field.name]" onchange="angular.element(this).scope().changeFiles(this.files)">
+                                                <input multiple accept="*/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="angular.element(this).scope().changeFiles(this.files,this.id)">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-switch-when="image">
+                                    <div ng-switch="field.disabled">
+                                        <div ng-switch-when="true">
+                                            <p class="md-body-1">{{field.translated_name}}</p>
+                                            <div class="material-carousel-container" material-carousel material-carousel-slides="slides"></div>
+                                        </div>
+                                        <div ng-switch-when="false">
+                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <div ng-repeat="image in files[field.id]">
+                                                <p class="subtitle">
+                                                    <a class="md-body-2" href="/file/{{image._id}}" target="_blank">{{image.name}}</a>
+                                                    <md-button ng-click="removeFile(image._id, field.id)" class="md-primary">X</md-button>
+                                                </p>
+                                            </div>
+                                            <p class="md-body-1" id="file_upload_{{field.id}}"></p>
+                                            <md-input-container ng-if="!field.disabled" class="md-block">
+                                                <input multiple accept="image/jpeg" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="angular.element(this).scope().changeFiles(this.files,this.id)">
                                             </md-input-container>
                                         </div>
                                     </div>
@@ -249,7 +271,7 @@
                                             <p class="subtitle">{{localdata[field.id]|date:"yyyy-MM-dd"}}</p>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-input-container>
+                                            <md-input-container class="md-block">
                                                 <label>{{field.translated_name}}</label>
                                                 <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" md-open-on-focus ng-model="localdata[field.id]"></md-datepicker>
                                             </md-input-container>
@@ -257,9 +279,31 @@
                                     </div>
                                 </div>
 
+                                <div ng-switch-when="appointment">
+                                    <div ng-switch="field.disabled">
+                                        <div ng-switch-when="true">
+                                            <p class="md-body-1">{{field.translated_name}}</p>
+                                            <p class="subtitle">{{localdata[field.id].start_time|date:"dddd, YYYY/MM/DD HH:00"}} - {{localdata[field.id].end_time|date:"dddd, YYYY/MM/DD HH:00"}}</p>
+                                        </div>
+                                        <div ng-switch-when="false">
+                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <div layout="row" layout-xs="column">
+                                                <md-input-container flex>
+                                                    <label>{{sessionData.appData.start_time}}</label>
+                                                    <input ng-model="localdata[field.id].start_time" moment-picker="localdata[field.id].start_time" max-view="day" format="dddd, YYYY/MM/DD HH:00">
+                                                </md-input-container>
+                                                <md-input-container flex>
+                                                    <label>{{sessionData.appData.end_time}}</label>
+                                                    <input ng-model="localdata[field.id].end_time" moment-picker="localdata[field.id].end_time" max-view="day" format="dddd, YYYY/MM/DD HH:00">
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div ng-switch-when="calculation" flex class="md-block">
                                     <p class="md-body-1">{{field.translated_name}}</p>
-                                    <p class="subtitle">{{localdata[field.id]}}</p>
+                                    <md-header layout-padding>{{localdata[field.id]}}</md-header>
                                 </div>
 
                                 <div ng-switch-when="email">
@@ -311,7 +355,7 @@
                                             </div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <p class="subtitle" layout-padding>{{field.translated_name}}</p>
+                                            <md-header layout-padding>{{field.translated_name}}</md-header>
                                             <md-input-container class="md-block">
                                                 <label>{{field.address_line1_translated_name}}</label>
                                                 <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">

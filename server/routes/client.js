@@ -313,6 +313,92 @@ router.get('/calendar', function (req, res, next) {
     });
 });
 
+router.put('/event/:id', function (req, res, next) {
+    if (!req.query.start_date || !req.query.end_date || !req.query.user_id || !req.query.object_id || !req.query.datamodel_id) return res.status(400).json({
+        err: 'Invalid parameters!'
+    });
+    var token = req.cookies[Constants.SessionCookie];
+    var user = SessionCache.userData[token];
+    var profile = getProfile(token, req.params.datamodelid);
+    var remote_profile = {};
+    var remote = false;
+    if (user.remote_profiles && user.remote_profiles.length > 0) {
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                remote = true;
+                break;
+            }
+        }
+    }
+    if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body._user) {
+        if (!remote) {
+            return res.status(401).json({
+                err: 'Not enough user rights!'
+            });
+        }
+    }
+    var search_criteria = {
+        _id: {
+            '$eq': req.params.id
+        }
+    };
+    if (remote) {
+        search_criteria._company_code = {
+            '$eq': remote_profile._company_code
+        };
+        search_criteria._user = {
+            '$eq': req.body._user
+        };
+        search_criteria[remote_profile.constraint.key] = {
+            '$eq': remote_profile.constraint.value
+        };
+    } else {
+        search_criteria._company_code = {
+            '$eq': profile.datamodels[req.params.datamodelid].update._company_code
+        };
+        if (profile.datamodels[req.params.datamodelid].update._user) {
+            search_criteria._user = {
+                '$in': profile.datamodels[req.params.datamodelid].update._user
+            };
+        }
+    }
+    search_criteria._updated_at = Date.parse(req.body._updated_at);
+    req.body._updated_at = Date.now();
+    Metadata.Objects[req.params.datamodelid].findOne(search_criteria, req.body, function (err, object) {
+        if (err) return next(err);
+        if (object) {
+            res.status(200).json({
+                'msg': 'Data: entry updated!'
+            });
+        } else {
+            delete search_criteria._updated_at;
+            Metadata.Objects[req.params.datamodelid].findOne(search_criteria, function (err, object) {
+                if (err) return next(err);
+                res.status(400).json(object);
+            });
+        }
+    });
+
+
+
+
+    User.findOne({
+        _id: req.query.user_id,
+        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
+        validated: true
+    }, 'email firstname lastname').exec(function (errUser, userObject) {
+        if (errUser) return next(err);
+        if (!userObject) return res.status(400).json({
+            err: 'Invalid parameters!'
+        });
+        res.status(200).json({
+            msg: 'Calendar sent!'
+        });
+        Email.sendCalendar(userObject.email, req.query.project_name, req.query.start_date, req.query.end_date, ((userObject.firstname ? userObject.firstname : '') + ' ' + (userObject.lastname ? userObject.lastname : '')));
+    });
+});
+
 router.put('/notify/:user_id', function (req, res, next) {
     if (!req.body.email_title || !req.body.email_html) return res.status(400).json({
         err: 'Invalid parameters!'

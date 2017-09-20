@@ -28,6 +28,10 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             en: 'Date',
             fr: 'Date'
         },
+        period: {
+            en: 'Period',
+            fr: 'Période'
+        },
         currency: {
             en: 'Amount',
             fr: 'Montant'
@@ -183,7 +187,57 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             result.full_path = (result.path == '' ? result.technical_name : result.path + '.' + result.technical_name);
             $scope.datamodel.projection[newId] = result;
             $scope.datamodel_keys.push($scope.datamodel.projection[newId]);
-            if (result.type == 'address') {
+            if (result.type == 'currency') {
+                var newIdAm = computeNewId();
+                $scope.datamodel.projection[newIdAm] = {
+                    path: result.full_path,
+                    type: 'number',
+                    technical_name: 'value',
+                    full_path: result.full_path + '.value',
+                    name: {
+                        en: 'Value',
+                        fr: 'Montant'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdAm]);
+                var newIdCu = computeNewId();
+                $scope.datamodel.projection[newIdCu] = {
+                    path: result.full_path,
+                    type: 'text',
+                    technical_name: 'currency',
+                    full_path: result.full_path + '.currency',
+                    name: {
+                        en: 'Currency',
+                        fr: 'Monnaie'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdCu]);
+            } else if (result.type == 'period') {
+                var newIdSt = computeNewId();
+                $scope.datamodel.projection[newIdSt] = {
+                    path: result.full_path,
+                    type: 'date',
+                    technical_name: 'start_time',
+                    full_path: result.full_path + '.start_time',
+                    name: {
+                        en: 'Start Time',
+                        fr: 'Heure de debut'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdSt]);
+                var newIdEn = computeNewId();
+                $scope.datamodel.projection[newIdEn] = {
+                    path: result.full_path,
+                    type: 'date',
+                    technical_name: 'end_time',
+                    full_path: result.full_path + '.end_time',
+                    name: {
+                        en: 'End Time',
+                        fr: 'Heure de fin'
+                    }
+                }
+                $scope.datamodel_keys.push($scope.datamodel.projection[newIdEn]);
+            } else if (result.type == 'address') {
                 var newIdL1 = computeNewId();
                 $scope.datamodel.projection[newIdL1] = {
                     path: result.full_path,

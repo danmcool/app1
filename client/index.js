@@ -1,4 +1,4 @@
-var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll']).config(['$mdThemingProvider', function ($mdThemingProvider) {
+var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll', 'moment-picker', 'materialCarousel']).config(['$mdThemingProvider', function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
         .accentPalette('amber');

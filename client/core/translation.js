@@ -509,6 +509,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         datamodel_field_index_weight: {
             en: 'Importance',
             fr: 'Importance'
+        },
+        start_time: {
+            en: 'Start Time',
+            fr: 'Heure de début'
+        },
+        end_time: {
+            en: 'End Time',
+            fr: 'Heure de fin'
         }
     };
     var translate = function translate(language) {

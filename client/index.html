@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/style.min.css" />
+    <link rel="stylesheet" href="/stylesheets/angular-moment-picker.min.css" />
+    <link rel="stylesheet" href="/stylesheets/angularjs-material-carousel.min.css" />
 </head>
 
 <body ng-app="app1" ng-cloak md-theme="{{sessionData.userData.properties.theme}}" ng-controller="AppCtrl" ng-class="sessionData.userData.properties.theme">
@@ -20,6 +22,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
 
     <script defer src="/javascripts/ng-infinite-scroll.min.js"></script>
+    <script defer src="/javascripts/moment.min.js"></script>
+    <script defer src="/javascripts/angular-moment-picker.min.js"></script>
+    <script defer src="/javascripts/angularjs-material-carousel.min.js"></script>
     <script src="index.min.js"></script>
     <script defer src="core/welcome.min.js"></script>
     <script defer src="core/login.min.js"></script>
@@ -30,7 +35,7 @@
     <script defer src="core/url.min.js"></script>
     <script defer src="core/file.min.js"></script>
     <script defer src="core/workflows.min.js"></script>
-    <script defer src="core/forms.min.js"></script>
+    <script defer src="core/forms.js"></script>
     <script defer src="core/translation.min.js"></script>
     <script defer src="designer/designer.min.js"></script>
     <script defer src="designer/text.min.js"></script>

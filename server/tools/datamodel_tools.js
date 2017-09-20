@@ -31,7 +31,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
     var datamodelkeys = Object.keys(projection);
     var addedUpdated = false;
     var addedUser = false;
-    var addedFile = false;
     for (var i = 0; i < datamodelkeys.length; i++) {
         var projectionItem = projection[datamodelkeys[i]];
         var currentField = resolvePathObject(datamodel, projectionItem.path);
@@ -55,13 +54,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
             projectionItem.ref = 'User';
             continue;
         }
-        if (projectionItem.path == '' && projectionItem.technical_name == '_file') {
-            addedFile = true;
-            projectionItem.full_path = '_file';
-            projectionItem.type = 'item';
-            projectionItem.ref = 'File';
-            continue;
-        }
 
         if (projectionItem.type == 'text') {
             currentField[projectionItem.technical_name] = 'String';
@@ -71,11 +63,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
             currentField[projectionItem.technical_name] = 'Boolean';
         } else if (projectionItem.type == 'date') {
             currentField[projectionItem.technical_name] = 'Date';
-        } else if (projectionItem.type == 'currency') {
-            currentField[projectionItem.technical_name] = {
-                value: 'Number',
-                currency: 'String'
-            }
         } else if (projectionItem.type == 'feed') {
             currentField[projectionItem.technical_name] = [{
                 from: 'String',
@@ -83,7 +70,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
                 date: 'Date',
                 text: 'String'
             }];
-        } else if (projectionItem.type == 'address' || projectionItem.type == 'node') {
+        } else if (projectionItem.type == 'address' || projectionItem.type == 'node' || projectionItem.type == 'currency' || projectionItem.type == 'period') {
             currentField[projectionItem.technical_name] = {};
         } else if (projectionItem.type == 'file') {
             currentField[projectionItem.technical_name] = [{
@@ -110,10 +97,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
-    datamodel._file = {
-        type: Schema.Types.ObjectId,
-        ref: 'File'
-    }
 
     if (!addedUpdated) {
         projection[newId(projection)] = {
@@ -127,7 +110,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
             }
         }
     }
-
     if (!addedUser) {
         projection[newId(projection)] = {
             path: '',
@@ -138,20 +120,6 @@ DatamodelTools.buildDataModel = function (projection, index) {
             name: {
                 en: 'User',
                 fr: 'Utilisateur'
-            }
-        }
-    }
-
-    if (!addedFile) {
-        projection[newId(projection)] = {
-            path: '',
-            full_path: '_file',
-            technical_name: '_file',
-            type: 'item',
-            ref: 'File',
-            name: {
-                en: 'Files',
-                fr: 'Fichiers'
             }
         }
     }
