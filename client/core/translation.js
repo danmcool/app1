@@ -517,6 +517,22 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         end_time: {
             en: 'End Time',
             fr: 'Heure de fin'
+        },
+        hour: {
+            en: 'Hour',
+            fr: 'Heure'
+        },
+        minute: {
+            en: 'Minute',
+            fr: 'Minute'
+        },
+        action_event_object_name: {
+            en: 'Name of object',
+            fr: 'Nom de l`objet'
+        },
+        action_event_period: {
+            en: 'Period',
+            fr: 'Période'
         }
     };
     var translate = function translate(language) {

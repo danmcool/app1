@@ -48,6 +48,10 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         calendar: {
             en: 'Send calendar',
             fr: 'Envoyer calendrier'
+        },
+        add_event: {
+            en: 'Add Event',
+            fr: 'Ajouter événement'
         }
     }
 

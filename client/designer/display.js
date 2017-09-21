@@ -64,6 +64,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             en: 'Appointment',
             fr: 'Rendez-vous'
         },
+        appointment_properties: {
+            en: 'Appointment Configuration',
+            fr: 'Configuration rendez-vous'
+        },
         calculation: {
             en: 'Formula',
             fr: 'Formule'

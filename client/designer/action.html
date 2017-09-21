@@ -33,6 +33,18 @@
                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
+                    <label>{{sessionData.appData.action_event_object_name}}</label>
+                    <md-select ng-model="action.object_name_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
+                    <label>{{sessionData.appData.action_event_period}}</label>
+                    <md-select ng-model="action.period_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">

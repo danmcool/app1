@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify) {
+app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function () {
@@ -11,12 +11,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     });
 
     $scope.resolvePath = function (object, path) {
+        if (!path) return undefined;
         return path.split('.').reduce(function (previous, current) {
             return (previous ? previous[current] : undefined);
         }, object);
     }
 
     $scope.resolvePathUpdate = function (object, path, value) {
+        if (!path) return undefined;
         path.split('.').reduce(function (previous, current, index, array) {
             if (index < array.length - 1) {
                 if (!previous[current]) {
@@ -52,6 +54,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.data = {};
+    $scope.dataLoaded = false;
     $scope.localdata = {};
     $scope.form = {};
     $scope.skip = 0;
@@ -67,6 +70,62 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.search_text = '';
     $scope.formLoaded = false;
     $scope.slides = [];
+    $scope.appointments = [];
+    $scope.selectedDate = undefined;
+    $scope.hours = [];
+    $scope.minutes = ['00', '15', '30', '45'];
+    $scope.full_hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'];
+    $scope.full_minutes = ['00', '15', '30', '45'];
+    $scope.days = [{
+            value: 0,
+            name: {
+                en: 'Sunday',
+                fr: 'Dimanche'
+            }
+        },
+        {
+            value: 1,
+            name: {
+                en: 'Monday',
+                fr: 'Lundi'
+            }
+        },
+        {
+            value: 2,
+            name: {
+                en: 'Tuesday',
+                fr: 'Mardi'
+            }
+        },
+        {
+            value: 3,
+            name: {
+                en: 'Wednesday',
+                fr: 'Mercredi'
+            }
+        },
+        {
+            value: 4,
+            name: {
+                en: 'Thursday',
+                fr: 'Jeudi'
+            }
+        },
+        {
+            value: 5,
+            name: {
+                en: 'Friday',
+                fr: 'Vendredi'
+            }
+        },
+        {
+            value: 6,
+            name: {
+                en: 'Saturday',
+                fr: 'Samedi'
+            }
+        }
+    ];
 
     $scope.getNextData = function () {
         if (!$scope.formLoaded) return;
@@ -94,6 +153,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     var initText = function () {
+        for (var i = 0; i < $scope.days.length; i++) {
+            $scope.days[i].translated_name = SessionService.translate($scope.days[i].name);
+        }
         $scope.form.title = SessionService.translate($scope.form.name);
         if ($scope.form.actions) {
             for (var i = 0; i < $scope.form.actions.length; i++) {
@@ -315,7 +377,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         var field = formDisplay[i].blocks[j].fields[k];
                         $scope.form.fields.push(field);
                         if (field.display == 'list' || field.display == 'item') {} else {
-                            if ($scope.form.datamodel.projection[field.projectionid].type == 'item' || $scope.form.datamodel.projection[field.projectionid].type == 'reference') {
+                            if (field.projectionid && ($scope.form.datamodel.projection[field.projectionid].type == 'item' || $scope.form.datamodel.projection[field.projectionid].type == 'reference')) {
                                 populate = populate + $scope.form.datamodel.projection[field.projectionid].full_path + ' ';
                             }
                         }
@@ -330,6 +392,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.data = new Datas({
                     datamodel_id: $scope.form.datamodel._id
                 });
+                $scope.dataLoaded = true;
                 initComponents();
             } else {
                 Datas.get({
@@ -338,6 +401,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     populate: populate.trim()
                 }, function (data) {
                     $scope.data = data;
+                    $scope.dataLoaded = true;
                     initComponents();
                 });
             }
@@ -393,8 +457,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         };
         xhr.send(file);
-    };
-    $scope.changeFiles = function (files, fieldId) {
+    }
+    changeFilesInFormsJS = function (files, fieldId) {
         if (files.length == 0) return;
         //$scope.dynamicForm.$setValidity({'Attachments': true});
         if (!$scope.localdata[fieldId]) $scope.localdata[fieldId] = [];
@@ -443,6 +507,50 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     })
                 break;
             }
+        }
+    }
+
+    var computeDateKey = function (date) {
+        return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("-");
+    }
+
+    $scope.dayAvailable = function (date) {
+        var today = new Date();
+        if (date < today) {
+            return false;
+        }
+        var dateKey = computeDateKey(date);
+        // check if day of week is allowed
+        if ($scope.data._appointment_properties && $scope.data._appointment_properties.days && $scope.data._appointment_properties.days[date.getDay()] && $scope.data._appointment_properties.days[date.getDay()].enabled) {
+            return true;
+
+            // check if there are free time slots
+            if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
+                return true;
+            } else {
+                return true;
+            }
+        } else {
+            // day of week not allowed
+            return false;
+        }
+    }
+
+    $scope.dayClick = function (date) {
+        $scope.selectedDate = date;
+        $scope.hours = [];
+        if ($scope.data._appointment_properties && $scope.data._appointment_properties.days && $scope.data._appointment_properties.days[date.getDay()]) {
+            for (var i = 0; i < $scope.full_hours.length; i++) {
+                if ($scope.full_hours[i].localeCompare($scope.data._appointment_properties.days[date.getDay()].start_time.hours) >= 0 && $scope.full_hours[i].localeCompare($scope.data._appointment_properties.days[date.getDay()].end_time.hours) <= 0) {
+                    $scope.hours.push($scope.full_hours[i]);
+                }
+            }
+        }
+        var dateKey = computeDateKey(date);
+        if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
+            $scope.appointments = $scope.data._appointments[dateKey];
+        } else {
+            $scope.appointments = [];
         }
     }
 
@@ -769,6 +877,31 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
         }, data).$promise.then(function (res) {
+            Calendar.get({
+                project_name: data[project_name_field],
+                start_date: data[start_date_field],
+                end_date: data[end_date_field],
+                user_id: data._user
+            }).$promise.then(function (res) {
+                gotoNextForm(formula, nextFormId, data);
+            })
+        }).catch(function (res) {
+            $scope.data = res.data;
+            updateErrorAlert();
+        });
+    }
+
+    $scope.addEvent = function (formula, nextFormId, setValue, objectNamePath, periodPath) {
+        updateComponents($scope.form, setValue, $scope.data);;
+        Event.update({
+            id: $scope.data._id
+        }, {
+            datamodel_id: $scope.form.datamodel._id,
+            object_name: $scope.resolvePath(data, objectNamePath),
+            start_time: $scope.resolvePath(data, periodPath).start_time,
+            end_time: $scope.resolvePath(data, periodPath).end_time,
+            _updated_at: $scope.data._updated_at
+        }).$promise.then(function (res) {
             Calendar.get({
                 project_name: data[project_name_field],
                 start_date: data[start_date_field],

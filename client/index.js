@@ -1,4 +1,4 @@
-var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'infinite-scroll', 'moment-picker', 'materialCarousel']).config(['$mdThemingProvider', function ($mdThemingProvider) {
+var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'materialCalendar', 'infinite-scroll', 'materialCarousel', 'materialCalendar']).config(['$mdThemingProvider', function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
         .accentPalette('amber');
@@ -117,6 +117,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
+]).factory('Event', ['$resource',
+    function ($resource) {
+        return $resource('/event/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
 ]).factory('Files', ['$resource',
     function ($resource) {
         return $resource('/file/:id', null, {
@@ -181,7 +189,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 
     var initSessionData = function (userResult, gotoApps) {
-        var language = $window.navigator.userLanguage || $window.navigator.language;
+        //var language = $window.navigator.userLanguage || $window.navigator.language;
         //alert(language);
         sessionData = {};
         sessionData.token = userResult.token;
@@ -313,10 +321,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             if (status === 'OK') {
                 maps[mapId].setCenter(results[0].geometry.location);
                 maps[mapId].setZoom(14);
-                var marker = new google.maps.Marker({
+                /*var marker = new google.maps.Marker({
                     map: maps[mapId],
                     position: results[0].geometry.location
-                });
+                });*/
             } else {
                 //alert('Geocode was not successful for the following reason: ' + status);
             }

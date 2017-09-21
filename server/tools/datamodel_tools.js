@@ -97,6 +97,8 @@ DatamodelTools.buildDataModel = function (projection, index) {
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
+    datamodel._appointments = Schema.Types.Mixed;
+    datamodel._appointment_properties = Schema.Types.Mixed;
 
     if (!addedUpdated) {
         projection[newId(projection)] = {

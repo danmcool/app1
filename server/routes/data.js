@@ -139,6 +139,7 @@ router.post('/:datamodelid/', function (req, res, next) {
     }
     if (req.body) {
         req.body._updated_at = Date.now();
+        delete req.body._appointments;
         if (remote) {
             req.body._company_code = remote_profile._company_code;
             req.body._user = remote_profile._user[0];
@@ -232,7 +233,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
             }
         }
     }
-    if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body._user) {
+    if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body || !req.body._user) {
         if (!remote) {
             return res.status(401).json({
                 err: 'Not enough user rights!'
@@ -266,6 +267,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
     }
     search_criteria._updated_at = Date.parse(req.body._updated_at);
     req.body._updated_at = Date.now();
+    delete req.body._appointments;
     Metadata.Objects[req.params.datamodelid].findOneAndUpdate(search_criteria, req.body, function (err, object) {
         if (err) return next(err);
         if (object) {
