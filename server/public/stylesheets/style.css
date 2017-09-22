@@ -25,6 +25,11 @@
 }
 */
 
+.md-inline-form md-select {
+    margin-top: 1px;
+    margin-left: 4px;
+}
+
 [draggable] {
     cursor: move;
 }

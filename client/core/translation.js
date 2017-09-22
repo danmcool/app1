@@ -518,6 +518,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'End Time',
             fr: 'Heure de fin'
         },
+        day: {
+            en: 'Day',
+            fr: 'Jour'
+        },
         hour: {
             en: 'Hour',
             fr: 'Heure'
@@ -533,6 +537,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         action_event_period: {
             en: 'Period',
             fr: 'Période'
+        },
+        whole_day: {
+            en: 'Whole Day',
+            fr: 'Journée entière'
         }
     };
     var translate = function translate(language) {

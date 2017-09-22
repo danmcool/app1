@@ -119,7 +119,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 ]).factory('Event', ['$resource',
     function ($resource) {
-        return $resource('/event/:id', null, {
+        return $resource('/client/event/:id', null, {
             'update': {
                 method: 'PUT'
             }

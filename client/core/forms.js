@@ -74,7 +74,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.selectedDate = undefined;
     $scope.hours = [];
     $scope.minutes = ['00', '15', '30', '45'];
-    $scope.full_hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'];
+    $scope.full_hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.full_minutes = ['00', '15', '30', '45'];
     $scope.days = [{
             value: 0,
@@ -344,6 +344,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.filesCount[formFields[i].id] = 0;
                 $scope.files[formFields[i].id] = [];
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+            } else if (formFields[i].display == 'appointment_properties') {
+                if (!$scope.data._appointment_properties || !$scope.data._appointment_properties.non_stop) {
+                    $scope.data._appointment_properties = {
+                        non_stop: {
+                            enabled: true
+                        }
+                    }
+                    $scope.updateWholeWeek($scope.data._appointment_properties);
+                }
             } else if (formFields[i].display == 'image') {
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
@@ -511,9 +520,62 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     var computeDateKey = function (date) {
-        return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("-");
+        return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-');
     }
 
+    $scope.updateWholeWeek = function (properties) {
+        if (!properties.days) {
+            properties.days = [];
+        }
+        if (properties.non_stop.enabled) {
+            for (var i = 0; i < 7; i++) {
+                properties.days[i] = {
+                    whole_day: true
+                };
+                $scope.updateWholeDay(properties.days[i]);
+            }
+        } else {
+            for (var i = 0; i < 7; i++) {
+                properties.days[i] = {
+                    whole_day: false
+                };
+                $scope.updateWholeDay(properties.days[i]);
+            }
+        }
+    }
+    $scope.updateWholeDay = function (day) {
+        if (day.whole_day) {
+            day.start_time = {
+                hours: '00',
+                minutes: '00'
+            };
+            day.end_time = {
+                hours: '24',
+                minutes: '00'
+            };
+        } else {
+            day.start_time = {
+                hours: '08',
+                minutes: '00'
+            };
+            day.end_time = {
+                hours: '19',
+                minutes: '00'
+            };
+        }
+    }
+    $scope.updateDate = function (fieldId, dateEntry, dateValueObject) {
+        if (dateValueObject.date) {
+            dateValueObject.date.setHours(parseInt(dateValueObject.hours ? dateValueObject.hours : '0'));
+            dateValueObject.date.setMinutes(parseInt(dateValueObject.minutes ? dateValueObject.minutes : '0'));
+            dateValueObject.date.setSeconds(0);
+            dateValueObject.date.setMilliseconds(0);
+            if (!$scope.localdata[fieldId]) {
+                $scope.localdata[fieldId] = {};
+            }
+            $scope.localdata[fieldId][dateEntry] = dateValueObject.date;
+        }
+    }
     $scope.dayAvailable = function (date) {
         var today = new Date();
         if (date < today) {
@@ -839,7 +901,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (navigator.msSaveBlob) {
                 navigator.msSaveBlob(blob, data[fileName] + '.csv');
             } else {
-                downloadElement.setAttribute("download", data[fileName] + '.csv');
+                downloadElement.setAttribute('download', data[fileName] + '.csv');
                 downloadElement.click();
             }
         } else {
@@ -897,18 +959,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             id: $scope.data._id
         }, {
             datamodel_id: $scope.form.datamodel._id,
-            object_name: $scope.resolvePath(data, objectNamePath),
-            start_time: $scope.resolvePath(data, periodPath).start_time,
-            end_time: $scope.resolvePath(data, periodPath).end_time,
+            object_name: $scope.resolvePath($scope.data, objectNamePath),
+            start_time: $scope.resolvePath($scope.data, periodPath).start_time,
+            end_time: $scope.resolvePath($scope.data, periodPath).end_time,
             _updated_at: $scope.data._updated_at
         }).$promise.then(function (res) {
             Calendar.get({
-                project_name: data[project_name_field],
-                start_date: data[start_date_field],
-                end_date: data[end_date_field],
-                user_id: data._user
+                project_name: $scope.resolvePath($scope.data, objectNamePath),
+                start_date: $scope.resolvePath($scope.data, periodPath).start_time,
+                end_date: $scope.resolvePath($scope.data, periodPath).end_time,
+                user_id: $scope._user
             }).$promise.then(function (res) {
-                gotoNextForm(formula, nextFormId, data);
+                gotoNextForm(formula, nextFormId, $scope.data);
             })
         }).catch(function (res) {
             $scope.data = res.data;
