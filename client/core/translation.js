@@ -541,6 +541,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         whole_day: {
             en: 'Whole Day',
             fr: 'Journée entière'
+        },
+        appointments: {
+            en: 'Appointments',
+            fr: 'Rendez-vous'
         }
     };
     var translate = function translate(language) {

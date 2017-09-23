@@ -13,39 +13,10 @@ var computePage = function (req) {
     }
 }
 
-var getDefaultProfile = function (userType) {
-    if (userType == Constants.UserProfileAdministrator) {
-        return Constants.UserProfileAdministratorDefault;
-    } else if (userType == Constants.UserProfilePrivate) {
-        return Constants.UserProfilePrivateDefault;
-    } else if (userType == Constants.UserProfilePublic) {
-        return Constants.UserProfilePublicDefault;
-    } else {
-        return null;
-    }
-}
-
-var getProfile = function (token, datamodelid) {
-    var user = SessionCache.userData[token];
-    var profile = user.profile.profile;
-    if (!profile) {
-        profile = {
-            datamodels: {}
-        };
-    }
-    if (!profile.datamodels[datamodelid]) {
-        profile.datamodels[datamodelid] = getDefaultProfile(SessionCache.userData[token].profile.type);
-        user.profile.profile = profile;
-        SessionCache.update(token, user);
-        profile = SessionCache.userData[token].profile.profile;
-    }
-    return profile;
-}
-
 router.get('/:datamodelid/', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
@@ -110,7 +81,7 @@ router.get('/:datamodelid/', function (req, res, next) {
 router.post('/:datamodelid/', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
@@ -160,7 +131,7 @@ router.post('/:datamodelid/', function (req, res, next) {
 router.get('/:datamodelid/:id', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
@@ -221,7 +192,7 @@ router.get('/:datamodelid/:id', function (req, res, next) {
 router.put('/:datamodelid/:id', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
@@ -285,7 +256,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
 });
 
 router.delete('/:datamodelid/:id', function (req, res, next) {
-    var profile = getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
+    var profile = SessionCache.getProfile(req.cookies[Constants.SessionCookie], req.params.datamodelid);
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].delete) {
         return res.status(401).json({
             err: 'Not enough user rights!'

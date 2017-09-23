@@ -317,7 +317,7 @@ var computeDateKey = function (date) {
     return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("-");
 }
 var computeTimeObject = function (time) {
-    return time.hours * 60 + time.minutes;
+    return time.hours * 60 + time.minutes * 1;
 }
 var computeTimeDate = function (time) {
     return time.getHours() * 60 + time.getMinutes();
@@ -342,7 +342,7 @@ router.put('/event/:id', function (req, res, next) {
     }
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
@@ -387,7 +387,7 @@ router.put('/event/:id', function (req, res, next) {
         }
     }
     search_criteria._updated_at = Date.parse(req.body._updated_at);
-    Metadata.Objects[req.params.datamodelid].findOne(search_criteria, function (err, object) {
+    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
         if (err) return next(err);
         if (!object) {
             delete search_criteria._updated_at;
@@ -438,12 +438,12 @@ router.put('/event/:id', function (req, res, next) {
                             var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
                             dayAgenda.push({
                                 start_time: {
-                                    hours: startTime.getHours(),
-                                    minutes: startTime.getMinutes()
+                                    hours: (startTime.getHours() < 10 ? '0' + startTime.getHours() : startTime.getHours()),
+                                    minutes: (startTime.getMinutes() < 10 ? '0' + startTime.getMinutes() : startTime.getMinutes())
                                 },
                                 end_time: {
-                                    hours: endTime.getHours(),
-                                    minutes: endTime.getMinutes()
+                                    hours: (endTime.getHours() < 10 ? '0' + endTime.getHours() : endTime.getHours()),
+                                    minutes: (endTime.getMinutes() < 10 ? '0' + endTime.getMinutes() : endTime.getMinutes())
                                 },
                                 user: {
                                     id: user._id,
@@ -451,8 +451,8 @@ router.put('/event/:id', function (req, res, next) {
                                     name: ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : ''))
                                 }
                             });
-                            Metadata.Objects[req.params.datamodelid].findOneAndUpdate(search_criteria, object, function (err, object) {
-                                Email.sendCalendar(userObject.email, req.query.object_name, req.query.start_date, req.query.end_date, dayAgenda.user.name);
+                            Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
+                                Email.sendCalendar(user.email, req.query.object_name, req.query.start_date, req.query.end_date, ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : '')));
                             });
                             return res.status(200).json({
                                 msg: 'Reservation done!'

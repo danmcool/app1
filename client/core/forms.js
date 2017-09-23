@@ -610,7 +610,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         var dateKey = computeDateKey(date);
         if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
-            $scope.appointments = $scope.data._appointments[dateKey];
+            $scope.appointments = $scope.data._appointments[dateKey].sort(function (a, b) {
+                return (a.start_time.hours * 60 + a.start_time.minutes * 1) - (b.start_time.hours * 60 + b.start_time.minutes * 1);
+            });
         } else {
             $scope.appointments = [];
         }
@@ -962,17 +964,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             object_name: $scope.resolvePath($scope.data, objectNamePath),
             start_time: $scope.resolvePath($scope.data, periodPath).start_time,
             end_time: $scope.resolvePath($scope.data, periodPath).end_time,
+            _user: $scope.data._user,
             _updated_at: $scope.data._updated_at
-        }).$promise.then(function (res) {
-            Calendar.get({
-                project_name: $scope.resolvePath($scope.data, objectNamePath),
-                start_date: $scope.resolvePath($scope.data, periodPath).start_time,
-                end_date: $scope.resolvePath($scope.data, periodPath).end_time,
-                user_id: $scope._user
-            }).$promise.then(function (res) {
-                gotoNextForm(formula, nextFormId, $scope.data);
-            })
-        }).catch(function (res) {
+        }).$promise.then(function (res) {}).catch(function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });

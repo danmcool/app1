@@ -285,8 +285,11 @@
                                             <md-header layout-padding>{{field.translated_name}}</md-header>
                                             <div layout="row" layout-xs="column">
                                                 <calendar-md ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" on-day-click="dayClick"></calendar-md>
-                                                <div ng-repeat="appointment in appointments">
-                                                    <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
+                                                <div layout="column">
+                                                    <header>{{sessionData.appData.appointments}}</header>
+                                                    <div ng-repeat="appointment in appointments">
+                                                        <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -294,8 +297,11 @@
                                             <md-header layout-padding>{{field.translated_name}}</md-header>
                                             <div layout-padding layout="row" layout-xs="column">
                                                 <calendar-md ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" on-day-click="dayClick"></calendar-md>
-                                                <div ng-repeat="appointment in appointments">
-                                                    <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
+                                                <div layout="column">
+                                                    <header>{{sessionData.appData.appointments}}</header>
+                                                    <div ng-repeat="appointment in appointments">
+                                                        <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div layout-padding layout="column" ng-if="selectedDate">
