@@ -33,10 +33,10 @@
                                                         <h3>{{resolvePath(data,field.title_full_path)}}</h3>
                                                     </div>
                                                     <div ng-switch-when="value">
-                                                        <h3>{{field.title_values[data[field.title]]}}</h3>
+                                                        <h3>{{field.title_values[resolvePath(data,field.title_full_path)]}}</h3>
                                                     </div>
                                                     <div ng-switch-when="currency">
-                                                        <h3>{{data[field.title].value}} {{field.title_values[data[field.title].currency]}}</h3>
+                                                        <h3>{{resolvePath(data,field.title_full_path).value}} {{field.title_values[resolvePath(data,field.title_full_path).currency]}}</h3>
                                                     </div>
                                                 </div>
                                                 <div ng-switch="field.subtitle_display">
@@ -44,10 +44,10 @@
                                                         <h4>{{resolvePath(data,field.subtitle_full_path)}}</h4>
                                                     </div>
                                                     <div ng-switch-when="value">
-                                                        <h4>{{field.subtitle_values[data[field.subtitle]]}}</h4>
+                                                        <h4>{{field.subtitle_values[resolvePath(data,field.subtitle_full_path)]}}</h4>
                                                     </div>
                                                     <div ng-switch-when="currency">
-                                                        <h4>{{data[field.subtitle].value}} {{field.subtitle_values[data[field.subtitle].currency]}}</h4>
+                                                        <h4>{{resolvePath(data,field.subtitle_full_path).value}} {{field.subtitle_values[resolvePath(data,field.subtitle_full_path).currency]}}</h4>
                                                     </div>
                                                 </div>
                                                 <p>{{data[field.date]|date:field.date_format}}</p>
@@ -167,8 +167,8 @@
                                 </div>
 
                                 <div ng-switch-when="editor">
-                                    <div layout-padding ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
+                                    <div ng-switch="field.disabled">
+                                        <div layout-padding ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle" style="white-space:pre-wrap">{{localdata[field.id]}}</p>
                                         </div>
