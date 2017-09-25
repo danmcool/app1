@@ -68,7 +68,7 @@
                             </md-input-container>
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.action_next_form}}</label>
-                                <md-select ng-model="action.next_form_id" ng-required="true">
+                                <md-select ng-model="item_action.next_form_id" ng-required="true">
                                     <md-option ng-repeat="form in forms" ng-value="form._id">{{form.translated_name}}</md-option>
                                 </md-select>
                             </md-input-container>
