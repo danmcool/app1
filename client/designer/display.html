@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <md-header layout-padding>{{sessionData.appData.form_actions}}</md-header>
-                        <div ng-repeat="action in field.item_actions">
+                        <div ng-repeat="item_action in field.item_actions">
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.new_action_name}}</label>
                                 <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="item_action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(item_action,'name',false,100)">
