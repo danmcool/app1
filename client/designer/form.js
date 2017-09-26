@@ -119,6 +119,9 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         if ($scope.form.display[section].blocks.length == 0) {
             $scope.form.display.splice(section, 1);
         }
+        for (var i = 0; i < $scope.form.display[section].blocks.length; i++) {
+            $scope.form.display[section].blocks[i].flex = 100 / $scope.form.display[section].blocks.length;
+        }
     }
 
     $scope.editAction = function (actionIndex) {
@@ -188,6 +191,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         text[$scope.sessionData.userData.properties.language] = '';
         $scope.form.display.push({
             blocks: [{
+                flex: 100,
                 fields: [{
                     text: text,
                     translated_name: '',
