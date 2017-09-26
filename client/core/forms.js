@@ -72,6 +72,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.slides = [];
     $scope.appointments = [];
     $scope.selectedDate = undefined;
+    $scope.today = new Date();
+    $scope.today_plus_1_year = new Date($scope.today.getTime() + 365 * 24 * 60 * 60 * 1000);
     $scope.hours = [];
     $scope.minutes = ['00', '15', '30', '45'];
     $scope.full_hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];

@@ -279,69 +279,57 @@
                                 </div>
 
                                 <div ng-switch-when="appointment">
-                                    <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
-                                            <div layout="row" layout-xs="column">
-                                                <calendar-md ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" on-day-click="dayClick"></calendar-md>
-                                                <div layout="column">
-                                                    <header>{{sessionData.appData.appointments}}</header>
-                                                    <div ng-repeat="appointment in appointments">
-                                                        <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
-                                                    </div>
-                                                </div>
+                                    <md-header layout-padding>{{field.translated_name}}</md-header>
+                                    <div layout-padding layout="row" layout-xs="column">
+                                        <calendar-md flex="50" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" on-day-click="dayClick"></calendar-md>
+                                        <div flex="50" layout="column">
+                                            <header>{{sessionData.appData.appointments}}</header>
+                                            <div ng-repeat="appointment in appointments">
+                                                <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
                                             </div>
                                         </div>
-                                        <div ng-switch-when="false">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
-                                            <div layout-padding layout="row" layout-xs="column">
-                                                <calendar-md ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" on-day-click="dayClick"></calendar-md>
-                                                <div layout="column">
-                                                    <header>{{sessionData.appData.appointments}}</header>
-                                                    <div ng-repeat="appointment in appointments">
-                                                        <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
-                                                    </div>
-                                                </div>
+                                    </div>
+                                    <div ng-if="(field.disabled==false)" layout-padding layout-xs="column" layout="row">
+                                        <div layout="column">
+                                            <md-header>{{sessionData.appData.start_time}}</md-header>
+                                            <div layout="row" class="md-inline-form">
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.day}}</label>
+                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="appointment.start_time.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'start_time', appointment.start_time)"></md-datepicker>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.hour}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.start_time.hours" ng-required="field.required" ng-change="updateDate(field.id, 'start_time', appointment.start_time)">
+                                                        <md-option ng-repeat="hour in hours" value="{{hour}}">{{hour}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.minute}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.start_time.minutes" ng-required="field.required" ng-change="updateDate(field.id, 'start_time', appointment.start_time)">
+                                                        <md-option ng-repeat="minute in minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
                                             </div>
-                                            <div layout-padding layout="column" ng-if="selectedDate">
-                                                <md-header>{{sessionData.appData.start_time}}</md-header>
-                                                <div layout="row" class="md-inline-form">
-                                                    <md-input-container class="md-block">
-                                                        <label>{{sessionData.appData.day}}</label>
-                                                        <md-datepicker ng-required="field.required" md-open-on-focus ng-model="appointment.start_time.date" ng-change="updateDate(field.id, 'start_time', appointment.start_time)"></md-datepicker>
-                                                    </md-input-container>
-                                                    <md-input-container class="md-block">
-                                                        <label>{{sessionData.appData.hour}}</label>
-                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.start_time.hours" ng-required="field.required" ng-change="updateDate(field.id, 'start_time', appointment.start_time)">
-                                                            <md-option ng-repeat="hour in hours" value="{{hour}}">{{hour}}</md-option>
-                                                        </md-select>
-                                                    </md-input-container>
-                                                    <md-input-container class="md-block">
-                                                        <label>{{sessionData.appData.minute}}</label>
-                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.start_time.minutes" ng-required="field.required" ng-change="updateDate(field.id, 'start_time', appointment.start_time)">
-                                                            <md-option ng-repeat="minute in minutes" value="{{minute}}">{{minute}}</md-option>
-                                                        </md-select>
-                                                    </md-input-container>
-                                                </div>
-                                                <md-header>{{sessionData.appData.end_time}}</md-header>
-                                                <div layout="row" class="md-inline-form">
-                                                    <md-input-container class="md-block">
-                                                        <label>{{sessionData.appData.day}}</label>
-                                                        <md-datepicker ng-required="field.required" md-open-on-focus ng-model="appointment.end_time.date" ng-change="updateDate(field.id, 'end_time', appointment.end_time)"></md-datepicker>
-                                                    </md-input-container>
-                                                    <md-input-container class="md-block">
-                                                        <label>{{sessionData.appData.hour}}</label>
-                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.end_time.hours" ng-required="field.required" ng-change="updateDate(field.id, 'end_time', appointment.end_time)">
-                                                            <md-option ng-repeat="hour in hours" value="{{hour}}">{{hour}}</md-option>
-                                                        </md-select>
-                                                    </md-input-container>
-                                                    <md-input-container class="md-block">
-                                                        <label>{{sessionData.appData.minute}}</label>
-                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.end_time.minutes" ng-required="field.required" ng-change="updateDate(field.id, 'end_time', appointment.end_time)">
-                                                            <md-option ng-repeat="minute in minutes" value="{{minute}}">{{minute}}</md-option>
-                                                        </md-select>
-                                                    </md-input-container>
-                                                </div>
+                                        </div>
+                                        <div layout="column">
+                                            <md-header>{{sessionData.appData.end_time}}</md-header>
+                                            <div layout="row" class="md-inline-form">
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.day}}</label>
+                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="appointment.end_time.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'end_time', appointment.end_time)"></md-datepicker>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.hour}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.end_time.hours" ng-required="field.required" ng-change="updateDate(field.id, 'end_time', appointment.end_time)">
+                                                        <md-option ng-repeat="hour in hours" value="{{hour}}">{{hour}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.minute}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.end_time.minutes" ng-required="field.required" ng-change="updateDate(field.id, 'end_time', appointment.end_time)">
+                                                        <md-option ng-repeat="minute in minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
                                             </div>
                                         </div>
                                     </div>

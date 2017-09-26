@@ -543,14 +543,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Journée entière'
         },
         appointments: {
-            en: 'Appointments',
-            fr: 'Rendez-vous'
+            en: 'Booked Timeslots',
+            fr: 'Créneaux reservés'
         }
     };
     var translate = function translate(language) {
         var appData = {};
         var keysOfText = Object.keys(text);
-        for (i = 0; i < keysOfText.length; i++) {
+        for (var i = 0; i < keysOfText.length; i++) {
             appData[keysOfText[i]] = text[keysOfText[i]][language];
         }
         return appData;
