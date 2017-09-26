@@ -93,7 +93,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }).then(function (result) {
             object[property] = result;
         });
-    };
+    }
 
     var saveFormForward = function (url) {
         DesignForm.update({
@@ -119,11 +119,11 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         if ($scope.form.display[section].blocks.length == 0) {
             $scope.form.display.splice(section, 1);
         }
-    };
+    }
 
     $scope.editAction = function (actionIndex) {
         saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + actionIndex + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
-    };
+    }
 
     $scope.deleteAction = function (actionIndex) {
         $scope.form.actions.splice(actionIndex, 1);
@@ -131,7 +131,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 
     $scope.editValue = function (value) {
         saveFormForward('/form_value_edit/' + value._id + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
-    };
+    }
 
     $scope.deleteValue = function (valueIndex) {
         $scope.form.values.splice(valueIndex, 1);
@@ -145,7 +145,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             translated_name: ''
         });
         saveFormForward('/form_action_edit/' + $scope.form._id + '?action=' + ($scope.form.actions.length - 1) + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
-    };
+    }
 
     $scope.newValue = function () {
         $mdDialog.show({
@@ -178,7 +178,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 saveFormForward('/form_value_edit/' + result + '?datamodel_id=' + $scope.form.datamodel._id + '&application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&form_id=' + $scope.form._id);
             }
         });
-    };
+    }
 
     $scope.newSection = function () {
         if (!$scope.form.display) {
@@ -197,7 +197,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                     }]
                 }]
         });
-    };
+    }
 
     $scope.newBlock = function (blocks) {
         if (!$scope.form.display) {
@@ -214,7 +214,10 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 id: computeNewId()
                 }]
         });
-    };
+        for (var i = 0; i < blocks.length; i++) {
+            blocks[i].flex = 100 / blocks.length;
+        }
+    }
 
     $scope.newField = function (fields) {
         var text = {};

@@ -452,10 +452,15 @@ router.put('/event/:id', function (req, res, next) {
                                 }
                             });
                             Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
+                                if (err) return next(err);
+                                if (!object) return res.status(400).json({
+                                    msg: 'Timeslot is unavailable!',
+                                    refresh: true
+                                });
                                 Email.sendCalendar(user.email, req.query.object_name, req.query.start_date, req.query.end_date, ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : '')));
-                            });
-                            return res.status(200).json({
-                                msg: 'Reservation done!'
+                                return res.status(200).json({
+                                    msg: 'Reservation done!'
+                                });
                             });
                         } else {
                             return res.status(400).json({
