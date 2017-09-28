@@ -6,16 +6,13 @@ var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
 
-var DataModel = Metadata.DataModel;
 var User = Metadata.User;
 var Company = Metadata.Company;
 var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
-var Workflow = Metadata.Workflow;
-var Form = Metadata.Form;
 
 var computePage = function (req) {
-    return pageOptions = {
+    return {
         skip: parseInt(req.query.skip) || Constants.QuerySkip,
         limit: parseInt(req.query.limit) || Constants.QueryLimit
     }
@@ -145,9 +142,9 @@ router.get('/application/', function (req, res, next) {
                 }
             }
             if (profileFound && profileFound.profile.applications[apps[i]._id]) {
-                for (var j = apps[i].workflows.length - 1; j >= 0; j--) {
-                    if (!profileFound.profile.applications[apps[i]._id].workflows[apps[i].workflows[j]._id]) {
-                        apps[i].workflows.splice(j, 1);
+                for (var k = apps[i].workflows.length - 1; k >= 0; k--) {
+                    if (!profileFound.profile.applications[apps[i]._id].workflows[apps[i].workflows[k]._id]) {
+                        apps[i].workflows.splice(k, 1);
                     }
                 }
             }
@@ -172,11 +169,15 @@ router.put('/user/:id', function (req, res, next) {
     User.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
     }), newUserProperties, function (err, object) {
-        if (err) return res.status(400).json({
-            errUser: err
-        });
-        res.json(object);
-        SessionCache.removeUserCache(userToken);
+        if (err) return next(err);
+        if (object) {
+            SessionCache.removeUserCache(userToken);
+            return res.json(object);
+        } else {
+            return res.status(401).json({
+                errUser: 'Not enough user rights'
+            });
+        }
     });
 });
 
@@ -302,7 +303,7 @@ router.get('/calendar', function (req, res, next) {
         _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
         validated: true
     }, 'email firstname lastname').exec(function (errUser, userObject) {
-        if (errUser) return next(err);
+        if (errUser) return next(errUser);
         if (!userObject) return res.status(400).json({
             err: 'Invalid parameters!'
         });
@@ -402,9 +403,8 @@ router.put('/event/:id', function (req, res, next) {
             if (startTime.getDay() == endTime.getDay()) {
                 var dateKey = computeDateKey(startTime);
                 if (!object._appointment_properties || !object._appointment_properties.days) {
-                    return res.status(400).json({
-                        msg: 'No days available!'
-                    });
+                    return res.status(400);
+                    // no days available!
                 }
                 var daysProperties = object._appointment_properties.days[startTime.getDay()];
                 if (daysProperties.enabled) {
@@ -453,26 +453,28 @@ router.put('/event/:id', function (req, res, next) {
                             });
                             Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
                                 if (err) return next(err);
-                                if (!object) return res.status(400).json({
-                                    msg: 'Timeslot is unavailable!',
-                                    refresh: true
-                                });
-                                Email.sendCalendar(user.email, req.query.object_name, req.query.start_date, req.query.end_date, ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : '')));
+                                if (!object) {
+                                    delete search_criteria._updated_at;
+                                    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+                                        if (err) return next(err);
+                                        res.status(400).json(object);
+                                        // Timeslot is unavailable!
+                                    });
+                                }
+                                Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : '')));
                                 return res.status(200).json({
                                     msg: 'Reservation done!'
                                 });
                             });
                         } else {
-                            return res.status(400).json({
-                                msg: 'Timeslot is unavailable!'
-                            });
+                            return res.status(400);
+                            // Timeslot is unavailable!
                         }
                     }
                 }
             } else {
-                return res.status(400).json({
-                    msg: 'Multiple day reservation is not yet available!'
-                });
+                return res.status(400);
+                //Multiple day reservation is not yet available!
             }
         }
     });
@@ -487,7 +489,7 @@ router.put('/notify/:user_id', function (req, res, next) {
         _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
         validated: true
     }, 'email firstname lastname').exec(function (errUser, userObject) {
-        if (errUser) return next(err);
+        if (errUser) return next(errUser);
         if (!userObject) return res.status(400).json({
             err: 'Invalid parameters!'
         });

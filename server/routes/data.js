@@ -4,10 +4,9 @@ var router = express.Router();
 var Constants = require('../tools/constants.js');
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
-var DataModel = Metadata.DataModel;
 
 var computePage = function (req) {
-    return pageOptions = {
+    return {
         skip: parseInt(req.query.skip) || 0,
         limit: parseInt(req.query.limit) || 10
     }

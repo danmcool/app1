@@ -75,7 +75,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.today = new Date();
     $scope.today_plus_1_year = new Date($scope.today.getTime() + 365 * 24 * 60 * 60 * 1000);
     $scope.hours = [];
-    $scope.minutes = ['00', '15', '30', '45'];
+    $scope.minutes = [];
     $scope.full_hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.full_minutes = ['00', '15', '30', '45'];
     $scope.days = [{
@@ -532,15 +532,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (properties.non_stop.enabled) {
             for (var i = 0; i < 7; i++) {
                 properties.days[i] = {
-                    whole_day: true
-                };
+                    whole_day: true,
+                    enabled: true
+                }
                 $scope.updateWholeDay(properties.days[i]);
             }
         } else {
             for (var i = 0; i < 7; i++) {
                 properties.days[i] = {
-                    whole_day: false
-                };
+                    whole_day: false,
+                    enabled: false
+                }
                 $scope.updateWholeDay(properties.days[i]);
             }
         }
@@ -568,18 +570,37 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
     $scope.updateDate = function (fieldId, dateEntry, dateValueObject) {
         if (dateValueObject.date) {
-            dateValueObject.date.setHours(parseInt(dateValueObject.hours ? dateValueObject.hours : '0'));
-            dateValueObject.date.setMinutes(parseInt(dateValueObject.minutes ? dateValueObject.minutes : '0'));
-            dateValueObject.date.setSeconds(0);
-            dateValueObject.date.setMilliseconds(0);
+            var date = dateValueObject.date;
+            $scope.hours = [];
+            if ($scope.data._appointment_properties && $scope.data._appointment_properties.days && $scope.data._appointment_properties.days[date.getDay()]) {
+                var day = $scope.data._appointment_properties.days[date.getDay()];
+                for (var i = 0; i < $scope.full_hours.length; i++) {
+                    if ($scope.full_hours[i].localeCompare(day.start_time.hours) >= 0 && $scope.full_hours[i].localeCompare(day.end_time.hours) <= 0) {
+                        $scope.hours.push($scope.full_hours[i]);
+                    }
+                }
+            }
+            if ($scope.hours.length > 0) {
+                $scope.minutes = ['00', '15', '30', '45']
+            } else {
+                $scope.minutes = [];
+            }
+            date.setHours(parseInt(dateValueObject.hours ? dateValueObject.hours : '0'));
+            date.setMinutes(parseInt(dateValueObject.minutes ? dateValueObject.minutes : '0'));
+            date.setSeconds(0);
+            date.setMilliseconds(0);
             if (!$scope.localdata[fieldId]) {
                 $scope.localdata[fieldId] = {};
             }
-            $scope.localdata[fieldId][dateEntry] = dateValueObject.date;
+            $scope.localdata[fieldId][dateEntry] = date;
         }
     }
     $scope.dayAvailable = function (date) {
         var today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
         if (date < today) {
             return false;
         }
@@ -602,14 +623,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     $scope.dayClick = function (date) {
         $scope.selectedDate = date;
-        $scope.hours = [];
-        if ($scope.data._appointment_properties && $scope.data._appointment_properties.days && $scope.data._appointment_properties.days[date.getDay()]) {
-            for (var i = 0; i < $scope.full_hours.length; i++) {
-                if ($scope.full_hours[i].localeCompare($scope.data._appointment_properties.days[date.getDay()].start_time.hours) >= 0 && $scope.full_hours[i].localeCompare($scope.data._appointment_properties.days[date.getDay()].end_time.hours) <= 0) {
-                    $scope.hours.push($scope.full_hours[i]);
-                }
-            }
-        }
         var dateKey = computeDateKey(date);
         if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
             $scope.appointments = $scope.data._appointments[dateKey].sort(function (a, b) {
@@ -652,6 +665,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .clickOutsideToClose(true)
             .title($scope.sessionData.appData.new_document_version)
             .textContent($scope.sessionData.appData.already_modified_document)
+            .ok($scope.sessionData.appData.ok)
+        );
+    }
+
+    var errorAlert = function (error) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.error)
+            .textContent(error)
             .ok($scope.sessionData.appData.ok)
         );
     }
@@ -968,9 +992,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             end_time: $scope.resolvePath($scope.data, periodPath).end_time,
             _user: $scope.data._user,
             _updated_at: $scope.data._updated_at
-        }).$promise.then(function (res) {}).catch(function (res) {
-            $scope.data = res.data;
-            updateErrorAlert();
+        }).$promise.then(function (res) {
+            gotoNextForm(formula, nextFormId, $scope.data);
+        }).catch(function (res) {
+            if (res.data) {
+                $scope.data = res.data;
+                initComponents();
+            }
+            errorAlert($scope.sessionData.appData.error_creating_appointment);
         });
     }
 

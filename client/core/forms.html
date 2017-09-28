@@ -349,7 +349,7 @@
                                         <div ng-switch-when="false" layout="column">
                                             <md-header layout-padding>{{field.translated_name}}</md-header>
                                             <md-input-container>
-                                                <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.non_stop.enabled" ng-change="updateWholeWeek(data._appointment_properties)">{{sessionData.appData.whole_day}}</md-checkbox>
+                                                <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.non_stop.enabled" ng-change="updateWholeWeek(data._appointment_properties)">{{sessionData.appData.whole_week}}</md-checkbox>
                                             </md-input-container>
                                             <div ng-if="!data._appointment_properties.non_stop.enabled" ng-repeat="day in days">
                                                 <div layout-padding>

@@ -302,6 +302,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'New document version',
             fr: 'Nouvelle version de document'
         },
+        error_creating_appointment: {
+            en: 'Reservation cannot be created, please verify the date and try again!',
+            fr: 'Le reservation n`est pas possible veuillez verifier les dates et re-essayer!'
+        },
         removal_confirmation: {
             en: 'Remove the object?',
             fr: 'Supprimer l’objet?'
@@ -354,7 +358,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Data Values',
             fr: 'Valeurs de données'
         },
-        new_value: {
+        new_data_value: {
             en: 'New Data Value',
             fr: 'Nouvelle valeur de données'
         },
@@ -542,11 +546,15 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Whole Day',
             fr: 'Journée entière'
         },
+        whole_week: {
+            en: 'Whole Week',
+            fr: 'Semaine entière'
+        },
         appointments: {
             en: 'Booked Timeslots',
             fr: 'Créneaux reservés'
         }
-    };
+    }
     var translate = function translate(language) {
         var appData = {};
         var keysOfText = Object.keys(text);

@@ -7,20 +7,16 @@ var Schema = mongoose.Schema;
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
-var Email = require('../tools/email.js');
 var DatamodelTools = require('../tools/datamodel_tools.js');
 
 var DataModel = Metadata.DataModel;
-var User = Metadata.User;
-var Company = Metadata.Company;
-var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
 var Workflow = Metadata.Workflow;
 var Form = Metadata.Form;
 var Value = Metadata.Value;
 
 var computePage = function (req) {
-    return pageOptions = {
+    return {
         skip: parseInt(req.query.skip) || Constants.QuerySkip,
         limit: parseInt(req.query.limit) || Constants.QueryLimit
     }
