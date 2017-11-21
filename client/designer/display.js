@@ -11,6 +11,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     $scope.block_index = $routeParams.block;
     $scope.field_index = $routeParams.field;
 
+    $scope.datamodels = [];
     $scope.display_type = {
         list: {
             en: 'List',
@@ -212,6 +213,16 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         };
         form_home.translated_name = SessionService.translate(form_home.name);
         $scope.forms.push(form_home);
+    });
+
+    DesignDataModel.query({
+        skip: 0,
+        limit: 500,
+    }, function (datamodels) {
+        for (var i = 0; i < datamodels.length; i++) {
+            datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+        }
+        $scope.datamodels = datamodels;
     });
 
     $scope.editText = function (object, property, multipleLines) {

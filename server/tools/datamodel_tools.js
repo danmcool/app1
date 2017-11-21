@@ -14,6 +14,7 @@ var newId = function (projection) {
 }
 
 var resolvePathObject = function (object, path) {
+    if (!path) return null;
     if (path == '') return object;
     return path.split('.').reduce(function (previous, current, index, array) {
         if (!previous[current]) {

@@ -96,8 +96,8 @@ Email.sendShare = function (email_address, cc_email_address, data_id, profile_id
         datamodel_id + '&data_id=' +
         data_id +
         '&profile_id=' +
-        profile_id + '">Open form</a><br><br><p>You are required to register on app1.cloud in order to access the form!</p>' +
-        '<br><a href="http://app1.cloud">App1.Cloud</a>');
+        profile_id + '">Open form</a><br><br><p>You are required to register on App1 in order to access the form!</p>' +
+        '<br><a href="http://' + Constants.WebAddress + '">App1</a>');
 }
 
 Email.sendSharePublic = function (email_address, profile_id, app_name, profile_name) {
@@ -111,7 +111,7 @@ Email.sendSharePublic = function (email_address, profile_id, app_name, profile_n
 Email.sendCalendar = function (email_address, projectName, startDate, endDate, userName) {
     try {
         cal = ical({
-            domain: 'app1.cloud',
+            domain: Constants.WebAddress,
             prodId: '//CloudApp1//calendar//EN',
             events: [{
                 start: new Date(startDate),

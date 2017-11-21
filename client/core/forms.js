@@ -620,6 +620,23 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             return false;
         }
     }
+    $scope.dayContent = function (date) {
+        var today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+        if (date < today) {
+            return '';
+        }
+        var dateKey = computeDateKey(date);
+        // check if there are free time slots
+        if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
+            return '' + $scope.data._appointments[dateKey].length;
+        } else {
+            return '';
+        }
+    }
 
     $scope.dayClick = function (date) {
         $scope.selectedDate = date;
