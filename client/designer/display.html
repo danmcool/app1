@@ -122,7 +122,7 @@
                             </md-button>
                         </md-input-container>
                     </div>
-                    <div ng-switch-when="shorttext|number|editor|feed|file|image|check|calendar|calculation|email|address" ng-switch-when-separator="|">
+                    <div ng-switch-when="shorttext|number|editor|feed|file|image|check|calendar|email|address" ng-switch-when-separator="|">
                         <div layout="row" layout-xs="column">
                             <md-input-container flex="auto" class="md-block">
                                 <md-checkbox ng-model="field.disabled">{{sessionData.appData.field_disabled}}</md-checkbox>
@@ -140,6 +140,24 @@
                             <md-select ng-model="field.projectionid" ng-required="true">
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
+                        </md-input-container>
+                    </div>
+                    <div ng-switch-when="calculation" ng-switch-when-separator="|">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.disabled">{{sessionData.appData.field_disabled}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.required">{{sessionData.appData.field_required}}</md-checkbox>
+                            </md-input-container>
+                        </div>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_name}}</label>
+                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                        </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.form_calculation}}</label>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.projectionid" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                         </md-input-container>
                     </div>
                     <div ng-switch-when="appointment|appointment_properties" ng-switch-when-separator="|">
