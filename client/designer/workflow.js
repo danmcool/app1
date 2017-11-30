@@ -71,6 +71,21 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
         });
     }
 
+    $scope.deleteForm = function (formIndex) {
+        var formId = $scope.workflow.forms[formIndex]._id;
+        $scope.workflow.forms.splice(formIndex, 1);
+        DesignWorkflow.update({
+            id: $scope.workflow._id
+        }, $scope.workflow).$promise.then(function (resWkf) {
+            DesignForm.remove({
+                    id: formId
+                }).$promise.then(function (res) {})
+                .catch(function (res) {
+                    /* show error*/
+                });
+        });
+    }
+
     $scope.save = function () {
         DesignWorkflow.update({
             id: $scope.workflow._id

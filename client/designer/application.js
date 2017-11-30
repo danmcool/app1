@@ -74,6 +74,21 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         });
     }
 
+    $scope.deleteWorkflow = function (workflowIndex) {
+        var workflowId = $scope.application.workflows[workflowIndex]._id;
+        $scope.application.workflows.splice(workflowIndex, 1);
+        DesignApplication.update({
+            id: $scope.application._id
+        }, $scope.application).$promise.then(function (resApp) {
+            DesignWorkflow.remove({
+                    id: workflowId
+                }).$promise.then(function (res) {})
+                .catch(function (res) {
+                    /* show error*/
+                });
+        });
+    }
+
     $scope.save = function () {
         DesignApplication.update({
             id: $scope.application._id

@@ -27,7 +27,7 @@ Email.send2 = function (email_address, cc_email_address, subject, text, html, ic
             // alternatively you could use `path` that points to a file or an url
             content: ical_content
         }
-    };
+    }
 
     console.log('Sending Mail');
     transporter.sendMail(message, function (error, info) {
