@@ -99,7 +99,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
 
     var keysOfDisplayType = Object.keys($scope.display_type);
     $scope.display_types = [];
-    for (i = 0; i < keysOfDisplayType.length; i++) {
+    for (var i = 0; i < keysOfDisplayType.length; i++) {
         $scope.display_types.push({
             translated_name: SessionService.translate($scope.display_type[keysOfDisplayType[i]]),
             type: keysOfDisplayType[i]
@@ -107,10 +107,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     }
     var keysOfTitleDisplayType = Object.keys($scope.title_display_type);
     $scope.title_display_types = [];
-    for (i = 0; i < keysOfTitleDisplayType.length; i++) {
+    for (var j = 0; j < keysOfTitleDisplayType.length; j++) {
         $scope.title_display_types.push({
-            translated_name: SessionService.translate($scope.title_display_type[keysOfTitleDisplayType[i]]),
-            type: keysOfTitleDisplayType[i]
+            translated_name: SessionService.translate($scope.title_display_type[keysOfTitleDisplayType[j]]),
+            type: keysOfTitleDisplayType[j]
         });
     }
 
@@ -172,14 +172,20 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.form.translated_name = SessionService.translate($scope.form.name);
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
         $scope.datamodel_keys = [];
-        if ($scope.form.datamodel) {
-            var datamodelkeys = Object.keys($scope.form.datamodel.projection);
-            for (var i = 0; i < datamodelkeys.length; i++) {
-                $scope.datamodel_keys.push({
-                    translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
-                    full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
-                    id: datamodelkeys[i]
-                });
+        if ($scope.field.type == 'item') {
+            if (field.ref && field.ref.startsWith('datas')) {
+                var datamodelId = field.ref.substring(5);
+            }
+        } else {
+            if ($scope.form.datamodel) {
+                var datamodelkeys = Object.keys($scope.form.datamodel.projection);
+                for (var i = 0; i < datamodelkeys.length; i++) {
+                    $scope.datamodel_keys.push({
+                        translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
+                        full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
+                        id: datamodelkeys[i]
+                    });
+                }
             }
         }
         if ($scope.form.actions) {

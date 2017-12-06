@@ -306,13 +306,22 @@ router.post('/datamodel', function (req, res, next) {
         });
     }
     SessionCache.filterCompanyCode(req, {});
-    if (req.body.properties && (req.body.properties.reference == Constants.DataModelUserId || req.body.properties.reference == Constants.DataModelFileId)) {
-        DataModel.create(req.body, function (err, object) {
-            if (err) return next(err);
-            Metadata.Objects[object._id] = Metadata.User;
-            module.exports = Metadata;
-            return res.json(object);
-        });
+    if (req.body.properties) {
+        if (req.body.properties.reference == Constants.DataModelUserId) {
+            DataModel.create(req.body, function (err, object) {
+                if (err) return next(err);
+                Metadata.Objects[object._id] = Metadata.User;
+                module.exports = Metadata;
+                return res.json(object);
+            });
+        } else if (req.body.properties.reference == Constants.DataModelFileId) {
+            DataModel.create(req.body, function (err, object) {
+                if (err) return next(err);
+                Metadata.Objects[object._id] = Metadata.File;
+                module.exports = Metadata;
+                return res.json(object);
+            });
+        }
     } else {
         var modelSchema;
         var index = {
@@ -321,7 +330,7 @@ router.post('/datamodel', function (req, res, next) {
                 name: Constants.DataModelIndexName,
                 weights: {}
             }
-        };
+        }
         try {
             modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
         } catch (e) {
