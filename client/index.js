@@ -194,7 +194,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData = {};
         sessionData.token = userResult.token;
         sessionData.userData = userResult.user;
-        sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + ' @ ' + (userResult.user.company.name ? userResult.user.company.name : '');
+        sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
         Applications.query().$promise.then(function (appResult) {
