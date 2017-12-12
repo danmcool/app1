@@ -85,10 +85,11 @@ router.post('/register', function (req, res) {
         }
         Company.create(company, function (errCompany, newCompany) {
             if (errCompany) return next(errCompany);
+            req.body.code = newCompany._id;
             Company.findOneAndUpdate({
                 _id: newCompany._id
             }, {
-                _company_code: newCompany._id
+                _company_code: req.body.code
             }, function (errCompanyFind, objectCompanyFind) {
                 if (errCompanyFind) return next(errCompanyFind);
                 var userprofileAdministrator = {
