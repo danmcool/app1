@@ -20,7 +20,7 @@ var Session = Metadata.Session;
 
 var randomString = function () {
     return Math.random().toString(36).substr(2, 8);
-};
+}
 
 router.put('/password', function (req, res) {
     if (!req.body.old || !req.body.new) {
@@ -69,6 +69,9 @@ router.post('/register', function (req, res) {
         });
     }
     var userName = req.body.email.toLowerCase();
+    if (req.body.company_name) {
+        req.body.company_name = req.body.company_name.trim();
+    }
     User.findOne({
         user: userName
     }, function (errUserFind, objectUserFind) {
@@ -76,20 +79,18 @@ router.post('/register', function (req, res) {
         if (objectUserFind) return res.status(400).json({
             msg: 'Registration: email is already used, please choose another email!'
         });
-        Company.findOne({
-            _company_code: req.body.code
-        }, function (errCompanyFind, objectCompanyFind) {
-            if (errCompanyFind) return next(errCompanyFind);
-            if (objectCompanyFind) return res.status(400).json({
-                msg: 'Registration: company code is already used, please use another code!'
-            });
-            var company = {
-                name: req.body.company_name,
-                _company_code: req.body.code,
-                applications: ['593d6a2b09290d1e3e9d9863', '58223c8dfaa281219c13beaf', '584185e59b20a92dd877ee9f', '586bbda98983994e00fc9757']
-            };
-            Company.create(company, function (errCompany, newCompany) {
-                if (errCompany) return next(errCompany);
+        var company = {
+            name: req.body.company_name,
+            applications: ['58209e223ee6583658eceedb', '586bbda98983994e00fc9757', '58223c8dfaa281219c13beaf', '5981c48700ba0804fc43b9b0']
+        }
+        Company.create(company, function (errCompany, newCompany) {
+            if (errCompany) return next(errCompany);
+            Company.findOneAndUpdate({
+                _id: newCompany._id
+            }, {
+                _company_code: newCompany._id
+            }, function (errCompanyFind, objectCompanyFind) {
+                if (errCompanyFind) return next(errCompanyFind);
                 var userprofileAdministrator = {
                     name: {
                         'en': 'Administrator'
