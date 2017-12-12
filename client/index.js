@@ -218,9 +218,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             });
             if (saveUserData) {
                 User.update({
-                    id: $scope.sessionData.userData._id
+                    id: sessionData.userData._id
                 }, {
-                    properties: $scope.sessionData.userData.properties
+                    properties: sessionData.userData.properties
                 });
             }
             if (gotoApps) {
