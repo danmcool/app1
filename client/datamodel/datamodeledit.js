@@ -155,24 +155,21 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         });
     };
 
-    $scope.editForm = function (formId) {
-        DesignWorkflow.update({
-            id: $scope.workflow._id
-        }, $scope.workflow).$promise.then(function (res) {
-            SessionService.init();
-            SessionService.location('/form_edit/' + formId + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
-        }).catch(function (res) {
-            $scope.application = res.application;
-            updateErrorAlert();
-        });
-    }
-
     var computeNewId = function () {
         var newId = Object.keys($scope.datamodel.projection).length;
         do {
             newId = newId + 1;
         } while ($scope.datamodel.projection[newId]);
         return newId;
+    }
+
+    $scope.changeFieldRef = function (field) {
+        for (var i = 0; i < $scope.datamodels.length; i++) {
+            if ($scope.datamodels[i]._id == field.ref_id) {
+                field.ref = $scope.datamodels[i].corrected_ref;
+                break;
+            }
+        }
     }
 
     $scope.newField = function (parent_path, parent_name) {

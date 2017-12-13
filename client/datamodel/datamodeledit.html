@@ -42,8 +42,8 @@
                     </div>
                     <md-input-container flex="auto" class="md-block" ng-if="field.type=='reference'||field.type=='item'">
                         <label>{{sessionData.appData.datamodel}}</label>
-                        <md-select ng-model="field.ref" ng-required="true">
-                            <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel.corrected_ref">{{datamodel.translated_name}}</md-option>
+                        <md-select ng-model="field.ref_id" ng-required="true" ng-change="changeFieldRef(field)">
+                            <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
                         </md-select>
                     </md-input-container>
                     <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}"></md-divider>
