@@ -172,11 +172,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.form.translated_name = SessionService.translate($scope.form.name);
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
         $scope.datamodel_keys = [];
-        if ($scope.field.type == 'item') {
-            if (field.ref && field.ref.startsWith('datas')) {
-                var datamodelId = field.ref.substring(5);
-            }
-        } else {
+        if ($scope.field.display != 'item' && $scope.field.display != 'reference') {
             if ($scope.form.datamodel) {
                 var datamodelkeys = Object.keys($scope.form.datamodel.projection);
                 for (var i = 0; i < datamodelkeys.length; i++) {
@@ -225,8 +221,32 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         skip: 0,
         limit: 500,
     }, function (datamodels) {
-        for (var i = 0; i < datamodels.length; i++) {
-            datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+        $scope.ref_datamodel_keys = [];
+        if ($scope.field.display == 'item' || $scope.field.display == 'reference') {
+            //$scope.field.projectionid
+            var datamodelId = '';
+            var isUser = false;
+            var isFile = false;
+            if (field.ref && field.ref.startsWith('datas')) {
+                var datamodelId = field.ref.substring(5);
+            } else if (field.ref.startsWith('User')) {
+                isUser = true;
+            } else if (field.ref.startsWith('File')) {
+                isFile = true;
+            }
+            for (var i = 0; i < datamodels.length; i++) {
+                datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+                if (isUser) {
+                    var datamodelkeys = Object.keys($scope.form.datamodel.projection);
+                    for (var i = 0; i < datamodelkeys.length; i++) {
+                        $scope.ref_datamodel_keys.push({
+                            translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
+                            full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
+                            id: datamodelkeys[i]
+                        });
+                    }
+                }
+            }
         }
         $scope.datamodels = datamodels;
     });

@@ -25,7 +25,7 @@
                                         <md-option ng-repeat="display in title_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container flex="auto" class="md-block">
+                                <md-input-container ng-if="field.title_display=='value'||field.title_display=='text'||field.title_display=='currency'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.title" ng-required="true">
                                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
@@ -37,6 +37,10 @@
                                         <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
+                                <md-input-container ng-if="field.title_display=='calculation'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.form_calculation}}</label>
+                                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.title_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
+                                </md-input-container>
                             </div>
                             <div flex>
                                 <md-header layout-padding>{{sessionData.appData.field_list_subtitle}}</md-header>
@@ -46,7 +50,7 @@
                                         <md-option ng-repeat="display in title_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container flex="auto" class="md-block">
+                                <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='text'||field.subtitle_display=='currency'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.subtitle">
                                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
@@ -57,6 +61,10 @@
                                     <md-select ng-model="field.subtitle_listofvalues">
                                         <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                                     </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.subtitle_display=='calculation'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.form_calculation}}</label>
+                                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.subtitle_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                                 </md-input-container>
                             </div>
                         </div>

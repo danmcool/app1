@@ -10,6 +10,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     });
 
+    $scope.calculation = function (object, calculation) {
+        var data = object;
+        return eval(calculation);
+    }
+
     $scope.resolvePath = function (object, path) {
         if (!path) return undefined;
         return path.split('.').reduce(function (previous, current) {

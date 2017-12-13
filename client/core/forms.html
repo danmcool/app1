@@ -37,16 +37,22 @@
                                                     <div ng-switch-when="currency">
                                                         <h3>{{resolvePath(data,field.title_full_path).value}} {{field.title_values[resolvePath(data,field.title_full_path).currency]}}</h3>
                                                     </div>
+                                                    <div ng-switch-when="calculation">
+                                                        <h4>{{calculation(data,field.title_calculation)}}</h4>
+                                                    </div>
                                                 </div>
                                                 <div ng-switch="field.subtitle_display">
                                                     <div ng-switch-when="text">
                                                         <h4>{{resolvePath(data,field.subtitle_full_path)}}</h4>
                                                     </div>
                                                     <div ng-switch-when="value">
-                                                        <h4>{{field.subtitle_values[resolvePath(data,field.subtitle_full_path)]}}</h4>
+                                                        <h4>{field.subtitle_values[resolvePath(data,field.subtitle_full_path)]}}</h4>
                                                     </div>
                                                     <div ng-switch-when="currency">
                                                         <h4>{{resolvePath(data,field.subtitle_full_path).value}} {{field.subtitle_values[resolvePath(data,field.subtitle_full_path).currency]}}</h4>
+                                                    </div>
+                                                    <div ng-switch-when="calculation">
+                                                        <h4>{{calculation(data,field.subtitle_calculation)}}</h4>
                                                     </div>
                                                 </div>
                                                 <p>{{data[field.date]|date:field.date_format}}</p>
