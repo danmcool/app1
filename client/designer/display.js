@@ -94,6 +94,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         currency: {
             en: 'Amount',
             fr: 'Montant'
+        },
+        calculation: {
+            en: 'Formula',
+            fr: 'Formule'
         }
     }
 
