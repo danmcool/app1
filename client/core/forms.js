@@ -271,8 +271,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                                 type: formValues[j].type
                             }, itemValues).$promise.then(function (resValues) {
                                 updateValuesForm(resValues.index, resValues.values);
-                            }).catch(function (res) {
-                                /* show error*/
                             });
                         }
                         break;
@@ -361,6 +359,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                                 type: formValues[j].type,
                             }, itemValues).$promise.then(function (resValues) {
                                 updateValuesItems(resValues.index, resValues.values);
+                            }).catch(function (res) {
+                                /* show error*/
                             });
                         }
                     }
