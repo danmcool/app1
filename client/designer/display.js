@@ -247,8 +247,8 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         skip: 0,
         limit: 500,
     }, function (datamodels) {
-        initDatamodelKeysRef();
         $scope.datamodels = datamodels;
+        initDatamodelKeysRef();
     });
 
     $scope.changeFieldDisplay = function (field) {
