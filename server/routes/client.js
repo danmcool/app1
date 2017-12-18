@@ -62,24 +62,16 @@ router.put('/value/:id', function (req, res, next) {
             };
         }
         if (userParams) {
-            User.find(userParams, 'user email firstname lastname').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (errUserObjects, userObjects) {
+            User.find(userParams, req.body.user_fields).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (errUserObjects, userObjects) {
                 if (errUserObjects) return next(errUserObjects);
                 if (!userObjects) return res.status(400).json({
                     'msg': 'Url is null!'
                 });
-                for (var i in userObjects) {
-                    result.values.push({
-                        _id: userObjects[i]._id,
-                        name: {
-                            en: ((userObjects[i].firstname ? userObjects[i].firstname : '') + ' ' + (userObjects[i].lastname ? userObjects[i].lastname : ''))
-                        },
-                        email: userObjects[i].email
-                    });
-                }
-                return res.status(200).json(result);
+                return res.status(200).json(userObjects);
             });
         }
     } else if (req.query.type == Constants.ValuesTypeQuery) {
+
         return res.status(200).json('');
     } else {
         return res.status(200).json('');

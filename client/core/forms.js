@@ -337,6 +337,22 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             };
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
+                            if (formFields[i].title_full_path) {
+                                var point = formFields[i].title_full_path.indexOf('.');
+                                if (point > 0) {
+                                    itemValues.user_fields = formFields[i].title_full_path.substring(0, point + 1);
+                                } else {
+                                    itemValues.user_fields = formFields[i].title_full_path;
+                                }
+                            }
+                            if (formFields[i].subtitle_full_path) {
+                                var point = formFields[i].subtitle_full_path.indexOf('.');
+                                if (point > 0) {
+                                    itemValues.user_fields = formFields[i].subtitle_full_path.substring(0, point + 1);
+                                } else {
+                                    itemValues.user_fields = formFields[i].subtitle_full_path;
+                                }
+                            }
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type,
