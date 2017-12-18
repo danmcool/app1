@@ -299,14 +299,14 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         }
         if ($scope.field.title) {
             if ($scope.field.display == 'item') {
-                $scope.field.title_full_path = ($scope.datamodel_ref.projection[$scope.field.title].path == '' ? $scope.datamodel_ref.projection[$scope.field.title].technical_name : $scope.datamodel_ref.projection[$scope.field.title].path + '.' + $scope.datamodel_ref.projection[$scope.field.title].technical_name);
+                $scope.field.title_full_path = ($scope.ref_datamodel.projection[$scope.field.title].path == '' ? $scope.ref_datamodel.projection[$scope.field.title].technical_name : $scope.ref_datamodel.projection[$scope.field.title].path + '.' + $scope.ref_datamodel.projection[$scope.field.title].technical_name);
             } else {
                 $scope.field.title_full_path = ($scope.form.datamodel.projection[$scope.field.title].path == '' ? $scope.form.datamodel.projection[$scope.field.title].technical_name : $scope.form.datamodel.projection[$scope.field.title].path + '.' + $scope.form.datamodel.projection[$scope.field.title].technical_name);
             }
         }
         if ($scope.field.subtitle) {
             if ($scope.field.display == 'item') {
-                $scope.field.subtitle_full_path = ($scope.datamodel_ref.projection[$scope.field.subtitle].path == '' ? $scope.datamodel_ref.projection[$scope.field.subtitle].technical_name : $scope.datamodel_ref.projection[$scope.field.subtitle].path + '.' + $scope.datamodel_ref.projection[$scope.field.subtitle].technical_name);
+                $scope.field.subtitle_full_path = ($scope.ref_datamodel.projection[$scope.field.subtitle].path == '' ? $scope.ref_datamodel.projection[$scope.field.subtitle].technical_name : $scope.ref_datamodel.projection[$scope.field.subtitle].path + '.' + $scope.ref_datamodel.projection[$scope.field.subtitle].technical_name);
             } else {
                 $scope.field.subtitle_full_path = ($scope.form.datamodel.projection[$scope.field.subtitle].path == '' ? $scope.form.datamodel.projection[$scope.field.subtitle].technical_name : $scope.form.datamodel.projection[$scope.field.subtitle].path + '.' + $scope.form.datamodel.projection[$scope.field.subtitle].technical_name);
             }
