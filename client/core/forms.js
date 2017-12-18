@@ -780,9 +780,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         notify(notifyUser, emailTitle, emailHtml);
         gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
     }
+
     $scope.subscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, $scope.data);
-        $scope.resolvePath($scope.data, actionItem).push($scope.sessionData.userData._id);
+        $scope.resolvePath($scope.data, itemPath).push($scope.sessionData.userData._id);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id

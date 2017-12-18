@@ -30,7 +30,7 @@
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='subscribe'||action.action=='unsubscribe'">
                     <label>{{sessionData.appData.action_subscription_list}}</label>
                     <md-select ng-model="action.item_path" ng-required="true">
-                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
