@@ -133,7 +133,7 @@
                     <div ng-switch-when="item" ng-switch-when-separator="|">
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>
-                            <md-select ng-model="field.items" ng-required="true">
+                            <md-select ng-model="field.projectionid" ng-required="true" ng-change="changeFieldDisplay(field)">
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
@@ -149,7 +149,7 @@
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.title" ng-required="true">
-                                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                        <md-option ng-repeat="datakey in ref_datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.title_display=='value'||field.title_display=='currency'" flex="auto" class="md-block">
@@ -170,7 +170,7 @@
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.subtitle">
-                                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                        <md-option ng-repeat="datakey in ref_datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='currency'" flex="auto" class="md-block">

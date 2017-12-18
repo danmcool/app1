@@ -150,10 +150,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             skip: localSkip,
             limit: localLimit,
             sort_by: $scope.form.sort_by
-        }).$promise.then(function (items) {
-            if (items.length < $scope.limit) $scope.stopScroll = true;
-            for (var i = 0; i < items.length; i++) {
-                $scope.datas.push(items[i]);
+        }).$promise.then(function (datas) {
+            if (datas.length < $scope.limit) $scope.stopScroll = true;
+            for (var i = 0; i < datas.length; i++) {
+                $scope.datas.push(datas[i]);
             }
             $scope.tempStopScroll = false;
         });
@@ -242,9 +242,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
     var updateValuesItems = function (index, newValues) {
         var formFields = $scope.form.fields[index];
-        var valuesFieldName = formFields.items + '_values';
+        var valuesFieldName = formFields.projectionid + '_values';
         formFields[valuesFieldName] = newValues;
-        $scope.data[formFields.items] = newValues;
+        $scope.data[formFields.projectionid] = newValues;
     }
     var initComponents = function () {
         var formFields = $scope.form.fields;
@@ -336,7 +336,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                                 index: i
                             };
                             itemValues.relation = formValues[j].values.relation;
-                            itemValues.id_list = $scope.data[formFields[i].items];
+                            itemValues.id_list = $scope.data[formFields[i].projectionid];
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type,
@@ -904,64 +904,63 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         notify(notifyUser, emailTitle, emailHtml);
         gotoNextForm(formula, nextFormId, data);
     }
-
-    $scope.download = function (data, dataFields, fileName) {
-        var content = 'sep=,\n';
-        for (var i = 0; i < dataFields.attributes.length; i++) {
-            content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + toString($scope.resolvePath(data, dataFields.attributes[i])).replace(/\"/g, '""') + '"' + '\n';
-        }
-        for (var i = 0; i < dataFields.items.length; i++) {
-            content += '"' + dataFields.items[i].name + '"' + ',' + '"' + data[dataFields.items[i].name].length + '"' + '\n';
-            if (data[dataFields.items[i].name].length > 0) {
-                for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
-                    content += '"' + dataFields.items[i].attributes[j] + '"' + ',';
-                }
-                content += '\n';
-                var objectItems = $scope.resolvePath(data, dataFields.items[i].name);
-                for (var k = 0; k < objectItems.length; k++) {
-                    for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
-                        content += '"' + toString($scope.resolvePath(objectItems[k], dataFields.items[i].attributes[j])).replace(/\"/g, '""') + '"' + ',';
+    /*    $scope.download = function (data, dataFields, fileName) {
+            var content = 'sep=,\n';
+            for (var i = 0; i < dataFields.attributes.length; i++) {
+                content += '"' + dataFields.attributes[i] + '"' + ',' + '"' + toString($scope.resolvePath(data, dataFields.attributes[i])).replace(/\"/g, '""') + '"' + '\n';
+            }
+            for (var i = 0; i < dataFields.projectionid.length; i++) {
+                content += '"' + dataFields.projectionid[i].name + '"' + ',' + '"' + data[dataFields.projectionid[i].name].length + '"' + '\n';
+                if (data[dataFields.projectionid[i].name].length > 0) {
+                    for (var j = 0; j < dataFields.projectionid[i].attributes.length; j++) {
+                        content += '"' + dataFields.projectionid[i].attributes[j] + '"' + ',';
                     }
                     content += '\n';
-                }
-            }
-        }
-        /*for (var i = 0; i < dataFields.details.length; i++) {
-                    content += '"' + dataFields.details[i].name + '"' + ',' + '"' + data[dataFields.details[i].name].length + '"' + '\n';
-                    if (data[dataFields.details[i].name].length > 0) {
-                        for (var j = 0; j < dataFields.details[i].attributes.length; j++) {
-                            content += '"' + dataFields.details[i].attributes[j] + '"' + ',';
+                    var objectItems = $scope.resolvePath(data, dataFields.projectionid[i].name);
+                    for (var k = 0; k < objectItems.length; k++) {
+                        for (var j = 0; j < dataFields.projectionid[i].attributes.length; j++) {
+                            content += '"' + toString($scope.resolvePath(objectItems[k], dataFields.projectionid[i].attributes[j])).replace(/\"/g, '""') + '"' + ',';
                         }
                         content += '\n';
-                        for (var k = 0; k < data[dataFields.items[i].name].length; k++) {
-                            for (var j = 0; j < dataFields.items[i].attributes.length; j++) {
-                                content += '"' + (data[dataFields.items[i].name][k][dataFields.items[i].attributes[j]] + '').replace(/\"/g, '""') + '"' + ',';
+                    }
+                }
+            }
+            for (var i = 0; i < dataFields.details.length; i++) {
+                        content += '"' + dataFields.details[i].name + '"' + ',' + '"' + data[dataFields.details[i].name].length + '"' + '\n';
+                        if (data[dataFields.details[i].name].length > 0) {
+                            for (var j = 0; j < dataFields.details[i].attributes.length; j++) {
+                                content += '"' + dataFields.details[i].attributes[j] + '"' + ',';
                             }
                             content += '\n';
+                            for (var k = 0; k < data[dataFields.projectionid[i].name].length; k++) {
+                                for (var j = 0; j < dataFields.projectionid[i].attributes.length; j++) {
+                                    content += '"' + (data[dataFields.projectionid[i].name][k][dataFields.projectionid[i].attributes[j]] + '').replace(/\"/g, '""') + '"' + ',';
+                                }
+                                content += '\n';
+                            }
                         }
                     }
-                }*/
-        var downloadElement = document.createElement('a');
-        downloadElement.setAttribute('target', '_blank'); //open file in new window
-        if (Blob !== undefined) {
-            var blob = new Blob([content], {
-                type: 'text/csv'
-            });
-            downloadElement.setAttribute('href', URL.createObjectURL(blob));
-            if (navigator.msSaveBlob) {
-                navigator.msSaveBlob(blob, data[fileName] + '.csv');
+            var downloadElement = document.createElement('a');
+            downloadElement.setAttribute('target', '_blank'); //open file in new window
+            if (Blob !== undefined) {
+                var blob = new Blob([content], {
+                    type: 'text/csv'
+                });
+                downloadElement.setAttribute('href', URL.createObjectURL(blob));
+                if (navigator.msSaveBlob) {
+                    navigator.msSaveBlob(blob, data[fileName] + '.csv');
+                } else {
+                    downloadElement.setAttribute('download', data[fileName] + '.csv');
+                    downloadElement.click();
+                }
             } else {
+                downloadElement.setAttribute('href', 'data:text/csv,' + encodeURIComponent(content));
                 downloadElement.setAttribute('download', data[fileName] + '.csv');
+                document.body.appendChild(downloadElement);
                 downloadElement.click();
+                document.body.removeChild(downloadElement);
             }
-        } else {
-            downloadElement.setAttribute('href', 'data:text/csv,' + encodeURIComponent(content));
-            downloadElement.setAttribute('download', data[fileName] + '.csv');
-            document.body.appendChild(downloadElement);
-            downloadElement.click();
-            document.body.removeChild(downloadElement);
-        }
-    }
+        }*/
     $scope.share = function (formula, nextFormId, setValue, constraint, email_field_name, form_id, data) {
         updateComponents($scope.form, setValue, data);
         Datas.update({

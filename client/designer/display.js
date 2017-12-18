@@ -169,6 +169,27 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         });
     }
 
+    var initDatamodelKeysRef = function () {
+        if ($scope.field) {
+            $scope.ref_datamodel_keys = [];
+            if ($scope.field.display == 'item' || $scope.field.display == 'reference') {
+                var datamodelref_id = $scope.form.datamodel.projection[$scope.field.projectionid].ref_id;
+                for (var i = 0; i < $scope.datamodels.length; i++) {
+                    if ($scope.datamodels[i]._id == datamodelref_id) {
+                        var datamodelkeys = Object.keys($scope.datamodels[i].projection);
+                        for (var j = 0; j < datamodelkeys.length; j++) {
+                            $scope.ref_datamodel_keys.push({
+                                translated_name: SessionService.translate($scope.datamodels[i].projection[datamodelkeys[j]].name),
+                                full_path: $scope.datamodels[i].projection[datamodelkeys[j]].full_path,
+                                id: datamodelkeys[j]
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {
@@ -225,35 +246,13 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         skip: 0,
         limit: 500,
     }, function (datamodels) {
-        $scope.ref_datamodel_keys = [];
-        if ($scope.field.display == 'item' || $scope.field.display == 'reference') {
-            //$scope.field.projectionid
-            var datamodelId = '';
-            var isUser = false;
-            var isFile = false;
-            if (field.ref && field.ref.startsWith('datas')) {
-                var datamodelId = field.ref.substring(5);
-            } else if (field.ref.startsWith('User')) {
-                isUser = true;
-            } else if (field.ref.startsWith('File')) {
-                isFile = true;
-            }
-            for (var i = 0; i < datamodels.length; i++) {
-                datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
-                if (isUser) {
-                    var datamodelkeys = Object.keys($scope.form.datamodel.projection);
-                    for (var i = 0; i < datamodelkeys.length; i++) {
-                        $scope.ref_datamodel_keys.push({
-                            translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
-                            full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
-                            id: datamodelkeys[i]
-                        });
-                    }
-                }
-            }
-        }
+        initDatamodelKeysRef();
         $scope.datamodels = datamodels;
     });
+
+    $scope.changeFieldDisplay = function (field) {
+        initDatamodelKeysRef();
+    }
 
     $scope.editText = function (object, property, multipleLines) {
         if (!object[property]) object[property] = {};
