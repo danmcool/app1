@@ -170,9 +170,9 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     }
 
     var initDatamodelKeysRef = function () {
-        if ($scope.field) {
-            $scope.ref_datamodel_keys = [];
-            if ($scope.field.display == 'item' || $scope.field.display == 'reference') {
+        $scope.ref_datamodel_keys = [];
+        if ($scope.field.display == 'item' || $scope.field.display == 'reference') {
+            if ($scope.field && $scope.field.projectionid) {
                 var datamodelref_id = $scope.form.datamodel.projection[$scope.field.projectionid].ref_id;
                 for (var i = 0; i < $scope.datamodels.length; i++) {
                     if ($scope.datamodels[i]._id == datamodelref_id) {
