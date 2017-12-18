@@ -255,7 +255,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 if (formFields[i].disabled) {
                     MapService.initMap('map' + formFields[i].id);
                     var address = $scope.localdata[formFields[i].id];
-                    MapService.geocodeAddress('map' + formFields[i].full_path, (address.address_line1 ? (address.address_line1 + ',') : '') + (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
+                    MapService.geocodeAddress('map' + formFields[i].id, (address.address_line1 ? (address.address_line1 + ',') : '') + (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
             } else if (formFields[i].display == 'selection' || formFields[i].display == 'currency') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);

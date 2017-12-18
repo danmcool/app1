@@ -299,7 +299,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         location: location
     }
 }]).factory('MapService', function MapService() {
-    var maps = {};
+    var maps = [];
 
     var initMap = function initMap(mapId) {
         maps[mapId] = new google.maps.Map(document.getElementById(mapId), {
