@@ -197,16 +197,14 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.form.translated_name = SessionService.translate($scope.form.name);
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
         $scope.datamodel_keys = [];
-        if ($scope.field.display != 'item' && $scope.field.display != 'reference') {
-            if ($scope.form.datamodel) {
-                var datamodelkeys = Object.keys($scope.form.datamodel.projection);
-                for (var i = 0; i < datamodelkeys.length; i++) {
-                    $scope.datamodel_keys.push({
-                        translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
-                        full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
-                        id: datamodelkeys[i]
-                    });
-                }
+        if ($scope.form.datamodel) {
+            var datamodelkeys = Object.keys($scope.form.datamodel.projection);
+            for (var i = 0; i < datamodelkeys.length; i++) {
+                $scope.datamodel_keys.push({
+                    translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
+                    full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
+                    id: datamodelkeys[i]
+                });
             }
         }
         if ($scope.form.actions) {
