@@ -80,8 +80,34 @@
                                     <md-list flex="auto">
                                         <md-list-item class="md-3-line" ng-repeat="item in field[field.projectionid+'_values']">
                                             <div class="md-list-item-text" layout="column">
-                                                <h3>{{item[field.title]}}</h3>
-                                                <h4>{{item[field.subtitle]}}</h4>
+                                                <div ng-switch="field.title_display">
+                                                    <div ng-switch-when="text">
+                                                        <h3>{{resolvePath(item,field.title_full_path)}}</h3>
+                                                    </div>
+                                                    <div ng-switch-when="value">
+                                                        <h3>{{field.title_values[resolvePath(item,field.title_full_path)]}}</h3>
+                                                    </div>
+                                                    <div ng-switch-when="currency">
+                                                        <h3>{{resolvePath(item,field.title_full_path).value}} {{field.title_values[resolvePath(item,field.title_full_path).currency]}}</h3>
+                                                    </div>
+                                                    <div ng-switch-when="calculation">
+                                                        <h4>{{calculation(item,field.title_calculation)}}</h4>
+                                                    </div>
+                                                </div>
+                                                <div ng-switch="field.subtitle_display">
+                                                    <div ng-switch-when="text">
+                                                        <h4>{{resolvePath(item,field.subtitle_full_path)}}</h4>
+                                                    </div>
+                                                    <div ng-switch-when="value">
+                                                        <h4>{field.subtitle_values[resolvePath(item,field.subtitle_full_path)]}}</h4>
+                                                    </div>
+                                                    <div ng-switch-when="currency">
+                                                        <h4>{{resolvePath(item,field.subtitle_full_path).value}} {{field.subtitle_values[resolvePath(item,field.subtitle_full_path).currency]}}</h4>
+                                                    </div>
+                                                    <div ng-switch-when="calculation">
+                                                        <h4>{{calculation(item,field.subtitle_calculation)}}</h4>
+                                                    </div>
+                                                </div>
                                                 <p>{{item[field.date]|date:field.date_format}}</p>
                                             </div>
                                             <div ng-repeat="action in field.item_actions" class="md-secondary" layout="row">
