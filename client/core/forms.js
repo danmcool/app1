@@ -336,7 +336,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                                 index: i
                             };
                             itemValues.relation = formValues[j].values.relation;
-                            itemValues.id_list = resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
+                            itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type,
