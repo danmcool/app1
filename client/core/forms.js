@@ -253,7 +253,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (formFields[i].display == 'address') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 if (formFields[i].disabled) {
-                    MapService.initMap('map' + field_id);
+                    MapService.initMap('map' + formFields[i].id);
                     var address = $scope.localdata[formFields[i].id];
                     MapService.geocodeAddress('map' + formFields[i].full_path, (address.address_line1 ? (address.address_line1 + ',') : '') + (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
