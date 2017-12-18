@@ -67,7 +67,8 @@ router.put('/value/:id', function (req, res, next) {
                 if (!userObjects) return res.status(400).json({
                     'msg': 'Url is null!'
                 });
-                return res.status(200).json(userObjects);
+                result.values = userObjects;
+                return res.status(200).json(result);
             });
         }
     } else if (req.query.type == Constants.ValuesTypeQuery) {
