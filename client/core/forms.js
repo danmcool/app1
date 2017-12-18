@@ -786,7 +786,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.resolvePath($scope.data, itemPath).push($scope.sessionData.userData._id);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
+            entry_id: $scope.data._id
         }, $scope.data).$promise.then(function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
