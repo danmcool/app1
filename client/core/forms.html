@@ -46,7 +46,7 @@
                                                         <h4>{{resolvePath(data,field.subtitle_full_path)}}</h4>
                                                     </div>
                                                     <div ng-switch-when="value">
-                                                        <h4>{field.subtitle_values[resolvePath(data,field.subtitle_full_path)]}}</h4>
+                                                        <h4>{{field.subtitle_values[resolvePath(data,field.subtitle_full_path)]}}</h4>
                                                     </div>
                                                     <div ng-switch-when="currency">
                                                         <h4>{{resolvePath(data,field.subtitle_full_path).value}} {{field.subtitle_values[resolvePath(data,field.subtitle_full_path).currency]}}</h4>
