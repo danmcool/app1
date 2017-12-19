@@ -719,7 +719,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         );
     }
 
-    var notify = function (notifyUser, emailTitle, emailHtml, itmeId) {
+    var notify = function (notifyUser, emailTitle, emailHtml, itemId) {
         if (!notifyUser) return;
         var notifyUserId;
         if (notifyUser == 'current') {
