@@ -232,7 +232,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 'name': SessionService.translate(newValues[k].name)
             });
             formFields.values_key[newValues[k]._id] =
-                SessionService.translate(newValues[k]);
+                SessionService.translate(newValues[k].name);
         }
     }
     var updateValuesTitle = function (index, newValues) {
