@@ -461,7 +461,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else {
                 formUrl = formUrl + '0?application_id=' + $routeParams.application_id;
             }
-            if (formUrl != $location.path()) {
+            if (formUrl != $location.url()) {
                 SessionService.location(formUrl);
             } else {
                 $route.reload();
