@@ -214,6 +214,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     var matchField = function (result, string) {
         if (!string) return;
         var fields = string.match(/data.([a-z_])+/g);
+        if (!fields) return;
         for (var i = 0; i < fields.length; i++) {
             result += fields[i].substr(5) + ' ';
         }
