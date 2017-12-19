@@ -211,6 +211,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
+    var matchField = function (result, string) {
+        if (!string) return;
+        var fields = string.match(/data.([a-z_])+/g);
+        for (var i = 0; i < fields.length; i++) {
+            result += fields[i].substr(5) + ' ';
+        }
+    }
+
     var updateValuesForm = function (index, newValues) {
         var formFields = $scope.form.fields[index];
         formFields.values = [];
@@ -338,22 +346,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
                             itemValues.user_fields = '';
-                            if (formFields[i].title_full_path) {
-                                var point = formFields[i].title_full_path.indexOf('.');
-                                if (point > 0) {
-                                    itemValues.user_fields = formFields[i].title_full_path.substring(0, point + 1);
-                                } else {
-                                    itemValues.user_fields = formFields[i].title_full_path;
-                                }
-                            }
-                            if (formFields[i].subtitle_full_path) {
-                                var point = formFields[i].subtitle_full_path.indexOf('.');
-                                if (point > 0) {
-                                    itemValues.user_fields = itemValues.user_fields + ' ' + formFields[i].subtitle_full_path.substring(0, point + 1);
-                                } else {
-                                    itemValues.user_fields = itemValues.user_fields + ' ' + formFields[i].subtitle_full_path;
-                                }
-                            }
+                            matchField(itemValues.user_fields, formFields[i].title_full_path);
+                            matchField(itemValues.user_fields, formFields[i].subtitle_full_path);
+                            matchField(itemValues.user_fields, formFields[i].title_calculation);
+                            matchField(itemValues.user_fields, formFields[i].subtitle_calculation);
+                            itemValues.user_fields = itemValues.user_fields.trim();
                             Value.update({
                                 id: formValues[j]._id,
                                 type: formValues[j].type,
