@@ -119,7 +119,7 @@
                                                         <md-button ng-click="deleteItem(action.formula, action.next_form_id, action.set_value, item._id, field.projectionid, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
                                                     </div>
                                                     <div ng-switch-when="move_item">
-                                                        <md-button ng-click="moveItem(action.formula, action.next_form_id, action.set_value, item._id, field.projectionid, action.destination_field_name, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                                        <md-button ng-click="moveItem(action.formula, action.next_form_id, action.set_value, item._id, field.full_path, action.destination_full_path, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
                                                     </div>
                                                     <div ng-switch-when="link_item">
                                                         <md-button ng-click="linkItem(action.formula, action.next_form_id, action.set_value, item._id, field.projectionid, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>

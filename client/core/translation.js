@@ -390,6 +390,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Mandatory',
             fr: 'Obligatoire'
         },
+        field_destination_datafield: {
+            en: 'Destination Data field',
+            fr: 'Champ de données de destination'
+        },
         field_datafield: {
             en: 'Data field',
             fr: 'Champ de données'

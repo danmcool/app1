@@ -861,7 +861,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             });
         });
     }
-    $scope.moveItem = function (formula, nextFormId, setValue, itemPath, itemId, destinationItemPath, notifyUser, emailTitle, emailHtml) {
+    $scope.moveItem = function (formula, nextFormId, setValue, itemId, itemPath, destinationItemPath, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, $scope.data);
         var itemList = $scope.resolvePath($scope.data, itemPath);
         for (var i = itemList.length - 1; i >= 0; i--) {
