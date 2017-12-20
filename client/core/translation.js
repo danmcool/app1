@@ -557,6 +557,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         appointments: {
             en: 'Booked Timeslots',
             fr: 'Créneaux reservés'
+        },
+        previous_messages: {
+            en: 'Previous Messages',
+            fr: 'Messages precedents'
         }
     }
     var translate = function translate(language) {

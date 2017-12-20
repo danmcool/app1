@@ -210,7 +210,7 @@
 
                                 <div ng-switch-when="feed">
                                     <div layout-padding>
-                                        <md-header>{{field.translated_previous}}</md-header>
+                                        <md-header>{{sessionData.appData.previous_messages}}</md-header>
                                         <div flex>
                                             <div ng-repeat="existing_feed in localdata[field.id]">
                                                 <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>

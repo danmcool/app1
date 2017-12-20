@@ -204,9 +204,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 } else if (fields[i].display != 'list' && fields[i].display != 'item') {
                     fields[i].translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].projectionid].name);
                 }
-                if (fields[i].previous) {
-                    fields[i].translated_previous = SessionService.translate(fields[i].previous);
-                }
             }
         }
     }
