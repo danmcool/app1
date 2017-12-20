@@ -209,17 +209,21 @@
                                 </div>
 
                                 <div ng-switch-when="feed">
-                                    <md-header layout-padding>{{field.translated_previous}}</md-header>
-                                    <div flex layout-padding>
-                                        <div ng-repeat="existing_feed in localdata[field.id]">
-                                            <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
-                                            <p class="subtitle">{{existing_feed.text}}</p>
+                                    <div layout-padding>
+                                        <md-header>{{field.translated_previous}}</md-header>
+                                        <div flex>
+                                            <div ng-repeat="existing_feed in localdata[field.id]">
+                                                <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
+                                                <p class="subtitle">{{existing_feed.text}}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <md-input-container flex="auto" ng-if="!field.disabled" class="md-block" layout-padding>
-                                        <label>{{field.translated_name}}</label>
-                                        <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
-                                    </md-input-container>
+                                    <div layout-padding ng-if="!field.disabled">
+                                        <md-input-container flex="auto" class="md-block">
+                                            <label>{{field.translated_name}}</label>
+                                            <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
+                                        </md-input-container>
+                                    </div>
                                 </div>
 
                                 <div ng-switch-when="file">
