@@ -12,9 +12,9 @@
 
                     <div ng-repeat="block in section.blocks" layout="column" flex="block.flex">
                         <div ng-repeat="field in block.fields" flex="auto">
-                            <div ng-switch="field.display" flex="auto" layout-padding>
+                            <div ng-switch="field.display" flex="auto">
 
-                                <div ng-switch-when="list">
+                                <div ng-switch-when="list" layout-padding>
                                     <md-input-container ng-if="show_search" flex="auto" class="md-block">
                                         <label>{{sessionData.appData.search_text}}</label>
                                         <input ng-model="search_text" name="SearchTextList" ng-change="search(search_text)">
@@ -71,7 +71,7 @@
                                     </md-list>
                                 </div>
 
-                                <div ng-switch-when="item">
+                                <div ng-switch-when="item" layout-padding>
                                     <md-header>{{field.translated_name}}</md-header>
                                     <md-list flex="auto">
                                         <md-list-item class="md-3-line" ng-repeat="item in field[field.projectionid+'_values']">
@@ -126,7 +126,7 @@
                                     </md-list>
                                 </div>
 
-                                <div ng-switch-when="shorttext">
+                                <div ng-switch-when="shorttext" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -146,7 +146,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="number">
+                                <div ng-switch-when="number" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -166,7 +166,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="currency" flex="auto" class="md-block">
+                                <div ng-switch-when="currency" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -193,7 +193,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="editor">
+                                <div ng-switch-when="editor" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -209,12 +209,14 @@
                                 </div>
 
                                 <div ng-switch-when="feed">
-                                    <md-header>{{field.translated_previous}}</md-header>
-                                    <div ng-repeat="existing_feed in localdata[field.id]">
-                                        <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
-                                        <p class="subtitle">{{existing_feed.text}}</p>
+                                    <md-header layout-padding>{{field.translated_previous}}</md-header>
+                                    <div flex layout-padding>
+                                        <div ng-repeat="existing_feed in localdata[field.id]">
+                                            <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
+                                            <p class="subtitle">{{existing_feed.text}}</p>
+                                        </div>
                                     </div>
-                                    <md-input-container flex="auto" ng-if="!field.disabled" class="md-block">
+                                    <md-input-container flex="auto" ng-if="!field.disabled" class="md-block" layout-padding>
                                         <label>{{field.translated_name}}</label>
                                         <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
                                     </md-input-container>
@@ -222,7 +224,7 @@
 
                                 <div ng-switch-when="file">
                                     <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
+                                        <div ng-switch-when="true" layout-padding>
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <div ng-repeat="file in localdata[field.id]">
                                                 <a class="md-body-2" href="/file/{{file._id}}" target="_blank">
@@ -231,44 +233,52 @@
                                             </div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-header>{{field.translated_name}}</md-header>
-                                            <div ng-repeat="file in files[field.id]">
-                                                <p class="subtitle">
-                                                    <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
-                                                    <md-button ng-click="removeFile(file._id, field.id)" class="md-primary">X</md-button>
-                                                </p>
+                                            <div layout-padding>
+                                                <md-header>{{field.translated_name}}</md-header>
+                                                <div ng-repeat="file in files[field.id]">
+                                                    <p class="subtitle">
+                                                        <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
+                                                        <md-button ng-click="removeFile(file._id, field.id)" class="md-primary">X</md-button>
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <p class="md-body-1" id="file_upload_{{field.id}}"></p>
-                                            <md-input-container ng-if="!field.disabled" class="md-block">
-                                                <input multiple accept="*/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="changeFilesInFormsJS(this.files,this.id)">
-                                            </md-input-container>
+                                            <div layout-padding>
+                                                <p class="md-body-1" id="file_upload_{{field.id}}"></p>
+                                                <md-input-container ng-if="!field.disabled" class="md-block">
+                                                    <input multiple accept="*/*" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="changeFilesInFormsJS(this.files,this.id)">
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div ng-switch-when="image">
                                     <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
+                                        <div ng-switch-when="true" layout-padding>
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <div class="material-carousel-container" material-carousel material-carousel-slides="slides"></div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-header>{{field.translated_name}}</md-header>
-                                            <div ng-repeat="image in files[field.id]">
-                                                <p class="subtitle">
-                                                    <a class="md-body-2" href="/file/{{image._id}}" target="_blank">{{image.name}}</a>
-                                                    <md-button ng-click="removeFile(image._id, field.id)" class="md-primary">X</md-button>
-                                                </p>
+                                            <div layout-padding>
+                                                <md-header>{{field.translated_name}}</md-header>
+                                                <div ng-repeat="image in files[field.id]">
+                                                    <p class="subtitle">
+                                                        <a class="md-body-2" href="/file/{{image._id}}" target="_blank">{{image.name}}</a>
+                                                        <md-button ng-click="removeFile(image._id, field.id)" class="md-primary">X</md-button>
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <p class="md-body-1" id="file_upload_{{field.id}}"></p>
-                                            <md-input-container ng-if="!field.disabled" class="md-block">
-                                                <input multiple accept="image/jpeg" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="changeFilesInFormsJS(this.files,this.id)">
-                                            </md-input-container>
+                                            <div layout-padding>
+                                                <p class="md-body-1" id="file_upload_{{field.id}}"></p>
+                                                <md-input-container ng-if="!field.disabled" class="md-block">
+                                                    <input multiple accept="image/jpeg" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="changeFilesInFormsJS(this.files,this.id)">
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="selection">
+                                <div ng-switch-when="selection" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -285,13 +295,13 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="check">
+                                <div ng-switch-when="check" layout-padding>
                                     <md-input-container>
                                         <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
                                     </md-input-container>
                                 </div>
 
-                                <div ng-switch-when="calendar">
+                                <div ng-switch-when="calendar" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -307,18 +317,20 @@
                                 </div>
 
                                 <div ng-switch-when="appointment">
-                                    <md-header>{{field.translated_name}}</md-header>
-                                    <div layout="row" layout-xs="column">
+                                    <div layout-padding>
+                                        <md-header>{{field.translated_name}}</md-header>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-padding>
                                         <calendar-md flex="50" flex-xs="100" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
-                                        <div flex="50" flex-xs="100" layout="column">
+                                        <div flex="45" flex-xs="100" layout="column">
                                             <header>{{sessionData.appData.appointments}}</header>
                                             <div ng-repeat="appointment in appointments">
                                                 <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-if="(field.disabled==false)" layout-xs="column" layout="row">
-                                        <div layout="column">
+                                    <div ng-if="(field.disabled==false)" layout-xs="column" layout="row" layout-padding>
+                                        <div layout="column" layout-align="space-between space-between">
                                             <md-header>{{sessionData.appData.start_time}}</md-header>
                                             <div layout="row" class="md-inline-form">
                                                 <md-input-container class="md-block">
@@ -363,7 +375,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="appointment_properties">
+                                <div ng-switch-when="appointment_properties" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <md-header>{{field.translated_name}}</md-header>
@@ -426,34 +438,12 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="appointment_old">
-                                    <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
-                                            <p class="md-body-1">{{field.translated_name}}</p>
-                                            <p class="subtitle">{{localdata[field.id].start_time|date:"dddd, YYYY/MM/DD HH:00"}} - {{localdata[field.id].end_time|date:"dddd, YYYY/MM/DD HH:00"}}</p>
-                                        </div>
-                                        <div ng-switch-when="false">
-                                            <md-header>{{field.translated_name}}</md-header>
-                                            <div layout="row" layout-xs="column">
-                                                <md-input-container flex>
-                                                    <label>{{sessionData.appData.start_time}}</label>
-                                                    <input ng-model="localdata[field.id].start_time" moment-picker="localdata[field.id].start_time" max-view="day" format="dddd, YYYY/MM/DD HH:00">
-                                                </md-input-container>
-                                                <md-input-container flex>
-                                                    <label>{{sessionData.appData.end_time}}</label>
-                                                    <input ng-model="localdata[field.id].end_time" moment-picker="localdata[field.id].end_time" max-view="day" format="dddd, YYYY/MM/DD HH:00">
-                                                </md-input-container>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div ng-switch-when="calculation" flex class="md-block">
+                                <div ng-switch-when="calculation" flex layout-padding>
                                     <p class="md-body-1">{{field.translated_name}}</p>
                                     <md-header>{{localdata[field.id]}}</md-header>
                                 </div>
 
-                                <div ng-switch-when="email">
+                                <div ng-switch-when="email" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -473,7 +463,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="address">
+                                <div ng-switch-when="address" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
