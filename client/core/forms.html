@@ -76,7 +76,7 @@
                                 </div>
 
                                 <div ng-switch-when="item">
-                                    <md-header layout-padding>{{field.translated_name}}</md-header>
+                                    <md-header>{{field.translated_name}}</md-header>
                                     <md-list flex="auto">
                                         <md-list-item class="md-3-line" ng-repeat="item in field[field.projectionid+'_values']">
                                             <div class="md-list-item-text" layout="column">
@@ -132,7 +132,7 @@
 
                                 <div ng-switch-when="shorttext">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id]}}</p>
                                         </div>
@@ -151,7 +151,7 @@
                                 </div>
 
                                 <div ng-switch-when="number">
-                                    <div layout-padding ng-switch="field.disabled">
+                                    <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id]}}</p>
@@ -171,7 +171,7 @@
                                 </div>
 
                                 <div ng-switch-when="currency" flex="auto" class="md-block">
-                                    <div layout-padding ng-switch="field.disabled">
+                                    <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id].value}} {{field.values_key[localdata[field.id].currency]}}</p>
@@ -199,7 +199,7 @@
 
                                 <div ng-switch-when="editor">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle" style="white-space:pre-wrap">{{localdata[field.id]}}</p>
                                         </div>
@@ -213,12 +213,12 @@
                                 </div>
 
                                 <div ng-switch-when="feed">
-                                    <md-header layout-padding>{{field.translated_previous}}</md-header>
-                                    <div layout-padding ng-repeat="existing_feed in localdata[field.id]">
+                                    <md-header>{{field.translated_previous}}</md-header>
+                                    <div ng-repeat="existing_feed in localdata[field.id]">
                                         <p class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
                                         <p class="subtitle">{{existing_feed.text}}</p>
                                     </div>
-                                    <md-input-container layout-padding flex="auto" ng-if="!field.disabled" class="md-block">
+                                    <md-input-container flex="auto" ng-if="!field.disabled" class="md-block">
                                         <label>{{field.translated_name}}</label>
                                         <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
                                     </md-input-container>
@@ -226,7 +226,7 @@
 
                                 <div ng-switch-when="file">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <div ng-repeat="file in localdata[field.id]">
                                                 <a class="md-body-2" href="/file/{{file._id}}" target="_blank">
@@ -235,7 +235,7 @@
                                             </div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <md-header>{{field.translated_name}}</md-header>
                                             <div ng-repeat="file in files[field.id]">
                                                 <p class="subtitle">
                                                     <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
@@ -252,12 +252,12 @@
 
                                 <div ng-switch-when="image">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <div class="material-carousel-container" material-carousel material-carousel-slides="slides"></div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <md-header>{{field.translated_name}}</md-header>
                                             <div ng-repeat="image in files[field.id]">
                                                 <p class="subtitle">
                                                     <a class="md-body-2" href="/file/{{image._id}}" target="_blank">{{image.name}}</a>
@@ -274,7 +274,7 @@
 
                                 <div ng-switch-when="selection">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{field.values_key[localdata[field.id]]}}</p>
                                         </div>
@@ -297,7 +297,7 @@
 
                                 <div ng-switch-when="calendar">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id]|date:"yyyy-MM-dd"}}</p>
                                         </div>
@@ -311,8 +311,8 @@
                                 </div>
 
                                 <div ng-switch-when="appointment">
-                                    <md-header layout-padding>{{field.translated_name}}</md-header>
-                                    <div layout-padding layout="row" layout-xs="column">
+                                    <md-header>{{field.translated_name}}</md-header>
+                                    <div layout="row" layout-xs="column">
                                         <calendar-md flex="50" flex-xs="100" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
                                         <div flex="50" flex-xs="100" layout="column">
                                             <header>{{sessionData.appData.appointments}}</header>
@@ -321,7 +321,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-if="(field.disabled==false)" layout-padding layout-xs="column" layout="row">
+                                    <div ng-if="(field.disabled==false)" layout-xs="column" layout="row">
                                         <div layout="column">
                                             <md-header>{{sessionData.appData.start_time}}</md-header>
                                             <div layout="row" class="md-inline-form">
@@ -370,7 +370,7 @@
                                 <div ng-switch-when="appointment_properties">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <md-header>{{field.translated_name}}</md-header>
                                             <div layout="row" layout-xs="column">
                                                 <calendar-md flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
                                                 <div ng-repeat="appointment in appointments">
@@ -379,7 +379,7 @@
                                             </div>
                                         </div>
                                         <div ng-switch-when="false" layout="column">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <md-header>{{field.translated_name}}</md-header>
                                             <md-input-container>
                                                 <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.non_stop.enabled" ng-change="updateWholeWeek(data._appointment_properties)">{{sessionData.appData.whole_week}}</md-checkbox>
                                             </md-input-container>
@@ -437,7 +437,7 @@
                                             <p class="subtitle">{{localdata[field.id].start_time|date:"dddd, YYYY/MM/DD HH:00"}} - {{localdata[field.id].end_time|date:"dddd, YYYY/MM/DD HH:00"}}</p>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <md-header>{{field.translated_name}}</md-header>
                                             <div layout="row" layout-xs="column">
                                                 <md-input-container flex>
                                                     <label>{{sessionData.appData.start_time}}</label>
@@ -452,14 +452,14 @@
                                     </div>
                                 </div>
 
-                                <div layout-padding ng-switch-when="calculation" flex class="md-block">
+                                <div ng-switch-when="calculation" flex class="md-block">
                                     <p class="md-body-1">{{field.translated_name}}</p>
-                                    <md-header layout-padding>{{localdata[field.id]}}</md-header>
+                                    <md-header>{{localdata[field.id]}}</md-header>
                                 </div>
 
                                 <div ng-switch-when="email">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle"><a href="mailto:{{localdata[field.id]}}">{{localdata[field.id]}}</a></p>
                                         </div>
@@ -479,7 +479,7 @@
 
                                 <div ng-switch-when="address">
                                     <div ng-switch="field.disabled">
-                                        <div layout-padding ng-switch-when="true">
+                                        <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <div layout="row" layout-xs="column" layout-sm="column">
                                                 <div flex="60" flex-xs="100" flex-sm="100" layout="column">
@@ -506,7 +506,7 @@
                                             </div>
                                         </div>
                                         <div ng-switch-when="false">
-                                            <md-header layout-padding>{{field.translated_name}}</md-header>
+                                            <md-header>{{field.translated_name}}</md-header>
                                             <md-input-container class="md-block">
                                                 <label>{{field.address_line1_translated_name}}</label>
                                                 <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
