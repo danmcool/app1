@@ -16,7 +16,7 @@
 
                     <div ng-repeat="block in section.blocks" layout="column" flex="block.flex">
                         <div ng-repeat="field in block.fields" flex="auto">
-                            <div ng-switch="field.display" flex="auto">
+                            <div ng-switch="field.display" flex="auto" layout-padding>
 
                                 <div ng-switch-when="list">
                                     <md-input-container ng-if="show_search" flex="auto" class="md-block">
