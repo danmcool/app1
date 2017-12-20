@@ -5,10 +5,6 @@
             <md-toolbar>
                 <div class="md-toolbar-tools" layout="row">
                     <span flex="95" md-colors="{'color': 'primary-50'}">{{form.title}}</span>
-                    <md-input-container ng-if="false">
-                        <label md-colors="{'color': 'primary-50'}">{{sessionData.appData.search_text}}</label>
-                        <input md-colors="{'border-color': 'primary-100'}" ng-model="search_text" name="SearchTextToolbar" ng-change="search(search_text)">
-                    </md-input-container>
                 </div>
             </md-toolbar>
             <form ng-cloak name="dynamicForm" layout="column">
@@ -19,6 +15,11 @@
                             <div ng-switch="field.display" flex="auto" layout-padding>
 
                                 <div ng-switch-when="list">
+                                    <md-input-container ng-if="show_search" flex="auto" class="md-block">
+                                        <label>{{sessionData.appData.search_text}}</label>
+                                        <input ng-model="search_text" name="SearchTextList" ng-change="search(search_text)">
+                                    </md-input-container>
+
                                     <md-list flex="auto" infinite-scroll="getNextData()" infinite-scroll-distance="10">
                                         <md-list-item class="md-3-line" ng-repeat="data in datas">
                                             <div class="md-list-item-text" layout="column">
