@@ -241,6 +241,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             initSessionData(userResult, false);
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
+            sessionData.userData.cookie = '';
             location('/');
         });
     }
@@ -287,14 +288,12 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
     var location = function (url, noScroll) {
         var newCookie = $cookies.get('app1_token');
-        if (!newCookie) {
-            sessionData.userData.cookie = newCookie;
-            logout();
-            return;
-        }
         if (newCookie != sessionData.userData.cookie) {
             sessionData.userData.cookie = newCookie;
-            location('/applications');
+            $location.url('/applications');
+            if (noScroll) {} else {
+                $window.scrollTo(0, 0);
+            }
             return;
         }
         $location.url(url);
