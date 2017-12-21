@@ -238,7 +238,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
     var init = function () {
         UserStatus.get().$promise.then(function (userResult) {
-            sessionData.userData.cookie = $cookies.get('app1_token')
+            sessionData.userData.cookie = userResult.token;
             initSessionData(userResult, false);
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
@@ -266,7 +266,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             password: password
         });
         loginObject.$save(function (userResult) {
-            sessionData.userData.cookie = $cookies.get('app1_token')
+            sessionData.userData.cookie = userResult.token;
             initSessionData(userResult, true);
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
