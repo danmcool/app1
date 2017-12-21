@@ -198,7 +198,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-        sessionData.userData.cookie = $cookies.get('app1_token');
+        sessionData.userData.cookie = userResult.token;
         Applications.query().$promise.then(function (appResult) {
             sessionData.applications = appResult;
             var apps = sessionData.applications;
@@ -238,7 +238,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
     var init = function () {
         UserStatus.get().$promise.then(function (userResult) {
-            sessionData.userData.cookie = userResult.token;
             initSessionData(userResult, false);
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
@@ -266,7 +265,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             password: password
         });
         loginObject.$save(function (userResult) {
-            sessionData.userData.cookie = userResult.token;
             initSessionData(userResult, true);
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
