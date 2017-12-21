@@ -290,23 +290,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
     var location = function (url, noScroll) {
         var newCookie = $cookies.get('app1_token');
-        if (!newCookie) {
-            sessionData = {
-                userData: {
-                    properties: {
-                        theme: 'default',
-                        language: 'en'
-                    },
-                    cookie: ''
-                },
-                applicationName: 'App1'
-            }
-            sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-            $location.url('/');
-            if (noScroll) {} else {
-                $window.scrollTo(0, 0);
-            }
-        } else if (newCookie != sessionData.userData.cookie) {
+        if (newCookie && newCookie != sessionData.userData.cookie) {
             sessionData.userData.cookie = newCookie;
             $location.url('/applications');
             if (noScroll) {} else {
