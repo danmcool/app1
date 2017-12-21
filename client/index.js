@@ -152,7 +152,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications, User) {
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', '$cookies', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, $cookies, Login, Logout, UserStatus, Applications, User) {
     var sessionData = {
         userData: {
             properties: {
