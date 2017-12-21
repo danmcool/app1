@@ -1,4 +1,4 @@
-var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'ngCookies', 'materialCalendar', 'infinite-scroll', 'materialCarousel', 'materialCalendar']).config(['$mdThemingProvider', function ($mdThemingProvider) {
+var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'materialCalendar', 'infinite-scroll', 'materialCarousel', 'materialCalendar']).config(['$mdThemingProvider', function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
         .accentPalette('amber');
@@ -152,14 +152,13 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', '$cookies', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, $cookies, Login, Logout, UserStatus, Applications, User) {
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications, User) {
     var sessionData = {
         userData: {
             properties: {
                 theme: 'default',
                 language: 'en'
-            },
-            cookie: ''
+            }
         },
         applicationName: 'App1',
         appData: {}
@@ -198,7 +197,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-        sessionData.userData.cookie = userResult.token;
         Applications.query().$promise.then(function (appResult) {
             sessionData.applications = appResult;
             var apps = sessionData.applications;
@@ -227,9 +225,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
             if (gotoApps) {
                 sessionData.applicationName = sessionData.appData.home;
-                $location.url('/applications');
-            } else if ($location.path() == '/') {
-                $location.url('/applications');
+                location('/applications');
+            } else
+            if ($location.path() == '/') {
+                location('/applications');
             }
         }).catch(function (error) {
             // shows an error loading applications
@@ -240,7 +239,6 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             initSessionData(userResult, false);
         }).catch(function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-            sessionData.userData.cookie = '';
             location('/');
         });
     }
@@ -277,30 +275,17 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 properties: {
                     theme: 'default',
                     language: 'en'
-                },
-                cookie: ''
+                }
             },
             applicationName: 'App1'
         };
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
         location('/');
-        if (noScroll) {} else {
-            $window.scrollTo(0, 0);
-        }
     }
     var location = function (url, noScroll) {
-        var newCookie = $cookies.get('app1_token');
-        if (newCookie && newCookie != sessionData.userData.cookie) {
-            sessionData.userData.cookie = newCookie;
-            $location.url('/applications');
-            if (noScroll) {} else {
-                $window.scrollTo(0, 0);
-            }
-        } else {
-            $location.url(url);
-            if (noScroll) {} else {
-                $window.scrollTo(0, 0);
-            }
+        $location.url(url);
+        if (noScroll) {} else {
+            $window.scrollTo(0, 0);
         }
     }
     return {
