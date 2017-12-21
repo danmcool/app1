@@ -159,7 +159,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 theme: 'default',
                 language: 'en'
             },
-            cookie: '';
+            cookie: ''
         },
         applicationName: 'App1',
         appData: {}
@@ -277,7 +277,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 properties: {
                     theme: 'default',
                     language: 'en'
-                }
+                },
+                cookie: ''
             },
             applicationName: 'App1'
         };
