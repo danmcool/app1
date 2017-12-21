@@ -227,10 +227,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
             if (gotoApps) {
                 sessionData.applicationName = sessionData.appData.home;
-                location('/applications');
-            } else
-            if ($location.path() == '/') {
-                location('/applications');
+                $location.url('/applications');
+            } else if ($location.path() == '/') {
+                $location.url('/applications');
             }
         }).catch(function (error) {
             // shows an error loading applications
