@@ -299,36 +299,41 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         }
         if ($scope.field.title) {
             if ($scope.field.display == 'item') {
-                $scope.field.title_full_path = ($scope.ref_datamodel.projection[$scope.field.title].path == '' ? $scope.ref_datamodel.projection[$scope.field.title].technical_name : $scope.ref_datamodel.projection[$scope.field.title].path + '.' + $scope.ref_datamodel.projection[$scope.field.title].technical_name);
-            } else {
+                if ($scope.ref_datamodel.projection[$scope.field.title]) {
+                    $scope.field.title_full_path = ($scope.ref_datamodel.projection[$scope.field.title].path == '' ? $scope.ref_datamodel.projection[$scope.field.title].technical_name : $scope.ref_datamodel.projection[$scope.field.title].path + '.' + $scope.ref_datamodel.projection[$scope.field.title].technical_name);
+                }
+            } else if ($scope.form.datamodel.projection[$scope.field.title]) {
                 $scope.field.title_full_path = ($scope.form.datamodel.projection[$scope.field.title].path == '' ? $scope.form.datamodel.projection[$scope.field.title].technical_name : $scope.form.datamodel.projection[$scope.field.title].path + '.' + $scope.form.datamodel.projection[$scope.field.title].technical_name);
             }
         }
-        if ($scope.field.subtitle) {
-            if ($scope.field.display == 'item') {
+    }
+    if ($scope.field.subtitle) {
+        if ($scope.field.display == 'item') {
+            if ($scope.ref_datamodel.projection[$scope.field.subtitle]) {
                 $scope.field.subtitle_full_path = ($scope.ref_datamodel.projection[$scope.field.subtitle].path == '' ? $scope.ref_datamodel.projection[$scope.field.subtitle].technical_name : $scope.ref_datamodel.projection[$scope.field.subtitle].path + '.' + $scope.ref_datamodel.projection[$scope.field.subtitle].technical_name);
-            } else {
-                $scope.field.subtitle_full_path = ($scope.form.datamodel.projection[$scope.field.subtitle].path == '' ? $scope.form.datamodel.projection[$scope.field.subtitle].technical_name : $scope.form.datamodel.projection[$scope.field.subtitle].path + '.' + $scope.form.datamodel.projection[$scope.field.subtitle].technical_name);
             }
+        } else if ($scope.form.datamodel.projection[$scope.field.subtitle]) {
+            $scope.field.subtitle_full_path = ($scope.form.datamodel.projection[$scope.field.subtitle].path == '' ? $scope.form.datamodel.projection[$scope.field.subtitle].technical_name : $scope.form.datamodel.projection[$scope.field.subtitle].path + '.' + $scope.form.datamodel.projection[$scope.field.subtitle].technical_name);
         }
-        DesignForm.update({
-            id: $scope.form._id
-        }, $scope.form).$promise.then(function (res) {
-            SessionService.init();
-            SessionService.location('/form_edit/' + $scope.form._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
-        }).catch(function (res) {
-            updateErrorAlert();
-        });
+    }
+    DesignForm.update({
+        id: $scope.form._id
+    }, $scope.form).$promise.then(function (res) {
+        SessionService.init();
+        SessionService.location('/form_edit/' + $scope.form._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
+    }).catch(function (res) {
+        updateErrorAlert();
+    });
     }
 
     var updateErrorAlert = function () {
-        $mdDialog.show(
-            $mdDialog.alert()
-            .parent(angular.element(document.body))
-            .clickOutsideToClose(true)
-            .title($scope.sessionData.appData.new_document_version)
-            .textContent($scope.sessionData.appData.already_modified_document)
-            .ok($scope.sessionData.appData.ok)
-        );
-    }
+    $mdDialog.show(
+        $mdDialog.alert()
+        .parent(angular.element(document.body))
+        .clickOutsideToClose(true)
+        .title($scope.sessionData.appData.new_document_version)
+        .textContent($scope.sessionData.appData.already_modified_document)
+        .ok($scope.sessionData.appData.ok)
+    );
+}
 }]);
