@@ -684,7 +684,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     var updateComponents = function (form, setValue, data) {
-        data._user = $scope.sessionData.userData._id;
+        //data._user = $scope.sessionData.userData._id;
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
