@@ -112,6 +112,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Activate',
             fr: 'Activer'
         },
+        app_profiles: {
+            en: 'Application User Profiles',
+            fr: 'Profiles utilisateur de l`application'
+        },
+        new_profile: {
+            en: 'New Application Profile',
+            fr: 'Nouveau profile de l`application'
+        },
+        default_profile: {
+            en: 'Default User Profile',
+            fr: 'Profiles utilisateur par défaut'
+        },
         home: {
             en: 'Home',
             fr: 'Accueil'

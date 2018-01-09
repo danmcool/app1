@@ -58,7 +58,7 @@ router.get('/application/:id/', function (req, res, next) {
     }
     Application.findOne(SessionCache.filterCompanyCode(req, {
         _id: req.params.id
-    })).populate('file workflows').exec(function (err, apps) {
+    })).populate('file workflows profiles').exec(function (err, apps) {
         if (err) return next(err);
         res.json(apps);
     });

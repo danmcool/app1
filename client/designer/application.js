@@ -52,6 +52,18 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         });
     }
 
+    $scope.editAppSecurity = function () {
+        DesignApplication.update({
+            id: $scope.application._id
+        }, $scope.application).$promise.then(function (res) {
+            SessionService.init();
+            SessionService.location('/application_security/' + $scope.application._id);
+        }).catch(function (res) {
+            $scope.application = res.application;
+            updateErrorAlert();
+        });
+    }
+
     $scope.newWorkflow = function () {
         var name = {};
         name[$scope.sessionData.userData.properties.language] = '';

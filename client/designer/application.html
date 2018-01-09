@@ -24,6 +24,18 @@
                 <md-input-container flex="auto" class="md-block">
                     <md-switch ng-disabled="false" ng-required="false" ng-model="application.active">{{sessionData.appData.activate}}</md-switch>
                 </md-input-container>
+                <md-card>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{sessionData.appData.app_profiles}}</span>
+                        </md-card-title-text>
+                        <md-card-actions layout="row" layout-align="end center">
+                            <md-button class="md-fab md-primary" ng-click="editAppSecurity()" aria-label="App Security">
+                                <md-icon>edit</md-icon>
+                            </md-button>
+                        </md-card-actions>
+                    </md-card-title>
+                </md-card>
                 <md-input-container flex="auto" class="md-block">
                     <p>{{sessionData.appData.app_wkf_type}}</p>
                     <md-radio-group ng-required="true" ng-model="application.type">

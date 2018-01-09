@@ -441,6 +441,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             templateUrl: 'designer/application.html',
             controller: 'ApplicationEditCtrl'
         })
+        .when('/application_security/:id', {
+            templateUrl: 'designer/applicationsecurity.html',
+            controller: 'ApplicationSecurityCtrl'
+        })
         .when('/application_share/:id', {
             templateUrl: 'designer/share.html',
             controller: 'ApplicationShareCtrl'
