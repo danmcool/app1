@@ -26,7 +26,7 @@ require('./tools/init_objects.js');
 
 // create instance of express
 var app = express();
-app.use(compression())
+//app.use(compression())
 
 var SessionCache = require('./tools/session_cache.js');
 var Constants = require('./tools/constants.js');
