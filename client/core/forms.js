@@ -850,7 +850,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         });
     }
 
-    $scope.deleteItem = function (formula, nextFormId, setValue, itemPath, itemId, notifyUser, emailTitle, emailHtml) {
+    $scope.deleteItem = function (formula, nextFormId, setValue, itemId, itemPath, notifyUser, emailTitle, emailHtml) {
         $mdDialog.show(
             $mdDialog.confirm()
             .parent(angular.element(document.body))
