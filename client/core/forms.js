@@ -506,7 +506,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     changeFilesInFormsJS = function (files, fieldId) {
         if (files.length == 0) return;
         //$scope.dynamicForm.$setValidity({'Attachments': true});
-        if (!$scope.localdata[fieldId]) $scope.localdata[fieldId] = [];
+        if (!$scope.localdata[fieldId]) {
+            $scope.localdata[fieldId] = [];
+        }
+        for (k = files.length - 1; k >= 0; k--) {
+            if (files[k].size / 1048576 > 35) {
+                files.splice(k, 1);
+            }
+        }
         $scope.filesCount[fieldId] = files.length;
         $scope.currentFile[fieldId] = 1;
         document.getElementById('file_upload_' + fieldId).textContent = $scope.sessionData.appData.uploading_in_progress + ' ' + $scope.currentFile[fieldId] + '/' + $scope.filesCount[fieldId];
