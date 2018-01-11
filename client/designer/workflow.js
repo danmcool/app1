@@ -117,6 +117,11 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
     };
     $scope.changeFile = function (files) {
         if (files.length != 1) return;
+        for (k = files.length - 1; k >= 0; k--) {
+            if (files[k].size / 1048576 > 35) {
+                files.splice(k, 1);
+            }
+        }
         document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' 1/1';
         var file = new Files({
             'name': files[0].name,
