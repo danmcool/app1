@@ -57,7 +57,7 @@ app1.controller('WorkflowsCtrl', ['$scope', '$routeParams', '$location', 'Sessio
         } else if (workflow.type == 'file') {
             SessionService.location('/file/' + $routeParams.application_id + '?iframe_file=' + workflow.file + '&workflow_id=' + workflow._id);
         } else {
-            SessionService.location('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id);
+            SessionService.location('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + workflow._id);
         }
     }
 

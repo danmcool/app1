@@ -49,10 +49,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (apps) {
             for (var i = 0; i < apps.length; i++) {
                 if (apps[i]._id == $routeParams.application_id) {
-                    $scope.sessionData.applicationName = SessionService.translate(apps[i].name);
-                    $scope.sessionData.application_id = $routeParams.application_id;
-                    SessionService.setSessionData($scope.sessionData);
-                    break;
+                    for (var j = 0; j < apps[i].workflows.length; j++) {
+                        if (apps[i].workflows[j]._id == $routeParams.workflow_id) {
+                            $scope.sessionData.applicationName = SessionService.translate(apps[i].name) + ' - ' + SessionService.translate(apps[i].workflows[j].name);
+                            $scope.sessionData.application_id = $routeParams.application_id;
+                            SessionService.setSessionData($scope.sessionData);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -463,7 +467,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         } else {
             var formUrl = '/form/' + nextFormId + '/';
             if (data && data._id) {
-                formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id;
+                formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
                 if (formula) {
                     keys = Object.keys(formula);
                     for (i = 0; i < keys.length; i++) {
@@ -471,7 +475,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             } else {
-                formUrl = formUrl + '0?application_id=' + $routeParams.application_id;
+                formUrl = formUrl + '0?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
             }
             if (formUrl != $location.url()) {
                 SessionService.location(formUrl);
