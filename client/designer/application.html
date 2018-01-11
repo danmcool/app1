@@ -21,9 +21,12 @@
                     <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="application.icon" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                     <md-icon>{{application.icon}}</md-icon>
                 </md-input-container>
-                <md-input-container flex="auto" class="md-block">
-                    <md-switch ng-disabled="false" ng-required="false" ng-model="application.active">{{sessionData.appData.activate}}</md-switch>
-                </md-input-container>
+                <div layout="row" layout-align="space-between center" flex>
+                    <md-input-container class="md-block">
+                        <md-switch ng-disabled="false" ng-required="false" ng-model="application.active">{{sessionData.appData.activate}}</md-switch>
+                    </md-input-container>
+                    <md-button ng-click="testApp()" class="md-primary">{{sessionData.appData.test_app}}</md-button>
+                </div>
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
@@ -39,7 +42,7 @@
                 <md-input-container flex="auto" class="md-block">
                     <p>{{sessionData.appData.app_wkf_type}}</p>
                     <md-radio-group ng-required="true" ng-model="application.type">
-                        <md-radio-button value="application">{{sessionData.appData.application}}</md-radio-button>
+                        <md-radio-button value="application">{{sessionData.appData.standard}}</md-radio-button>
                         <md-radio-button value="url">{{sessionData.appData.url}}</md-radio-button>
                         <md-radio-button value="file">{{sessionData.appData.file}}</md-radio-button>
                     </md-radio-group>

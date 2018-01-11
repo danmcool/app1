@@ -8,6 +8,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'New application',
             fr: 'Nouvelle application'
         },
+        test_app: {
+            en: 'Test application',
+            fr: 'Tester l`application'
+        },
         new_app_name: {
             en: 'Name of the application',
             fr: 'Nom de l`application'
@@ -91,6 +95,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         application: {
             en: 'Application',
             fr: 'Application'
+        },
+        standard: {
+            en: 'Forms',
+            fr: 'Formulaires'
         },
         url: {
             en: 'Link',

@@ -38,7 +38,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         }).then(function (result) {
             object[property] = result;
         });
-    };
+    }
 
     $scope.editWorkflow = function (workflowId) {
         DesignApplication.update({
@@ -98,6 +98,18 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
                 .catch(function (res) {
                     /* show error*/
                 });
+        });
+    }
+
+    $scope.testApp = function () {
+        DesignApplication.update({
+            id: $scope.application._id
+        }, $scope.application).$promise.then(function (res) {
+            SessionService.init();
+            SessionService.location('/workflows/' + $scope.application._id + '?test');
+        }).catch(function (res) {
+            $scope.application = res.application;
+            updateErrorAlert();
         });
     }
 

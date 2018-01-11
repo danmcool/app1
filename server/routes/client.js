@@ -85,7 +85,7 @@ router.get('/form/:id', function (req, res, next) {
     });
     Metadata.Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
         _id: {
-            '$eq': req.params.id
+            $eq: req.params.id
         }
     })).populate('datamodel values').exec(function (err, formObject) {
         if (err) return next(err);
@@ -99,8 +99,8 @@ router.get('/form/:id', function (req, res, next) {
 router.get('/application/', function (req, res, next) {
     var pageOptions = computePage(req);
     Application.find(SessionCache.filterApplicationCompanyCode(req, {
-        '_id': {
-            '$in': SessionCache.userData[req.cookies[Constants.SessionCookie]].company.applications
+        _id: {
+            $in: SessionCache.userData[req.cookies[Constants.SessionCookie]].company.applications
         },
         active: true
     })).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err,
@@ -143,6 +143,50 @@ router.get('/application/', function (req, res, next) {
             }
         }
         res.json(apps);
+    });
+});
+
+router.get('/application/:id', function (req, res, next) {
+    var pageOptions = computePage(req);
+    Application.findOne(SessionCache.filterApplicationCompanyCode(req, {
+        _id: req.params.id
+    })).populate('profiles default_profile workflows').exec(function (err,
+        app) {
+        if (err) return next(err);
+        var remoteProfiles = SessionCache.userData[req.cookies[Constants.SessionCookie]].remote_profiles;
+        var userToken = req.cookies[Constants.SessionCookie];
+        if (!app.profiles || app.profiles.length == 0) {
+            if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+                return res.json({});
+            }
+        }
+        var profileFound;
+        if (SessionCache.userData[userToken].profile.type != Constants.UserProfilePublic) {
+            profileFound = app.default_profile;
+        }
+        for (var j = 0; j < remoteProfiles.length; j++) {
+            if (remoteProfiles[j].profile.applications[app._id]) {
+                if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+                    if (remoteProfiles[j].type == Constants.UserProfileShare) {
+                        profileFound = remoteProfiles[j];
+                        break;
+                    }
+                } else {
+                    if (remoteProfiles[j].type == Constants.UserProfileApplication) {
+                        profileFound = remoteProfiles[j];
+                        break;
+                    }
+                }
+            }
+        }
+        if (profileFound && profileFound.profile.applications[app._id]) {
+            for (var k = app.workflows.length - 1; k >= 0; k--) {
+                if (!profileFound.profile.applications[app._id].workflows[app.workflows[k]._id]) {
+                    app.workflows.splice(k, 1);
+                }
+            }
+        }
+        res.json(app);
     });
 });
 
@@ -285,7 +329,6 @@ router.put('/share', function (req, res, next) {
         }
     });
 });
-
 
 router.get('/calendar', function (req, res, next) {
     if (!req.query.project_name || !req.query.start_date || !req.query.end_date || !req.query.user_id) return res.status(400).json({
