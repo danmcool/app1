@@ -400,12 +400,12 @@ router.get('/open', function (req, res, next) {
                         });
                         var application_id = Object.keys(objectProfile.profile.applications)[0];
                         Workflow.findOne({
-                            '_id': Object.keys(objectProfile.profile.applications[application_id].workflows)[0]
+                            _id: Object.keys(objectProfile.profile.applications[application_id].workflows)[0]
                         }).exec(function (errWorkflow, workflow) {
                             if (errWorkflow) return res.status(400).json({
                                 err: 'Workflow error'
                             });
-                            res.redirect('/#!/form/' + workflow.startup_form + '/0?application_id=' + application_id);
+                            res.redirect('/#!/form/' + workflow.startup_form + '/0?application_id=' + application_id + '&workflow_id=' + workflow._id);
                         })
                     });
                 });
@@ -418,7 +418,7 @@ router.get('/open', function (req, res, next) {
                 if (errWorkflow) return res.status(400).json({
                     err: 'Workflow error'
                 });
-                res.redirect('/#!/form/' + workflow.startup_form + '/' + req.query.data_id + '?application_id=' + application_id);
+                res.redirect('/#!/form/' + workflow.startup_form + '/' + req.query.data_id + '?application_id=' + application_id + '&workflow_id=' + workflow._id);
             });
         }
         /*
