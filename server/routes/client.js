@@ -83,7 +83,7 @@ router.get('/form/:id', function (req, res, next) {
     if (!req.params.id) return res.status(400).json({
         msg: 'Form id is null!'
     });
-    Metadata.Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
+    Metadata.Form.findOne(SessionCache.filterAddProductionCompanyCode(req, {
         _id: {
             $eq: req.params.id
         }
@@ -98,7 +98,7 @@ router.get('/form/:id', function (req, res, next) {
 
 router.get('/application/', function (req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(SessionCache.filterApplicationCompanyCode(req, {
+    Application.find(SessionCache.filterAddProductionCompanyCode(req, {
         _id: {
             $in: SessionCache.userData[req.cookies[Constants.SessionCookie]].company.applications
         },
@@ -148,7 +148,7 @@ router.get('/application/', function (req, res, next) {
 
 router.get('/application/:id', function (req, res, next) {
     var pageOptions = computePage(req);
-    Application.findOne(SessionCache.filterApplicationCompanyCode(req, {
+    Application.findOne(SessionCache.filterAddProductionCompanyCode(req, {
         _id: req.params.id
     })).populate('profiles default_profile workflows').exec(function (err,
         app) {
