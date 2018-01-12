@@ -223,10 +223,10 @@ router.post('/invite', function (req, res, next) {
     var current_time = Date.now();
     Session.findOneAndUpdate({
         _id: {
-            '$eq': token
+            $eq: token
         },
         timeout: {
-            '$gt': current_time
+            $gt: current_time
         }
     }, {
         timeout: current_time + Constants.MaxSessionTimeout
@@ -237,10 +237,10 @@ router.post('/invite', function (req, res, next) {
         });
         UserProfile.findOne({
             _company_code: {
-                '$eq': existingSession.user._company_code
+                $eq: existingSession.user._company_code
             },
             type: {
-                '$eq': Constants.UserProfilePrivate
+                $eq: Constants.UserProfilePrivate
             }
         }, function (err, userprofile) {
             if (err) return next(err);
@@ -254,14 +254,18 @@ router.post('/invite', function (req, res, next) {
                 }, function (errUserFind, objectUserFind) {
                     if (errUserFind) return next(errUserFind);
                     if (!objectUserFind) {
-                        invitedUser.password = Constants.InitialPasswordHash;
-                        invitedUser.company = existingSession.user.company;
-                        invitedUser._company_code = existingSession.user._company_code;
-                        invitedUser.profile = userprofile._id;
-                        invitedUser.validated = false;
-                        User.create(invitedUser, function (errNewUser, newUser) {
-                            if (errNewUser) return next(errNewUser);
-                            Email.sendValidation(newUser.email, newUser.user, newUser._company_code);
+                        var newPassword = randomString();
+                        crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+                            if (errCrypto) return next(errCrypto);
+                            invitedUser.password = key.toString('hex');
+                            invitedUser.company = existingSession.user.company;
+                            invitedUser._company_code = existingSession.user._company_code;
+                            invitedUser.profile = userprofile._id;
+                            invitedUser.validated = false;
+                            User.create(invitedUser, function (errNewUser, newUser) {
+                                if (errNewUser) return next(errNewUser);
+                                Email.sendValidation(newUser.email, newUser.user, newUser._company_code, newPassword);
+                            });
                         });
                     }
                 });
@@ -271,9 +275,6 @@ router.post('/invite', function (req, res, next) {
             });
         });
     });
-
-    // 'password':Constants.InitialPasswordHash,'profile':'58249c3e591d37288c45819c','company':'58249c3e591d37288c45819b','_company_code':'smarthys'
-
 });
 
 router.post('/login', function (req, res, next) {
