@@ -111,7 +111,7 @@ SessionCache.filterCompanyCode = function (req, filter) {
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
-            '$eq': company_code
+            $eq: company_code
         };
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;
@@ -120,12 +120,38 @@ SessionCache.filterCompanyCode = function (req, filter) {
     return filter;
 }
 
-SessionCache.filterApplicationCompanyCode = function (req, filter) {
+SessionCache.filterAddProductionCompanyCode = function (req, filter) {
     var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
-            '$in': [company_code, Constants.ProductionCompany]
+            $in: [company_code, Constants.ProductionCompany]
+        };
+        if (req.body != null && req.body._company_code != company_code) {
+            req.body._company_code = company_code;
+        }
+    }
+    return filter;
+}
+
+SessionCache.filterApplicationCompanyCode = function (req) {
+    var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
+    var filter = {};
+    if (company_code != Constants.AdminCompany) {
+        filter = {
+            $or: [
+                {
+                    _company_code: company_code
+                }, {
+                    $and: [
+                        {
+                            _company_code: Constants.ProductionCompany
+                        }, {
+                            active: true
+                        }
+                ]
+                }
+            ]
         };
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;
@@ -140,7 +166,7 @@ SessionCache.filterDataUserProfile = function (req, filter, datamodel_id, data_i
     if (company_code != Constants.AdminCompany) {
         if (!filter) filter = {};
         filter._company_code = {
-            '$eq': company_code
+            $eq: company_code
         };
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;

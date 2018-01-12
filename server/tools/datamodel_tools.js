@@ -120,6 +120,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
             technical_name: '_user',
             type: 'reference',
             ref: 'User',
+            ref_id: '598c86b68b7cf00974e761fe',
             name: {
                 en: 'User',
                 fr: 'Utilisateur'

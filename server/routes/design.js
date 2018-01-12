@@ -30,7 +30,7 @@ router.get('/application', function (req, res, next) {
         });
     }
     var pageOptions = computePage(req);
-    Application.find(SessionCache.filterApplicationCompanyCode(req, {})).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
+    Application.find(SessionCache.filterApplicationCompanyCode(req)).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         apps) {
         if (err) return next(err);
         res.json(apps);
@@ -169,9 +169,9 @@ router.get('/form/:id', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    Form.findOne(SessionCache.filterApplicationCompanyCode(req, {
+    Form.findOne(SessionCache.filterAddProductionCompanyCode(req, {
         _id: {
-            '$eq': req.params.id
+            $eq: req.params.id
         }
     })).populate('datamodel values').exec(function (err, formObject) {
         if (err) return next(err);
@@ -218,7 +218,7 @@ router.get('/value', function (req, res, next) {
         });
     }
     var pageOptions = computePage(req);
-    Value.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, value) {
+    Value.find(SessionCache.filterAddProductionCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, value) {
         if (err) return next(err);
         res.json(value);
     });
@@ -243,9 +243,9 @@ router.get('/value/:id', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    Value.findOne(SessionCache.filterApplicationCompanyCode(req, {
+    Value.findOne(SessionCache.filterAddProductionCompanyCode(req, {
         _id: {
-            '$eq': req.params.id
+            $eq: req.params.id
         }
     })).exec(function (err, valueObject) {
         if (err) return next(err);
@@ -292,7 +292,7 @@ router.get('/datamodel', function (req, res, next) {
         });
     }
     var pageOptions = computePage(req);
-    DataModel.find(SessionCache.filterApplicationCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
+    DataModel.find(SessionCache.filterAddProductionCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         datamodels) {
         if (err) return next(err);
         res.json(datamodels);
@@ -400,7 +400,6 @@ router.put('/datamodel/:id', function (req, res, next) {
             _id: req.body._id
         }), req.body, function (err, object) {
             if (err) return next(err);
-
             if (mongoose.connections[0].collections[Constants.DataModelPrefix + object._id]) {
                 mongoose.connections[0].collections[Constants.DataModelPrefix + object._id].dropIndex(Constants.DataModelIndexName);
             }
