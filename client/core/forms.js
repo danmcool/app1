@@ -758,7 +758,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             var fieldList = translatedEmail.match(/@\w*@/g);
             for (var i = 0; i < fieldList.length; i++) {
                 if (fieldList[i] != '@@') {
-                    translatedEmail = translatedEmail.replace(new RegExp(fieldList[i], 'g'), $scope.data[fieldList[i].replace(/@/g, '')]);
+                    translatedEmail = translatedEmail.replace(new RegExp(fieldList[i], 'g'), $scope.localdata[fieldList[i].replace(/@/g, '')]);
                 }
             }
             Notify.update({
