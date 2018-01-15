@@ -25,16 +25,16 @@
                                             <div class="md-list-item-text" layout="column">
                                                 <div ng-switch="field.title_display">
                                                     <div ng-switch-when="text">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{resolvePath(data,field.title_full_path)}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(data,field.title_full_path)}}</p>
                                                     </div>
                                                     <div ng-switch-when="value">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{field.title_values[resolvePath(data,field.title_full_path)]}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{field.title_values[resolvePath(data,field.title_full_path)]}}</p>
                                                     </div>
                                                     <div ng-switch-when="currency">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{resolvePath(data,field.title_full_path).value}} {{field.title_values[resolvePath(data,field.title_full_path).currency]}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(data,field.title_full_path).value}} {{field.title_values[resolvePath(data,field.title_full_path).currency]}}</p>
                                                     </div>
                                                     <div ng-switch-when="calculation">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{calculation(data,field.title_calculation)}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{calculation(data,field.title_calculation)}}</p>
                                                     </div>
                                                 </div>
                                                 <div ng-switch="field.subtitle_display">
@@ -78,16 +78,16 @@
                                             <div class="md-list-item-text" layout="column">
                                                 <div ng-switch="field.title_display">
                                                     <div ng-switch-when="text">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{resolvePath(item,field.title_full_path)}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(item,field.title_full_path)}}</p>
                                                     </div>
                                                     <div ng-switch-when="value">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{field.title_values[resolvePath(item,field.title_full_path)]}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{field.title_values[resolvePath(item,field.title_full_path)]}}</p>
                                                     </div>
                                                     <div ng-switch-when="currency">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{resolvePath(item,field.title_full_path).value}} {{field.title_values[resolvePath(item,field.title_full_path).currency]}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(item,field.title_full_path).value}} {{field.title_values[resolvePath(item,field.title_full_path).currency]}}</p>
                                                     </div>
                                                     <div ng-switch-when="calculation">
-                                                        <p style="color: rgba(0, 0, 0, 0.98)">{{calculation(item,field.title_calculation)}}</p>
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{calculation(item,field.title_calculation)}}</p>
                                                     </div>
                                                 </div>
                                                 <div ng-switch="field.subtitle_display">
