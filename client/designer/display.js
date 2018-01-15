@@ -315,6 +315,15 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                 $scope.field.subtitle_full_path = ($scope.form.datamodel.projection[$scope.field.subtitle].path == '' ? $scope.form.datamodel.projection[$scope.field.subtitle].technical_name : $scope.form.datamodel.projection[$scope.field.subtitle].path + '.' + $scope.form.datamodel.projection[$scope.field.subtitle].technical_name);
             }
         }
+        if ($scope.field.date) {
+            if ($scope.field.display == 'item') {
+                if ($scope.ref_datamodel.projection[$scope.field.date]) {
+                    $scope.field.date_full_path = ($scope.ref_datamodel.projection[$scope.field.date].path == '' ? $scope.ref_datamodel.projection[$scope.field.date].technical_name : $scope.ref_datamodel.projection[$scope.field.date].path + '.' + $scope.ref_datamodel.projection[$scope.field.date].technical_name);
+                }
+            } else if ($scope.form.datamodel.projection[$scope.field.date]) {
+                $scope.field.date_full_path = ($scope.form.datamodel.projection[$scope.field.date].path == '' ? $scope.form.datamodel.projection[$scope.field.date].technical_name : $scope.form.datamodel.projection[$scope.field.date].path + '.' + $scope.form.datamodel.projection[$scope.field.date].technical_name);
+            }
+        }
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form).$promise.then(function (res) {

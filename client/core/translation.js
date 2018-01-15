@@ -120,6 +120,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Activate',
             fr: 'Activer'
         },
+        deactivate: {
+            en: 'Deactivate',
+            fr: 'Desactiver'
+        },
         app_profiles: {
             en: 'Application User Profiles',
             fr: 'Profiles utilisateur de l`application'
@@ -437,6 +441,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         field_list_date: {
             en: 'Date format',
             fr: 'Format date'
+        },
+        field_date: {
+            en: 'Date',
+            fr: 'Date'
         },
         action_editor: {
             en: 'Action',

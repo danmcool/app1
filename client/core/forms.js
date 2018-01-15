@@ -346,7 +346,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         } else {
                             var itemValues = {
                                 index: i
-                            };
+                            }
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
                             itemValues.user_fields = '';

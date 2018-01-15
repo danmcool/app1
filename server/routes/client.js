@@ -111,7 +111,7 @@ router.get('/application/', function (req, res, next) {
         for (var i = apps.length - 1; i >= 0; i--) {
             if (!apps[i].profiles || apps[i].profiles.length == 0) {
                 if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
-                    apps.splice(i, 1)
+                    apps.splice(i, 1);
                 }
                 continue;
             }
