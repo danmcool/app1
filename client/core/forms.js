@@ -331,6 +331,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.search_criteria = $scope.form.search_criteria;
                 }
                 $scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
+                $scope.search_criteria = $scope.search_criteria.replace(/@@today/g, new Date());
                 var keysOfParameters = Object.keys($routeParams);
                 for (k = 0, l = keysOfParameters.length; k < l; k++) {
                     $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
