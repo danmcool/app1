@@ -4,7 +4,7 @@ const Constants = {
     MaxSessionPublicTimeout: 15 * 60 * 1000, // 15 minutes cookie validity
     MaxSessionCacheTimeout: 60 * 60 * 1000, // 1 hour cookie cache
     DBSessionTimerCleanup: 60 * 60 * 1000, // clean up expired sessions every hour
-    CacheSessionTimerCleanup: 30 * 60 * 1000, // clean up cookie cache every 30 minutes
+    CacheSessionTimerCleanup: 10 * 60 * 1000, // clean up cookie cache every 30 minutes
     QuerySkip: 0,
     QueryLimit: 10,
     SessionCookie: 'app1_token',

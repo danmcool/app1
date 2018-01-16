@@ -38,38 +38,38 @@ router.get('/:datamodelid/', function (req, res, next) {
     var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
     if (remote) {
         search_criteria._company_code = {
-            '$eq': remote_profile._company_code
-        };
+            $eq: remote_profile._company_code
+        }
         if (remote_profile._user) {
             search_criteria._user = {
-                '$in': remote_profile._user
-            };
+                $in: remote_profile._user
+            }
         }
     } else {
         search_criteria._company_code = {
-            '$eq': profile.datamodels[req.params.datamodelid].list._company_code
-        };
+            $eq: profile.datamodels[req.params.datamodelid].list._company_code
+        }
         if (profile.datamodels[req.params.datamodelid].list._user) {
             search_criteria._user = {
-                '$in': profile.datamodels[req.params.datamodelid].list._user
-            };
+                $in: profile.datamodels[req.params.datamodelid].list._user
+            }
         }
     }
     var searchScoreProjection = {};
     if (req.query.search_text && req.query.search_text != '') {
         search_criteria['$text'] = {
-            '$search': req.query.search_text
-        };
+            $search: req.query.search_text
+        }
         searchScoreProjection = {
             score: {
-                '$meta': 'textScore'
+                $meta: 'textScore'
             }
         }
         sort_by = {
-            'score': {
-                '$meta': 'textScore'
+            score: {
+                $meta: 'textScore'
             }
-        };
+        }
     }
     Metadata.Objects[req.params.datamodelid].find(search_criteria, searchScoreProjection).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
         if (err) return next(err);
@@ -159,23 +159,23 @@ router.get('/:datamodelid/:id', function (req, res, next) {
     }
     var search_criteria = {
         _id: {
-            '$eq': req.params.id
+            $eq: req.params.id
         }
     };
     if (remote) {
         search_criteria._company_code = {
-            '$eq': remote_profile._company_code
-        };
+            $eq: remote_profile._company_code
+        }
         search_criteria[remote_profile.constraint.key] = {
-            '$eq': remote_profile.constraint.value
-        };
+            $eq: remote_profile.constraint.value
+        }
     } else {
         search_criteria._company_code = {
-            '$eq': profile.datamodels[req.params.datamodelid].read._company_code
-        };
+            $eq: profile.datamodels[req.params.datamodelid].read._company_code
+        }
         if (profile.datamodels[req.params.datamodelid].read._user) {
             search_criteria._user = {
-                '$in': profile.datamodels[req.params.datamodelid].read._user
+                $in: profile.datamodels[req.params.datamodelid].read._user
             };
         }
     }
@@ -212,27 +212,27 @@ router.put('/:datamodelid/:id', function (req, res, next) {
     }
     var search_criteria = {
         _id: {
-            '$eq': req.params.id
+            $eq: req.params.id
         }
-    };
+    }
     if (remote) {
         search_criteria._company_code = {
-            '$eq': remote_profile._company_code
+            $eq: remote_profile._company_code
         };
         search_criteria._user = {
-            '$eq': req.body._user
+            $eq: req.body._user
         };
         search_criteria[remote_profile.constraint.key] = {
-            '$eq': remote_profile.constraint.value
-        };
+            $eq: remote_profile.constraint.value
+        }
     } else {
         search_criteria._company_code = {
-            '$eq': profile.datamodels[req.params.datamodelid].update._company_code
-        };
+            $eq: profile.datamodels[req.params.datamodelid].update._company_code
+        }
         if (profile.datamodels[req.params.datamodelid].update._user) {
             search_criteria._user = {
-                '$in': profile.datamodels[req.params.datamodelid].update._user
-            };
+                $in: profile.datamodels[req.params.datamodelid].update._user
+            }
         }
     }
     search_criteria._updated_at = Date.parse(req.body._updated_at);
@@ -242,7 +242,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
         if (err) return next(err);
         if (object) {
             res.status(200).json({
-                'msg': 'Data: entry updated!'
+                msg: 'Data: entry updated!'
             });
         } else {
             delete search_criteria._updated_at;
@@ -281,7 +281,7 @@ router.delete('/:datamodelid/:id', function (req, res, next) {
     }, function (err, object) {
         if (err) return next(err);
         res.status(200).json({
-            'msg': 'Data: entry deleted!'
+            msg: 'Data: entry deleted!'
         });
     });
 });

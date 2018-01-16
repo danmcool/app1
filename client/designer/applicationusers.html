@@ -1,0 +1,43 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex layout="column" class="fade">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.app_profiles}}</span>
+                </div>
+            </md-toolbar>
+            <form name="appSecForm">
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.profiles}}</label>
+                    <md-select ng-model="selected_profile" ng-change="changeProfile()">
+                        <md-option ng-repeat="profile in application.profiles" ng-value="profile._id">{{profile.translated_name}}{{(application.default_profile == profile._id?' - '+sessionData.appData.default_profile:'')}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.search_text}}</label>
+                    <input ng-model="search_text" name="SearchTextList" ng-change="search(search_text)">
+                </md-input-container>
+                <md-list flex="auto" infinite-scroll="getNextUsers()" infinite-scroll-distance="10">
+                    <md-list-item class="md-3-line" ng-repeat="user in users">
+                        <div class="md-list-item-text" layout="column">
+                            <div>
+                                <p style="color: rgba(0, 0, 0, 0.85)">{{user.firstname+' '+user.lastname}}</p>
+                                <p>{{user.email}}</p>
+                            </div>
+                            <div class="md-secondary" layout="row">
+                                <md-button ng-if="(user.remote_profiles && user.remote_profiles.indexOf(selected_profile)>-1)" ng-click="removeUserProfile(user)">{{sessionData.appData.deactivate}}</md-button>
+                                <md-button ng-if="(!user.remote_profiles || user.remote_profiles.indexOf(selected_profile)==-1)" ng-click="addUserProfile(user)">{{sessionData.appData.activate}}</md-button>
+                            </div>
+                        </div>
+                        <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}"></md-divider>
+                    </md-list-item>
+                </md-list>
+                <div layout="row" layout-align="end" flex>
+                    <md-button ng-disabled="appSecForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                </div>
+            </form>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

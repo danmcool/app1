@@ -128,6 +128,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Application User Profiles',
             fr: 'Profiles utilisateur de l`application'
         },
+        profiles: {
+            en: 'Profiles',
+            fr: 'Profiles'
+        },
         new_profile: {
             en: 'New Application Profile',
             fr: 'Nouveau profile de l`application'

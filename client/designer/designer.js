@@ -198,4 +198,8 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
             );
         }
     }
+
+    $scope.users = function (applicationId) {
+        SessionService.location('/application_users/' + applicationId);
+    }
 }]);

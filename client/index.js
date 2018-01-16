@@ -445,6 +445,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             templateUrl: 'designer/applicationsecurity.html',
             controller: 'ApplicationSecurityCtrl'
         })
+        .when('/application_users/:id', {
+            templateUrl: 'designer/applicationusers.html',
+            controller: 'ApplicationUsersCtrl'
+        })
         .when('/application_share/:id', {
             templateUrl: 'designer/share.html',
             controller: 'ApplicationShareCtrl'

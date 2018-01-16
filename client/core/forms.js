@@ -382,7 +382,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else if (formFields[i].display == 'file') {
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
-                $scope.files[formFields[i].id] = [];
+                $scope.files[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
             } else if (formFields[i].display == 'appointment_properties') {
                 if (!$scope.data._appointment_properties || !$scope.data._appointment_properties.non_stop) {
@@ -396,7 +396,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else if (formFields[i].display == 'image') {
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
-                $scope.files[formFields[i].id] = [];
+                $scope.files[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 if ($scope.localdata[formFields[i].id]) {
                     for (var j = 0; j < $scope.localdata[formFields[i].id].length; j++) {

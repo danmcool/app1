@@ -71,7 +71,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_date}}</label>
-                            <md-select ng-model="field.date" ng-required="true">
+                            <md-select ng-model="field.date" ng-required="false">
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>

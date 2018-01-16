@@ -139,7 +139,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
                     alert('Could not upload file.');
                 }
             }
-        };
+        }
         xhr.send(file);
     };
     $scope.changeFile = function (files) {

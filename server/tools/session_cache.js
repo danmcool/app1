@@ -19,7 +19,7 @@ setInterval(function () {
     var current_time = Date.now();
     Metadata.Session.remove({
         timeout: {
-            '$lt': current_time
+            $lt: current_time
         }
     });
 }, Constants.DBSessionTimerCleanup);

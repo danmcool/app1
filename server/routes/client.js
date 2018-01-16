@@ -190,6 +190,43 @@ router.get('/application/:id', function (req, res, next) {
     });
 });
 
+router.get('/user/', function (req, res, next) {
+    var token = req.cookies[Constants.SessionCookie];
+    if (SessionCache.userData[token].profile.type == Constants.UserProfilePublic) {
+        return res.status(401).json({
+            errUser: 'Not enough user rights'
+        });
+    }
+    var user = SessionCache.userData[token];
+    var pageOptions = computePage(req);
+    var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
+    var search_criteria = {
+        _company_code: {
+            $eq: SessionCache.userData[token]._company_code
+        }
+    }
+    var searchScoreProjection = {};
+    if (req.query.search_text && req.query.search_text != '') {
+        search_criteria['$text'] = {
+            $search: req.query.search_text
+        };
+        searchScoreProjection = {
+            score: {
+                $meta: 'textScore'
+            }
+        }
+        sort_by = {
+            score: {
+                $meta: 'textScore'
+            }
+        }
+    }
+    User.find(search_criteria, searchScoreProjection).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
+        if (err) return next(err);
+        res.json(objects);
+    });
+});
+
 router.put('/user/:id', function (req, res, next) {
     var userToken = req.cookies[Constants.SessionCookie];
     if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
@@ -197,10 +234,14 @@ router.put('/user/:id', function (req, res, next) {
             errUser: 'Not enough user rights'
         });
     }
-    var newUserProperties = {
-        properties: req.body.properties
-    };
-    if (!req.body.properties) {
+    var newUserProperties = {};
+    if (req.body.properties) {
+        newUserProperties.properties = req.body.properties;
+    }
+    if (req.body.remote_profiles) {
+        newUserProperties.remote_profiles = req.body.remote_profiles;
+    }
+    if (req.body.user) {
         req.body.user = req.body.user.toLowerCase();
     }
     User.findOneAndUpdate(SessionCache.filterCompanyCode(req, {

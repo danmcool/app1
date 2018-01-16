@@ -60,14 +60,14 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
         });
         newProfile.$save(function () {
             newProfile.translated_name = newProfile.name.en;
-            $scope.workflow.forms.push(newForm);
-            DesignWorkflow.update({
-                id: $scope.workflow._id
-            }, $scope.workflow).$promise.then(function (res) {
-                SessionService.init();
-                SessionService.location('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
+            $scope.application.profiles.push(newProfile);
+            DesignApplication.update({
+                id: $scope.application._id
+            }, $scope.application).$promise.then(function (res) {
+                //SessionService.init();
+                //SessionService.location('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
             }).catch(function (res) {
-                $scope.workflow = res.workflow;
+                $scope.application = res.application;
                 updateErrorAlert();
             });
         });
@@ -89,9 +89,9 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
     }
 
     $scope.save = function () {
-        DesignWorkflow.update({
-            id: $scope.workflow._id
-        }, $scope.workflow).$promise.then(function (res) {
+        DesignApplication.update({
+            id: $scope.application._id
+        }, $scope.application).$promise.then(function (res) {
             SessionService.init();
             SessionService.location('/application_edit/' + $routeParams.application_id);
         }).catch(function (res) {
