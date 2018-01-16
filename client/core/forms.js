@@ -379,11 +379,26 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                     }
                 }
-            } else if (formFields[i].display == 'file') {
+            } else if (formFields[i].display == 'file' || formFields[i].display == 'image') {
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
-                $scope.files[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                $scope.files[formFields[i].id] = [];
+                for (var f = 0; f < $scope.localdata[formFields[i].id].length; f++) {
+                    $scope.files[formFields[i].id].push({
+                        _id: $scope.localdata[formFields[i].id][f]._id,
+                        name: $scope.localdata[formFields[i].id][f].name,
+                        type: $scope.localdata[formFields[i].id][f].type
+                    });
+                }
+                if ($scope.localdata[formFields[i].id]) {
+                    for (var j = 0; j < $scope.localdata[formFields[i].id].length; j++) {
+                        $scope.slides.push({
+                            url: '/file/' + $scope.localdata[formFields[i].id][j]._id,
+                            caption: ''
+                        });
+                    }
+                }
             } else if (formFields[i].display == 'appointment_properties') {
                 if (!$scope.data._appointment_properties || !$scope.data._appointment_properties.non_stop) {
                     $scope.data._appointment_properties = {
@@ -392,19 +407,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                     }
                     $scope.updateWholeWeek($scope.data._appointment_properties);
-                }
-            } else if (formFields[i].display == 'image') {
-                $scope.currentFile[formFields[i].id] = 0;
-                $scope.filesCount[formFields[i].id] = 0;
-                $scope.files[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
-                if ($scope.localdata[formFields[i].id]) {
-                    for (var j = 0; j < $scope.localdata[formFields[i].id].length; j++) {
-                        $scope.slides.push({
-                            url: '/file/' + $scope.localdata[formFields[i].id][j]._id,
-                            caption: ''
-                        });
-                    }
                 }
             } else {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
