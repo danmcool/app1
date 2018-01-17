@@ -16,8 +16,10 @@
                     <label>{{sessionData.appData.datamodel_description}}</label>
                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(datamodel,'description',true)"></textarea>
                 </md-input-container>
-                <md-header layout-padding>{{sessionData.appData.datamodel_field_list}}</md-header>
-                <div ng-repeat="field in datamodel_keys" layout-padding>
+                <div style="margin-bottom: 30px">
+                    <md-header>{{sessionData.appData.datamodel_field_list}}</md-header>
+                </div>
+                <div ng-repeat="field in datamodel_keys">
                     <div layout="row">
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.new_datamodel_name}}</label>
@@ -30,7 +32,8 @@
                             <md-icon>delete</md-icon>
                         </md-button>
                     </div>
-                    <span class="md-title"><i>{{field_type[field.type].translated_name}}</i> - {{field.full_path}}</span>
+                    <div>
+                        <span class="md-title"><i>{{field_type[field.type].translated_name}}</i> - {{field.full_path}}</span></div>
                     <div layout="row">
                         <md-input-container flex="auto" class="md-block" ng-if="field.type=='text'||field.type=='number'">
                             <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
@@ -40,13 +43,15 @@
                             <p ng-if="field.index" class="md-body">{{field.index_weight}}</p>
                         </md-slider-container>
                     </div>
-                    <md-input-container flex="auto" class="md-block" ng-if="field.type=='reference'||field.type=='item'">
-                        <label>{{sessionData.appData.datamodel}}</label>
-                        <md-select ng-model="field.ref_id" ng-required="true" ng-change="changeFieldRef(field)">
-                            <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}"></md-divider>
+                    <div>
+                        <md-input-container flex="auto" class="md-block" ng-if="field.type=='reference'||field.type=='item'">
+                            <label>{{sessionData.appData.datamodel}}</label>
+                            <md-select ng-model="field.ref_id" ng-required="true" ng-change="changeFieldRef(field)">
+                                <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}" style="margin-top: 30px;margin-bottom: 30px"></md-divider>
                 </div>
                 <md-input-container flex="auto" class="md-block">
                     <md-button ng-click="newField('','')" class="md-fab md-primary">

@@ -19,7 +19,9 @@
                     <div ng-switch-when="list">
                         <div layout="row" layout-xs="column">
                             <div flex>
-                                <md-header layout-padding>{{sessionData.appData.field_list_title}}</md-header>
+                                <div style="margin-bottom: 30px">
+                                    <md-header>{{sessionData.appData.field_list_title}}</md-header>
+                                </div>
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_display}}</label>
                                     <md-select ng-model="field.title_display" ng-required="true">
@@ -44,7 +46,9 @@
                                 </md-input-container>
                             </div>
                             <div flex>
-                                <md-header layout-padding>{{sessionData.appData.field_list_subtitle}}</md-header>
+                                <div style="margin-bottom: 30px">
+                                    <md-header>{{sessionData.appData.field_list_subtitle}}</md-header>
+                                </div>
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_display}}</label>
                                     <md-select ng-model="field.subtitle_display">
@@ -79,7 +83,9 @@
                             <label>{{sessionData.appData.field_list_date}}</label>
                             <textarea type="text" ng-disabled="false" ng-required="false" name="dateformat" ng-model="field.date_format" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="1"></textarea>
                         </md-input-container>
-                        <md-header layout-padding>{{sessionData.appData.form_actions}}</md-header>
+                        <div style="margin-bottom: 30px">
+                            <md-header>{{sessionData.appData.form_actions}}</md-header>
+                        </div>
                         <div ng-repeat="item_action in field.item_actions">
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.new_action_name}}</label>
@@ -123,7 +129,7 @@
                                     <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.set_value.value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                                 </md-input-container>
                             </div>
-                            <md-divider layout-padding ng-if="!$last" md-colors="{'background-color': 'primary-A100'}"></md-divider>
+                            <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}" style="margin-top: 40px;margin-bottom: 40px"></md-divider>
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <md-button ng-click="addActionList(field)" class="md-fab md-primary">
@@ -141,7 +147,9 @@
                         </md-input-container>
                         <div layout="row" layout-xs="column">
                             <div flex>
-                                <md-header layout-padding>{{sessionData.appData.field_list_title}}</md-header>
+                                <div style="margin-bottom: 30px">
+                                    <md-header>{{sessionData.appData.field_list_title}}</md-header>
+                                </div>
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_display}}</label>
                                     <md-select ng-model="field.title_display" ng-required="true">
@@ -166,7 +174,9 @@
                                 </md-input-container>
                             </div>
                             <div flex>
-                                <md-header layout-padding>{{sessionData.appData.field_list_subtitle}}</md-header>
+                                <div style="margin-bottom: 30px">
+                                    <md-header>{{sessionData.appData.field_list_subtitle}}</md-header>
+                                </div>
                                 <md-input-container flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_display}}</label>
                                     <md-select ng-model="field.subtitle_display">
@@ -195,7 +205,9 @@
                             <label>{{sessionData.appData.field_list_date}}</label>
                             <textarea type="text" ng-disabled="false" ng-required="false" name="dateformat" ng-model="field.date_format" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="1"></textarea>
                         </md-input-container>
-                        <md-header layout-padding>{{sessionData.appData.form_actions}}</md-header>
+                        <div style="margin-bottom: 30px">
+                            <md-header>{{sessionData.appData.form_actions}}</md-header>
+                        </div>
                         <div ng-repeat="item_action in field.item_actions">
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.new_action_name}}</label>
