@@ -53,7 +53,7 @@
                                                 </div>
                                                 <p>{{resolvePath(data,field.date_full_path)|date:field.date_format}}</p>
                                             </div>
-                                            <div layout="row" layout-xs="column" layout-align="end center">
+                                            <div layout="row" layout-xs="column" layout-align="center end">
                                                 <div ng-repeat="action in field.item_actions">
                                                     <div ng-switch="action.action">
                                                         <div ng-switch-when="delete_list">
@@ -108,7 +108,7 @@
                                                 </div>
                                                 <p>{{resolvePath(item,field.date_full_path)|date:field.date_format}}</p>
                                             </div>
-                                            <div layout="row" layout-xs="column" layout-align="end center">
+                                            <div layout="row" layout-xs="column" layout-align="center end">
                                                 <div ng-repeat="action in field.item_actions">
                                                     <div ng-switch="action.action">
                                                         <div ng-switch-when="modify_item">
