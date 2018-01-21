@@ -136,25 +136,28 @@ SessionCache.filterAddProductionCompanyCode = function (req, filter) {
     return filter;
 }
 
-SessionCache.filterApplicationCompanyCode = function (req) {
+SessionCache.filterApplicationCompanyCode = function (req, filter) {
     var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
-    var filter = {};
     if (company_code != Constants.AdminCompany) {
+        if (!filter) filter = {};
         filter = {
-            $or: [
+            $and: [filter,
                 {
-                    _company_code: company_code
-                }, {
-                    $and: [
+                    $or: [
                         {
-                            _company_code: Constants.ProductionCompany
+                            _company_code: company_code
+                }, {
+                            $and: [
+                                {
+                                    _company_code: Constants.ProductionCompany
                         }, {
-                            active: true
+                                    active: true
                         }
                 ]
                 }
             ]
-        };
+                }]
+        }
         if (req.body != null && req.body._company_code != company_code) {
             req.body._company_code = company_code;
         }
