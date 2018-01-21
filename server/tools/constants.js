@@ -93,7 +93,7 @@ const Constants = {
     SECRET_ACCESS_KEY: 'svOcOW/XI0vPYWAryVPcNyBt0gX+D9xhIgry5acD',
 
     EmailUserName: 'app1.noreply@gmail.com',
-    EmailPassword: 'Admin;App1',
+    EmailPassword: 'Admin;App1New',
     EmailHost: 'smtp.gmail.com',
     EmailPort: '465',
     EmailSSL: true,
