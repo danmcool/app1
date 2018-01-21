@@ -56,7 +56,7 @@ router.get('/application/:id/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    Application.findOne(SessionCache.filterCompanyCode(req, {
+    Application.findOne(SessionCache.filterApplicationCompanyCode(req, {
         _id: req.params.id
     })).populate('file workflows profiles').exec(function (err, apps) {
         if (err) return next(err);
