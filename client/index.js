@@ -243,6 +243,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
     var openApp = function (appId) {
+        if (sessionData.userData.profile.type == 'public') return;
         for (var i = 0; i < sessionData.applications.length; i++) {
             sessionData.userData.properties.app_score[sessionData.applications[i]._id] *= 0.99;
         }
