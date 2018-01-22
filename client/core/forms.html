@@ -8,9 +8,9 @@
                 </div>
             </md-toolbar>
             <form ng-cloak name="dynamicForm" layout="column">
-                <div ng-repeat="section in form.display" layout="row" layout-xs="column" layout-align="space-between stretch">
+                <div ng-repeat="section in form.display" layout="row" layout-xs="column">
 
-                    <div ng-repeat="block in section.blocks" layout="column" flex="block.flex">
+                    <div ng-repeat="block in section.blocks" layout="column" flex="block.flex" layout-align="space-between stretch">
                         <div ng-repeat="field in block.fields" flex="auto">
                             <div ng-switch="field.display" flex="auto">
 
