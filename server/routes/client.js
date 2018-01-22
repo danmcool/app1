@@ -115,8 +115,15 @@ router.get('/application/', function (req, res, next) {
                 }
                 continue;
             }
-            var profileFound;
-            if (SessionCache.userData[userToken].profile.type != Constants.UserProfilePublic) {
+            var profileFound = null;
+            if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
+                for (var j = 0; j < apps[i].profiles.length; j++) {
+                    if (apps[i].profiles[j].properties && apps[i].profiles[j].properties.user == Constants.UserProfilePublic) {
+                        profileFound = apps[i].profiles[j];
+                        break;
+                    }
+                }
+            } else {
                 profileFound = apps[i].default_profile;
             }
             for (var j = 0; j < remoteProfiles.length; j++) {
@@ -140,6 +147,8 @@ router.get('/application/', function (req, res, next) {
                         apps[i].workflows.splice(k, 1);
                     }
                 }
+            } else {
+                apps.splice(i, 1);
             }
         }
         res.json(apps);
