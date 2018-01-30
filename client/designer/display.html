@@ -339,7 +339,7 @@
                         </md-input-container>
                     </div>
 
-                    <div ng-switch-when="currency|selection" ng-switch-when-separator="|">
+                    <div ng-switch-when="currency">
                         <div layout="row" layout-xs="column">
                             <md-input-container flex="auto" class="md-block">
                                 <md-checkbox ng-model="field.disabled">{{sessionData.appData.field_disabled}}</md-checkbox>
@@ -363,6 +363,48 @@
                             <md-select ng-model="field.listofvalues" ng-required="(form.values.length > 0)">
                                 <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                             </md-select>
+                        </md-input-container>
+                    </div>
+                    <div ng-switch-when="selection">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.disabled">{{sessionData.appData.field_disabled}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.required">{{sessionData.appData.field_required}}</md-checkbox>
+                            </md-input-container>
+                        </div>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_name}}</label>
+                            <input type="text" ng-disabled="false" name="appicon" ng-required="false" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                        </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_datafield}}</label>
+                            <md-select ng-model="field.projectionid" ng-required="true" ng-change="changeFieldDisplay(field)">
+                                <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_listofvalues}}</label>
+                            <md-select ng-model="field.listofvalues" ng-required="(form.values.length > 0)" ng-change="changeValues(field.listofvalues)">
+                                <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container ng-if="ref_selection" flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_display}}</label>
+                            <md-select ng-model="field.selection_display" ng-required="true">
+                                <md-option ng-repeat="display in selection_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container ng-if="field.selection_display=='text'&&ref_selection" flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_datafield}}</label>
+                            <md-select ng-model="field.selection_title" ng-required="true">
+                                <md-option ng-repeat="datakey in ref_datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container ng-if="field.selection_display=='calculation'&&ref_selection" flex="auto" class="md-block">
+                            <label>{{sessionData.appData.form_calculation}}</label>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.selection_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                         </md-input-container>
                     </div>
                     <div layout="row" layout-align="end" flex>

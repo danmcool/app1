@@ -383,6 +383,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                if (!$scope.localdata[formFields[i].id]) {
+                    $scope.localdata[formFields[i].id] = [];
+                }
                 $scope.files[formFields[i].id] = [];
                 for (var f = 0; f < $scope.localdata[formFields[i].id].length; f++) {
                     $scope.files[formFields[i].id].push({

@@ -100,6 +100,16 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             fr: 'Formule'
         }
     }
+    $scope.selection_display_type = {
+        text: {
+            en: 'Text',
+            fr: 'Texte'
+        },
+        calculation: {
+            en: 'Formula',
+            fr: 'Formule'
+        }
+    }
 
     var keysOfDisplayType = Object.keys($scope.display_type);
     $scope.display_types = [];
@@ -115,6 +125,14 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.title_display_types.push({
             translated_name: SessionService.translate($scope.title_display_type[keysOfTitleDisplayType[j]]),
             type: keysOfTitleDisplayType[j]
+        });
+    }
+    var keysOfSelectionDisplayType = Object.keys($scope.selection_display_type);
+    $scope.selection_display_types = [];
+    for (var k = 0; k < keysOfSelectionDisplayType.length; k++) {
+        $scope.selection_display_types.push({
+            translated_name: SessionService.translate($scope.selection_display_type[keysOfSelectionDisplayType[k]]),
+            type: keysOfSelectionDisplayType[k]
         });
     }
 
@@ -172,9 +190,13 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     var initDatamodelKeysRef = function () {
         $scope.ref_datamodel_keys = [];
         $scope.ref_datamodel = {};
-        if ($scope.field.display == 'item' || $scope.field.display == 'reference') {
+        $scope.ref_selection = false;
+        if ($scope.field.display == 'item' || $scope.field.display == 'reference' || $scope.field.display == 'selection') {
             if ($scope.field && $scope.field.projectionid) {
                 var datamodelref_id = $scope.form.datamodel.projection[$scope.field.projectionid].ref_id;
+                if (datamodelref_id) {
+                    $scope.ref_selection = true;
+                }
                 for (var i = 0; i < $scope.datamodels.length; i++) {
                     if ($scope.datamodels[i]._id == datamodelref_id) {
                         $scope.ref_datamodel = $scope.datamodels[i];
@@ -197,8 +219,17 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         id: $routeParams.id
     }, function (resultForm, err) {
         $scope.form = resultForm;
+        $scope.ref_selection = false;
         $scope.form.translated_name = SessionService.translate($scope.form.name);
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
+        DesignDataModel.query({
+            skip: 0,
+            limit: 500,
+        }, function (datamodels) {
+            $scope.datamodels = datamodels;
+            initDatamodelKeysRef();
+        });
+        $scope.changeValues($scope.field.listofvalues);
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
             var datamodelkeys = Object.keys($scope.form.datamodel.projection);
@@ -211,13 +242,13 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             }
         }
         if ($scope.form.actions) {
-            for (var i = 0; i < $scope.form.actions.length; i++) {
-                $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
+            for (var k = 0; k < $scope.form.actions.length; k++) {
+                $scope.form.actions[k].translated_name = SessionService.translate($scope.form.actions[k].name);
             }
         }
         if ($scope.form.values) {
-            for (var i = 0; i < $scope.form.values.length; i++) {
-                $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
+            for (var j = 0; j < $scope.form.values.length; j++) {
+                $scope.form.values[j].translated_name = SessionService.translate($scope.form.values[j].name);
             }
         }
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
@@ -243,16 +274,18 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         $scope.forms.push(form_home);
     });
 
-    DesignDataModel.query({
-        skip: 0,
-        limit: 500,
-    }, function (datamodels) {
-        $scope.datamodels = datamodels;
-        initDatamodelKeysRef();
-    });
-
     $scope.changeFieldDisplay = function (field) {
         initDatamodelKeysRef();
+    }
+
+    $scope.changeValues = function (listofvalues) {
+        if ($scope.form.values) {
+            for (var l = 0; l < $scope.form.values.length; l++) {
+                if ($scope.form.values[l]._id == listofvalues && $scope.form.values[l].type != 'list') {
+                    $scope.ref_selection = true;
+                }
+            }
+        }
     }
 
     $scope.editText = function (object, property, multipleLines) {
