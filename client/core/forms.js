@@ -1031,19 +1031,19 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             updateErrorAlert();
         });
     }
-    $scope.calendar = function (formula, nextFormId, setValue, project_name_field, start_date_field, end_date_field, data) {
+    $scope.calendar = function (formula, nextFormId, setValue, forwardId, projectNamePath, startDatePath, endDatePath, userPath, data) {
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
         }, data, function (res) {
             Calendar.get({
-                project_name: $scope.resolvePath(data, project_name_path),
-                start_date: $scope.resolvePath(data, start_date_path),
-                end_date: $scope.resolvePath(data, end_date_path),
-                user_id: $scope.resolvePath(data, user_path)
+                project_name: $scope.resolvePath(data, projectNamePath),
+                start_date: $scope.resolvePath(data, startDatePath),
+                end_date: $scope.resolvePath(data, endDatePath),
+                user_id: $scope.resolvePath(data, userPath)
             }, function (res) {
-                gotoNextForm(formula, nextFormId, data);
+                gotoNextForm(formula, nextFormId, (forwardId ? data : null));
             })
         }, function (res) {
             $scope.data = res.data;
