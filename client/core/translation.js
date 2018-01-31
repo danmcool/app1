@@ -458,6 +458,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Type',
             fr: 'Type'
         },
+        action_project_name: {
+            en: 'Project Name',
+            fr: 'Nom du projet'
+        },
+        action_start_date: {
+            en: 'Start Date',
+            fr: 'Date de début'
+        },
+        action_end_date: {
+            en: 'End Date',
+            fr: 'Date de fin'
+        },
         action_forward_id: {
             en: 'Forward Object Id',
             fr: 'Transmettre l`identifiant de l`objet'

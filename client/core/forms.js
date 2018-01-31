@@ -1038,10 +1038,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             entry_id: data._id
         }, data, function (res) {
             Calendar.get({
-                project_name: data[project_name_field],
-                start_date: data[start_date_field],
-                end_date: data[end_date_field],
-                user_id: data._user
+                project_name: $scope.resolvePath(data, project_name_path),
+                start_date: $scope.resolvePath(data, start_date_path),
+                end_date: $scope.resolvePath(data, end_date_path),
+                user_id: $scope.resolvePath(data, user_path)
             }, function (res) {
                 gotoNextForm(formula, nextFormId, data);
             })

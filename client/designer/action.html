@@ -24,7 +24,7 @@
                         <md-option ng-repeat="action in action_types" ng-value="action.type">{{action.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
-                <md-input-container flex="auto" class="md-block" ng-if="action.action=='create'||action.action=='modify'||action.action=='link'||action.action=='subscribe'||action.action=='unsubscribe'">
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='create'||action.action=='modify'||action.action=='link'||action.action=='subscribe'||action.action=='unsubscribe'||action.action=='calendar'">
                     <md-checkbox ng-model="action.forward_id">{{sessionData.appData.action_forward_id}}</md-checkbox>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='subscribe'||action.action=='unsubscribe'">
@@ -42,6 +42,30 @@
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
                     <label>{{sessionData.appData.action_event_period}}</label>
                     <md-select ng-model="action.period_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='calendar'">
+                    <label>{{sessionData.appData.action_project_name}}</label>
+                    <md-select ng-model="action.project_name_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='calendar'">
+                    <label>{{sessionData.appData.action_start_date}}</label>
+                    <md-select ng-model="action.start_date_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='calendar'">
+                    <label>{{sessionData.appData.action_end_date}}</label>
+                    <md-select ng-model="action.end_date_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='calendar'">
+                    <label>{{sessionData.appData.user}}</label>
+                    <md-select ng-model="action.user_path" ng-required="true">
                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
