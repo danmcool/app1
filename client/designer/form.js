@@ -90,7 +90,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }).then(function (result) {
+        }, function (result) {
             object[property] = result;
         });
     }
@@ -98,9 +98,9 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     var saveFormForward = function (url) {
         DesignForm.update({
             id: $scope.form._id
-        }, $scope.form).$promise.then(function (res) {
+        }, $scope.form, function (res) {
             SessionService.location(url);
-        }).catch(function (res) {
+        }, function (res) {
             updateErrorAlert();
         });
     }
@@ -156,7 +156,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             controller: 'NewValueCtrl',
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }).then(function (result) {
+        }, function (result) {
             if (result == '') {
                 var name = {};
                 name[$scope.sessionData.userData.properties.language] = '';

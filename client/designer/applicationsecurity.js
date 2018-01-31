@@ -35,7 +35,7 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }).then(function (result) {
+        }, function (result) {
             object[property] = result;
         });
     }
@@ -43,10 +43,10 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
     $scope.editProfile = function (profileId) {
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (res) {
+        }, $scope.application, function (res) {
             SessionService.init();
             SessionService.location('/profile_edit/' + profileId + '?application_id=' + $scope.application._id);
-        }).catch(function (res) {
+        }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
         });
@@ -63,10 +63,10 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
             $scope.application.profiles.push(newProfile);
             DesignApplication.update({
                 id: $scope.application._id
-            }, $scope.application).$promise.then(function (res) {
+            }, $scope.application, function (res) {
                 //SessionService.init();
                 //SessionService.location('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
-            }).catch(function (res) {
+            }, function (res) {
                 $scope.application = res.application;
                 updateErrorAlert();
             });
@@ -78,23 +78,22 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
         $scope.workflow.forms.splice(formIndex, 1);
         DesignWorkflow.update({
             id: $scope.workflow._id
-        }, $scope.workflow).$promise.then(function (resWkf) {
+        }, $scope.workflow, function (resWkf) {
             DesignForm.remove({
-                    id: formId
-                }).$promise.then(function (res) {})
-                .catch(function (res) {
-                    /* show error*/
-                });
+                id: formId
+            }, function (res) {}, function (res) {
+                /* show error*/
+            });
         });
     }
 
     $scope.save = function () {
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (res) {
+        }, $scope.application, function (res) {
             SessionService.init();
             SessionService.location('/application_edit/' + $routeParams.application_id);
-        }).catch(function (res) {
+        }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
         });

@@ -154,7 +154,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             skip: localSkip,
             limit: localLimit,
             sort_by: $scope.form.sort_by
-        }).$promise.then(function (datas) {
+        }, function (datas) {
             if (datas.length < $scope.limit) $scope.stopScroll = true;
             for (var i = 0; i < datas.length; i++) {
                 $scope.datas.push(datas[i]);
@@ -223,17 +223,54 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         return result;
     }
 
-    var updateValuesForm = function (index, newValues) {
+    var queryValues = function (valuesId, valuesType, valuesObject, fieldIndex, valuesDisplay, extData) {
+        Value.update({
+            id: valuesId,
+            type: valuesType
+        }, valuesObject, function (resValues) {
+            if (valuesDisplay == 'title') {
+                updateValuesTitle(fieldIndex, resValues.values);
+            } else if (valuesDisplay == 'subtitle') {
+                updateValuesSubTitle(fieldIndex, resValues.values);
+            } else if (valuesDisplay == 'item') {
+                updateValuesItems(fieldIndex, resValues.values);
+            } else if (valuesDisplay == 'form') {
+                updateValuesForm(fieldIndex, resValues.values, extData);
+            }
+        });
+    }
+    var updateValuesForm = function (index, newValues, extData) {
         var formFields = $scope.form.fields[index];
         formFields.values = [];
         formFields.values_key = {};
-        for (k = 0; k < newValues.length; k++) {
-            formFields.values.push({
-                '_id': newValues[k]._id,
-                'name': SessionService.translate(newValues[k].name)
-            });
-            formFields.values_key[newValues[k]._id] =
-                SessionService.translate(newValues[k].name);
+        var k;
+        if (extData) {
+            if (extData.selection_display == 'text') {
+                for (k = 0; k < newValues.length; k++) {
+                    formFields.values.push({
+                        _id: newValues[k]._id,
+                        name: $scope.resolvePath(newValues[k], extData.selection_full_path)
+                    });
+                    formFields.values_key[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.selection_full_path);
+                }
+            } else if (extData.selection_display == 'calculation') {
+                for (k = 0; k < newValues.length; k++) {
+                    formFields.values.push({
+                        _id: newValues[k]._id,
+                        name: $scope.calculation(newValues[k], extData.selection_calculation)
+                    });
+                    formFields.values_key[newValues[k]._id] = $scope.calculation(newValues[k], extData.selection_calculation);
+                }
+            }
+        } else {
+            for (k = 0; k < newValues.length; k++) {
+                formFields.values.push({
+                    _id: newValues[k]._id,
+                    name: SessionService.translate(newValues[k].name)
+                });
+                formFields.values_key[newValues[k]._id] =
+                    SessionService.translate(newValues[k].name);
+            }
         }
     }
     var updateValuesTitle = function (index, newValues) {
@@ -276,14 +313,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         if (formValues[j].type == 'list') {
                             updateValuesForm(i, formValues[j].values);
                         } else {
-                            var itemValues = formValues[j].values;
-                            itemValues.index = i;
-                            Value.update({
-                                id: formValues[j]._id,
-                                type: formValues[j].type
-                            }, itemValues).$promise.then(function (resValues) {
-                                updateValuesForm(resValues.index, resValues.values);
-                            });
+                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'form', formFields[i]);
                         }
                         break;
                     }
@@ -303,27 +333,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         if (formValues[j].type == 'list') {
                             updateValuesTitle(i, formValues[j].values);
                         } else {
-                            var itemValues = formValues[j].values;
-                            itemValues.index = i;
-                            Value.update({
-                                id: formValues[j]._id,
-                                type: formValues[j].type
-                            }, itemValues).$promise.then(function (resValues) {
-                                updateValuesTitle(resValues.index, resValues.values);
-                            });
+                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'title');
                         }
                     } else if (formFields[i].subtitle_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             updateValuesSubTitle(i, formValues[j].values);
                         } else {
-                            var itemValues = formValues[j].values;
-                            itemValues.index = i;
-                            Value.update({
-                                id: formValues[j]._id,
-                                type: formValues[j].type,
-                            }, itemValues).$promise.then(function (resValues) {
-                                updateValuesSubTitle(resValues.index, resValues.values);
-                            });
+                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'subtitle');
                         }
                     }
                 }
@@ -345,9 +361,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         if (formValues[j].type == 'list') {
                             updateValuesItems(i, formValues[j].values);
                         } else {
-                            var itemValues = {
-                                index: i
-                            }
+                            var itemValues = {};
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
                             itemValues.user_fields = '';
@@ -370,12 +384,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             itemValues.user_fields += matchField(formFields[i].title_calculation);
                             itemValues.user_fields += matchField(formFields[i].subtitle_calculation);
                             itemValues.user_fields = itemValues.user_fields.trim();
-                            Value.update({
-                                id: formValues[j]._id,
-                                type: formValues[j].type,
-                            }, itemValues).$promise.then(function (resValues) {
-                                updateValuesItems(resValues.index, resValues.values);
-                            });
+                            queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'items');
                         }
                     }
                 }
@@ -533,7 +542,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 type: files[i].type
             });
             $scope.files[fieldId].push(files[i]);
-            file.$save().then(function (res) {
+            file.$save(function (res) {
                 for (var j = 0; j < $scope.files[fieldId].length; j++) {
                     if ($scope.files[fieldId][j].name == res.file.name) {
                         $scope.localdata[fieldId].push({
@@ -554,19 +563,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (files[i]._id == fileId) {
                 files.splice(i, 1);
                 Files.remove({
-                        id: fileId
-                    }).$promise
-                    .then(function (res) {
-                        for (var j = 0; j < $scope.files[fieldId].length; j++) {
-                            if ($scope.files[fieldId][j]._id == fileId) {
-                                $scope.files[fieldId].splice(j, 1);
-                                break;
-                            }
+                    id: fileId
+                }, function (res) {
+                    for (var j = 0; j < $scope.files[fieldId].length; j++) {
+                        if ($scope.files[fieldId][j]._id == fileId) {
+                            $scope.files[fieldId].splice(j, 1);
+                            break;
                         }
-                    })
-                    .catch(function (res) {
-                        /* show error*/
-                    })
+                    }
+                }, function (res) {
+                    /* show error*/
+                })
                 break;
             }
         }
@@ -778,10 +785,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, $scope.data);
-        $scope.data.$save().then(function (res) {
+        $scope.data.$save(function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? res : null));
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
         });
     }
@@ -790,10 +797,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, $scope.data).$promise.then(function (res) {
+        }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? res : null));
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -806,20 +813,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function () {
-            Datas.remove({
+            .cancel($scope.sessionData.appData.cancel),
+            function () {
+                Datas.remove({
                     datamodel_id: $scope.form.datamodel._id,
                     entry_id: $scope.data._id
-                }).$promise
-                .then(function (res) {
+                }, function (res) {
                     notify(notifyUser, emailTitle, emailHtml);
                     gotoNextForm(formula, nextFormId, null);
-                })
-                .catch(function (res) {
+                }, function (error) {
                     /* show error*/
                 });
-        });
+            });
     }
     $scope.link = function (formula, nextFormId, forwardId, notifyUser, emailTitle, emailHtml) {
         notify(notifyUser, emailTitle, emailHtml);
@@ -832,10 +837,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, $scope.data).$promise.then(function (res) {
+        }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -851,10 +856,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, $scope.data).$promise.then(function (res) {
+        }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -868,26 +873,26 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function () {
-            updateComponents($scope.form, setValue, $scope.data);
-            var itemList = $scope.resolvePath($scope.data, itemPath);
-            for (var i = itemList.length - 1; i >= 0; i--) {
-                if (itemList[i] == itemId || itemList[i]._id == itemId) {
-                    itemList.splice(i, 1);
+            .cancel($scope.sessionData.appData.cancel),
+            function () {
+                updateComponents($scope.form, setValue, $scope.data);
+                var itemList = $scope.resolvePath($scope.data, itemPath);
+                for (var i = itemList.length - 1; i >= 0; i--) {
+                    if (itemList[i] == itemId || itemList[i]._id == itemId) {
+                        itemList.splice(i, 1);
+                    }
                 }
-            }
-            Datas.update({
-                datamodel_id: $scope.form.datamodel._id,
-                entry_id: $scope.data._id
-            }, $scope.data).$promise.then(function (res) {
-                notify(notifyUser, emailTitle, emailHtml, itemId);
-                gotoNextForm(formula, nextFormId, $scope.data);
-            }).catch(function (res) {
-                $scope.data = res.data;
-                updateErrorAlert();
+                Datas.update({
+                    datamodel_id: $scope.form.datamodel._id,
+                    entry_id: $scope.data._id
+                }, $scope.data, function (res) {
+                    notify(notifyUser, emailTitle, emailHtml, itemId);
+                    gotoNextForm(formula, nextFormId, $scope.data);
+                }, function (res) {
+                    $scope.data = res.data;
+                    updateErrorAlert();
+                });
             });
-        });
     }
     $scope.moveItem = function (formula, nextFormId, setValue, itemId, itemPath, destinationItemPath, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, $scope.data);
@@ -901,10 +906,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id
-        }, $scope.data).$promise.then(function (res) {
+        }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml, itemId);
             gotoNextForm(formula, nextFormId, $scope.data);
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -915,10 +920,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function (res) {
+        }, data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, res);
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -931,20 +936,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function () {
-            Datas.remove({
+            .cancel($scope.sessionData.appData.cancel),
+            function () {
+                Datas.remove({
                     datamodel_id: $scope.form.datamodel._id,
                     entry_id: data._id
-                }).$promise
-                .then(function (res) {
+                }, function (res) {
                     notify(notifyUser, emailTitle, emailHtml);
                     gotoNextForm(formula, nextFormId, null);
-                })
-                .catch(function (res) {
+                }, function (res) {
                     /* show error*/
                 });
-        });
+            });
     }
     $scope.linkList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
         notify(notifyUser, emailTitle, emailHtml);
@@ -1012,7 +1015,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function (res) {
+        }, data, function (res) {
             Share.update({
                 form_id: form_id,
                 datamodel_id: $scope.form.datamodel._id,
@@ -1020,10 +1023,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 email: data[email_field_name],
                 key: constraint.key,
                 value: constraint.value
-            }).$promise.then(function (res) {
+            }, function (res) {
                 gotoNextForm(formula, nextFormId, data);
             })
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -1033,16 +1036,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
-        }, data).$promise.then(function (res) {
+        }, data, function (res) {
             Calendar.get({
                 project_name: data[project_name_field],
                 start_date: data[start_date_field],
                 end_date: data[end_date_field],
                 user_id: data._user
-            }).$promise.then(function (res) {
+            }, function (res) {
                 gotoNextForm(formula, nextFormId, data);
             })
-        }).catch(function (res) {
+        }, function (res) {
             $scope.data = res.data;
             updateErrorAlert();
         });
@@ -1059,9 +1062,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             end_time: $scope.resolvePath($scope.data, periodPath).end_time,
             _user: $scope.data._user,
             _updated_at: $scope.data._updated_at
-        }).$promise.then(function (res) {
+        }, function (res) {
             gotoNextForm(formula, nextFormId, $scope.data);
-        }).catch(function (res) {
+        }, function (res) {
             if (res.data) {
                 $scope.data = res.data;
                 initComponents();

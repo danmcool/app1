@@ -197,7 +197,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-        Applications.query().$promise.then(function (appResult) {
+        Applications.query(function (appResult) {
             sessionData.applications = appResult;
             var apps = sessionData.applications;
             var saveUserData = false;
@@ -230,14 +230,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             if ($location.path() == '/') {
                 location('/applications');
             }
-        }).catch(function (error) {
+        }, function (error) {
             // shows an error loading applications
         });
     }
     var init = function () {
-        UserStatus.get().$promise.then(function (userResult) {
+        UserStatus.get(function (userResult) {
             initSessionData(userResult, false);
-        }).catch(function (error) {
+        }, function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
             location('/');
         });
@@ -264,7 +264,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
         loginObject.$save(function (userResult) {
             initSessionData(userResult, true);
-        }).catch(function (error) {
+        }, function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
             location('/');
         });

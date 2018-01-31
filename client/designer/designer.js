@@ -105,36 +105,36 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function () {
-            DesignApplication.remove({
-                id: app._id
-            }).$promise.then(function (res) {
-                for (var i = 0; i < $scope.applications.length; i++) {
-                    if ($scope.applications[i]._id == app._id) {
-                        $scope.applications.splice(i, 1);
-                        break;
-                    }
-                }
-                if (app.enabled) {
-                    var enabledApps = $scope.sessionData.userData.company.applications;
-                    for (var i = 0; i < enabledApps.length; i++) {
-                        if (app._id == enabledApps[i]) {
-                            enabledApps.splice(i, 1);
+            .cancel($scope.sessionData.appData.cancel),
+            function () {
+                DesignApplication.remove({
+                    id: app._id
+                }, function (res) {
+                    for (var i = 0; i < $scope.applications.length; i++) {
+                        if ($scope.applications[i]._id == app._id) {
+                            $scope.applications.splice(i, 1);
                             break;
                         }
                     }
-                    Company.update({
-                        id: $scope.sessionData.userData.company._id
-                    }, {
-                        _id: $scope.sessionData.userData.company._id,
-                        applications: enabledApps
-                    }).$promise.then(function (res) {
-                        SessionService.init();
-                    });
-                }
+                    if (app.enabled) {
+                        var enabledApps = $scope.sessionData.userData.company.applications;
+                        for (var i = 0; i < enabledApps.length; i++) {
+                            if (app._id == enabledApps[i]) {
+                                enabledApps.splice(i, 1);
+                                break;
+                            }
+                        }
+                        Company.update({
+                            id: $scope.sessionData.userData.company._id
+                        }, {
+                            _id: $scope.sessionData.userData.company._id,
+                            applications: enabledApps
+                        }, function (res) {
+                            SessionService.init();
+                        });
+                    }
+                });
             });
-        });
     }
 
     $scope.updateCompanyApps = function (app) {
@@ -156,7 +156,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
         }, {
             _id: $scope.sessionData.userData.company._id,
             applications: enabledApps
-        }).$promise.then(function (res) {
+        }, function (res) {
             SessionService.init();
         });
     }
@@ -174,7 +174,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
                     app_profile_id: application.profiles[i]._id,
                     app_name: application.name.en,
                     profile_name: application.profiles[i].name.en
-                }).$promise.then(function (res) {
+                }, function (res) {
                     $mdDialog.show(
                         $mdDialog.confirm()
                         .parent(angular.element(document.body))
@@ -183,7 +183,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
                         .textContent(res.share_url)
                         .ok($scope.sessionData.appData.ok)
                     );
-                }).catch(function (res) {});
+                }, function (res) {});
                 break;
             }
         }

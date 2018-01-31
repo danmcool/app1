@@ -32,7 +32,7 @@ app1.controller('ApplicationUsersCtrl', ['$scope', 'SessionService', 'DesignAppl
                 lastname: 'ascending',
                 firstname: 'ascending'
             }
-        }).$promise.then(function (users) {
+        }, function (users) {
             if (users.length < $scope.limit) $scope.stopScroll = true;
             for (var i = 0; i < users.length; i++) {
                 $scope.users.push(users[i]);

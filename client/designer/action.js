@@ -128,7 +128,7 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }).then(function (result) {
+        }, function (result) {
             object[property] = result;
         });
     }
@@ -136,10 +136,10 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
     $scope.save = function () {
         DesignForm.update({
             id: $scope.form._id
-        }, $scope.form).$promise.then(function (res) {
+        }, $scope.form, function (res) {
             SessionService.init();
             SessionService.location('/form_edit/' + $scope.form._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
-        }).catch(function (res) {
+        }, function (res) {
             updateErrorAlert();
         });
     }

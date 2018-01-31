@@ -40,7 +40,7 @@ ApplicationLiveCycle.copyDataModel = function (currentDataModelId, _company_code
         objectList['d_' + currentDataModelId] = newDataModelObject._id;
         newDataModelObject.isNew = true;
         newDataModelObject._company_code = _company_code;
-        newDataModelObject.save().then(function () {
+        newDataModelObject.save(function () {
             //console.log('d'+newDataModelObject._id)
             replaceFormDataModel(newFormId, currentDataModelId, objectList['d_' + currentDataModelId]);
             var modelSchema;
@@ -89,7 +89,7 @@ ApplicationLiveCycle.copyValues = function (currentValueId, _company_code, objec
         objectList['v_' + currentValueId] = newValueObject._id;
         newValueObject.isNew = true;
         newValueObject._company_code = _company_code;
-        newValueObject.save().then(function () {
+        newValueObject.save(function () {
             //console.log('v'+newValueObject._id)
             replaceFormValues(newFormId, currentValueId, objectList['v_' + currentValueId]);
         });
@@ -153,7 +153,7 @@ ApplicationLiveCycle.copyForm = function (currentFormId, _company_code, objectLi
         objectList['f_' + currentFormId] = newFormObject._id;
         newFormObject.isNew = true;
         newFormObject._company_code = _company_code;
-        newFormObject.save().then(function () {
+        newFormObject.save(function () {
             //console.log('f'+newFormObject._id)
             replaceFormPredecessor(newWorkflowId, parentNewFormId, currentFormId, objectList['f_' + currentFormId]);
             ApplicationLiveCycle.copyDataModel(newFormObject.datamodel_id, _company_code, objectList, newFormObject._id);
@@ -185,7 +185,7 @@ ApplicationLiveCycle.copyWorkflow = function (workflowObject, _company_code, app
     newWorkflowObject._company_code = _company_code;
     newWorkflowObject.application_id = '' + application_id;
     objectList['w_' + workflowObject._id] = newWorkflowObject._id;
-    newWorkflowObject.save().then(function () {
+    newWorkflowObject.save(function () {
         //console.log('w'+newWorkflowObject._id)
         ApplicationLiveCycle.copyForm(newWorkflowObject.startup_form_id, _company_code, objectList, newWorkflowObject._id, null);
     });

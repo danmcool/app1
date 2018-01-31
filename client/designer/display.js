@@ -283,7 +283,17 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             for (var l = 0; l < $scope.form.values.length; l++) {
                 if ($scope.form.values[l]._id == listofvalues && $scope.form.values[l].type != 'list') {
                     $scope.ref_selection = true;
+                    break;
                 }
+            }
+        }
+    }
+
+    $scope.changeRefDataModel = function (field) {
+        for (var i = 0; i < $scope.ref_datamodel_keys.length; i++) {
+            if ($scope.ref_datamodel_keys[i].id == field.selection_id) {
+                field.selection_full_path = $scope.ref_datamodel_keys[i].full_path;
+                break;
             }
         }
     }
@@ -299,7 +309,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }).then(function (result) {
+        }, function (result) {
             object[property] = result;
         });
     }
@@ -312,18 +322,18 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             .title($scope.sessionData.appData.new_action)
             .initialValue('My Action')
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            if (!field.item_actions) {
-                field.item_actions = [];
-            }
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            field.item_actions.push({
-                name: name,
-                translated_name: result
+            .cancel($scope.sessionData.appData.cancel),
+            function (result) {
+                if (!field.item_actions) {
+                    field.item_actions = [];
+                }
+                var name = {};
+                name[$scope.sessionData.userData.properties.language] = result;
+                field.item_actions.push({
+                    name: name,
+                    translated_name: result
+                });
             });
-        });
     }
 
     $scope.save = function () {
@@ -359,10 +369,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         }
         DesignForm.update({
             id: $scope.form._id
-        }, $scope.form).$promise.then(function (res) {
+        }, $scope.form, function (res) {
             SessionService.init();
             SessionService.location('/form_edit/' + $scope.form._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id);
-        }).catch(function (res) {
+        }, function (res) {
             updateErrorAlert();
         });
     }

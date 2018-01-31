@@ -35,7 +35,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }).then(function (result) {
+        }, function (result) {
             object[property] = result;
         });
     }
@@ -43,10 +43,10 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
     $scope.editWorkflow = function (workflowId) {
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (res) {
+        }, $scope.application, function (res) {
             SessionService.init();
             SessionService.location('/workflow_edit/' + workflowId + '?application_id=' + $scope.application._id);
-        }).catch(function (res) {
+        }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
         });
@@ -55,10 +55,10 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
     $scope.editAppSecurity = function () {
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (res) {
+        }, $scope.application, function (res) {
             SessionService.init();
             SessionService.location('/application_security/' + $scope.application._id);
-        }).catch(function (res) {
+        }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
         });
@@ -76,10 +76,10 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
             $scope.application.workflows.push(newWorkflow);
             DesignApplication.update({
                 id: $scope.application._id
-            }, $scope.application).$promise.then(function (res) {
+            }, $scope.application, function (res) {
                 SessionService.init();
                 SessionService.location('/workflow_edit/' + newWorkflow._id + '?application_id=' + $scope.application._id);
-            }).catch(function (res) {
+            }, function (res) {
                 $scope.application = res.application;
                 updateErrorAlert();
             });
@@ -91,23 +91,22 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         $scope.application.workflows.splice(workflowIndex, 1);
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (resApp) {
+        }, $scope.application, function (resApp) {
             DesignWorkflow.remove({
-                    id: workflowId
-                }).$promise.then(function (res) {})
-                .catch(function (res) {
-                    /* show error*/
-                });
+                id: workflowId
+            }, function (res) {}, function (res) {
+                /* show error*/
+            });
         });
     }
 
     $scope.testApp = function () {
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (res) {
+        }, $scope.application, function (res) {
             SessionService.init();
             SessionService.location('/workflows/' + $scope.application._id + '?test');
-        }).catch(function (res) {
+        }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
         });
@@ -116,10 +115,10 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
     $scope.save = function () {
         DesignApplication.update({
             id: $scope.application._id
-        }, $scope.application).$promise.then(function (res) {
+        }, $scope.application, function (res) {
             SessionService.init();
             SessionService.location('/designer');
-        }).catch(function (res) {
+        }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
         });
@@ -154,7 +153,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
             name: files[0].name,
             type: files[0].type
         });
-        file.$save().then(function (res) {
+        file.$save(function (res) {
             $scope.application.file = {
                 _id: res.file._id,
                 name: res.file.name,
@@ -165,13 +164,11 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
     }
     $scope.removeFile = function (fileId) {
         Files.remove({
-                id: fileId
-            }).$promise
-            .then(function (res) {
-                $scope.application.file = null;
-            })
-            .catch(function (res) {
-                /* show error*/
-            })
+            id: fileId
+        }, function (res) {
+            $scope.application.file = null;
+        }, function (res) {
+            /* show error*/
+        })
     }
 }]);

@@ -59,16 +59,16 @@ app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel',
             .title($scope.sessionData.appData.new_datamodel_name)
             .initialValue('My Datamodel')
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel)
-        ).then(function (result) {
-            var name = {};
-            name[$scope.sessionData.userData.properties.language] = result;
-            var newDatamodel = new DesignDataModel({
-                name: name
+            .cancel($scope.sessionData.appData.cancel),
+            function (result) {
+                var name = {};
+                name[$scope.sessionData.userData.properties.language] = result;
+                var newDatamodel = new DesignDataModel({
+                    name: name
+                });
+                newDatamodel.$save(function () {
+                    SessionService.location('/datamodel/' + newDatamodel._id);
+                });
             });
-            newDatamodel.$save(function () {
-                SessionService.location('/datamodel/' + newDatamodel._id);
-            });
-        });
     }
 }]);
