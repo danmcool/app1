@@ -110,12 +110,14 @@ Email.sendSharePublic = function (email_address, profile_id, app_name, profile_n
 
 Email.sendCalendar = function (email_address, projectName, startDate, endDate, userName) {
     try {
+        var endDateNextDay = new Date(endDate);
+        endDateNextDay.setDate(endDateNextDay.getDate() + 1);
         cal = ical({
             domain: Constants.WebAddress,
-            prodId: '//CloudApp1//calendar//EN',
+            prodId: '//App1//calendar//EN',
             events: [{
                 start: new Date(startDate),
-                end: new Date(endDate),
+                end: endDateNextDay,
                 timestamp: new Date(),
                 summary: projectName,
                 organizer: userName + '<' + email_address + '>'
@@ -126,7 +128,7 @@ Email.sendCalendar = function (email_address, projectName, startDate, endDate, u
             email_address,
             '',
             projectName,
-            'Automatic message from App1',
+            'Dear ' + userName + ', this is the project invitation for ' + projectName + ' please add this to your calendar!',
             '<html><body><p>Dear ' + userName + ', this is the project invitation for ' + projectName + ' please add this to your calendar.</p></body></html>',
             new Buffer(cal.toString()).toString()
         );
