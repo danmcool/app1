@@ -21,6 +21,7 @@ Email.send2 = function (email_address, cc_email_address, subject, text, html, ic
         to: email_address,
         subject: subject,
         text: text,
+        html: html,
         icalEvent: {
             method: 'request',
             // content can be a string, a buffer or a stream
@@ -128,8 +129,8 @@ Email.sendCalendar = function (email_address, projectName, startDate, endDate, u
             email_address,
             '',
             projectName,
-            'Dear ' + userName + ', this is the project invitation for ' + projectName + ' please add this to your calendar!',
-            '<html><body><p>Dear ' + userName + ', this is the project invitation for ' + projectName + ' please add this to your calendar.</p></body></html>',
+            'Dear ' + userName + ', this is the calendar invitation for ' + projectName + ', please add this to your calendar!',
+            '<html><body><p>Dear ' + userName + ', this is the calendar invitation for ' + projectName + ', please add this to your calendar.</p></body></html>',
             new Buffer(cal.toString()).toString()
         );
     } catch (e) {
