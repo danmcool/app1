@@ -111,7 +111,7 @@ Email.sendSharePublic = function (email_address, profile_id, app_name, profile_n
 Email.sendCalendar = function (email_address, projectName, startDate, endDate, userName) {
     try {
         var endDateNextDay = new Date(endDate);
-        endDateNextDay.setDate(endDateNextDay.getDate() + 1);
+        endDateNextDay.setMilliseconds(endDateNextDay.getMilliseconds() + 24 * 60 * 60 * 1000 - 1);
         cal = ical({
             domain: Constants.WebAddress,
             prodId: '//App1//calendar//EN',
