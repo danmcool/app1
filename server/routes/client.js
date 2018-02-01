@@ -395,7 +395,7 @@ router.get('/calendar', function (req, res, next) {
         res.status(200).json({
             msg: 'Calendar sent!'
         });
-        Email.sendCalendar(userObject.email, req.query.project_name, req.query.start_date, req.query.end_date, ((userObject.firstname ? userObject.firstname : '') + ' ' + (userObject.lastname ? userObject.lastname : '')));
+        Email.sendCalendar(userObject.email, req.query.project_name, req.query.start_date, req.query.end_date, true, userObject.firstname);
     });
 });
 
@@ -546,7 +546,7 @@ router.put('/event/:id', function (req, res, next) {
                                         // Timeslot is unavailable!
                                     });
                                 }
-                                Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : '')));
+                                Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
                                 return res.status(200).json({
                                     msg: 'Reservation done!'
                                 });

@@ -24,21 +24,14 @@ Email.send2 = function (email_address, cc_email_address, subject, text, html, ic
         html: html,
         icalEvent: {
             method: 'request',
-            // content can be a string, a buffer or a stream
-            // alternatively you could use `path` that points to a file or an url
             content: ical_content
         }
     }
-
-    console.log('Sending Mail');
     transporter.sendMail(message, function (error, info) {
         if (error) {
-            console.log('Error occurred');
-            console.log(error.message);
+            console.log('Error occurred' + error.message);
             return;
         }
-        console.log('Message sent successfully!');
-        console.log('Server responded with "%s"', info.response);
     });
 }
 
@@ -57,9 +50,7 @@ Email.send = function (email_address, cc_email_address, subject, text, html) {
         authentication: Constants.EmailAuthentication,
         username: Constants.EmailUserName,
         password: Constants.EmailPassword
-    }, function (err, result) {
-        //if (err) return next(err);
-    });
+    }, function (err, result) {});
 }
 
 Email.sendValidation = function (emailAddress, user, companyCode, newPassword) {
@@ -109,20 +100,19 @@ Email.sendSharePublic = function (email_address, profile_id, app_name, profile_n
         Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
 }
 
-Email.sendCalendar = function (email_address, projectName, startDate, endDate, userName) {
+Email.sendCalendar = function (email_address, projectName, startDate, endDate, allDay, userName) {
     try {
-        var endDateNextDay = new Date(endDate);
-        endDateNextDay.setMilliseconds(endDateNextDay.getMilliseconds() + 24 * 60 * 60 * 1000 - 1);
         cal = ical({
             domain: Constants.WebAddress,
             prodId: '//App1//calendar//EN',
             events: [{
                 start: new Date(startDate),
-                end: endDateNextDay,
+                end: new Date(endDate),
+                allDay: allDay,
                 timestamp: new Date(),
                 summary: projectName,
                 organizer: userName + '<' + email_address + '>'
-        }]
+            }]
         });
 
         Email.send2(
@@ -134,7 +124,7 @@ Email.sendCalendar = function (email_address, projectName, startDate, endDate, u
             new Buffer(cal.toString()).toString()
         );
     } catch (e) {
-        console.log(e);
+        console.log('Calendar error ' + e);
     }
 }
 
