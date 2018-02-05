@@ -62,7 +62,7 @@
                                         <md-option ng-repeat="datakey in ref_datamodel_title_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container ng-if="field.title_display=='calculation'&&title_ref.show&&field.title_display_text=='calculation'" flex="auto" class="md-block">
+                                <md-input-container ng-if="field.title_display=='value'&&title_ref.show&&field.title_display_text=='calculation'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.form_calculation}}</label>
                                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.title_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                                 </md-input-container>
@@ -111,7 +111,7 @@
                                         <md-option ng-repeat="datakey in ref_datamodel_subtitle_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container ng-if="field.subtitle_display=='calculation'&&subtitle_ref.show&&field.subtitle_display_text=='calculation'" flex="auto" class="md-block">
+                                <md-input-container ng-if="field.subtitle_display=='value'&&subtitle_ref.show&&field.subtitle_display_text=='calculation'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.form_calculation}}</label>
                                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.subtitle_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                                 </md-input-container>
