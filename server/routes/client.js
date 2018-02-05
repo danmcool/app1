@@ -326,7 +326,7 @@ router.put('/share', function (req, res, next) {
             type: Constants.UserProfileShare,
             _company_code: SessionCache.userData[userToken]._company_code
         }
-        if (objectProfile.properties.user && objectProfile.properties.user == Constants.UserProfilePublic) {
+        if (objectProfile.properties && objectProfile.properties.user == Constants.UserProfilePublic) {
             var appId = Object.keys(objectProfile.profile.applications)[0];
             var workflowId = Object.keys(objectProfile.profile.applications[appId].workflows)[0];
             var applicationsFilter = 'profile.applications.' + appId + '.workflows.' + workflowId;
