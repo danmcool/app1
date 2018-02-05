@@ -92,7 +92,7 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
             id: $scope.application._id
         }, $scope.application, function (res) {
             SessionService.init();
-            SessionService.location('/application_edit/' + $routeParams.application_id);
+            SessionService.location('/application_edit/' + $routeParams.id);
         }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
