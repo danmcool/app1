@@ -232,7 +232,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 updateValuesTitle(fieldIndex, resValues.values, extData);
             } else if (valuesDisplay == 'subtitle') {
                 updateValuesSubTitle(fieldIndex, resValues.values, extData);
-            } else if (valuesDisplay == 'item') {
+            } else if (valuesDisplay == 'items') {
                 updateValuesItems(fieldIndex, resValues.values);
             } else if (valuesDisplay == 'form') {
                 updateValuesForm(fieldIndex, resValues.values, extData);
