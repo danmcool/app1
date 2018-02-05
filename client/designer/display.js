@@ -11,6 +11,16 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
     $scope.block_index = $routeParams.block;
     $scope.field_index = $routeParams.field;
 
+    $scope.title_ref = {
+        show: false
+    }
+    $scope.subtitle_ref = {
+        show: false
+    }
+    $scope.selection_ref = {
+        show: false
+    }
+
     $scope.datamodels = [];
     $scope.display_type = {
         list: {
@@ -94,16 +104,12 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         currency: {
             en: 'Amount',
             fr: 'Montant'
-        },
-        calculation: {
-            en: 'Formula',
-            fr: 'Formule'
         }
     }
     $scope.selection_display_type = {
-        text: {
-            en: 'Text',
-            fr: 'Texte'
+        property: {
+            en: 'Property',
+            fr: 'Proprieté'
         },
         calculation: {
             en: 'Formula',
@@ -187,29 +193,52 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         });
     }
 
+    var initDatamodel = function (datamodelref_id, ref_datamodel, ref_datamodel_keys) {
+        for (var i = 0; i < $scope.datamodels.length; i++) {
+            if ($scope.datamodels[i]._id == datamodelref_id) {
+                ref_datamodel = $scope.datamodels[i];
+                var datamodelkeys = Object.keys($scope.datamodels[i].projection);
+                for (var j = 0; j < datamodelkeys.length; j++) {
+                    ref_datamodel_keys.push({
+                        translated_name: SessionService.translate($scope.datamodels[i].projection[datamodelkeys[j]].name),
+                        full_path: $scope.datamodels[i].projection[datamodelkeys[j]].full_path,
+                        id: datamodelkeys[j]
+                    });
+                }
+                break;
+            }
+        }
+    }
     var initDatamodelKeysRef = function () {
-        $scope.ref_datamodel_keys = [];
-        $scope.ref_datamodel = {};
-        $scope.ref_selection = false;
+        $scope.ref_datamodel_selection_keys = [];
+        $scope.ref_datamodel_selection = {};
+        $scope.ref_datamodel_title_keys = [];
+        $scope.ref_datamodel_title = {};
+        $scope.ref_datamodel_subtitle_keys = [];
+        $scope.ref_datamodel_subtitle = {};
         if ($scope.field.display == 'item' || $scope.field.display == 'reference' || $scope.field.display == 'selection') {
             if ($scope.field && $scope.field.projectionid) {
                 var datamodelref_id = $scope.form.datamodel.projection[$scope.field.projectionid].ref_id;
                 if (datamodelref_id) {
-                    $scope.ref_selection = true;
+                    $scope.selection_ref.show = true;
                 }
-                for (var i = 0; i < $scope.datamodels.length; i++) {
-                    if ($scope.datamodels[i]._id == datamodelref_id) {
-                        $scope.ref_datamodel = $scope.datamodels[i];
-                        var datamodelkeys = Object.keys($scope.datamodels[i].projection);
-                        for (var j = 0; j < datamodelkeys.length; j++) {
-                            $scope.ref_datamodel_keys.push({
-                                translated_name: SessionService.translate($scope.datamodels[i].projection[datamodelkeys[j]].name),
-                                full_path: $scope.datamodels[i].projection[datamodelkeys[j]].full_path,
-                                id: datamodelkeys[j]
-                            });
-                        }
-                        break;
+                initDatamodel(datamodelref_id, $scope.ref_datamodel_selection, $scope.ref_datamodel_selection_keys);
+            }
+        } else if ($scope.field.display == 'list') {
+            if ($scope.field) {
+                if ($scope.field.title) {
+                    var datamodelref_id = $scope.form.datamodel.projection[$scope.field.title].ref_id;
+                    if (datamodelref_id) {
+                        $scope.title_ref.show = true;
                     }
+                    initDatamodel(datamodelref_id, $scope.ref_datamodel_title, $scope.ref_datamodel_title_keys);
+                }
+                if ($scope.field.subtitle) {
+                    var datamodelref_id = $scope.form.datamodel.projection[$scope.field.subtitle].ref_id;
+                    if (datamodelref_id) {
+                        $scope.subtitle_ref.show = true;
+                    }
+                    initDatamodel(datamodelref_id, $scope.ref_datamodel_subtitle, $scope.ref_datamodel_subtitle_keys);
                 }
             }
         }
@@ -219,7 +248,6 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         id: $routeParams.id
     }, function (resultForm, err) {
         $scope.form = resultForm;
-        $scope.ref_selection = false;
         $scope.form.translated_name = SessionService.translate($scope.form.name);
         $scope.field = $scope.form.display[$scope.section_index].blocks[$scope.block_index].fields[$scope.field_index];
         DesignDataModel.query({
@@ -229,7 +257,9 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             $scope.datamodels = datamodels;
             initDatamodelKeysRef();
         });
-        $scope.changeValues($scope.field.listofvalues);
+        $scope.changeValues($scope.field.listofvalues, $scope.selection_ref);
+        $scope.changeValues($scope.field.title_listofvalues, $scope.title_ref);
+        $scope.changeValues($scope.field.subtitle_listofvalues, $scope.subtitle_ref);
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
             var datamodelkeys = Object.keys($scope.form.datamodel.projection);
@@ -278,21 +308,40 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         initDatamodelKeysRef();
     }
 
-    $scope.changeValues = function (listofvalues) {
+    $scope.changeValues = function (listofvalues, reference) {
+        reference.show = false;
         if ($scope.form.values) {
             for (var l = 0; l < $scope.form.values.length; l++) {
                 if ($scope.form.values[l]._id == listofvalues && $scope.form.values[l].type != 'list') {
-                    $scope.ref_selection = true;
+                    reference.show = true;
                     break;
                 }
             }
         }
     }
 
-    $scope.changeRefDataModel = function (field) {
-        for (var i = 0; i < $scope.ref_datamodel_keys.length; i++) {
-            if ($scope.ref_datamodel_keys[i].id == field.selection_id) {
-                field.selection_full_path = $scope.ref_datamodel_keys[i].full_path;
+    $scope.changeSelectionRefDataModel = function (field) {
+        for (var i = 0; i < $scope.ref_datamodel_selection_keys.length; i++) {
+            if ($scope.ref_datamodel_selection_keys[i].id == field.selection_id) {
+                field.selection_full_path = $scope.ref_datamodel_selection_keys[i].full_path;
+                break;
+            }
+        }
+    }
+
+    $scope.changeTitleRefDataModel = function (field) {
+        for (var i = 0; i < $scope.ref_datamodel_title_keys.length; i++) {
+            if ($scope.ref_datamodel_title_keys[i].id == field.title) {
+                field.title_full_path = $scope.ref_datamodel_title_keys[i].full_path;
+                break;
+            }
+        }
+    }
+
+    $scope.changeSubtitleRefDataModel = function (field) {
+        for (var i = 0; i < $scope.ref_datamodel_subtitle_keys.length; i++) {
+            if ($scope.ref_datamodel_subtitle_keys[i].id == field.subtitle) {
+                field.subtitle_full_path = $scope.ref_datamodel_subtitle_keys[i].full_path;
                 break;
             }
         }
@@ -342,8 +391,12 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         }
         if ($scope.field.title) {
             if ($scope.field.display == 'item') {
-                if ($scope.ref_datamodel.projection[$scope.field.title]) {
-                    $scope.field.title_full_path = ($scope.ref_datamodel.projection[$scope.field.title].path == '' ? $scope.ref_datamodel.projection[$scope.field.title].technical_name : $scope.ref_datamodel.projection[$scope.field.title].path + '.' + $scope.ref_datamodel.projection[$scope.field.title].technical_name);
+                if ($scope.ref_datamodel_selection.projection[$scope.field.title]) {
+                    $scope.field.title_full_path = ($scope.ref_datamodel_selection.projection[$scope.field.title].path == '' ? $scope.ref_datamodel_selection.projection[$scope.field.title].technical_name : $scope.ref_datamodel_selection.projection[$scope.field.title].path + '.' + $scope.ref_datamodel_selection.projection[$scope.field.title].technical_name);
+                }
+            } else if ($scope.field.display == 'list' && $scope.field.title_display == 'value' && $scope.field.title_display_text == 'property') {
+                if ($scope.ref_datamodel_title.projection[$scope.field.title]) {
+                    $scope.field.title_full_path = ($scope.ref_datamodel_title.projection[$scope.field.title].path == '' ? $scope.ref_datamodel_title.projection[$scope.field.title].technical_name : $scope.ref_datamodel_title.projection[$scope.field.title].path + '.' + $scope.ref_datamodel_title.projection[$scope.field.title].technical_name);
                 }
             } else if ($scope.form.datamodel.projection[$scope.field.title]) {
                 $scope.field.title_full_path = ($scope.form.datamodel.projection[$scope.field.title].path == '' ? $scope.form.datamodel.projection[$scope.field.title].technical_name : $scope.form.datamodel.projection[$scope.field.title].path + '.' + $scope.form.datamodel.projection[$scope.field.title].technical_name);
@@ -351,8 +404,12 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         }
         if ($scope.field.subtitle) {
             if ($scope.field.display == 'item') {
-                if ($scope.ref_datamodel.projection[$scope.field.subtitle]) {
-                    $scope.field.subtitle_full_path = ($scope.ref_datamodel.projection[$scope.field.subtitle].path == '' ? $scope.ref_datamodel.projection[$scope.field.subtitle].technical_name : $scope.ref_datamodel.projection[$scope.field.subtitle].path + '.' + $scope.ref_datamodel.projection[$scope.field.subtitle].technical_name);
+                if ($scope.ref_datamodel_selection.projection[$scope.field.subtitle]) {
+                    $scope.field.subtitle_full_path = ($scope.ref_datamodel_selection.projection[$scope.field.subtitle].path == '' ? $scope.ref_datamodel_selection.projection[$scope.field.subtitle].technical_name : $scope.ref_datamodel_selection.projection[$scope.field.subtitle].path + '.' + $scope.ref_datamodel_selection.projection[$scope.field.subtitle].technical_name);
+                }
+            } else if ($scope.field.display == 'list' && $scope.field.subtitle_display == 'value' && $scope.field.subtitle_display_text == 'property') {
+                if ($scope.ref_datamodel_subtitle.projection[$scope.field.subtitle]) {
+                    $scope.field.subtitle_full_path = ($scope.ref_datamodel_subtitle.projection[$scope.field.subtitle].path == '' ? $scope.ref_datamodel_subtitle.projection[$scope.field.subtitle].technical_name : $scope.ref_datamodel_subtitle.projection[$scope.field.subtitle].path + '.' + $scope.ref_datamodel_subtitle.projection[$scope.field.subtitle].technical_name);
                 }
             } else if ($scope.form.datamodel.projection[$scope.field.subtitle]) {
                 $scope.field.subtitle_full_path = ($scope.form.datamodel.projection[$scope.field.subtitle].path == '' ? $scope.form.datamodel.projection[$scope.field.subtitle].technical_name : $scope.form.datamodel.projection[$scope.field.subtitle].path + '.' + $scope.form.datamodel.projection[$scope.field.subtitle].technical_name);
@@ -360,8 +417,8 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         }
         if ($scope.field.date) {
             if ($scope.field.display == 'item') {
-                if ($scope.ref_datamodel.projection[$scope.field.date]) {
-                    $scope.field.date_full_path = ($scope.ref_datamodel.projection[$scope.field.date].path == '' ? $scope.ref_datamodel.projection[$scope.field.date].technical_name : $scope.ref_datamodel.projection[$scope.field.date].path + '.' + $scope.ref_datamodel.projection[$scope.field.date].technical_name);
+                if ($scope.ref_datamodel_selection.projection[$scope.field.date]) {
+                    $scope.field.date_full_path = ($scope.ref_datamodel_selection.projection[$scope.field.date].path == '' ? $scope.ref_datamodel_selection.projection[$scope.field.date].technical_name : $scope.ref_datamodel_selection.projection[$scope.field.date].path + '.' + $scope.ref_datamodel_selection.projection[$scope.field.date].technical_name);
                 }
             } else if ($scope.form.datamodel.projection[$scope.field.date]) {
                 $scope.field.date_full_path = ($scope.form.datamodel.projection[$scope.field.date].path == '' ? $scope.form.datamodel.projection[$scope.field.date].technical_name : $scope.form.datamodel.projection[$scope.field.date].path + '.' + $scope.form.datamodel.projection[$scope.field.date].technical_name);

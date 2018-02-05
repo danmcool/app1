@@ -28,19 +28,41 @@
                                         <md-option ng-repeat="display in title_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container ng-if="field.title_display=='value'||field.title_display=='text'||field.title_display=='currency'" flex="auto" class="md-block">
+                                <md-input-container ng-if="field.title_display=='text'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_display}}</label>
+                                    <md-select ng-model="field.title_display_text" ng-required="true">
+                                        <md-option ng-repeat="display in selection_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.title_display=='text'&&field.title_display_text=='calculation'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.form_calculation}}</label>
+                                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.title_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
+                                </md-input-container>
+                                <md-input-container ng-if="field.title_display=='value'||field.title_display=='currency'||(field.title_display=='text'&&field.title_display_text=='property')" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
-                                    <md-select ng-model="field.title" ng-required="true">
+                                    <md-select ng-model="field.title" ng-required="true" ng-change="changeFieldDisplay(field)">
                                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.title_display=='value'||field.title_display=='currency'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_listofvalues}}</label>
-                                    <md-select ng-model="field.title_listofvalues" ng-required="(form.values.length > 0)">
+                                    <md-select ng-model="field.title_listofvalues" ng-required="(form.values.length > 0)" ng-change="changeValues(field.title_listofvalues, title_ref)">
                                         <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container ng-if="field.title_display=='calculation'" flex="auto" class="md-block">
+                                <md-input-container ng-if="field.title_display=='value'&&title_ref.show" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_display}}</label>
+                                    <md-select ng-model="field.title_display_text" ng-required="true">
+                                        <md-option ng-repeat="display in selection_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.title_display=='value'&&title_ref.show&&field.title_display_text=='property'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_datafield}}</label>
+                                    <md-select ng-model="field.title_ref" ng-required="true">
+                                        <md-option ng-repeat="datakey in ref_datamodel_title_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.title_display=='calculation'&&title_ref.show&&field.title_display_text=='calculation'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.form_calculation}}</label>
                                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.title_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                                 </md-input-container>
@@ -55,19 +77,41 @@
                                         <md-option ng-repeat="display in title_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='text'||field.subtitle_display=='currency'" flex="auto" class="md-block">
+                                <md-input-container ng-if="field.subtitle_display=='text'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_display}}</label>
+                                    <md-select ng-model="field.subtitle_display_text">
+                                        <md-option ng-repeat="display in selection_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.subtitle_display=='text'&&field.subtitle_display_text=='calculation'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.form_calculation}}</label>
+                                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.subtitle_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
+                                </md-input-container>
+                                <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='currency'||(field.subtitle_display=='text'&&field.subtitle_display_text=='property')" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
-                                    <md-select ng-model="field.subtitle">
+                                    <md-select ng-model="field.subtitle" ng-change="changeFieldDisplay(field)">
                                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='currency'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_listofvalues}}</label>
-                                    <md-select ng-model="field.subtitle_listofvalues">
+                                    <md-select ng-model="field.subtitle_listofvalues" ng-required="(form.values.length > 0)" ng-change="changeValues(field.subtitle_listofvalues, subtitle_ref)">
                                         <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container ng-if="field.subtitle_display=='calculation'" flex="auto" class="md-block">
+                                <md-input-container ng-if="field.subtitle_display=='value'&&subtitle_ref.show" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_display}}</label>
+                                    <md-select ng-model="field.subtitle_display_text">
+                                        <md-option ng-repeat="display in selection_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.subtitle_display=='value'&&subtitle_ref.show&&field.subtitle_display_text=='property'" flex="auto" class="md-block">
+                                    <label>{{sessionData.appData.field_datafield}}</label>
+                                    <md-select ng-model="field.subtitle_ref">
+                                        <md-option ng-repeat="datakey in ref_datamodel_subtitle_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container ng-if="field.subtitle_display=='calculation'&&subtitle_ref.show&&field.subtitle_display_text=='calculation'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.form_calculation}}</label>
                                     <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.subtitle_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                                 </md-input-container>
@@ -159,7 +203,7 @@
                                 <md-input-container ng-if="field.title_display=='value'||field.title_display=='text'||field.title_display=='currency'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.title" ng-required="true">
-                                        <md-option ng-repeat="datakey in ref_datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                        <md-option ng-repeat="datakey in ref_datamodel_selection_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.title_display=='value'||field.title_display=='currency'" flex="auto" class="md-block">
@@ -186,7 +230,7 @@
                                 <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='text'||field.subtitle_display=='currency'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.subtitle">
-                                        <md-option ng-repeat="datakey in ref_datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                        <md-option ng-repeat="datakey in ref_datamodel_selection_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.subtitle_display=='value'||field.subtitle_display=='currency'" flex="auto" class="md-block">
@@ -387,23 +431,23 @@
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_listofvalues}}</label>
-                            <md-select ng-model="field.listofvalues" ng-required="(form.values.length > 0)" ng-change="changeValues(field.listofvalues)">
+                            <md-select ng-model="field.listofvalues" ng-required="(form.values.length > 0)" ng-change="changeValues(field.listofvalues, selection_ref)">
                                 <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-input-container ng-if="ref_selection" flex="auto" class="md-block">
+                        <md-input-container ng-if="selection_ref.show" flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_display}}</label>
                             <md-select ng-model="field.selection_display" ng-required="true">
                                 <md-option ng-repeat="display in selection_display_types" ng-value="display.type">{{display.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-input-container ng-if="field.selection_display=='text'&&ref_selection" flex="auto" class="md-block">
+                        <md-input-container ng-if="field.selection_display=='property'&&selection_ref.show" flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>
-                            <md-select ng-model="field.selection_id" ng-required="true" ng-change="changeRefDataModel(field)">
-                                <md-option ng-repeat="datakey in ref_datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                            <md-select ng-model="field.selection_id" ng-required="true" ng-change="changeSelectionRefDataModel(field)">
+                                <md-option ng-repeat="datakey in ref_datamodel_selection_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-input-container ng-if="field.selection_display=='calculation'&&ref_selection" flex="auto" class="md-block">
+                        <md-input-container ng-if="field.selection_display=='calculation'&&selection_ref.show" flex="auto" class="md-block">
                             <label>{{sessionData.appData.form_calculation}}</label>
                             <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.selection_calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                         </md-input-container>
