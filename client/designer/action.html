@@ -69,6 +69,22 @@
                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='share'">
+                    <label>{{sessionData.appData.email}}</label>
+                    <md-select ng-model="action.email_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='share'">
+                    <label>{{sessionData.appData.field_datafield}}</label>
+                    <md-select ng-model="action.constraint_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='share'">
+                    <label>{{sessionData.appData.new_value}}</label>
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.constraint_value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                </md-input-container>
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">
