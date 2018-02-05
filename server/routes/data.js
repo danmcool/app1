@@ -140,11 +140,11 @@ router.get('/:datamodelid/:id', function (req, res, next) {
                     remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
                     remote = true;
                     break;
-                } else {
-                    if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read) {
-                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read;
-                        remote = true;
-                    }
+                    /*} else {
+                        if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read) {
+                            remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read;
+                            remote = true;
+                        }*/
                 }
 
             }

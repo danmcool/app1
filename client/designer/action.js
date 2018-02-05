@@ -1,4 +1,4 @@
-app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignWorkflow', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignWorkflow) {
+app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignWorkflow', 'DesignApplication', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignWorkflow, DesignApplication) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -115,6 +115,18 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         };
         form_home.translated_name = SessionService.translate(form_home.name);
         $scope.forms.push(form_home);
+    });
+
+    DesignApplication.get({
+        id: $routeParams.application_id
+    }, function (resultApp, err) {
+        if (resultApp.profiles) {
+            for (var i = 0; i < resultApp.profiles.length; i++) {
+                resultApp.profiles[i].translated_name = SessionService.translate(resultApp.profiles[i].name);
+                resultApp.profiles[i].translated_description = SessionService.translate(resultApp.profiles[i].description);
+            }
+        }
+        $scope.application = resultApp;
     });
 
     $scope.editText = function (object, property, multipleLines) {

@@ -32,6 +32,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Application Designer',
             fr: 'Concepteur d`application'
         },
+        share_form: {
+            en: 'Share Form',
+            fr: 'Formulaire pour le partage'
+        },
         share_url: {
             en: 'Share URL',
             fr: 'URL pour le partage'
@@ -124,9 +128,9 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Deactivate',
             fr: 'Desactiver'
         },
-        app_profiles: {
-            en: 'Application User Profiles',
-            fr: 'Profiles utilisateur de l`application'
+        app_profile: {
+            en: 'Application User Profile',
+            fr: 'Profile utilisateur d`application'
         },
         profiles: {
             en: 'Profiles',

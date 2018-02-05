@@ -325,7 +325,7 @@ router.put('/share', function (req, res, next) {
             properties: objectProfile.properties,
             type: Constants.UserProfileShare,
             _company_code: SessionCache.userData[userToken]._company_code
-        };
+        }
         if (objectProfile.properties.user && objectProfile.properties.user == Constants.UserProfilePublic) {
             var appId = Object.keys(objectProfile.profile.applications)[0];
             var workflowId = Object.keys(objectProfile.profile.applications[appId].workflows)[0];
@@ -359,8 +359,8 @@ router.put('/share', function (req, res, next) {
             if (!userProfile.profile.datamodels) {
                 userProfile.profile.datamodels = {};
             }
-            userProfile.profile.datamodels[req.query.datamodel_id] = {};
-            userProfile.profile.datamodels[req.query.datamodel_id][req.query.data_id] = {
+            userProfile.profile.datamodels[req.body.datamodel_id] = {};
+            userProfile.profile.datamodels[req.body.datamodel_id][req.body.data_id] = {
                 _company_code: SessionCache.userData[userToken]._company_code,
                 constraint: {
                     key: req.body.key,
@@ -373,7 +373,7 @@ router.put('/share', function (req, res, next) {
                     msg: 'Application shared successfully!',
                     share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
                 });
-                Email.sendShare(req.body.email, SessionCache.userData[userToken].email, req.query.data_id, newUserprofile._id);
+                Email.sendShare(req.body.email, SessionCache.userData[userToken].email, req.body.data_id, newUserprofile._id);
             });
         }
     });

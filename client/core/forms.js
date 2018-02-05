@@ -1036,14 +1036,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 document.body.removeChild(downloadElement);
             }
         }*/
-    $scope.share = function (formula, nextFormId, setValue, constraintPath, constraintValue, emailPath, formId, data) {
+    $scope.share = function (formula, nextFormId, setValue, constraintPath, constraintValue, emailPath, shareAppProfileId, data) {
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id
         }, data, function (res) {
             Share.update({
-                form_id: formId,
+                app_profile_id: shareAppProfileId,
                 datamodel_id: $scope.form.datamodel._id,
                 data_id: data._id,
                 email: $scope.resolvePath(data, emailPath),

@@ -85,6 +85,12 @@
                     <label>{{sessionData.appData.new_value}}</label>
                     <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.constraint_value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='share'">
+                    <label>{{sessionData.appData.app_profile}}</label>
+                    <md-select ng-model="action.app_profile_id" ng-required="true)">
+                        <md-option ng-repeat="profile in application.profiles" ng-value="profile._id">{{profile.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">
