@@ -120,4 +120,10 @@ Email.sendCalendar = function (email_address, projectName, startDate, endDate, a
     }
 }
 
+Email.prepareMessage = function (text, userData) {
+    if (!text) return '';
+    return text.replace(/@@user/g, ((userData.firstname ? userData.firstname : '') + ' ' + (userData.lastname ? userData.lastname : ''))).replace(/@@company/g, (userData.company.name ? userData.company.name : ''));
+}
+
+
 module.exports = Email;

@@ -373,7 +373,10 @@ router.put('/share', function (req, res, next) {
                     msg: 'Application shared successfully!',
                     share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
                 });
-                Email.sendShare(req.body.email, SessionCache.userData[userToken].email, newUserprofile._id, req.body.message);
+                if (!req.body.message) {
+                    req.body.message = '';
+                }
+                Email.sendShare(req.body.email, SessionCache.userData[userToken].email, newUserprofile._id, Email.prepareMessage(req.body.message, SessionCache.userData[userToken]));
             });
         }
     });
@@ -581,7 +584,7 @@ router.put('/notify/:user_id', function (req, res, next) {
         res.status(200).json({
             msg: 'Email sent!'
         });
-        Email.send(userObject.email, null, req.body.email_title, 'Automatic message from App1', req.body.email_html.replace(/@@user/g, ((userObject.firstname ? userObject.firstname : '') + ' ' + (userObject.lastname ? userObject.lastname : ''))));
+        Email.send(userObject.email, null, req.body.email_title, 'Automatic message from App1', Email.prepareMessage(req.body.email_html, userObject));
     });
 });
 
