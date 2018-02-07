@@ -368,7 +368,7 @@ router.get('/open', function (req, res, next) {
         if (!objectProfile || objectProfile.type != Constants.UserProfileShare) return res.status(400).json({
             err: 'Invalid parameters!'
         });
-        if (objectProfile.properties.user == Constants.UserProfilePublic) {
+        if (objectProfile.properties && objectProfile.properties.user == Constants.UserProfilePublic) {
             User.findOne({
                 user: Constants.PublicUser + '@' + objectProfile._company_code,
                 _company_code: objectProfile._company_code,
