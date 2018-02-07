@@ -373,7 +373,7 @@ router.put('/share', function (req, res, next) {
                     msg: 'Application shared successfully!',
                     share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
                 });
-                Email.sendShare(req.body.email, SessionCache.userData[userToken].email, req.body.data_id, newUserprofile._id);
+                Email.sendShare(req.body.email, SessionCache.userData[userToken].email, newUserprofile._id, req.body.message);
             });
         }
     });

@@ -607,7 +607,7 @@
                                 <md-button ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="share">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint_path, action.constraint_value, action.email_path, action.app_profile_id, data)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint_path, action.constraint_value, action.email_path, action.app_profile_id, action.message, data)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="calendar">
                                 <md-button ng-disabled="dynamicForm.$invalid" ng-click="calendar(action.formula, action.next_form_id, action.set_value, action.forward_id, action.project_name_path, action.start_date_path, action.end_date_path, action.user_path, data)" class="md-primary">{{action.translated_name}}</md-button>

@@ -77,26 +77,18 @@ Email.sendSAMLNewUser = function (email_address, user, company_code) {
         '</p></span>');
 }
 
-Email.sendShare = function (email_address, cc_email_address, data_id, profile_id) {
+Email.sendShare = function (email_address, cc_email_address, profile_id, message) {
     Email.send(
-        email_address,
-        cc_email_address,
-        'App1 - Shared form',
+        email_address, cc_email_address, 'App1 - Shared workflow',
         'Automatic message from App1',
-        '<p>A form has been shared with you, to access it please click on the following link:</p><br><a href="http://' +
-        Constants.WebAddress + '/client/open?form_id=' + form_id + '&datamodel_id=' +
-        datamodel_id + '&data_id=' +
-        data_id +
-        '&profile_id=' +
-        profile_id + '">Open form</a><br><br><p>You are required to register on App1 in order to access the form!</p>' +
-        '<br><a href="http://' + Constants.WebAddress + '">App1</a>');
+        message + '<br><a href="http://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">http://' +
+        Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
 }
-
 Email.sendSharePublic = function (email_address, profile_id, app_name, profile_name) {
     Email.send(
         email_address, '', 'App1 - Shared workflow',
         'Automatic message from App1',
-        '<span><p>Dear customer, please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="http://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">http://' +
+        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="http://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">http://' +
         Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
 }
 

@@ -56,6 +56,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Text Translation',
             fr: 'Traduction de texte'
         },
+        html_message: {
+            en: 'Message (HTML Format)',
+            fr: 'Message (format HTML)'
+        },
         new_workflow: {
             en: 'New workflow',
             fr: 'Nouveau processus'

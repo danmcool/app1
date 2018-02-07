@@ -91,6 +91,10 @@
                         <md-option ng-repeat="profile in application.profiles" ng-value="profile._id">{{profile.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='share'">
+                    <label>{{sessionData.appData.html_message}}</label>
+                    <textarea type="text" ng-disabled="false" ng-required="true" name="action_message" ng-model="action.message" md-minlength="0" ng-minlength="0" md-maxlength="1000" ng-maxlength="1000" rows="4"></textarea>
+                </md-input-container>
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">
