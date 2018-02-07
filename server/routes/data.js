@@ -172,7 +172,7 @@ router.get('/:datamodelid/:id', function (req, res, next) {
         if (profile.datamodels[req.params.datamodelid].read._user) {
             search_criteria._user = {
                 $in: profile.datamodels[req.params.datamodelid].read._user
-            };
+            }
         }
     }
     if (!req.query.populate) {

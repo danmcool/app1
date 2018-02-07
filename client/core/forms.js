@@ -324,6 +324,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     var initComponents = function () {
         var formFields = $scope.form.fields;
         var formValues = $scope.form.values;
+        if ($scope.form.search_criteria) {
+            $scope.search_criteria = $scope.form.search_criteria;
+        }
+        $scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
+        $scope.search_criteria = $scope.search_criteria.replace(/@@today/g, new Date());
+        var keysOfParameters = Object.keys($routeParams);
+        for (k = 0, l = keysOfParameters.length; k < l; k++) {
+            $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
+                keysOfParameters[k]]);
+        }
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'address') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
@@ -368,16 +378,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'subtitle', formFields[i]);
                         }
                     }
-                }
-                if ($scope.form.search_criteria) {
-                    $scope.search_criteria = $scope.form.search_criteria;
-                }
-                $scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
-                $scope.search_criteria = $scope.search_criteria.replace(/@@today/g, new Date());
-                var keysOfParameters = Object.keys($routeParams);
-                for (k = 0, l = keysOfParameters.length; k < l; k++) {
-                    $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
-                        keysOfParameters[k]]);
                 }
                 $scope.formLoaded = true;
                 $scope.getNextData();
@@ -488,6 +488,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 Datas.get({
                     datamodel_id: $scope.form.datamodel._id,
                     entry_id: $routeParams.entry_id,
+                    search_criteria: $scope.search_criteria,
                     populate: populate.trim()
                 }, function (data) {
                     $scope.data = data;
