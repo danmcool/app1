@@ -324,16 +324,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     var initComponents = function () {
         var formFields = $scope.form.fields;
         var formValues = $scope.form.values;
-        if ($scope.form.search_criteria) {
-            $scope.search_criteria = $scope.form.search_criteria;
-        }
-        $scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
-        $scope.search_criteria = $scope.search_criteria.replace(/@@today/g, new Date());
-        var keysOfParameters = Object.keys($routeParams);
-        for (k = 0, l = keysOfParameters.length; k < l; k++) {
-            $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
-                keysOfParameters[k]]);
-        }
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'address') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
@@ -476,6 +466,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         updateAppName();
         initText();
+        if ($scope.form.search_criteria) {
+            $scope.search_criteria = $scope.form.search_criteria;
+        }
+        $scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
+        $scope.search_criteria = $scope.search_criteria.replace(/@@today/g, new Date());
+        var keysOfParameters = Object.keys($routeParams);
+        for (k = 0, l = keysOfParameters.length; k < l; k++) {
+            $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
+                keysOfParameters[k]]);
+        }
         if ($scope.form.datamodel) {
             if ($routeParams.entry_id == '0') {
                 $scope.data = new Datas({
