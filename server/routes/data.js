@@ -178,7 +178,6 @@ router.get('/:datamodelid/:id', function (req, res, next) {
     if (!req.query.populate) {
         req.query.populate = '';
     }
-    console.log(search_criteria);
     Metadata.Objects[req.params.datamodelid].findOne(search_criteria).populate(req.query.populate).exec(function (err, object) {
         if (err) return next(err);
         res.json(object);
