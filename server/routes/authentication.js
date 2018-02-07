@@ -198,7 +198,7 @@ router.get('/validate', function (req, res) {
                 applications: appList
             });
         });
-        res.status(200).send('<p>Registration: user has been validated, please log on using initial password!</p><br><a href="/#!/login">Login</a>');
+        res.status(200).send('<p>Registration: user has been validated, please log on using initial password!</p><br><a href="/login">Login</a>');
         /*
         var objectList = {};
         Application.find({
@@ -424,7 +424,7 @@ router.get('/open', function (req, res, next) {
                         res.redirect('/#!/form/' + workflow.startup_form + '/' + req.query.data_id + '?application_id=' + application_id + '&workflow_id=' + workflow._id);
                     });
                 } else {
-                    return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="/#!/register">Register</a><br><a href="/#!/login">Login</a>');
+                    return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="/register">Register</a><br><a href="/login">Login</a>');
                 }
             });
         }
