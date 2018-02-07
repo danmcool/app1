@@ -166,9 +166,6 @@ router.get('/:datamodelid/:id', function (req, res, next) {
         search_criteria._company_code = {
             $eq: remote_profile._company_code
         }
-        search_criteria[remote_profile.constraint.key] = {
-            $eq: remote_profile.constraint.value
-        }
     } else {
         search_criteria._company_code = {
             $eq: profile.datamodels[req.params.datamodelid].read._company_code
@@ -216,6 +213,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
             $eq: req.params.id
         }
     }
+    var objectToBeUpdated = {};
     if (remote) {
         search_criteria._company_code = {
             $eq: remote_profile._company_code
@@ -223,9 +221,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
         search_criteria._user = {
             $eq: req.body._user
         };
-        search_criteria[remote_profile.constraint.key] = {
-            $eq: remote_profile.constraint.value
-        }
+        objectToBeUpdated[remote_profile.constraint.key] = remote_profile.constraint.value;
     } else {
         search_criteria._company_code = {
             $eq: profile.datamodels[req.params.datamodelid].update._company_code
@@ -235,10 +231,11 @@ router.put('/:datamodelid/:id', function (req, res, next) {
                 $in: profile.datamodels[req.params.datamodelid].update._user
             }
         }
+        objectToBeUpdated = req.body;
     }
     search_criteria._updated_at = Date.parse(req.body._updated_at);
-    req.body._updated_at = Date.now();
-    delete req.body._appointments;
+    objectToBeUpdated._updated_at = Date.now();
+    delete objectToBeUpdated._appointments;
     Metadata.Objects[req.params.datamodelid].findOneAndUpdate(search_criteria, req.body, function (err, object) {
         if (err) return next(err);
         if (object) {
