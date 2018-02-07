@@ -411,15 +411,21 @@ router.get('/open', function (req, res, next) {
                     });
                 });
         } else {
-            var userWithRemoteProfile = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-            userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
-            SessionCache.update(req.cookies[Constants.SessionCookie], userWithRemoteProfile);
-            var application_id = objectProfile.profile.applications[Object.keys(objectProfile)[0]];
-            Workflow.findOne(Object.keys(objectProfile.profile.applications[application_id].workflows)[0]).exec(function (errWorkflow, workflow) {
-                if (errWorkflow) return res.status(400).json({
-                    err: 'Workflow error'
-                });
-                res.redirect('/#!/form/' + workflow.startup_form + '/' + req.query.data_id + '?application_id=' + application_id + '&workflow_id=' + workflow._id);
+            SessionCache.isActive(req, function (active) {
+                if (active) {
+                    var userWithRemoteProfile = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+                    userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
+                    SessionCache.update(req.cookies[Constants.SessionCookie], userWithRemoteProfile);
+                    var application_id = objectProfile.profile.applications[Object.keys(objectProfile)[0]];
+                    Workflow.findOne(Object.keys(objectProfile.profile.applications[application_id].workflows)[0]).exec(function (errWorkflow, workflow) {
+                        if (errWorkflow) return res.status(400).json({
+                            err: 'Workflow error'
+                        });
+                        res.redirect('/#!/form/' + workflow.startup_form + '/' + req.query.data_id + '?application_id=' + application_id + '&workflow_id=' + workflow._id);
+                    });
+                } else {
+                    return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="/#/register">Register</a><br><a href="/#/login">Login</a>');
+                }
             });
         }
         /*
