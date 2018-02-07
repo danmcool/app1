@@ -61,7 +61,7 @@ Email.sendValidation = function (emailAddress, user, companyCode, newPassword) {
         'Automatic message from App1',
         '<span><p>Dear customer, thank-you for registering with our website, your initial password is: ' +
         newPassword +
-        '</p></span><br><span><p><b>Please validate your email by clicking on the following link</b></p></span><br><a href="http://' +
+        '</p></span><br><span><p><b>Please validate your email by clicking on the following link</b></p></span><br><a href="https://' +
         Constants.WebAddress + '/authentication/validate?user=' + user + '&code=' +
         companyCode + '"><p><b>Validate registration</b></p></a>');
 }
@@ -81,14 +81,14 @@ Email.sendShare = function (email_address, cc_email_address, profile_id, message
     Email.send(
         email_address, cc_email_address, 'App1 - Shared workflow',
         'Automatic message from App1',
-        message + '<br><a href="http://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">http://' +
+        message + '<br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
         Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
 }
 Email.sendSharePublic = function (email_address, profile_id, app_name, profile_name) {
     Email.send(
         email_address, '', 'App1 - Shared workflow',
         'Automatic message from App1',
-        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="http://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">http://' +
+        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
         Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
 }
 

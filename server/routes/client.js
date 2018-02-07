@@ -343,14 +343,14 @@ router.put('/share', function (req, res, next) {
                         if (err) return next(err);
                         res.status(200).json({
                             msg: 'Application shared successfully (new share)!',
-                            share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+                            share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
                         });
                         Email.sendSharePublic(SessionCache.userData[userToken].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
                     });
                 } else {
                     res.status(200).json({
                         msg: 'Application shared successfully (existing share)!',
-                        share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
+                        share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
                     });
                     Email.sendSharePublic(SessionCache.userData[userToken].email, objectExistingProfile._id, req.body.app_name, req.body.profile_name);
                 }
@@ -371,7 +371,7 @@ router.put('/share', function (req, res, next) {
                 if (err) return next(err);
                 res.status(200).json({
                     msg: 'Application shared successfully!',
-                    share_url: 'http://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+                    share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
                 });
                 if (!req.body.message) {
                     req.body.message = '';
