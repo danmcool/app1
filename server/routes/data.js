@@ -157,11 +157,10 @@ router.get('/:datamodelid/:id', function (req, res, next) {
             });
         }
     }
-    var search_criteria = {
-        _id: {
-            $eq: req.params.id
-        }
-    };
+    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
+    search_criteria._id = {
+        $eq: req.params.id
+    }
     if (remote) {
         search_criteria._company_code = {
             $eq: remote_profile._company_code
