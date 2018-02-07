@@ -226,8 +226,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             if (gotoApps) {
                 sessionData.applicationName = sessionData.appData.home;
                 location('/applications');
-            } else
-            if ($location.path() == '/') {
+            } else if ($location.path() == '/') {
                 location('/applications');
             }
         }, function (error) {
@@ -239,7 +238,9 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             initSessionData(userResult, false);
         }, function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.language);
-            location('/');
+            if ($location.path() != '/login' && $location.path() != '/register') {
+                location('/');
+            }
         });
     }
     var openApp = function (appId) {
