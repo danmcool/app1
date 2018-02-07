@@ -423,7 +423,8 @@ router.get('/open', function (req, res, next) {
                         if (errWorkflow) return res.status(400).json({
                             err: 'Workflow error'
                         });
-                        res.redirect('/#!/form/' + workflow.startup_form + '/' + req.query.data_id + '?application_id=' + application_id + '&workflow_id=' + workflow._id);
+                        var datamodel = Object.keys(objectProfile.profile.datamodels)[0];
+                        res.redirect('/#!/form/' + workflow.startup_form + '/' + Object.keys(objectProfile.profile.datamodels[datamodel])[0] + '?application_id=' + app_id + '&workflow_id=' + workflow._id);
                     });
                 } else {
                     return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + Constants.WebAddress + '/#!/register">Register</a><br><a href="https://' + Constants.WebAddress + '' + '/#!/login">Login</a>');
