@@ -27,7 +27,6 @@ DataModel.find(function (err, objects) {
                 }
             }
             try {
-                console.log(objects[i]._id);
                 modelSchema = new Schema(DatamodelTools.buildDataModel(objects[i].projection, index));
             } catch (e) {
                 console.log(e);

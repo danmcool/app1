@@ -416,7 +416,7 @@ router.get('/open', function (req, res, next) {
                     var userWithRemoteProfile = SessionCache.userData[req.cookies[Constants.SessionCookie]];
                     userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
                     SessionCache.update(req.cookies[Constants.SessionCookie], userWithRemoteProfile);
-                    var app_id = objectProfile.profile.applications[Object.keys(objectProfile.profile.applications)[0]];
+                    var app_id = Object.keys(objectProfile.profile.applications)[0];
                     Workflow.findOne(Object.keys(objectProfile.profile.applications[app_id].workflows)[0]).exec(function (errWorkflow, workflow) {
                         if (errWorkflow) return res.status(400).json({
                             err: 'Workflow error'
