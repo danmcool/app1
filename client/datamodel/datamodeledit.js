@@ -132,7 +132,7 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     };
@@ -150,7 +150,7 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     };
@@ -178,7 +178,7 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
             controller: 'NewFieldCtrl',
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             var newId = computeNewId();
             result.path = (parent_path == '' ? parent_name : parent_path + '.' + parent_name);
             result.full_path = (result.path == '' ? result.technical_name : result.path + '.' + result.technical_name);

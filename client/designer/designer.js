@@ -105,7 +105,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel),
+            .cancel($scope.sessionData.appData.cancel)).then(
             function () {
                 DesignApplication.remove({
                     id: app._id
@@ -183,7 +183,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
                         .textContent(res.share_url)
                         .ok($scope.sessionData.appData.ok)
                     );
-                }, function (res) {});
+                });
                 break;
             }
         }

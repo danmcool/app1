@@ -90,7 +90,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     }
@@ -156,7 +156,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             controller: 'NewValueCtrl',
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             if (result == '') {
                 var name = {};
                 name[$scope.sessionData.userData.properties.language] = '';

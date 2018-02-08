@@ -840,7 +840,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel),
+            .cancel($scope.sessionData.appData.cancel)).then(
             function () {
                 Datas.remove({
                     datamodel_id: $scope.form.datamodel._id,
@@ -900,7 +900,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel),
+            .cancel($scope.sessionData.appData.cancel)).then(
             function () {
                 updateComponents($scope.form, setValue, $scope.data);
                 var itemList = $scope.resolvePath($scope.data, itemPath);
@@ -963,7 +963,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .title($scope.sessionData.appData.confirmation)
             .textContent($scope.sessionData.appData.removal_confirmation)
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel),
+            .cancel($scope.sessionData.appData.cancel)).then(
             function () {
                 Datas.remove({
                     datamodel_id: $scope.form.datamodel._id,

@@ -127,7 +127,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var workflow = $scope.workflows[index];
                     Workflows.remove({
@@ -163,7 +163,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var application = $scope.applications[index];
                     Applications.remove({
@@ -199,7 +199,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var form = $scope.forms[index];
                     Forms.remove({
@@ -234,7 +234,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
             .clickOutsideToClose(true)
             .title('Remove object?')
             .ok('Yes')
-            .cancel('No'),
+            .cancel('No')).then(
             function () {
                 var value = $scope.values[index];
                 Values.remove({
@@ -269,7 +269,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var userprofile = $scope.userprofiles[index];
                     UserProfiles.remove({
@@ -304,7 +304,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var session = $scope.sessions[index];
                     Sessions.remove({
@@ -339,7 +339,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var company = $scope.companies[index];
                     Companies.remove({
@@ -373,7 +373,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var user = $scope.users[index];
                     Users.remove({
@@ -407,7 +407,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var user = $scope.files[index];
                     Files.remove({
@@ -443,7 +443,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .clickOutsideToClose(true)
                 .title('Remove object?')
                 .ok('Yes')
-                .cancel('No'),
+                .cancel('No')).then(
                 function () {
                     var datamodel = $scope.datamodels[index];
                     DataModels.remove({

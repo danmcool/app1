@@ -23,7 +23,7 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
                 function () {
                     SessionService.location('/');
                 });
-        }, function (res) {
+        }).then(function (res) {
             $mdDialog.show(
                 $mdDialog.alert()
                 .parent(angular.element(document.body))

@@ -35,7 +35,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     }

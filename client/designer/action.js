@@ -140,7 +140,7 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     }

@@ -35,7 +35,7 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     }

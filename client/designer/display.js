@@ -358,7 +358,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             },
             parent: angular.element(document.body),
             clickOutsideToClose: true
-        }, function (result) {
+        }).then(function (result) {
             object[property] = result;
         });
     }
@@ -371,7 +371,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             .title($scope.sessionData.appData.new_action)
             .initialValue('My Action')
             .ok($scope.sessionData.appData.ok)
-            .cancel($scope.sessionData.appData.cancel),
+            .cancel($scope.sessionData.appData.cancel)).then(
             function (result) {
                 if (!field.item_actions) {
                     field.item_actions = [];
