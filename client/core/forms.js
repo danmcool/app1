@@ -203,9 +203,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                     }
                 }
-                if (fields[i].text && fields[i].text.en != '') {
+                if (fields[i].text) {
                     fields[i].translated_name = SessionService.translate(fields[i].text);
-                } else if (fields[i].display != 'list' && fields[i].display != 'item') {
+                }
+                if ((!fields[i].translated_name || fields[i].translated_name == '') && fields[i].display != 'list' && fields[i].display != 'item') {
                     fields[i].translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].projectionid].name);
                 }
             }
