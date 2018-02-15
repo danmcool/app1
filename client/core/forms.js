@@ -246,6 +246,20 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         return result;
     }
+    var computeFields = function (fullPath, calculation) {
+        var userFields = '';
+        if (fullPath) {
+            var point = fullPath.indexOf('.');
+            if (point > 0) {
+                userFields += fullPath.substring(0, point + 1) + ' ';
+            } else {
+                userFields += fullPath + ' ';
+            }
+        }
+        userFields += matchField(calculation);
+        userFields = userFields.trim();
+        return userFields;
+    }
 
     var queryValues = function (valuesId, valuesType, valuesObject, formField, valuesDisplay, extData) {
         Value.update({
@@ -371,6 +385,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         if (formValues[j].type == 'list') {
                             updateValuesForm(formFields[i], formValues[j].values);
                         } else {
+                            var itemValues = {};
+                            itemValues.relation = formValues[j].values.relation;
+                            itemValues.user_fields = computeFields(formFields[i].selection_full_path, formFields[i].selection_calculation);
+                            if (formFields[i].disabled) {
+                                itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
+                            }
                             queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, formFields[i], 'form', formFields[i]);
                         }
                         break;
@@ -394,31 +414,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         if (formValues[j].type == 'list') {
                             updateValuesTitle(formFields[i], formValues[j].values);
                         } else {
-                            if (formFields[i].title_full_path) {
-                                var point = formFields[i].title_full_path.indexOf('.');
-                                if (point > 0) {
-                                    $scope.form_field_list_title_user_fields += formFields[i].title_full_path.substring(0, point + 1) + ' ';
-                                } else {
-                                    $scope.form_field_list_title_user_fields += formFields[i].title_full_path + ' ';
-                                }
-                            }
-                            $scope.form_field_list_title_user_fields += matchField(formFields[i].title_calculation);
-                            $scope.form_field_list_title_user_fields = $scope.form_field_list_title_user_fields.trim();
+                            $scope.form_field_list_title_user_fields = computeFields(formFields[i].title_full_path, formFields[i].title_calculation);
                         }
                     } else if (formFields[i].subtitle_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             updateValuesSubTitle(formFields[i], formValues[j].values);
                         } else {
-                            if (formFields[i].subtitle_full_path) {
-                                var point = formFields[i].subtitle_full_path.indexOf('.');
-                                if (point > 0) {
-                                    $scope.form_field_list_subtitle_user_fields += formFields[i].subtitle_full_path.substring(0, point + 1) + ' ';
-                                } else {
-                                    $scope.form_field_list_subtitle_user_fields += formFields[i].subtitle_full_path + ' ';
-                                }
-                            }
-                            $scope.form_field_list_subtitle_user_fields += matchField(formFields[i].subtitle_calculation);
-                            $scope.form_field_list_subtitle_user_fields = $scope.form_field_list_subtitle_user_fields.trim();
+                            $scope.form_field_list_subtitle_user_fields = computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
                         }
                     }
                 }
@@ -433,26 +435,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             var itemValues = {};
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
-                            itemValues.user_fields = '';
-                            if (formFields[i].title_full_path) {
-                                var point = formFields[i].title_full_path.indexOf('.');
-                                if (point > 0) {
-                                    itemValues.user_fields += formFields[i].title_full_path.substring(0, point + 1) + ' ';
-                                } else {
-                                    itemValues.user_fields += formFields[i].title_full_path + ' ';
-                                }
-                            }
-                            if (formFields[i].subtitle_full_path) {
-                                var point = formFields[i].subtitle_full_path.indexOf('.');
-                                if (point > 0) {
-                                    itemValues.user_fields += formFields[i].subtitle_full_path.substring(0, point + 1) + ' ';
-                                } else {
-                                    itemValues.user_fields += formFields[i].subtitle_full_path + ' ';
-                                }
-                            }
-                            itemValues.user_fields += matchField(formFields[i].title_calculation);
-                            itemValues.user_fields += matchField(formFields[i].subtitle_calculation);
-                            itemValues.user_fields = itemValues.user_fields.trim();
+                            itemValues.user_fields = computeFields(formFields[i].title_full_path, formFields[i].title_calculation);
+                            itemValues.user_fields += computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
                             queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'items');
                         }
                     }
