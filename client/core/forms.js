@@ -156,6 +156,27 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             sort_by: $scope.form.sort_by
         }, function (datas) {
             if (datas.length < $scope.limit) $scope.stopScroll = true;
+            var formValues = $scope.form.values;
+            for (var j = 0; j < formValues.length; j++) {
+                if ($scope.form_field_list.title_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
+                    var itemValues = {};
+                    itemValues.relation = formValues[j].values.relation;
+                    itemValues.id_list = [];
+                    for (var i = 0; i < datas.length; i++) {
+                        itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
+                    }
+                    itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[$scope.form_field_list.title].full_path);
+                    queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'title', $scope.form_field_list);
+                } else if (formFields[i].subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
+                    var itemValues = {};
+                    itemValues.relation = formValues[j].values.relation;
+                    itemValues.id_list = [];
+                    for (var i = 0; i < datas.length; i++) {
+                        itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
+                    }
+                    queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'subtitle', $scope.form_field_list);
+                }
+            }
             for (var i = 0; i < datas.length; i++) {
                 $scope.datas.push(datas[i]);
             }
@@ -203,6 +224,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                     }
                 }
+                fields[i].translated_name = '';
                 if (fields[i].text) {
                     fields[i].translated_name = SessionService.translate(fields[i].text);
                 }
@@ -333,7 +355,19 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     var address = $scope.localdata[formFields[i].id];
                     MapService.geocodeAddress('map' + formFields[i].id, (address.address_line1 ? (address.address_line1 + ',') : '') + (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
-            } else if (formFields[i].display == 'selection' || formFields[i].display == 'currency') {
+            } else if (formFields[i].display == 'currency') {
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                for (var j = 0; j < formValues.length; j++) {
+                    if (formFields[i].listofvalues == formValues[j]._id) {
+                        if (formValues[j].type == 'list') {
+                            updateValuesForm(i, formValues[j].values);
+                        } else {
+                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'form', formFields[i]);
+                        }
+                        break;
+                    }
+                }
+            } else if (formFields[i].display == 'selection') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
@@ -355,18 +389,45 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
             } else if (formFields[i].display == 'list') {
                 $scope.show_search = true;
+                $scope.form_field_list = formFields[i];
+                $scope.form_field_list_title_user_fields = '';
+                $scope.form_field_list_subtitle_user_fields = '';
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].title_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             updateValuesTitle(i, formValues[j].values);
                         } else {
-                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'title', formFields[i]);
+                            if (formFields[i].title_full_path) {
+                                var point = formFields[i].title_full_path.indexOf('.');
+                                if (point > 0) {
+                                    $scope.form_field_list_title_user_fields += formFields[i].title_full_path.substring(0, point + 1) + ' ';
+                                } else {
+                                    $scope.form_field_list_title_user_fields += formFields[i].title_full_path + ' ';
+                                }
+                            }
+                            $scope.form_field_list_title_user_fields += matchField(formFields[i].title_calculation);
+                            $scope.form_field_list_title_user_fields = $scope.form_field_list_title_user_fields.trim();
+
+
+                            //queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'title', formFields[i]);
                         }
                     } else if (formFields[i].subtitle_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             updateValuesSubTitle(i, formValues[j].values);
                         } else {
-                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'subtitle', formFields[i]);
+                            if (formFields[i].subtitle_full_path) {
+                                var point = formFields[i].subtitle_full_path.indexOf('.');
+                                if (point > 0) {
+                                    $scope.form_field_list_subtitle_user_fields += formFields[i].subtitle_full_path.substring(0, point + 1) + ' ';
+                                } else {
+                                    $scope.form_field_list_subtitle_user_fields += formFields[i].subtitle_full_path + ' ';
+                                }
+                            }
+                            $scope.form_field_list_subtitle_user_fields += matchField(formFields[i].subtitle_calculation);
+                            $scope.form_field_list_subtitle_user_fields = $scope.form_field_list_subtitle_user_fields.trim();
+
+
+                            //queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'subtitle', formFields[i]);
                         }
                     }
                 }
