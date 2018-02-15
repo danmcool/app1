@@ -331,7 +331,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         } else {
             for (k = 0; k < newValues.length; k++) {
-                formField.title_values[newValues[k]._id] =
+                formField.subtitle_values[newValues[k]._id] =
                     SessionService.translate(newValues[k].name);
             }
         }
