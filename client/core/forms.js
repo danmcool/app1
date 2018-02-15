@@ -392,7 +392,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             if (formFields[i].disabled) {
                                 itemValues.id_list.push($scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path));
                             }
-                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, formFields[i], 'form', formFields[i]);
+                            queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'form', formFields[i]);
                         }
                         break;
                     }
