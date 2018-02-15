@@ -404,13 +404,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             }
                             $scope.form_field_list_title_user_fields += matchField(formFields[i].title_calculation);
                             $scope.form_field_list_title_user_fields = $scope.form_field_list_title_user_fields.trim();
-
-
-                            //queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'title', formFields[i]);
                         }
                     } else if (formFields[i].subtitle_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesSubTitle(i, formValues[j].values);
+                            updateValuesSubTitle(formFields[i], formValues[j].values);
                         } else {
                             if (formFields[i].subtitle_full_path) {
                                 var point = formFields[i].subtitle_full_path.indexOf('.');
@@ -422,9 +419,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             }
                             $scope.form_field_list_subtitle_user_fields += matchField(formFields[i].subtitle_calculation);
                             $scope.form_field_list_subtitle_user_fields = $scope.form_field_list_subtitle_user_fields.trim();
-
-
-                            //queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'subtitle', formFields[i]);
                         }
                     }
                 }
