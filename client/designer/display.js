@@ -424,6 +424,17 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                 $scope.field.date_full_path = ($scope.form.datamodel.projection[$scope.field.date].path == '' ? $scope.form.datamodel.projection[$scope.field.date].technical_name : $scope.form.datamodel.projection[$scope.field.date].path + '.' + $scope.form.datamodel.projection[$scope.field.date].technical_name);
             }
         }
+        delete $scope.form['translated_name'];
+        if ($scope.form.actions) {
+            for (var l = 0; l < $scope.form.actions.length; l++) {
+                delete $scope.form.actions[l]['translated_name'];
+            }
+        }
+        if ($scope.form.values) {
+            for (var m = 0; m < $scope.form.values.length; m++) {
+                delete $scope.form.values[m]['translated_name'];
+            }
+        }
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form, function (res) {

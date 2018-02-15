@@ -146,6 +146,16 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
     }
 
     $scope.save = function () {
+        if ($scope.form.actions) {
+            for (var i = 0; i < $scope.form.actions.length; i++) {
+                delete $scope.form.actions[i]['translated_name'];
+            }
+        }
+        if ($scope.form.values) {
+            for (var j = 0; j < $scope.form.values.length; j++) {
+                delete $scope.form.values[j]['translated_name'];
+            }
+        }
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form, function (res) {

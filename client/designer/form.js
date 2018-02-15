@@ -96,6 +96,25 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
     }
 
     var saveFormForward = function (url) {
+        if ($scope.form.actions) {
+            for (var l = 0; l < $scope.form.actions.length; l++) {
+                delete $scope.form.actions[l]['translated_name'];
+            }
+        }
+        if ($scope.form.values) {
+            for (var m = 0; m < $scope.form.values.length; m++) {
+                delete $scope.form.values[m]['translated_name'];
+            }
+        }
+        if ($scope.form.display) {
+            for (var i = 0; i < $scope.form.display.length; i++) {
+                for (var j = 0; j < $scope.form.display[i].blocks.length; j++) {
+                    for (var k = 0; k < $scope.form.display[i].blocks[j].fields.length; k++) {
+                        delete $scope.form.display[i].blocks[j].fields[k]['translated_name'];
+                    }
+                }
+            }
+        }
         DesignForm.update({
             id: $scope.form._id
         }, $scope.form, function (res) {
