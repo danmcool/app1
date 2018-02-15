@@ -167,7 +167,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                     itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[$scope.form_field_list.title].full_path);
                     queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'title', $scope.form_field_list);
-                } else if (formFields[i].subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
+                }
+                if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
                     var itemValues = {};
                     itemValues.relation = formValues[j].values.relation;
                     itemValues.id_list = [];
