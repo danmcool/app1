@@ -166,7 +166,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
                     }
                     itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[$scope.form_field_list.title].full_path);
-                    queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'title', $scope.form_field_list);
+                    queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                 }
                 if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
                     var itemValues = {};
@@ -175,7 +175,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     for (var i = 0; i < datas.length; i++) {
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
                     }
-                    queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'subtitle', $scope.form_field_list);
+                    queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
                 }
             }
             for (var i = 0; i < datas.length; i++) {
@@ -247,103 +247,99 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         return result;
     }
 
-    var queryValues = function (valuesId, valuesType, valuesObject, fieldIndex, valuesDisplay, extData) {
+    var queryValues = function (valuesId, valuesType, valuesObject, formField, valuesDisplay, extData) {
         Value.update({
             id: valuesId,
             type: valuesType
         }, valuesObject, function (resValues) {
             if (valuesDisplay == 'title') {
-                updateValuesTitle(fieldIndex, resValues.values, extData);
+                updateValuesTitle(formField, resValues.values, extData);
             } else if (valuesDisplay == 'subtitle') {
-                updateValuesSubTitle(fieldIndex, resValues.values, extData);
+                updateValuesSubTitle(formField, resValues.values, extData);
             } else if (valuesDisplay == 'items') {
-                updateValuesItems(fieldIndex, resValues.values);
+                updateValuesItems(formField, resValues.values);
             } else if (valuesDisplay == 'form') {
-                updateValuesForm(fieldIndex, resValues.values, extData);
+                updateValuesForm(formField, resValues.values, extData);
             }
         });
     }
-    var updateValuesForm = function (index, newValues, extData) {
-        var formFields = $scope.form.fields[index];
-        formFields.values = [];
-        formFields.values_key = {};
+    var updateValuesForm = function (formField, newValues, extData) {
+        formField.values = [];
+        formField.values_key = {};
         var k;
         if (extData) {
             if (extData.selection_display == 'property') {
                 for (k = 0; k < newValues.length; k++) {
-                    formFields.values.push({
+                    formField.values.push({
                         _id: newValues[k]._id,
                         name: $scope.resolvePath(newValues[k], extData.selection_full_path)
                     });
-                    formFields.values_key[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.selection_full_path);
+                    formField.values_key[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.selection_full_path);
                 }
             } else if (extData.selection_display == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
-                    formFields.values.push({
+                    formField.values.push({
                         _id: newValues[k]._id,
                         name: $scope.calculation(newValues[k], extData.selection_calculation)
                     });
-                    formFields.values_key[newValues[k]._id] = $scope.calculation(newValues[k], extData.selection_calculation);
+                    formField.values_key[newValues[k]._id] = $scope.calculation(newValues[k], extData.selection_calculation);
                 }
             }
         } else {
             for (k = 0; k < newValues.length; k++) {
-                formFields.values.push({
+                formField.values.push({
                     _id: newValues[k]._id,
                     name: SessionService.translate(newValues[k].name)
                 });
-                formFields.values_key[newValues[k]._id] =
+                formField.values_key[newValues[k]._id] =
                     SessionService.translate(newValues[k].name);
             }
         }
     }
-    var updateValuesTitle = function (index, newValues, extData) {
-        var formFields = $scope.form.fields[index];
-        formFields.title_values = {};
+    var updateValuesTitle = function (formField, newValues, extData) {
+        formField.title_values = {};
         var k;
         if (extData) {
             if (extData.title_display_text == 'property') {
                 for (k = 0; k < newValues.length; k++) {
-                    formFields.title_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.title_full_path);
+                    formField.title_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.title_full_path);
                 }
             } else if (extData.title_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
-                    formFields.title_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.title_calculation);
+                    formField.title_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.title_calculation);
                 }
             }
         } else {
             for (k = 0; k < newValues.length; k++) {
-                formFields.title_values[newValues[k]._id] =
+                formField.title_values[newValues[k]._id] =
                     SessionService.translate(newValues[k].name);
             }
         }
     }
-    var updateValuesSubTitle = function (index, newValues, extData) {
-        var formFields = $scope.form.fields[index];
-        formFields.subtitle_values = {};
+    var updateValuesSubTitle = function (formField, newValues, extData) {
+        formField.subtitle_values = {};
         var k;
         if (extData) {
             if (extData.subtitle_display_text == 'property') {
                 for (k = 0; k < newValues.length; k++) {
-                    formFields.subtitle_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.subtitle_full_path);
+                    formField.subtitle_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.subtitle_full_path);
                 }
             } else if (extData.subtitle_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
-                    formFields.subtitle_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.subtitle_calculation);
+                    formField.subtitle_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.subtitle_calculation);
                 }
             }
         } else {
             for (k = 0; k < newValues.length; k++) {
-                formFields.title_values[newValues[k]._id] =
+                formField.title_values[newValues[k]._id] =
                     SessionService.translate(newValues[k].name);
             }
         }
     }
-    var updateValuesItems = function (index, newValues) {
-        var formFields = $scope.form.fields[index];
-        var valuesFieldName = formFields.projectionid + '_values';
-        formFields[valuesFieldName] = newValues;
-        $scope.data[formFields.projectionid] = newValues;
+    var updateValuesItems = function (formField, newValues) {
+        var valuesFieldName = formField.projectionid + '_values';
+        formField[valuesFieldName] = newValues;
+        $scope.data[formField.projectionid] = newValues;
     }
     var initComponents = function () {
         var formFields = $scope.form.fields;
@@ -361,9 +357,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesForm(i, formValues[j].values);
+                            updateValuesForm(formFields[i], formValues[j].values);
                         } else {
-                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'form', formFields[i]);
+                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, formFields[i], 'form', formFields[i]);
                         }
                         break;
                     }
@@ -373,9 +369,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesForm(i, formValues[j].values);
+                            updateValuesForm(formFields[i], formValues[j].values);
                         } else {
-                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, i, 'form', formFields[i]);
+                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, formFields[i], 'form', formFields[i]);
                         }
                         break;
                     }
@@ -396,7 +392,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].title_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesTitle(i, formValues[j].values);
+                            updateValuesTitle(formFields[i], formValues[j].values);
                         } else {
                             if (formFields[i].title_full_path) {
                                 var point = formFields[i].title_full_path.indexOf('.');
@@ -463,7 +459,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             itemValues.user_fields += matchField(formFields[i].title_calculation);
                             itemValues.user_fields += matchField(formFields[i].subtitle_calculation);
                             itemValues.user_fields = itemValues.user_fields.trim();
-                            queryValues(formValues[j]._id, formValues[j].type, itemValues, i, 'items');
+                            queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'items');
                         }
                     }
                 }
