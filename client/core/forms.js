@@ -495,7 +495,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         var field = formDisplay[i].blocks[j].fields[k];
                         $scope.form.fields.push(field);
                         if (field.display == 'file' || field.display == 'image') {
-                            if (field.projectionid && $scope.form.datamodel.projection[field.projectionid].type == 'reference') {
+                            if (field.projectionid && ($scope.form.datamodel.projection[field.projectionid].type == 'item' || $scope.form.datamodel.projection[field.projectionid].type == 'reference')) {
                                 populate = populate + $scope.form.datamodel.projection[field.projectionid].full_path + ' ';
                             }
                         }
