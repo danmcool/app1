@@ -436,8 +436,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             var itemValues = {};
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
-                            itemValues.user_fields = computeFields(formFields[i].title_full_path, formFields[i].title_calculation);
+                            itemValues.user_fields = computeFields(formFields[i].title_full_path, formFields[i].title_calculation) + ' ';
                             itemValues.user_fields += computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
+                            itemValues.user_fields = itemValues.user_fields.trim();
                             queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'items');
                         }
                     }
