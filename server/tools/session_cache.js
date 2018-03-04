@@ -42,7 +42,6 @@ SessionCache.prepareUser = function (userObject) {
     strUser = strUser.replace(/@@public/g, Constants.PublicUser + '@' + userObject._company_code);
     if (userObject.reports) strUser = strUser.replace(/'@@reports'/g, (userObject.reports ? (userObject.reports.length > 0 ? JSON.stringify(userObject.reports).replace(/]|[[]/g, '') : '\'\'') : '\'\''));
     if (userObject._company_code) strUser = strUser.replace(/@@company_code/g, userObject._company_code);
-    console.log(strUser);
     var resUser = JSON.parse(strUser);
     if (resUser.company.properties) resUser.company.properties.saml = {};
     return resUser;
