@@ -195,6 +195,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
 
     var initDatamodel = function (datamodelref_id, ref_datamodel, ref_datamodel_keys) {
         for (var i = 0; i < $scope.datamodels.length; i++) {
+            $scope.datamodels.translated_name = SessionService.translate($scope.datamodels[i].name);
             if ($scope.datamodels[i]._id == datamodelref_id) {
                 ref_datamodel = $scope.datamodels[i];
                 var datamodelkeys = Object.keys($scope.datamodels[i].projection);

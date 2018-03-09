@@ -375,12 +375,6 @@
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
-                        <md-input-container flex="auto" class="md-block">
-                            <label>{{sessionData.appData.datamodel}}</label>
-                            <md-select ng-model="field.event_datamodel_id" ng-required="true">
-                                <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
-                            </md-select>
-                        </md-input-container>
                     </div>
 
                     <div ng-switch-when="currency">
