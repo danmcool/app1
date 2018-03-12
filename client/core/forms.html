@@ -338,16 +338,16 @@
                                     <div layout-padding>
                                         <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                     </div>
-                                    <div layout="row" layout-xs="column" layout-padding>
-                                        <calendar-md flex="50" flex-xs="100" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
-                                        <div flex="45" flex-xs="100" layout="column">
+                                    <div layout="row" layout-xs="column" layout-sm="column" layout-padding>
+                                        <calendar-md flex="50" flex-sm="100" flex-xs="100" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
+                                        <div flex="45" flex-xs="100" flex-sm="100" layout="column">
                                             <header>{{sessionData.appData.appointments}}</header>
                                             <div ng-repeat="appointment in appointments">
                                                 <md-subheader>{{appointment.start_time.hours}}:{{appointment.start_time.minutes}}-{{appointment.end_time.hours}}:{{appointment.end_time.minutes}} {{appointment.user.name}}</md-subheader>
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-if="(field.disabled==false)" layout-xs="column" layout="row" layout-padding>
+                                    <div ng-if="(field.disabled==false)" layout-xs="column" layout-sm="column" layout="row" layout-padding>
                                         <div layout="column" layout-align="space-between space-between">
                                             <p class="md-body-1">{{sessionData.appData.start_time}}</p>
                                             <div layout="row" class="md-inline-form">
