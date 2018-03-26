@@ -242,6 +242,16 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
     var init = function () {
+        if (sessionData.userData.properties.language && sessionData.userData.properties.language == 'auto') {
+            var language = $window.navigator.userLanguage || $window.navigator.language;
+            if (!language) {
+                sessionData.userData.properties.correctedLanguage = 'en';
+            } else {
+                sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
+            }
+        } else {
+            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.language;
+        }
         UserStatus.get(function (userResult) {
             initSessionData(userResult, false);
         }, function (error) {

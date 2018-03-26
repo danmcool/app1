@@ -4,21 +4,85 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Application ONE',
             fr: 'Application ONE'
         },
+        homepage_welcome: {
+            en: 'Welcome to App1',
+            fr: 'Bienvenue chez App1'
+        },
+        homepage_platform: {
+            en: 'App1 is the platform for digital enterprise',
+            fr: 'App1 est la plateforme de l\'entreprise digitale'
+        },
+        homepage_power: {
+            en: 'Power',
+            fr: 'Puissance'
+        },
+        homepage_design: {
+            en: 'Looks',
+            fr: 'Design'
+        },
+        homepage_flexibility: {
+            en: 'Versatility',
+            fr: 'Flexibilité'
+        },
+        homepage_architecture: {
+            en: 'Modern architecture allows App1 to be one of the fastest cloud enterprise software',
+            fr: 'L\'architecture moderne permet à App1 d\'etre un des plus rapides logiciel cloud pour entreprise'
+        },
+        homepage_looks: {
+            en: 'Easy to use, designed for mobile first, there\'s no need to read the manual',
+            fr: 'Facile à utiliser, disponible sur mobile, tablette et desktop, pas besoin de regarder le manuel'
+        },
+        homepage_versatility: {
+            en: 'Business partners can collaborate on different apps in same cloud',
+            fr: 'Les partenaires business peuvent collaborer sur des applications différentes dans le même cloud'
+        },
+        homepage_products: {
+            en: 'Products',
+            fr: 'Produits'
+        },
+        homepage_contact: {
+            en: 'Contact Us',
+            fr: 'Nous contacter'
+        },
+        homepage_events_title: {
+            en: 'Events',
+            fr: 'Evénements'
+        },
+        homepage_events: {
+            en: 'Cloud application that helps organizing internal events (trainings, workshops, etc)',
+            fr: 'Application cloud pour faciliter l\'organisation des événements interne (trainings, workshops, etc)'
+        },
+        homepage_incidents_title: {
+            en: 'Incident Management',
+            fr: 'Gestion des incidents'
+        },
+        homepage_incidents: {
+            en: 'Cloud application that helps managing incoming issues from customers or partners',
+            fr: 'Application cloud qui permet de gérer les incidents saisis par des clients ou partenaires'
+        },
+        homepage_register_free_trial: {
+            en: 'Up to 10 users, registration is 100% free!',
+            fr: 'Jusqu\'à 10 utilisateurs l\'enregistrement est 100% gratuit!'
+        },
+        homepage_require_poc: {
+            en: 'Companies with more than 100 employees contact us for a free POC!',
+            fr: 'Companies a partir de 100 employees, contactez nous pour un POC gratuit!'
+        },
         new_app: {
             en: 'New application',
             fr: 'Nouvelle application'
         },
         test_app: {
             en: 'Test application',
-            fr: 'Tester l`application'
+            fr: 'Tester l\'application'
         },
         new_app_name: {
             en: 'Name of the application',
-            fr: 'Nom de l`application'
+            fr: 'Nom de l\'application'
         },
         app_description: {
             en: 'Application Description',
-            fr: 'Description de l`application'
+            fr: 'Description de l\'application'
         },
         app_icon: {
             en: 'Icon',
@@ -30,7 +94,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         app_designer: {
             en: 'Application Designer',
-            fr: 'Concepteur d`application'
+            fr: 'Concepteur d\'application'
         },
         share_form: {
             en: 'Share Form',
@@ -134,7 +198,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         app_profile: {
             en: 'Application User Profile',
-            fr: 'Profile utilisateur d`application'
+            fr: 'Profile utilisateur d\'application'
         },
         profiles: {
             en: 'Profiles',
@@ -142,7 +206,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         new_profile: {
             en: 'New Application Profile',
-            fr: 'Nouveau profile de l`application'
+            fr: 'Nouveau profile de l\'application'
         },
         default_profile: {
             en: 'Default User Profile',
@@ -182,7 +246,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         password_match: {
             en: 'New password does not match!',
-            fr: 'Le nouveau mot de passe n`est pas identique!'
+            fr: 'Le nouveau mot de passe n\'est pas identique!'
         },
         company_code: {
             en: 'Company code',
@@ -322,11 +386,11 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         saml_activate_test: {
             en: 'Activate test mode - login is not possible',
-            fr: 'Activer le mode test - la connexion n`est pas disponible'
+            fr: 'Activer le mode test - la connexion n\'est pas disponible'
         },
         saml_metadata_url: {
             en: 'Metadata definition of App1 service provider - to be uploaded to Identity Provider',
-            fr: 'Définition des métadonnées du service App1 - a charger sur le service d`Identification'
+            fr: 'Définition des métadonnées du service App1 - a charger sur le service d\'Identification'
         },
         already_modified_document: {
             en: 'The underlying data of this document has been modified by another user,' +
@@ -340,7 +404,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         error_creating_appointment: {
             en: 'Reservation cannot be created, please verify the date and try again!',
-            fr: 'Le reservation n`est pas possible veuillez verifier les dates et re-essayer!'
+            fr: 'Le reservation n\'est pas possible veuillez verifier les dates et re-essayer!'
         },
         removal_confirmation: {
             en: 'Remove the object?',
@@ -384,7 +448,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         form_display: {
             en: 'Display Layout',
-            fr: 'Disposition de l`affichage'
+            fr: 'Disposition de l\'affichage'
         },
         form_actions: {
             en: 'Actions',
@@ -436,7 +500,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         field_display: {
             en: 'Display type',
-            fr: 'Type d`affichage'
+            fr: 'Type d\'affichage'
         },
         field_listofvalues: {
             en: 'Values',
@@ -480,7 +544,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         action_forward_id: {
             en: 'Forward Object Id',
-            fr: 'Transmettre l`identifiant de l`objet'
+            fr: 'Transmettre l\'identifiant de l\'objet'
         },
         action_next_form: {
             en: 'Next Form',
@@ -496,7 +560,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         new_action_name: {
             en: 'Action Name',
-            fr: 'Nom de l`action'
+            fr: 'Nom de l\'action'
         },
         action_set_value: {
             en: 'Modify value',
@@ -592,7 +656,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         action_event_object_name: {
             en: 'Name of object',
-            fr: 'Nom de l`objet'
+            fr: 'Nom de l\'objet'
         },
         action_event_period: {
             en: 'Period',
