@@ -23,15 +23,17 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
                 function () {
                     SessionService.location('/');
                 });
-        }).then(function (res) {
+        }, function (error) {
             $mdDialog.show(
                 $mdDialog.alert()
                 .parent(angular.element(document.body))
                 .clickOutsideToClose(true)
                 .title('Error')
-                .textContent(res.data.msg)
-                .ok('Got it!')
-            );
+                .textContent(error.msg)
+                .ok('Got it!'),
+                function () {
+                    SessionService.location('/');
+                });
         });
     };
 }]);
