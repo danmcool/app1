@@ -161,7 +161,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 
     $scope.newAction = function () {
         var name = {};
-        name[$scope.sessionData.userData.properties.language] = '';
+        name[$scope.sessionData.userData.properties.correctedLanguage] = '';
         $scope.form.actions.push({
             name: name,
             translated_name: ''
@@ -178,7 +178,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
         }).then(function (result) {
             if (result == '') {
                 var name = {};
-                name[$scope.sessionData.userData.properties.language] = '';
+                name[$scope.sessionData.userData.properties.correctedLanguage] = '';
                 var newValue = new DesignValue({
                     name: name
                 });
@@ -207,7 +207,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             $scope.form.display = [];
         }
         var text = {};
-        text[$scope.sessionData.userData.properties.language] = '';
+        text[$scope.sessionData.userData.properties.correctedLanguage] = '';
         $scope.form.display.push({
             blocks: [{
                 flex: 100,
@@ -227,7 +227,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
             $scope.form.display = [];
         }
         var text = {};
-        text[$scope.sessionData.userData.properties.language] = '';
+        text[$scope.sessionData.userData.properties.correctedLanguage] = '';
         blocks.push({
             fields: [{
                 text: text,
@@ -244,7 +244,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
 
     $scope.newField = function (fields) {
         var text = {};
-        text[$scope.sessionData.userData.properties.language] = '';
+        text[$scope.sessionData.userData.properties.correctedLanguage] = '';
         fields.push({
             text: text,
             translated_name: '',

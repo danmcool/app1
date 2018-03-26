@@ -52,7 +52,7 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
 
     $scope.newForm = function () {
         var name = {};
-        name[$scope.sessionData.userData.properties.language] = '';
+        name[$scope.sessionData.userData.properties.correctedLanguage] = '';
         var newForm = new DesignForm({
             name: name
         });

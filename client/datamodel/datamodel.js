@@ -62,7 +62,7 @@ app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel',
             .cancel($scope.sessionData.appData.cancel)).then(
             function (result) {
                 var name = {};
-                name[$scope.sessionData.userData.properties.language] = result;
+                name[$scope.sessionData.userData.properties.correctedLanguage] = result;
                 var newDatamodel = new DesignDataModel({
                     name: name
                 });

@@ -10,11 +10,11 @@
             <form name="datamodelForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_datamodel_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(datamodel,'name',false)">
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(datamodel,'name',false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.datamodel_description}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(datamodel,'description',true)"></textarea>
+                    <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="datamodel.description[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(datamodel,'description',true)"></textarea>
                 </md-input-container>
                 <div style="margin-bottom: 30px">
                     <md-header>{{sessionData.appData.datamodel_field_list}}</md-header>
@@ -23,7 +23,7 @@
                     <div layout="row">
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.new_datamodel_name}}</label>
-                            <input type="text" ng-disabled="false" ng-required="true" ng-model="field.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
+                            <input type="text" ng-disabled="false" ng-required="true" ng-model="field.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
                         </md-input-container>
                         <md-button ng-if="field.type=='node'" class="md-fab md-primary" aria-label="NewField" ng-click="newField(field.path, field.technical_name)">
                             <md-icon>add</md-icon>

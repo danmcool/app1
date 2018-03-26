@@ -54,7 +54,7 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
 
     $scope.newProfile = function () {
         var name = {};
-        name[$scope.sessionData.userData.properties.language] = '';
+        name[$scope.sessionData.userData.properties.correctedLanguage] = '';
         var newProfile = new DesignProfile({
             name: name
         });

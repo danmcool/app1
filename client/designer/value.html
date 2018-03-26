@@ -10,7 +10,7 @@
             <form name="valueForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_value_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value,'name',false)">
+                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value,'name',false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.value_type}}</label>
@@ -24,7 +24,7 @@
                         <div ng-repeat="value_item in value.values">
                             <div layout="row">
                                 <md-input-container flex="auto" class="md-block">
-                                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value_item.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value_item,'name',false)">
+                                    <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value_item.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(value_item,'name',false)">
                                 </md-input-container>
                                 <md-button ng-click="deleteValue($index)" class="md-fab md-primary">
                                     <md-icon>delete</md-icon>

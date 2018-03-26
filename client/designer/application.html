@@ -10,11 +10,11 @@
             <form name="appForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_app_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="application.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(application, 'name', false)">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="application.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(application, 'name', false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.app_description}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="application.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(application, 'description', false)"></textarea>
+                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="application.description[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(application, 'description', false)"></textarea>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.app_icon}}</label>

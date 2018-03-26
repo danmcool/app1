@@ -378,7 +378,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                     field.item_actions = [];
                 }
                 var name = {};
-                name[$scope.sessionData.userData.properties.language] = result;
+                name[$scope.sessionData.userData.properties.correctedLanguage] = result;
                 field.item_actions.push({
                     name: name,
                     translated_name: result

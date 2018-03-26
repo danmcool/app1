@@ -10,11 +10,11 @@
             <form name="wkfForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_workflow_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(workflow, 'name', false)">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(workflow, 'name', false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.workflow_description}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.description[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(workflow, 'description', true)"></textarea>
+                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="workflow.description[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(workflow, 'description', true)"></textarea>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.app_icon}}</label>

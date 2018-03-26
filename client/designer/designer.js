@@ -85,7 +85,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
 
     $scope.newApplication = function () {
         var name = {};
-        name[$scope.sessionData.userData.properties.language] = '';
+        name[$scope.sessionData.userData.properties.correctedLanguage] = '';
         var newApp = new DesignApplication({
             name: name,
             icon: 'clear'

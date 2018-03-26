@@ -10,7 +10,7 @@
             <form name="actionForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.new_action_name}}</label>
-                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(action,'name',false)">
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(action,'name',false)">
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.action_next_form}}</label>

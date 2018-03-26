@@ -20,7 +20,7 @@ app1.controller('UserCtrl', ['$scope', '$location', 'SessionService', 'AppTransl
     });
 
     $scope.saveUserData = function () {
-        $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.language);
+        $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.correctedLanguage);
         SessionService.setSessionData($scope.sessionData);
         User.update({
             id: $scope.sessionData.userData._id

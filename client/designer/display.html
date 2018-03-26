@@ -133,7 +133,7 @@
                         <div ng-repeat="item_action in field.item_actions">
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.new_action_name}}</label>
-                                <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="item_action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(item_action,'name',false,100)">
+                                <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="item_action.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(item_action,'name',false,100)">
                             </md-input-container>
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.action_next_form}}</label>
@@ -255,7 +255,7 @@
                         <div ng-repeat="item_action in field.item_actions">
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.new_action_name}}</label>
-                                <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="item_action.name[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(item_action,'name',false,100)">
+                                <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="item_action.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(item_action,'name',false,100)">
                             </md-input-container>
                             <md-input-container flex="auto" class="md-block">
                                 <label>{{sessionData.appData.action_next_form}}</label>
@@ -323,7 +323,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
-                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>
@@ -348,7 +348,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
-                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.form_calculation}}</label>
@@ -367,7 +367,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
-                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                            <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>
@@ -388,7 +388,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
-                            <input type="text" ng-disabled="false" name="appicon" ng-required="false" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                            <input type="text" ng-disabled="false" name="appicon" ng-required="false" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>
@@ -415,7 +415,7 @@
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
-                            <input type="text" ng-disabled="false" name="appicon" ng-required="false" ng-model="field.text[sessionData.userData.properties.language]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
+                            <input type="text" ng-disabled="false" name="appicon" ng-required="false" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_datafield}}</label>
