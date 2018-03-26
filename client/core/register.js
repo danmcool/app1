@@ -29,11 +29,8 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
                 .parent(angular.element(document.body))
                 .clickOutsideToClose(true)
                 .title('Error')
-                .textContent(error.msg)
-                .ok('Got it!'),
-                function () {
-                    SessionService.location('/');
-                });
+                .textContent(error.data.msg)
+                .ok('Got it!'));
         });
     };
 }]);
