@@ -157,7 +157,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         userData: {
             properties: {
                 theme: 'default',
-                language: 'auto'
+                uiLanguage: 'auto'
             }
         },
         applicationName: 'App1',
@@ -192,7 +192,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData = {};
         sessionData.token = userResult.token;
         sessionData.userData = userResult.user;
-        if (sessionData.userData.properties.language && sessionData.userData.properties.language == 'auto') {
+        if (sessionData.userData.properties.uiLanguage && sessionData.userData.properties.uiLanguage == 'auto') {
             var language = $window.navigator.userLanguage || $window.navigator.language;
             if (!language) {
                 sessionData.userData.properties.correctedLanguage = 'en';
@@ -200,7 +200,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
             }
         } else {
-            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.language;
+            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.uiLanguage;
         }
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
@@ -242,7 +242,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
     var init = function () {
-        if (sessionData.userData.properties.language && sessionData.userData.properties.language == 'auto') {
+        if (sessionData.userData.properties.uiLanguage && sessionData.userData.properties.uiLanguage == 'auto') {
             var language = $window.navigator.userLanguage || $window.navigator.language;
             if (!language) {
                 sessionData.userData.properties.correctedLanguage = 'en';
@@ -250,7 +250,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
             }
         } else {
-            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.language;
+            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.uiLanguage;
         }
         UserStatus.get(function (userResult) {
             initSessionData(userResult, false);
@@ -294,12 +294,12 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             userData: {
                 properties: {
                     theme: 'default',
-                    language: 'auto'
+                    uiLanguage: 'auto'
                 }
             },
             applicationName: 'App1'
         }
-        if (sessionData.userData.properties.language && sessionData.userData.properties.language == 'auto') {
+        if (sessionData.userData.properties.uiLanguage && sessionData.userData.properties.uiLanguage == 'auto') {
             var language = $window.navigator.userLanguage || $window.navigator.language;
             if (!language) {
                 sessionData.userData.properties.correctedLanguage = 'en';
@@ -307,7 +307,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
             }
         } else {
-            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.language;
+            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.uiLanguage;
         }
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
         location('/');

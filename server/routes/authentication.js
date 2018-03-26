@@ -131,7 +131,7 @@ router.post('/register', function (req, res) {
                                     lastname: req.body.lastname,
                                     properties: {
                                         theme: 'default',
-                                        language: 'auto'
+                                        uiLanguage: 'auto'
                                     },
                                     profile: newUserprofileAdministrator._id,
                                     validated: false,
@@ -148,7 +148,7 @@ router.post('/register', function (req, res) {
                                         lastname: Constants.PublicUserLastName,
                                         properties: {
                                             theme: 'default',
-                                            language: 'auto'
+                                            uiLanguage: 'auto'
                                         },
                                         profile: newUserprofilePublic._id,
                                         validated: true,
@@ -533,7 +533,7 @@ router.post('/saml_callback', function (req, res) {
                                 validated: true,
                                 properties: {
                                     theme: 'default',
-                                    language: 'en'
+                                    uiLanguage: 'auto'
                                 },
                                 profile: objectProfile._id,
                                 company: SessionCache.identityProvider[company_code].company_id,
