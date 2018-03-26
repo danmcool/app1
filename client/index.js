@@ -157,7 +157,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         userData: {
             properties: {
                 theme: 'default',
-                language: 'en'
+                language: 'auto'
             }
         },
         applicationName: 'App1',
@@ -284,11 +284,21 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             userData: {
                 properties: {
                     theme: 'default',
-                    language: 'en'
+                    language: 'auto'
                 }
             },
             applicationName: 'App1'
-        };
+        }
+        if (sessionData.userData.properties.language && sessionData.userData.properties.language == 'auto') {
+            var language = $window.navigator.userLanguage || $window.navigator.language;
+            if (!language) {
+                sessionData.userData.properties.correctedLanguage = 'en';
+            } else {
+                sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
+            }
+        } else {
+            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.language;
+        }
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
         location('/');
     }
