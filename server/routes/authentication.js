@@ -131,7 +131,7 @@ router.post('/register', function (req, res) {
                                     lastname: req.body.lastname,
                                     properties: {
                                         theme: 'default',
-                                        language: 'en'
+                                        language: 'auto'
                                     },
                                     profile: newUserprofileAdministrator._id,
                                     validated: false,
@@ -148,7 +148,7 @@ router.post('/register', function (req, res) {
                                         lastname: Constants.PublicUserLastName,
                                         properties: {
                                             theme: 'default',
-                                            language: 'en'
+                                            language: 'auto'
                                         },
                                         profile: newUserprofilePublic._id,
                                         validated: true,

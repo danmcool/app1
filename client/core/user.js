@@ -1,4 +1,4 @@
-app1.controller('UserCtrl', ['$scope', '$location', 'SessionService', 'AppTranslationService', 'User', 'Password', function ($scope, $location, SessionService, AppTranslationService, User, Password) {
+app1.controller('UserCtrl', ['$scope', '$location', '$window', 'SessionService', 'AppTranslationService', 'User', 'Password', function ($scope, $location, $window, SessionService, AppTranslationService, User, Password) {
     $scope.password = {
         current: '',
         new: '',
@@ -20,6 +20,16 @@ app1.controller('UserCtrl', ['$scope', '$location', 'SessionService', 'AppTransl
     });
 
     $scope.saveUserData = function () {
+        if ($scope.sessionData.userData.properties.language && $scope.sessionData.userData.properties.language == 'auto') {
+            var language = $window.navigator.userLanguage || $window.navigator.language;
+            if (!language) {
+                $scope.sessionData.userData.properties.correctedLanguage = 'en';
+            } else {
+                $scope.sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
+            }
+        } else {
+            $scope.sessionData.userData.properties.correctedLanguage = $scope.sessionData.userData.properties.language;
+        }
         $scope.sessionData.appData = AppTranslationService.translate($scope.sessionData.userData.properties.correctedLanguage);
         SessionService.setSessionData($scope.sessionData);
         User.update({
