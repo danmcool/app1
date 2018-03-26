@@ -19,10 +19,9 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
                 .clickOutsideToClose(true)
                 .title('Success')
                 .textContent(res.msg)
-                .ok('Got it!'),
-                function () {
-                    SessionService.location('/');
-                });
+                .ok('Got it!')).then(function () {
+                SessionService.location('/');
+            });
         }, function (error) {
             $mdDialog.show(
                 $mdDialog.alert()
