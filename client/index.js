@@ -187,21 +187,23 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     var getSessionData = function () {
         return sessionData;
     }
-
+    var computeLanguage = function (properties, window) {
+        if (properties.uiLanguage && properties.uiLanguage == 'auto') {
+            var language = window.navigator.userLanguage || window.navigator.language;
+            if (!language) {
+                return 'en';
+            } else {
+                return (language.indexOf('en') == 0 ? 'en' : language.indexOf('fr') == 0 ? 'fr' : 'en');
+            }
+        } else {
+            return properties.uiLanguage;
+        }
+    }
     var initSessionData = function (userResult, gotoApps) {
         sessionData = {};
         sessionData.token = userResult.token;
         sessionData.userData = userResult.user;
-        if (sessionData.userData.properties.uiLanguage && sessionData.userData.properties.uiLanguage == 'auto') {
-            var language = $window.navigator.userLanguage || $window.navigator.language;
-            if (!language) {
-                sessionData.userData.properties.correctedLanguage = 'en';
-            } else {
-                sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
-            }
-        } else {
-            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.uiLanguage;
-        }
+        sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
@@ -242,16 +244,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         });
     }
     var init = function () {
-        if (sessionData.userData.properties.uiLanguage && sessionData.userData.properties.uiLanguage == 'auto') {
-            var language = $window.navigator.userLanguage || $window.navigator.language;
-            if (!language) {
-                sessionData.userData.properties.correctedLanguage = 'en';
-            } else {
-                sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
-            }
-        } else {
-            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.uiLanguage;
-        }
+        sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
         UserStatus.get(function (userResult) {
             initSessionData(userResult, false);
         }, function (error) {
@@ -299,16 +292,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             },
             applicationName: 'App1'
         }
-        if (sessionData.userData.properties.uiLanguage && sessionData.userData.properties.uiLanguage == 'auto') {
-            var language = $window.navigator.userLanguage || $window.navigator.language;
-            if (!language) {
-                sessionData.userData.properties.correctedLanguage = 'en';
-            } else {
-                sessionData.userData.properties.correctedLanguage = (language.startsWith('en') ? 'en' : language.startsWith('fr') ? 'fr' : 'en');
-            }
-        } else {
-            sessionData.userData.properties.correctedLanguage = sessionData.userData.properties.uiLanguage;
-        }
+        sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
         location('/');
     }
@@ -326,7 +310,8 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         openApp: openApp,
         login: login,
         logout: logout,
-        location: location
+        location: location,
+        computeLanguage: computeLanguage
     }
 }]).factory('MapService', function MapService() {
     var maps = [];

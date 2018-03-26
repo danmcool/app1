@@ -316,13 +316,13 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
 
     $scope.deleteField = function (full_path) {
         for (var i = $scope.datamodel_keys.length - 1; i >= 0; i--) {
-            if ($scope.datamodel_keys[i].full_path.startsWith(full_path)) {
+            if ($scope.datamodel_keys[i].full_path.indexOf(full_path)) {
                 $scope.datamodel_keys.splice(i, 1);
             }
         }
         var datamodelkeys = Object.keys($scope.datamodel.projection);
         for (var i = 0; i < datamodelkeys.length; i++) {
-            if ($scope.datamodel.projection[datamodelkeys[i]].full_path.startsWith(full_path)) {
+            if ($scope.datamodel.projection[datamodelkeys[i]].full_path.indexOf(full_path)) {
                 delete $scope.datamodel.projection[datamodelkeys[i]];
             }
         }
