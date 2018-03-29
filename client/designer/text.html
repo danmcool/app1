@@ -1,11 +1,11 @@
 <md-dialog aria-label="Translate Text">
-    <form ng-cloak>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>{{sessionData.appData.text_translation}}</h2>
-            </div>
-        </md-toolbar>
-        <md-dialog-content>
+    <md-toolbar layout="row">
+        <div class="md-toolbar-tools">
+            <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.text_translation}}</span>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <form ng-cloak>
             <div class="md-dialog-content">
                 <div ng-if="!multipleLines">
                     <md-input-container flex="auto" class="md-block">
@@ -28,14 +28,14 @@
                     </md-input-container>
                 </div>
             </div>
-        </md-dialog-content>
-        <md-dialog-actions layout="row">
-            <md-button ng-click="cancel()">
-                {{sessionData.appData.cancel}}
-            </md-button>
-            <md-button ng-click="answer(text)">
-                {{sessionData.appData.ok}}
-            </md-button>
-        </md-dialog-actions>
-    </form>
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-click="cancel()">
+            {{sessionData.appData.cancel}}
+        </md-button>
+        <md-button ng-click="answer(text)">
+            {{sessionData.appData.ok}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -49,24 +49,52 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Evénements'
         },
         homepage_events: {
-            en: 'Cloud application that helps organizing internal events (trainings, workshops, etc)',
-            fr: 'Application cloud pour faciliter l\'organisation des événements interne (trainings, workshops, etc)'
+            en: 'Organize internal events (trainings, workshops, etc), share venue et prerequisits information, let colleagues subscribe to an event',
+            fr: 'Organisation des événements interne (trainings, workshops, etc), partager l\'adresse et les prérequis, permettez à vos collègues de souscrire à un événement'
         },
         homepage_incidents_title: {
             en: 'Incident Management',
             fr: 'Gestion des incidents'
         },
         homepage_incidents: {
-            en: 'Cloud application that helps managing incoming issues from customers or partners',
-            fr: 'Application cloud qui permet de gérer les incidents saisis par des clients ou partenaires'
+            en: 'Manage incoming issues from customers or partners, easily find insightful information on your products, increase productivity',
+            fr: 'Gérez les incidents saisis par des clients ou partenaires, trouver des informations pertinentes sur vos produits, augmentez votre productivité'
+        },
+        homepage_timesheets_title: {
+            en: 'Timesheets',
+            fr: 'Feuilles de présence'
+        },
+        homepage_timesheets: {
+            en: 'Create timesheets and assign them to your employees, employees can get their timesheets validated by the customers',
+            fr: 'Créer de feuilles de présence et assignez les a vos employés, vos employés peuvent les faire valider par les clients'
+        },
+        homepage_consulting: {
+            en: 'Consulting',
+            fr: 'Conseil'
+        },
+        homepage_buildpoc_title: {
+            en: 'Let Us Build Your Live Proof Of Concept',
+            fr: 'Laissez nous faire une preuve de concept live pour vous'
+        },
+        homepage_buildpoc: {
+            en: 'Our consulting team can help you define your digital requirements; then rapidly create a App1 application and help you with the deployment of the solution in your enterprise',
+            fr: 'Notre équipe de conseil peut vous aider à concrétiser vos besoins dans le numérique; ensuite créer très rapidement une application App1 et vous accompagner dans le déploiement de la solution dans votre entreprise'
+        },
+        homepage_appcreation_title: {
+            en: 'Training For Partners And Power Users',
+            fr: 'Training pour les partenaires et utilisateurs chevronnés'
+        },
+        homepage_appcreation: {
+            en: 'We show you how App1 digital platform works so that you can create yourself your digital experience and applications',
+            fr: 'On vous montre comment la plateforme numérique App1 marche pour que vous puissiez créer vous-mêmes votre expérience numérique ou vos applications'
         },
         homepage_register_free_trial: {
-            en: 'Up to 10 users, registration is 100% free!',
-            fr: 'Jusqu\'à 10 utilisateurs l\'enregistrement est 100% gratuit!'
+            en: 'Free registration for up to 10 users',
+            fr: 'Enregistrement gratuit jusqu\'à 10 utilisateurs'
         },
         homepage_require_poc: {
-            en: 'Companies with more than 100 employees contact us for a free POC!',
-            fr: 'Companies a partir de 100 employees, contactez nous pour un POC gratuit!'
+            en: 'Free proof of concept -> Make your digital transformation with App1',
+            fr: 'Preuve de concept gratuit -> Créez votre transformation digitale avec App1'
         },
         new_app: {
             en: 'New application',

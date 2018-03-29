@@ -88,6 +88,7 @@ app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routePara
                 text: object[property],
                 multipleLines: multipleLines
             },
+            theme: $scope.sessionData.userData.properties.theme,
             parent: angular.element(document.body),
             clickOutsideToClose: true
         }).then(function (result) {
