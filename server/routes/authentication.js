@@ -406,7 +406,7 @@ router.get('/open', function (req, res, next) {
                             if (errWorkflow) return res.status(400).json({
                                 err: 'Workflow error'
                             });
-                            res.redirect('/#!/form/' + workflow.startup_form + '/0?application_id=' + application_id + '&workflow_id=' + workflow._id);
+                            res.redirect('/app/#!/form/' + workflow.startup_form + '/0?application_id=' + application_id + '&workflow_id=' + workflow._id);
                         })
                     });
                 });
@@ -424,7 +424,7 @@ router.get('/open', function (req, res, next) {
                             err: 'Workflow error'
                         });
                         var datamodel = Object.keys(objectProfile.profile.datamodels)[0];
-                        res.redirect('/#!/form/' + workflow.startup_form + '/' + Object.keys(objectProfile.profile.datamodels[datamodel])[0] + '?application_id=' + app_id + '&workflow_id=' + workflow._id);
+                        res.redirect('/app/#!/form/' + workflow.startup_form + '/' + Object.keys(objectProfile.profile.datamodels[datamodel])[0] + '?application_id=' + app_id + '&workflow_id=' + workflow._id);
                     });
                 } else {
                     return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + Constants.WebAddress + '/#!/register">Register</a><br><a href="https://' + Constants.WebAddress + '' + '/#!/login">Login</a>');
@@ -446,7 +446,7 @@ router.get('/open', function (req, res, next) {
                     err: 'Invalid parameters!'
                 });
                 SessionCache.update(req.cookies[Constants.SessionCookie], userObject);
-                res.redirect('/#/form/' + req.query.form_id + '/' + req.query.data_id);
+                res.redirect('/app/#!/form/' + req.query.form_id + '/' + req.query.data_id);
             });
         */
     });
@@ -557,7 +557,7 @@ router.post('/saml_callback', function (req, res) {
                                     return res.cookie(Constants.SessionCookie, newSession._id, {
                                         maxAge: Constants.MaxSessionTimeout,
                                         httpOnly: true
-                                    }).redirect('/');
+                                    }).redirect('/app/');
                                 });
                                 Email.sendSAMLNewUser(newUser.email, newUser.user, newUser._company_code);
                             });
@@ -579,7 +579,7 @@ router.post('/saml_callback', function (req, res) {
                             return res.cookie(Constants.SessionCookie, newSession._id, {
                                 maxAge: Constants.MaxSessionTimeout,
                                 httpOnly: true
-                            }).redirect('/');
+                            }).redirect('/app/');
                         });
                     }
                 });

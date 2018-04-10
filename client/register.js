@@ -1,4 +1,4 @@
-app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register', 'SessionService', function ($scope, $location, $mdDialog, Register, SessionService) {
+home.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register', 'SessionService', function ($scope, $location, $mdDialog, Register, SessionService) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.sessionData.applicationName = 'App1';
     SessionService.setSessionData($scope.sessionData);

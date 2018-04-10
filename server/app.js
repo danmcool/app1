@@ -40,7 +40,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 function allowedPath(req) {
-    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file') || req.path.startsWith('/client')) {
+    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file')) {
         return false;
     }
     return true;

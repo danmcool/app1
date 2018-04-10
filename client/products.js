@@ -1,0 +1,1 @@
+home.controller('ProductsCtrl', function () {});

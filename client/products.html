@@ -1,0 +1,70 @@
+<md-content flex>
+    <div layout="column" layout-xs="column" layout-sm="column" id="applications">
+        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/products.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
+            <div layout-padding md-colors="{'color':'primary-50'}">
+                <p style="font-size: 54px; text-align: center"><b>{{sessionData.appData.cloud_applications}}</b></p>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+            <div layout-padding>
+                <h2 class="md-display-1">{{sessionData.appData.homepage_events_title}}</h2>
+                <p class="md-headline">{{sessionData.appData.homepage_events}}</p>
+            </div>
+            <div layout-padding>
+                <img style="height: 300px" src='/images/events2.png'>
+            </div>
+        </div>
+        <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-200', 'color':'primary-800'}">
+            <div layout="column" layout-padding>
+                <h2 class="md-display-1">{{sessionData.appData.homepage_incidents_title}}</h2>
+                <p class="md-headline">{{sessionData.appData.homepage_incidents}}</p>
+            </div>
+            <div layout-padding>
+                <img style="height: 300px" src='/images/incidents2.png'>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+            <div layout-padding>
+                <h2 class="md-display-1">{{sessionData.appData.homepage_timesheets_title}}</h2>
+                <p class="md-headline">{{sessionData.appData.homepage_timesheets}}</p>
+            </div>
+            <div layout-padding>
+                <img style="height: 350px" src='/images/timesheets2.png'>
+            </div>
+        </div>
+    </div>
+    <div layout="column" layout-xs="column" layout-sm="column" id="consulting">
+        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/business3.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
+            <div layout-padding md-colors="{'color':'primary-50'}">
+                <p style="font-size: 54px; text-align: center"><b>{{sessionData.appData.homepage_consulting}}</b></p>
+            </div>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column">
+            <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+                <div layout-padding>
+                    <h2 class="md-display-1">{{sessionData.appData.homepage_buildpoc_title}}</h2>
+                    <p class="md-headline">{{sessionData.appData.homepage_buildpoc}}</p>
+                </div>
+                <div layout-padding>
+                    <img style="height: 350px" src='/images/datamodeler.png'>
+                </div>
+            </div>
+            <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-200', 'color':'primary-800'}">
+                <div layout-padding>
+                    <h2 class="md-display-1">{{sessionData.appData.homepage_appcreation_title}}</h2>
+                    <p class="md-headline">{{sessionData.appData.homepage_appcreation}}</p>
+                </div>
+                <div layout-padding>
+                    <img style="height: 350px" src='/images/appdesigner.png'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div md-colors="{'background': 'primary-50', 'color':'primary-800'}" class="md-display-1" align="left" layout-padding>
+        <p style="text-align: right; font-size: 18px">©2018 App1</p>
+    </div>
+</md-content>

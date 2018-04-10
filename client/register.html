@@ -1,11 +1,11 @@
-<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+<md-content flex="auto">
     <div layout="row">
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex class="fade">
             <div layout-wrap layout-margin layout-align="center">
                 <md-toolbar layout="row" class="md-hue-1">
                     <div class="md-toolbar-tools">
-                        <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.register}}</span>
+                        <span md-colors="{'color': 'primary-800'}">{{sessionData.appData.register}}</span>
                     </div>
                 </md-toolbar>
                 <div style="height:20px"></div>
@@ -31,11 +31,10 @@
                         <label>{{sessionData.appData.company_name}}</label>
                         <input ng-disabled="false" ng-required="false" name="company_name" ng-model="company_name" md-minlength="1" md-maxlength="100" ng-minlength="1" ng-maxlength="100">
                     </md-input-container>
-                    <md-button flex-gt-xs ng-disabled="registerForm.$invalid" ng-click="register(firstname, lastname, email, code, company_name)" class="md-primary">{{sessionData.appData.register}}</md-button>
+                    <md-button flex-gt-xs ng-disabled="registerForm.$invalid" ng-click="register(firstname, lastname, email, code, company_name)" class="md-secondary">{{sessionData.appData.register}}</md-button>
                 </form>
-                <a href="#!login">
-                    <p class="subtitle">{{sessionData.appData.already_account}}</p>
-                </a>
+                <md-divider md-colors="{'color': 'primary-800'}"></md-divider>
+                <md-button layout-padding flex-gt-xs ng-href="/login">{{sessionData.appData.already_account}}</md-button>
             </div>
         </div>
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>

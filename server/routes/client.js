@@ -20,7 +20,7 @@ var computePage = function (req) {
 
 router.put('/value/:id', function (req, res, next) {
     var pageOptions = computePage(req);
-    if (!req.query.type) return res.status(400).json({
+    if (!req.query.type || !req.body) return res.status(400).json({
         'msg': 'Missing values parameters!'
     });
     var result = {
@@ -44,21 +44,21 @@ router.put('/value/:id', function (req, res, next) {
                         '$eq': SessionCache.userData[req.cookies[Constants.SessionCookie]]._id
                     }
                 }]
-            };
+            }
         } else if (req.body.relation == Constants.ValuesRelationUserManager) {
             userParams = {
                 _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
                 _id: {
                     '$in': SessionCache.userData[req.cookies[Constants.SessionCookie]].manager
                 }
-            };
+            }
         } else if (req.body.relation == Constants.ValuesRelationUserList) {
             userParams = {
                 _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
                 _id: {
                     '$in': req.body.id_list
                 }
-            };
+            }
         }
         if (userParams) {
             User.find(userParams, req.body.user_fields).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (errUserObjects, userObjects) {
@@ -71,6 +71,23 @@ router.put('/value/:id', function (req, res, next) {
             });
         }
     } else if (req.query.type == Constants.ValuesTypeQuery) {
+        var queryParams = {
+            _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+        }
+        if (req.body.id_list) {
+            queryParams._id = {
+                '$in': req.body.id_list
+            }
+        }
+
+        User.find(userParams, req.body.user_fields).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (errUserObjects, userObjects) {
+            if (errUserObjects) return next(errUserObjects);
+            if (!userObjects) return res.status(400).json({
+                msg: 'Url is null!'
+            });
+            result.values = userObjects;
+            return res.status(200).json(result);
+        });
 
         return res.status(200).json('');
     } else {

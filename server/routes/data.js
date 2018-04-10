@@ -71,7 +71,10 @@ router.get('/:datamodelid/', function (req, res, next) {
             }
         }
     }
-    Metadata.Objects[req.params.datamodelid].find(search_criteria, searchScoreProjection).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (err, objects) {
+    if (!req.query.populate) {
+        req.query.populate = '';
+    }
+    Metadata.Objects[req.params.datamodelid].find(search_criteria, searchScoreProjection).skip(pageOptions.skip).limit(pageOptions.limit).populate(req.query.populate).sort(sort_by).exec(function (err, objects) {
         if (err) return next(err);
         res.json(objects);
     });
