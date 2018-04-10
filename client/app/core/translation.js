@@ -381,8 +381,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Enregister'
         },
         welcome: {
-            en: 'Welcome',
-            fr: 'Accueil'
+            en: 'App1 Website',
+            fr: 'Site web App1'
         },
         uploading_in_progress: {
             en: 'Uploading in progress',
