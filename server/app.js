@@ -40,7 +40,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 function allowedPath(req) {
-    if (req.path.startsWith('/data') || req.path.startsWith('/api') || req.path.startsWith('/file')) {
+    if (req.path.startsWith('/client') || req.path.startsWith('/api')) {
         return false;
     }
     return true;
@@ -71,12 +71,12 @@ app.use(function (req, res, next) {
 });
 
 // routes
-app.use('/data', data);
-app.use('/file', file);
 app.use('/authentication', authentication);
 app.use('/client', client);
-app.use('/api', api);
 app.use('/client/design', design);
+app.use('/client/data', data);
+app.use('/client/file', file);
+app.use('/api', api);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../client')));

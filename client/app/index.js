@@ -127,7 +127,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 ]).factory('Files', ['$resource',
     function ($resource) {
-        return $resource('/file/:id', null, {
+        return $resource('/client/file/:id', null, {
             'update': {
                 method: 'PUT'
             }
@@ -135,7 +135,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 ]).factory('FileUrl', ['$resource',
     function ($resource) {
-        return $resource('/file/url/:id', null, {
+        return $resource('/client/file/url/:id', null, {
             'update': {
                 method: 'PUT'
             }
@@ -143,7 +143,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 ]).factory('Datas', ['$resource',
     function ($resource) {
-        return $resource('/data/:datamodel_id/:entry_id', {
+        return $resource('/client/data/:datamodel_id/:entry_id', {
             datamodel_id: '@datamodel_id',
             entry_id: '@entry_id'
         }, {
