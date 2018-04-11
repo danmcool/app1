@@ -25,7 +25,6 @@
 
     <script src="index.js"></script>
     <script defer src="welcome.js"></script>
-    <script defer src="products.js"></script>
     <script defer src="register.js"></script>
     <script defer src="translation.js"></script>
 
@@ -52,20 +51,46 @@
                 {{sessionData.applicationName}}
             </md-button>
             <span flex></span>
-            <md-button layout-padding class="md-no-focus" aria-label="Products" ng-href="#!welcome">
-                {{sessionData.appData.home}}
+            <md-button hide-xs layout-padding class="md-no-focus" aria-label="Platform" ng-href="#platform">
+                {{sessionData.appData.homepage_platform}}
             </md-button>
-            <md-button layout-padding class="md-no-focus" aria-label="Products" ng-href="#!products">
+            <md-button hide-xs layout-padding class="md-no-focus" aria-label="Products" ng-href="#products">
                 {{sessionData.appData.homepage_products}}
             </md-button>
-            <md-button layout-padding class="md-no-focus" aria-label="Products" ng-href="#!register">
+            <md-button hide-xs layout-padding class="md-no-focus" aria-label="Services" ng-href="#services">
+                {{sessionData.appData.homepage_services}}
+            </md-button>
+            <md-button hide-xs layout-padding class="md-no-focus" aria-label="Register" ng-href="#!register">
                 {{sessionData.appData.register}}
             </md-button>
-            <md-button layout-padding class="md-no-focus" aria-label="Products" ng-href="/authentication/open?pid=5a9c2e7864916446b1fc6857">
+            <md-button hide-xs layout-padding class="md-no-focus" aria-label="Contact" ng-href="/authentication/open?pid=5a9c2e7864916446b1fc6857">
                 {{sessionData.appData.homepage_contact}}
+            </md-button>
+            <md-button hide-gt-xs class="md-icon-button" aria-label="Links" ng-click="toggleRight()">
+                <md-icon>menu</md-icon>
             </md-button>
         </div>
     </md-toolbar>
+
+    <md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
+        <md-content layout-padding layout="column">
+            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Platform" ng-href="#platform" ng-click="closeRight()">
+                {{sessionData.appData.homepage_platform}}
+            </md-button>
+            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Products" ng-href="#products" ng-click="closeRight()">
+                {{sessionData.appData.homepage_products}}
+            </md-button>
+            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Services" ng-href="#services" ng-click="closeRight()">
+                {{sessionData.appData.homepage_services}}
+            </md-button>
+            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Register" ng-href="#!register" ng-click="closeRight()">
+                {{sessionData.appData.register}}
+            </md-button>
+            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Contact" ng-href="/authentication/open?pid=5a9c2e7864916446b1fc6857" ng-click="closeRight()">
+                {{sessionData.appData.homepage_contact}}
+            </md-button>
+        </md-content>
+    </md-sidenav>
 
     <md-content flex ng-view style="top:50px"></md-content>
 </body>

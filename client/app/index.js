@@ -364,15 +364,15 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
 
     $scope.closeLeft = function () {
         $mdSidenav('left').close();
-    };
+    }
     $scope.closeRight = function () {
         $mdSidenav('right').close();
-    };
+    }
 
     $scope.logout = function () {
         $mdSidenav('right').close();
         SessionService.logout();
-    };
+    }
 
     $scope.open = function (application) {
         SessionService.openApp(application._id);

@@ -1,26 +1,94 @@
 <md-content flex>
-    <div style="background-position: top; width:100%; height: 500px; background-image: url('/images/business2.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
-        <div layout-padding md-colors="{'color':'primary-50'}">
-            <p style="font-size: 72px; text-align: center"><b>{{sessionData.appData.homepage_welcome1}}</b></p>
-            <p style="font-size: 36px; text-align: center"><b>{{sessionData.appData.homepage_welcome2}}</b></p>
+    <div style="background-position: top; width:100%; height: 500px; background-image: url('/images/business2.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed" id="platform">
+        <div layout-padding md-colors="{'color':'primary-50'}" style="top: 120px; position: relative">
+            <h1 class="md-display-3"><b>{{sessionData.appData.homepage_welcome1}}</b></h1>
+            <h2 class="md-display-1">{{sessionData.appData.homepage_welcome2}}</h2>
         </div>
     </div>
     <div md-colors="{'background': 'primary-50', 'color':'primary-800'}" style="width:100%" layout="row" layout-sm="column" layout-xs="column" layout-padding>
         <div layout-padding>
-            <h1 style="font-size: 54px">{{sessionData.appData.homepage_platform}}</h1>
+            <h2 class="md-display-2">{{sessionData.appData.homepage_ent_platform}}</h2>
         </div>
         <div layout="row" layout-xs="column" layout-sm="row">
             <div layout-padding>
-                <h2 class="md-display-1"><i class="material-icons" style="font-size: 48px">flash_on</i><br>{{sessionData.appData.homepage_power}}</h2>
+                <i class="material-icons" style="font-size: 36px">flash_on</i><br>
+                <h3 class="md-display-1">{{sessionData.appData.homepage_power}}</h3>
                 <p class="md-headline">{{sessionData.appData.homepage_architecture}}</p>
             </div>
             <div layout-padding>
-                <h2 class="md-display-1"><i class="material-icons" style="font-size: 48px">face</i><br>{{sessionData.appData.homepage_design}}</h2>
+                <i class="material-icons" style="font-size: 36px">face</i><br>
+                <h3 class="md-display-1">{{sessionData.appData.homepage_design}}</h3>
                 <p class="md-headline">{{sessionData.appData.homepage_looks}}</p>
             </div>
             <div layout-padding>
-                <h2 class="md-display-1"><i class="material-icons" style="font-size: 48px">business_center</i><br>{{sessionData.appData.homepage_flexibility}}</h2>
+                <i class="material-icons" style="font-size: 36px">business_center</i><br>
+                <h3 class="md-display-1">{{sessionData.appData.homepage_flexibility}}</h3>
                 <p class="md-headline">{{sessionData.appData.homepage_versatility}}</p>
+            </div>
+        </div>
+    </div>
+    <div layout="column" layout-xs="column" layout-sm="column" id="products">
+        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/products.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
+            <div layout-padding md-colors="{'color':'primary-50'}" style="top: 40px; position: relative">
+                <h2 class="md-display-2">{{sessionData.appData.cloud_applications}}</h2>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+            <div layout-padding>
+                <h3 class="md-display-1">{{sessionData.appData.homepage_events_title}}</h3>
+                <p class="md-headline">{{sessionData.appData.homepage_events}}</p>
+            </div>
+            <div layout-padding>
+                <img style="height: 300px" src='/images/events2.png'>
+            </div>
+        </div>
+        <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-200', 'color':'primary-800'}">
+            <div layout="column" layout-padding>
+                <h3 class="md-display-1">{{sessionData.appData.homepage_incidents_title}}</h3>
+                <p class="md-headline">{{sessionData.appData.homepage_incidents}}</p>
+            </div>
+            <div layout-padding>
+                <img style="height: 300px" src='/images/incidents2.png'>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+            <div layout-padding>
+                <h3 class="md-display-1">{{sessionData.appData.homepage_timesheets_title}}</h3>
+                <p class="md-headline">{{sessionData.appData.homepage_timesheets}}</p>
+            </div>
+            <div layout-padding>
+                <img style="height: 350px" src='/images/timesheets2.png'>
+            </div>
+        </div>
+    </div>
+    <div layout="column" layout-xs="column" layout-sm="column" id="services">
+        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/business3.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
+            <div layout-padding md-colors="{'color':'primary-50'}" style="top: 40px; position: relative">
+                <h2 class="md-display-2">{{sessionData.appData.homepage_consulting}}</h2>
+            </div>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column">
+            <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+                <div layout-padding>
+                    <h3 class="md-display-1">{{sessionData.appData.homepage_buildpoc_title}}</h3>
+                    <p class="md-headline">{{sessionData.appData.homepage_buildpoc}}</p>
+                </div>
+                <div layout-padding>
+                    <img style="height: 350px" src='/images/datamodeler.png'>
+                </div>
+            </div>
+            <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-200', 'color':'primary-800'}">
+                <div layout-padding>
+                    <h3 class="md-display-1">{{sessionData.appData.homepage_appcreation_title}}</h3>
+                    <p class="md-headline">{{sessionData.appData.homepage_appcreation}}</p>
+                </div>
+                <div layout-padding>
+                    <img style="height: 350px" src='/images/appdesigner.png'>
+                </div>
             </div>
         </div>
     </div>

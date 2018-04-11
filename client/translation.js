@@ -17,12 +17,20 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'ENTREPRISE DIGITALE'
         },
         homepage_welcome2: {
-            en: 'Make your first step with us!',
-            fr: 'Faites vos premiers pas avec nous!'
+            en: 'Make your digital transformation with us!\nFree registration up to 10 users!',
+            fr: 'Faites votre transformation digitale avec nous!\nEnregistrement gratuit jusqu\'à 10 utilisateurs'
         },
-        homepage_platform: {
+        homepage_ent_platform: {
             en: 'App1 is the platform for digital enterprise',
             fr: 'App1 est la plateforme de l\'entreprise digitale'
+        },
+        homepage_platform: {
+            en: 'Platform',
+            fr: 'Plateforme'
+        },
+        homepage_services: {
+            en: 'Services',
+            fr: 'Services'
         },
         homepage_power: {
             en: 'Fast',
@@ -33,8 +41,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Design'
         },
         homepage_flexibility: {
-            en: 'Versatility',
-            fr: 'Flexibilité'
+            en: 'Security',
+            fr: 'Sécurité'
         },
         homepage_architecture: {
             en: 'Modern architecture allows App1 to be one of the fastest cloud enterprise software',
@@ -45,16 +53,16 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Facile à utiliser, disponible sur mobile, tablette et desktop, pas besoin de regarder le manuel'
         },
         homepage_versatility: {
-            en: 'Business partners can collaborate on different apps in same cloud',
-            fr: 'Les partenaires business peuvent collaborer sur des applications différentes dans le même cloud'
+            en: 'Business partners can share data on a secure platform',
+            fr: 'Les partenaires d\'affaire peuvent partager des données sur une plateforme sécurisée'
         },
         homepage_products: {
             en: 'Products',
             fr: 'Produits'
         },
         homepage_contact: {
-            en: 'Contact Us',
-            fr: 'Nous contacter'
+            en: 'Contact',
+            fr: 'Contact'
         },
         homepage_events_title: {
             en: 'Events',
@@ -405,8 +413,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Téléchargement terminé avec succès!'
         },
         already_account: {
-            en: 'If you already have an account, please click here to login!',
-            fr: 'Si vous avez déjà un compte, veuillez cliquer ici pour se connecter!'
+            en: 'Already have an account? Click here for login!',
+            fr: 'Vous avez déjà un compte? Cliquez pour se connecter!'
         },
         enable_saml: {
             en: 'Enable user SSO login for enterprise using SAML',
