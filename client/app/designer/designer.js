@@ -29,6 +29,8 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
         }
     });
 }]).controller('DesignerCtrl', ['$scope', 'SessionService', 'DesignApplication', 'Company', 'Share', '$mdDialog', '$location', function ($scope, SessionService, DesignApplication, Company, Share, $mdDialog, $location) {
+    ga('send', 'pageview', '/app/designer');
+
     $scope.sessionData = SessionService.getSessionData();
     $scope.applications = [];
     $scope.skip = 0;

@@ -1,4 +1,6 @@
 app1.controller('CompanyCtrl', ['$scope', '$location', 'SessionService', 'AppTranslationService', 'Company', function ($scope, $location, SessionService, AppTranslationService, Company) {
+    ga('send', 'pageview', '/app/company');
+
     $scope.sessionData = SessionService.getSessionData();
     $scope.sessionData.applicationName = 'App1';
     SessionService.setSessionData($scope.sessionData);

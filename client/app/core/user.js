@@ -1,4 +1,6 @@
 app1.controller('UserCtrl', ['$scope', '$location', '$window', 'SessionService', 'AppTranslationService', 'User', 'Password', function ($scope, $location, $window, SessionService, AppTranslationService, User, Password) {
+    ga('send', 'pageview', '/app/user');
+
     $scope.password = {
         current: '',
         new: '',

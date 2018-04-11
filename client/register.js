@@ -1,4 +1,6 @@
 home.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register', 'SessionService', function ($scope, $location, $mdDialog, Register, SessionService) {
+    ga('send', 'pageview', '/register');
+
     $scope.sessionData = SessionService.getSessionData();
     $scope.sessionData.applicationName = 'App1';
     SessionService.setSessionData($scope.sessionData);
