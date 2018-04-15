@@ -20,6 +20,8 @@
                     </md-input-container>
                     <md-button flex-gt-xs ng-disabled="loginForm.$invalid" type="submit" ng-click="login(user, password, code)" class="md-primary">{{sessionData.appData.login}}</md-button>
                 </form>
+                <md-divider md-colors="{'color': 'primary-800'}"></md-divider>
+                <md-button layout-padding flex-gt-xs ng-href="/#!register">{{sessionData.appData.no_account}}</md-button>
             </div>
         </div>
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>

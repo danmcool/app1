@@ -384,6 +384,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'App1 Website',
             fr: 'Site web App1'
         },
+        no_account: {
+            en: 'No account yet, register for free!',
+            fr: 'Pas de compte, enregistrement gratuit!'
+        },
         uploading_in_progress: {
             en: 'Uploading in progress',
             fr: 'Téléchargement en cours'

@@ -17,8 +17,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'ENTREPRISE DIGITALE'
         },
         homepage_welcome2: {
-            en: 'Make your digital transformation with us!\nFree registration up to 10 users!',
-            fr: 'Faites votre transformation digitale avec nous!\nEnregistrement gratuit jusqu\'à 10 utilisateurs'
+            en: 'Make your digital transformation with us!\nFree registration!',
+            fr: 'Faites votre transformation digitale avec nous!\nEnregistrement gratuit!'
         },
         homepage_ent_platform: {
             en: 'App1 is the platform for digital enterprise',
@@ -109,8 +109,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'On vous montre comment la plateforme numérique App1 marche pour que vous puissiez créer vous-mêmes votre expérience numérique ou vos applications'
         },
         homepage_register_free_trial: {
-            en: 'Free registration for up to 10 users',
-            fr: 'Enregistrement gratuit jusqu\'à 10 utilisateurs'
+            en: 'Free registration for up to 10 users per company',
+            fr: 'Enregistrement gratuit jusqu\'à 10 utilisateurs par société'
         },
         homepage_require_poc: {
             en: 'Free proof of concept -> Make your digital transformation with App1',
