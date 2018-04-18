@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://app1.digital/</loc>
+    </url>
+    <url>
+        <loc>https://app1.digital/#!/#platform</loc>
+    </url>
+    <url>
+        <loc>https://app1.digital/#!/#products</loc>
+    </url>
+    <url>
+        <loc>https://app1.digital/#!/#services</loc>
+    </url>
+    <url>
+        <loc>https://app1.digital/authentication/open?pid=5a9c2e7864916446b1fc6857</loc>
+    </url>
+    <url>
+        <loc>https://app1.digital/app</loc>
+    </url>
+</urlset>
