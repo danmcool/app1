@@ -112,6 +112,10 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'We show you how App1 digital platform works so that you can create yourself your digital experience and applications',
             fr: 'On vous montre comment la plateforme numérique App1 marche pour que vous puissiez créer vous-mêmes votre expérience numérique ou vos applications'
         },
+        homepage_register_free: {
+            en: 'Free registration',
+            fr: 'Enregistrement gratuit'
+        },
         homepage_register_free_trial: {
             en: 'Free registration for up to 10 users per company',
             fr: 'Enregistrement gratuit jusqu\'à 10 utilisateurs par société'
