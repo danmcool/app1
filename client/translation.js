@@ -8,6 +8,14 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'CLOUD APPLICATIONS',
             fr: 'APPLICATIONS CLOUD'
         },
+        homepage_platform: {
+            en: 'Platform',
+            fr: 'Plateforme'
+        },
+        homepage_services: {
+            en: 'Services',
+            fr: 'Services'
+        },
         homepage_welcome: {
             en: 'Welcome to App1',
             fr: 'Bienvenue chez App1'
@@ -21,44 +29,40 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Faites votre transformation digitale avec nous!\nEnregistrement gratuit!'
         },
         homepage_ent_platform: {
-            en: 'App1 is the platform for digital enterprise',
-            fr: 'App1 est la plateforme de l\'entreprise digitale'
-        },
-        homepage_platform: {
-            en: 'Platform',
-            fr: 'Plateforme'
-        },
-        homepage_services: {
-            en: 'Services',
-            fr: 'Services'
+            en: 'Run your digital business process on App1 platform',
+            fr: 'Démarrez vos processus numériques sur la plateforme App1'
         },
         homepage_power: {
-            en: 'Fast',
-            fr: 'Rapide'
+            en: 'Applications',
+            fr: 'Applications'
         },
         homepage_design: {
-            en: 'Looks',
-            fr: 'Design'
+            en: 'Experience',
+            fr: 'Expérience'
         },
         homepage_flexibility: {
-            en: 'Security',
-            fr: 'Sécurité'
+            en: 'Versatility',
+            fr: 'Versatilité'
         },
         homepage_architecture: {
-            en: 'Modern architecture allows App1 to be one of the fastest cloud enterprise software',
-            fr: 'L\'architecture moderne permet à App1 d\'etre un des plus rapides logiciel cloud pour entreprise'
+            en: 'Use out of the box cloud applications like event management, timesheets, etc.',
+            fr: 'Utilisez les applications existantes comme gestion d\'évènements, feuilles de présence, etc.'
         },
         homepage_looks: {
             en: 'Easy to use, designed for mobile first, there\'s no need to read the manual',
             fr: 'Facile à utiliser, disponible sur mobile, tablette et desktop, pas besoin de regarder le manuel'
         },
         homepage_versatility: {
-            en: 'Business partners can share data on a secure platform',
-            fr: 'Les partenaires d\'affaire peuvent partager des données sur une plateforme sécurisée'
+            en: 'Create your own applications or change the existing one to suit your needs',
+            fr: 'Créez vos propres applications ou ajustez à vos besoins les applications existantes'
         },
         homepage_products: {
             en: 'Products',
             fr: 'Produits'
+        },
+        homepage_pricing: {
+            en: 'Pricing',
+            fr: 'Tarifs'
         },
         homepage_contact: {
             en: 'Contact',
@@ -115,6 +119,54 @@ home.factory('AppTranslationService', function AppTranslationService() {
         homepage_require_poc: {
             en: 'Free proof of concept -> Make your digital transformation with App1',
             fr: 'Preuve de concept gratuit -> Créez votre transformation digitale avec App1'
+        },
+        pricing_package: {
+            en: 'Package',
+            fr: 'Package'
+        },
+        pricing_users: {
+            en: 'Users',
+            fr: 'Utilisateurs'
+        },
+        pricing_existing_applications: {
+            en: 'Running apps',
+            fr: 'Apps utilisées'
+        },
+        pricing_new_applications: {
+            en: 'Create your apps',
+            fr: 'Créez vos apps'
+        },
+        pricing_cost: {
+            en: 'Cost',
+            fr: 'Cout'
+        },
+        package_free: {
+            en: 'Free',
+            fr: 'Gratuit'
+        },
+        pricing_free: {
+            en: '$0',
+            fr: '0€'
+        },
+        package_team: {
+            en: 'Team',
+            fr: 'Equipe'
+        },
+        pricing_5k: {
+            en: '$5.000 per year',
+            fr: '5.000€ par an'
+        },
+        package_enterprise: {
+            en: 'Big enterprise',
+            fr: 'Grand groupe'
+        },
+        users_unlimited: {
+            en: 'TBD',
+            fr: 'A definir'
+        },
+        pricing_per_user: {
+            en: 'From $10 per user per year',
+            fr: 'A partir de 10€ par utilisateur par an'
         },
         new_app: {
             en: 'New application',

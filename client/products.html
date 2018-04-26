@@ -38,7 +38,34 @@
         </div>
     </div>
     <div layout="column" layout-xs="column" layout-sm="column" id="consulting">
-        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/business3.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
+        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/consulting.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
+            <div layout-padding md-colors="{'color':'primary-50'}">
+                <p style="font-size: 54px; text-align: center"><b>{{sessionData.appData.homepage_consulting}}</b></p>
+            </div>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column">
+            <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-100', 'color':'primary-800'}">
+                <div layout-padding>
+                    <h2 class="md-display-1">{{sessionData.appData.homepage_buildpoc_title}}</h2>
+                    <p class="md-headline">{{sessionData.appData.homepage_buildpoc}}</p>
+                </div>
+                <div layout-padding>
+                    <img style="height: 350px" src='/images/datamodeler.png'>
+                </div>
+            </div>
+            <div layout="row" layout-sm="row" layout-xs="column" md-colors="{'background': 'primary-200', 'color':'primary-800'}">
+                <div layout-padding>
+                    <h2 class="md-display-1">{{sessionData.appData.homepage_appcreation_title}}</h2>
+                    <p class="md-headline">{{sessionData.appData.homepage_appcreation}}</p>
+                </div>
+                <div layout-padding>
+                    <img style="height: 350px" src='/images/appdesigner.png'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="column" layout-xs="column" layout-sm="column" id="pricing">
+        <div style="background-position: left; width: 100%; height: 300px; background-image: url('/images/business5.jpg');  background-repeat: no-repeat; background-size: cover; background-attachment: fixed">
             <div layout-padding md-colors="{'color':'primary-50'}">
                 <p style="font-size: 54px; text-align: center"><b>{{sessionData.appData.homepage_consulting}}</b></p>
             </div>
