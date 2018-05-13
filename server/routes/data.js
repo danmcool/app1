@@ -18,14 +18,33 @@ router.get('/:datamodelid/', function (req, res, next) {
     var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
-    if (user.remote_profiles && user.remote_profiles.length > 0) {
+    if (req.query.pid) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list;
-                remote = true;
+            if (req.query.pid == user.remote_profiles[i]._id) {
+                if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list) {
+                    remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list;
+                    remote = true;
+                }
+                break;
+            } else {
+                continue;
             }
         }
+        if (!remote) {
+            return res.status(401).json({
+                err: 'Incorrect profile!'
+            });
+        }
     }
+    /* else if (user.remote_profiles && user.remote_profiles.length > 0) {
+            for (var i = 0; i < user.remote_profiles.length; i++) {
+                if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list) {
+                    remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list;
+                    remote = true;
+                    break;
+                }
+            }
+        }*/
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].list) {
         if (!remote) {
             return res.status(401).json({
@@ -86,23 +105,50 @@ router.post('/:datamodelid/', function (req, res, next) {
     var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
-    if (user.remote_profiles && user.remote_profiles.length > 0) {
-        for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
-                if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
-                    remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
-                    remote = true;
+    if (req.body.pid) {
+        if (user.remote_profiles && user.remote_profiles.length > 0) {
+            for (var i = 0; i < user.remote_profiles.length; i++) {
+                if (req.body.pid == user.remote_profiles[i]._id) {
+                    if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
+                        if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                            remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                            remote = true;
+                        } else if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create) {
+                            remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create;
+                            remote = true;
+                        }
+                    }
                     break;
                 } else {
-                    if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create) {
-                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create;
-                        remote = true;
-                    }
+                    continue;
                 }
-
             }
         }
+        if (!remote) {
+            return res.status(401).json({
+                err: 'Incorrect profile!'
+            });
+        }
     }
+    /* else {
+            if (user.remote_profiles && user.remote_profiles.length > 0) {
+                for (var i = 0; i < user.remote_profiles.length; i++) {
+                    if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
+                        if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                            remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                            remote = true;
+                            break;
+                        } else {
+                            if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create) {
+                                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].create;
+                                remote = true;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }*/
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].create) {
         if (!remote) {
             return res.status(401).json({
@@ -136,23 +182,48 @@ router.get('/:datamodelid/:id', function (req, res, next) {
     var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
-    if (user.remote_profiles && user.remote_profiles.length > 0) {
+    if (req.query.pid) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
-                if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
-                    remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
-                    remote = true;
-                    break;
-                    /*} else {
-                        if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read) {
-                            remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read;
-                            remote = true;
-                        }*/
+            if (req.query.pid == user.remote_profiles[i]._id) {
+                if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
+                    if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                        remote = true;
+                        /*} else {
+                            if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read) {
+                                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read;
+                                remote = true;
+                            }*/
+                    }
                 }
-
+                break;
+            } else {
+                continue;
             }
         }
+        if (!remote) {
+            return res.status(401).json({
+                err: 'Incorrect profile!'
+            });
+        }
     }
+    /* else if (user.remote_profiles && user.remote_profiles.length > 0) {
+            for (var i = 0; i < user.remote_profiles.length; i++) {
+                if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid]) {
+                    if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                        remote = true;
+                        break;
+                        //} else {
+                        //    if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read) {
+                        //        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].read;
+                        //        remote = true;
+                        //    }
+                    }
+
+                }
+            }
+        }*/
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].read) {
         if (!remote) {
             return res.status(401).json({
@@ -193,15 +264,35 @@ router.put('/:datamodelid/:id', function (req, res, next) {
     var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
-    if (user.remote_profiles && user.remote_profiles.length > 0) {
-        for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
-                remote = true;
-                break;
+    if (req.query.pid) {
+        if (user.remote_profiles && user.remote_profiles.length > 0) {
+            for (var i = 0; i < user.remote_profiles.length; i++) {
+                if (req.query.pid == user.remote_profiles[i]._id) {
+                    if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                        remote = true;
+                    }
+                    break;
+                }
             }
         }
+        if (!remote) {
+            return res.status(401).json({
+                err: 'Incorrect profile!'
+            });
+        }
     }
+    /* else {
+            if (user.remote_profiles && user.remote_profiles.length > 0) {
+                for (var i = 0; i < user.remote_profiles.length; i++) {
+                    if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
+                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+                        remote = true;
+                        break;
+                    }
+                }
+            }
+        }*/
     if (!profile || !profile.datamodels[req.params.datamodelid] || !profile.datamodels[req.params.datamodelid].update || !req.body || !req.body._user) {
         if (!remote) {
             return res.status(401).json({
@@ -218,10 +309,10 @@ router.put('/:datamodelid/:id', function (req, res, next) {
     if (remote) {
         search_criteria._company_code = {
             $eq: remote_profile._company_code
-        };
+        }
         search_criteria._user = {
             $eq: req.body._user
-        };
+        }
         objectToBeUpdated[remote_profile.constraint.key] = remote_profile.constraint.value;
     } else {
         search_criteria._company_code = {

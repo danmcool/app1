@@ -10,9 +10,13 @@ app1.controller('WorkflowsCtrl', ['$scope', '$routeParams', '$location', 'Sessio
             if ($scope.sessionData.applications) {
                 var apps = $scope.sessionData.applications;
                 for (var i = 0; i < apps.length; i++) {
-                    apps[i].translated_name = SessionService.translate(apps[i].name);
+                    if (apps[i].remote) {
+                        apps[i].translated_name = SessionService.translate(apps[i].name) + ' (' + apps[i].company_name + ')';
+                    } else {
+                        apps[i].translated_name = SessionService.translate(apps[i].name);
+                    }
                     apps[i].translated_description = SessionService.translate(apps[i].description);
-                    if (apps[i]._id == $routeParams.application_id) {
+                    if (apps[i]._id == $routeParams.application_id && $routeParams.pid == apps[i].pid) {
                         $scope.workflows = apps[i].workflows;
                         $scope.sessionData.applicationName = apps[i].translated_name;
                         appFound = true;
@@ -57,7 +61,11 @@ app1.controller('WorkflowsCtrl', ['$scope', '$routeParams', '$location', 'Sessio
         } else if (workflow.type == 'file') {
             SessionService.location('/file/' + $routeParams.application_id + '?iframe_file=' + workflow.file + '&workflow_id=' + workflow._id);
         } else {
-            SessionService.location('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + workflow._id);
+            if ($routeParams.pid) {
+                SessionService.location('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + workflow._id + '&pid=' + $routeParams.pid);
+            } else {
+                SessionService.location('/form/' + workflow.startup_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + workflow._id);
+            }
         }
     }
 

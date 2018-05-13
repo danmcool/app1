@@ -48,10 +48,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var apps = $scope.sessionData.applications;
         if (apps) {
             for (var i = 0; i < apps.length; i++) {
-                if (apps[i]._id == $routeParams.application_id) {
+                if (apps[i]._id == $routeParams.application_id && apps[i].pid == $routeParams.pid) {
                     for (var j = 0; j < apps[i].workflows.length; j++) {
                         if (apps[i].workflows[j]._id == $routeParams.workflow_id) {
-                            $scope.sessionData.applicationName = SessionService.translate(apps[i].name) + ' - ' + SessionService.translate(apps[i].workflows[j].name);
+                            $scope.sessionData.applicationName = apps[i].translated_name + ' - ' + SessionService.translate(apps[i].workflows[j].name);
                             $scope.sessionData.application_id = $routeParams.application_id;
                             SessionService.setSessionData($scope.sessionData);
                             break;
@@ -153,7 +153,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             search_text: $scope.search_text,
             skip: localSkip,
             limit: localLimit,
-            sort_by: $scope.form.sort_by
+            sort_by: $scope.form.sort_by,
+            pid: $routeParams.pid
         }, function (datas) {
             if (datas.length < $scope.limit) $scope.stopScroll = true;
             var formValues = $scope.form.values;
@@ -533,7 +534,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     datamodel_id: $scope.form.datamodel._id,
                     entry_id: $routeParams.entry_id,
                     search_criteria: $scope.search_criteria,
-                    populate: populate.trim()
+                    populate: populate.trim(),
+                    pid: $routeParams.pid
                 }, function (data) {
                     $scope.data = data;
                     $scope.dataLoaded = true;
@@ -549,7 +551,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     var gotoNextForm = function (formula, nextFormId, data) {
         if (nextFormId == 'home') {
-            SessionService.location('/workflows/' + $scope.sessionData.application_id);
+            if ($routeParams.pid) {
+                SessionService.location('/workflows/' + $scope.sessionData.application_id + '?pid=' + $routeParams.pid);
+            } else {
+                SessionService.location('/workflows/' + $scope.sessionData.application_id);
+            }
         } else {
             var formUrl = '/form/' + nextFormId + '/';
             if (data && data._id) {
@@ -562,6 +568,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             } else {
                 formUrl = formUrl + '0?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
+            }
+            if ($routeParams.pid) {
+                formUrl = formUrl + '&pid=' + $routeParams.pid;
             }
             if (formUrl != $location.url()) {
                 SessionService.location(formUrl);
@@ -856,6 +865,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
         updateComponents($scope.form, setValue, $scope.data);
+        if ($routeParams.pid) {
+            $scope.data.pid = $routeParams.pid;
+        }
         $scope.data.$save(function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? res : null));
@@ -867,7 +879,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         updateComponents($scope.form, setValue, $scope.data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: $scope.data._id
+            entry_id: $scope.data._id,
+            pid: $routeParams.pid
         }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? res : null));
@@ -888,7 +901,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             function () {
                 Datas.remove({
                     datamodel_id: $scope.form.datamodel._id,
-                    entry_id: $scope.data._id
+                    entry_id: $scope.data._id,
+                    pid: $routeParams.pid
                 }, function (res) {
                     notify(notifyUser, emailTitle, emailHtml);
                     gotoNextForm(formula, nextFormId, null);
@@ -907,7 +921,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.resolvePath($scope.data, itemPath).push($scope.sessionData.userData._id);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: $scope.data._id
+            entry_id: $scope.data._id,
+            pid: $routeParams.pid
         }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
@@ -926,7 +941,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: $scope.data._id
+            entry_id: $scope.data._id,
+            pid: $routeParams.pid
         }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
@@ -955,7 +971,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
                 Datas.update({
                     datamodel_id: $scope.form.datamodel._id,
-                    entry_id: $scope.data._id
+                    entry_id: $scope.data._id,
+                    pid: $routeParams.pid
                 }, $scope.data, function (res) {
                     notify(notifyUser, emailTitle, emailHtml, itemId);
                     gotoNextForm(formula, nextFormId, $scope.data);
@@ -976,7 +993,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.resolvePath($scope.data, destinationItemPath).push(itemId);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: $scope.data._id
+            entry_id: $scope.data._id,
+            pid: $routeParams.pid
         }, $scope.data, function (res) {
             notify(notifyUser, emailTitle, emailHtml, itemId);
             gotoNextForm(formula, nextFormId, $scope.data);
@@ -990,7 +1008,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
+            entry_id: data._id,
+            pid: $routeParams.pid
         }, data, function (res) {
             notify(notifyUser, emailTitle, emailHtml);
             gotoNextForm(formula, nextFormId, res);
@@ -1011,7 +1030,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             function () {
                 Datas.remove({
                     datamodel_id: $scope.form.datamodel._id,
-                    entry_id: data._id
+                    entry_id: data._id,
+                    pid: $routeParams.pid
                 }, function (res) {
                     notify(notifyUser, emailTitle, emailHtml);
                     gotoNextForm(formula, nextFormId, null);
@@ -1085,7 +1105,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
+            entry_id: data._id,
+            pid: $routeParams.pid
         }, data, function (res) {
             Share.update({
                 app_profile_id: shareAppProfileId,
@@ -1107,7 +1128,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
-            entry_id: data._id
+            entry_id: data._id,
+            pid: $routeParams.pid
         }, data, function (res) {
             Calendar.get({
                 project_name: $scope.resolvePath(data, projectNamePath),

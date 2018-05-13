@@ -170,12 +170,12 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
     $scope.share = function (application) {
         var publicProfileFound = false;
         for (var i = 0; i < application.profiles.length; i++) {
-            if (application.profiles[i].properties && application.profiles[i].properties.user == 'public') {
-                publicProfileFound = true;
+            if (application.profiles[i].properties && (application.profiles[i].properties.user == 'public' || application.profiles[i].properties.workflow)) {
+                shareableProfileFound = true;
                 Share.update({
                     app_profile_id: application.profiles[i]._id,
-                    app_name: application.name.en,
-                    profile_name: application.profiles[i].name.en
+                    app_name: SessionService.translate(application.name),
+                    profile_name: SessionService.translate(application.profiles[i].name)
                 }, function (res) {
                     $mdDialog.show(
                         $mdDialog.confirm()
@@ -189,7 +189,7 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
                 break;
             }
         }
-        if (!publicProfileFound) {
+        if (!shareableProfileFound) {
             $mdDialog.show(
                 $mdDialog.alert()
                 .parent(angular.element(document.body))

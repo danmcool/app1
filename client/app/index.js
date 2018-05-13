@@ -178,7 +178,11 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     var setSessionData = function (newData) {
         if (newData.applications) {
             for (var i = 0; i < newData.applications.length; i++) {
-                newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.correctedLanguage);
+                if (newData.applications[i].remote) {
+                    newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.correctedLanguage) + ' (' + newData.applications[i].company_name + ')';
+                } else {
+                    newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.correctedLanguage);
+                }
                 newData.applications[i].translated_description = translateInternal(newData.applications[i].description, newData.userData.properties.correctedLanguage);
             }
         }
@@ -216,7 +220,11 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 saveUserData = true;
             }
             for (var i = 0; i < apps.length; i++) {
-                apps[i].translated_name = translate(apps[i].name);
+                if (apps[i].remote) {
+                    apps[i].translated_name = translate(apps[i].name) + ' (' + apps[i].company_name + ')';
+                } else {
+                    apps[i].translated_name = translate(apps[i].name);
+                }
                 apps[i].translated_description = translate(apps[i].description);
                 if (!sessionData.userData.properties.app_score[apps[i]._id]) {
                     sessionData.userData.properties.app_score[apps[i]._id] = 75.00;
@@ -375,13 +383,17 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     }
 
     $scope.open = function (application) {
-        SessionService.openApp(application._id);
+        //SessionService.openApp(application._id);
         if (application.type == 'url') {
             SessionService.location('/url/' + application._id + '?iframe_url=' + application.url);
         } else if (application.type == 'file') {
             SessionService.location('/file/' + application._id + '?iframe_file=' + application.file);
         } else {
-            SessionService.location('/workflows/' + application._id);
+            if (application.remote) {
+                SessionService.location('/workflows/' + application._id + '?pid=' + application.pid);
+            } else {
+                SessionService.location('/workflows/' + application._id);
+            }
         }
         $scope.closeLeft();
     }

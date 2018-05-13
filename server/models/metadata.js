@@ -189,6 +189,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'UserProfile'
     }],
+    remote_applications: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Application'
+    }],
     company: {
         type: Schema.Types.ObjectId,
         ref: 'Company'

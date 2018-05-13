@@ -114,60 +114,101 @@ router.get('/form/:id', function (req, res, next) {
 
 router.get('/application/', function (req, res, next) {
     var pageOptions = computePage(req);
-    Application.find(SessionCache.filterAddProductionCompanyCode(req, {
-        _id: {
-            $in: SessionCache.userData[req.cookies[Constants.SessionCookie]].company.applications
-        },
-        active: true
-    })).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err,
+    var userData = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+    Application.find(SessionCache.filterAddRemoteAppsAndProductionCompanyCode(req, userData.company.applications, userData.remote_applications)).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err,
         apps) {
         if (err) return next(err);
-        var remoteProfiles = SessionCache.userData[req.cookies[Constants.SessionCookie]].remote_profiles;
+        var remoteProfiles = userData.remote_profiles;
         var userToken = req.cookies[Constants.SessionCookie];
-        for (var i = apps.length - 1; i >= 0; i--) {
-            if (!apps[i].profiles || apps[i].profiles.length == 0) {
-                if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
-                    apps.splice(i, 1);
+        var resultApps = [];
+        for (var c = 0; c < userData.company.applications.length; c++) {
+            for (var i = 0; i < apps.length; i++) {
+                if (userData.company.applications[c] != apps[i]._id) {
+                    continue;
                 }
-                continue;
-            }
-            var profileFound = null;
-            if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
-                for (var j = 0; j < apps[i].profiles.length; j++) {
-                    if (apps[i].profiles[j].properties && apps[i].profiles[j].properties.user == Constants.UserProfilePublic) {
-                        profileFound = apps[i].profiles[j];
-                        break;
-                    }
-                }
-            } else {
-                profileFound = apps[i].default_profile;
-            }
-            for (var j = 0; j < remoteProfiles.length; j++) {
-                if (remoteProfiles[j].profile.applications[apps[i]._id]) {
+                var profileFound;
+                if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic && (!apps[i].profiles || apps[i].profiles.length == 0)) {
+                    continue;
+                } else {
                     if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic) {
-                        if (remoteProfiles[j].type == Constants.UserProfileShare) {
-                            profileFound = remoteProfiles[j];
-                            break;
+                        for (var j = 0; j < apps[i].profiles.length; j++) {
+                            if (apps[i].profiles[j].properties && apps[i].profiles[j].properties.user == Constants.UserProfilePublic) {
+                                profileFound = apps[i].profiles[j];
+                                break;
+                            }
                         }
                     } else {
-                        if (remoteProfiles[j].type == Constants.UserProfileApplication) {
-                            profileFound = remoteProfiles[j];
-                            break;
+                        profileFound = apps[i].default_profile;
+                    }
+                }
+                var currentApp = JSON.parse(JSON.stringify(apps[i]));
+                currentApp.remote = false;
+                if (profileFound) {
+                    for (var k = currentApp.workflows.length - 1; k >= 0; k--) {
+                        if (!profileFound.profile.applications[currentApp._id].workflows[currentApp.workflows[k]._id]) {
+                            currentApp.workflows.splice(k, 1);
                         }
                     }
                 }
-            }
-            if (profileFound && profileFound.profile.applications[apps[i]._id]) {
-                for (var k = apps[i].workflows.length - 1; k >= 0; k--) {
-                    if (!profileFound.profile.applications[apps[i]._id].workflows[apps[i].workflows[k]._id]) {
-                        apps[i].workflows.splice(k, 1);
-                    }
-                }
-            } else {
-                apps.splice(i, 1);
+                resultApps.push(currentApp);
+                break;
             }
         }
-        res.json(apps);
+        var companyCodes = [];
+        for (var r = 0; r < userData.remote_applications.length; r++) {
+            for (var i = 0; i < apps.length; i++) {
+                if (userData.remote_applications[r] != apps[i]._id) {
+                    continue;
+                }
+                var profilesFound = [];
+                for (var j = 0; j < remoteProfiles.length; j++) {
+                    if (remoteProfiles[j].profile.applications[apps[i]._id]) {
+                        if (remoteProfiles[j].type == Constants.UserProfileApplication || remoteProfiles[j].type == Constants.UserProfileShare) {
+                            profilesFound.push(remoteProfiles[j]);
+                        }
+                    }
+                }
+                if (profilesFound.length > 0) {
+                    for (var p = 0; p < profilesFound.length; p++) {
+                        var currentApp = JSON.parse(JSON.stringify(apps[i]));
+                        if (profilesFound[p] && profilesFound[p].type == Constants.UserProfileShare) {
+                            currentApp.remote = true;
+                            currentApp.pid = profilesFound[p]._id;
+                            currentApp.company_name = profilesFound[p]._company_code;
+                            companyCodes.push(profilesFound[p]._company_code);
+                        }
+                        if (profilesFound[p]) {
+                            for (var k = currentApp.workflows.length - 1; k >= 0; k--) {
+                                if (!profilesFound[p].profile.applications[currentApp._id].workflows[currentApp.workflows[k]._id]) {
+                                    currentApp.workflows.splice(k, 1);
+                                }
+                            }
+                        }
+                        resultApps.push(currentApp);
+                    }
+                }
+            }
+        }
+        if (companyCodes.length == 0) {
+            res.json(resultApps);
+        } else {
+            Company.find({
+                _company_code: {
+                    $in: companyCodes
+                }
+            }, function (err,
+                companies) {
+                if (err) return next(err);
+                if (!companies) return res.status(400).json({
+                    msg: 'Missing company data!'
+                });
+                var resultAppsStr = JSON.stringify(resultApps);
+                for (var c = 0; c < companies.length; c++) {
+                    resultAppsStr = resultAppsStr.replace(companies[c]._company_code, companies[c].name);
+                }
+                res.json(JSON.parse(resultAppsStr));
+            });
+        }
     });
 });
 
@@ -331,7 +372,7 @@ router.put('/share', function (req, res, next) {
         _id: req.body.app_profile_id
     }, function (errProfile, objectProfile) {
         if (errProfile) return next(errProfile);
-        if (!objectProfile) return res.status(400).json({
+        if (!objectProfile || !objectProfile.properties) return res.status(400).json({
             err: 'Invalid parameters!'
         });
         var userProfile = {
@@ -343,7 +384,7 @@ router.put('/share', function (req, res, next) {
             type: Constants.UserProfileShare,
             _company_code: SessionCache.userData[userToken]._company_code
         }
-        if (objectProfile.properties && objectProfile.properties.user == Constants.UserProfilePublic) {
+        if (objectProfile.properties.user == Constants.UserProfilePublic) {
             var appId = Object.keys(objectProfile.profile.applications)[0];
             var workflowId = Object.keys(objectProfile.profile.applications[appId].workflows)[0];
             var applicationsFilter = 'profile.applications.' + appId + '.workflows.' + workflowId;
@@ -351,7 +392,7 @@ router.put('/share', function (req, res, next) {
                 'properties.user': Constants.UserProfilePublic,
                 _company_code: SessionCache.userData[userToken]._company_code,
                 type: Constants.UserProfileShare
-            };
+            }
             filter[applicationsFilter] = true;
             UserProfile.findOne(filter, function (errExistingProfile, objectExistingProfile) {
                 if (errExistingProfile) return next(errExistingProfile);
@@ -363,6 +404,35 @@ router.put('/share', function (req, res, next) {
                             share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
                         });
                         Email.sendSharePublic(SessionCache.userData[userToken].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
+                    });
+                } else {
+                    res.status(200).json({
+                        msg: 'Application shared successfully (existing share)!',
+                        share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
+                    });
+                    Email.sendSharePublic(SessionCache.userData[userToken].email, objectExistingProfile._id, req.body.app_name, req.body.profile_name);
+                }
+            });
+        } else if (objectProfile.properties.workflow) {
+            var appId = Object.keys(objectProfile.profile.applications)[0];
+            var workflowId = Object.keys(objectProfile.profile.applications[appId].workflows)[0];
+            var applicationsFilter = 'profile.applications.' + appId + '.workflows.' + workflowId;
+            var filter = {
+                'properties.workflow': true,
+                _company_code: SessionCache.userData[userToken]._company_code,
+                type: Constants.UserProfileShare
+            }
+            filter[applicationsFilter] = true;
+            UserProfile.findOne(filter, function (errExistingProfile, objectExistingProfile) {
+                if (errExistingProfile) return next(errExistingProfile);
+                if (!objectExistingProfile) {
+                    UserProfile.create(userProfile, function (err, newUserprofile) {
+                        if (err) return next(err);
+                        res.status(200).json({
+                            msg: 'Application shared successfully (new share)!',
+                            share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+                        });
+                        Email.sendSharePrivate(SessionCache.userData[userToken].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
                     });
                 } else {
                     res.status(200).json({
@@ -488,7 +558,7 @@ router.put('/event/:id', function (req, res, next) {
         };
         if (profile.datamodels[req.body.datamodel_id].update._user) {
             search_criteria._user = {
-                '$in': profile.datamodels[req.body.datamodel_id].update._user
+                $in: profile.datamodels[req.body.datamodel_id].update._user
             };
         }
     }

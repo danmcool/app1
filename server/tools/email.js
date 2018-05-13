@@ -91,6 +91,13 @@ Email.sendSharePublic = function (email_address, profile_id, app_name, profile_n
         '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
         Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
 }
+Email.sendSharePrivate = function (email_address, profile_id, app_name, profile_name) {
+    Email.send(
+        email_address, '', 'App1 - Shared workflow',
+        'Automatic message from App1',
+        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using private profile ' + profile_name + ' :</p></span><br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
+        Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
+}
 
 Email.sendCalendar = function (email_address, projectName, startDate, endDate, allDay, userName) {
     try {

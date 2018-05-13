@@ -18,7 +18,7 @@
         "mongoose": "^4.6.5",
         "morgan": "^1.7.0",
         "ical-generator": "^0.2.8",
-        "nodemailer": "^2.6.4",
+        "nodemailer": "^4.0.1",
         "saml2-js": "^1.11.0"
     }
 }

@@ -50,7 +50,11 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     var setSessionData = function (newData) {
         if (newData.applications) {
             for (var i = 0; i < newData.applications.length; i++) {
-                newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.correctedLanguage);
+                if (newData.applications[i].remote) {
+                    newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.correctedLanguage) + ' (' + newData.applications[i].company_name + ')';
+                } else {
+                    newData.applications[i].translated_name = translateInternal(newData.applications[i].name, newData.userData.properties.correctedLanguage);
+                }
                 newData.applications[i].translated_description = translateInternal(newData.applications[i].description, newData.userData.properties.correctedLanguage);
             }
         }

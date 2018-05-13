@@ -1,1 +1,2 @@
-..\app1\node_modules\.bin\node-debug server\server.js
+#npm install -g inspect-process 
+inspect --debug-brk server\server.js

@@ -137,8 +137,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Partage publique'
         },
         no_public_profile: {
-            en: 'No public profile available',
-            fr: 'Pas de profile publique disponible'
+            en: 'No public profile or workflow available',
+            fr: 'Pas de profile publique ou de processus disponible'
         },
         error: {
             en: 'Error',
