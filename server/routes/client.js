@@ -99,11 +99,11 @@ router.get('/form/:id', function (req, res, next) {
     if (!req.params.id) return res.status(400).json({
         msg: 'Form id is null!'
     });
-    Metadata.Form.findOne(SessionCache.filterAddProductionCompanyCode(req, {
+    Metadata.Form.findOne({
         _id: {
             $eq: req.params.id
         }
-    })).populate('datamodel values').exec(function (err, formObject) {
+    }).populate('datamodel values').exec(function (err, formObject) {
         if (err) return next(err);
         if (!formObject) return res.status(400).json({
             msg: 'Url is null!'
