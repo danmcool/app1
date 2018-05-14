@@ -851,7 +851,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (notifyUserId && emailTitle && emailHtml) {
             var translatedEmail = SessionService.translate(emailHtml);
             var fieldList = translatedEmail.match(/@\w*@/g);
-            for (var i = 0; i < fieldList.length; i++) {
+            for (var i = 0; fieldList && i < fieldList.length; i++) {
                 if (fieldList[i] != '@@') {
                     translatedEmail = translatedEmail.replace(new RegExp(fieldList[i], 'g'), $scope.localdata[fieldList[i].replace(/@/g, '')]);
                 }
