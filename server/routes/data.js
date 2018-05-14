@@ -270,6 +270,9 @@ router.put('/:datamodelid/:id', function (req, res, next) {
                     if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
                         remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
                         remote = true;
+                    } else if (user.remote_profiles[i].profile.datamodels[req.params.datamodelid].update) {
+                        remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].update;
+                        remote = true;
                     }
                     break;
                 }
