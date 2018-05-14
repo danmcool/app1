@@ -115,13 +115,13 @@ router.get('/form/:id', function (req, res, next) {
 router.get('/application/', function (req, res, next) {
     var pageOptions = computePage(req);
     var userData = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-    Application.find(SessionCache.filterAddRemoteAppsAndProductionCompanyCode(req, userData.company.applications, userData.remote_applications)).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err,
-        apps) {
+    Application.find(SessionCache.filterAddRemoteAppsAndProductionCompanyCode(req, userData.company.applications, userData.remote_applications)).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err, apps) {
         if (err) return next(err);
+        if (!apps) return res.json([]);
         var remoteProfiles = userData.remote_profiles;
         var userToken = req.cookies[Constants.SessionCookie];
         var resultApps = [];
-        for (var c = 0; c < userData.company.applications.length; c++) {
+        for (var c = 0; userData.company.applications && c < userData.company.applications.length; c++) {
             for (var i = 0; i < apps.length; i++) {
                 if (userData.company.applications[c] != apps[i]._id) {
                     continue;
@@ -155,7 +155,7 @@ router.get('/application/', function (req, res, next) {
             }
         }
         var companyCodes = [];
-        for (var r = 0; r < userData.remote_applications.length; r++) {
+        for (var r = 0; userData.remote_applications && r < userData.remote_applications.length; r++) {
             for (var i = 0; i < apps.length; i++) {
                 if (userData.remote_applications[r] != apps[i]._id) {
                     continue;
