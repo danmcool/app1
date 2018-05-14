@@ -117,7 +117,6 @@ router.get('/application/', function (req, res, next) {
     var userData = SessionCache.userData[req.cookies[Constants.SessionCookie]];
     Application.find(SessionCache.filterAddRemoteAppsAndProductionCompanyCode(req, userData.company.applications, userData.remote_applications)).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err, apps) {
         if (err) return next(err);
-        if (!apps) return res.json([]);
         var remoteProfiles = userData.remote_profiles;
         var userToken = req.cookies[Constants.SessionCookie];
         var resultApps = [];
