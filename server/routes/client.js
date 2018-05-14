@@ -213,7 +213,6 @@ router.get('/application/', function (req, res, next) {
 });
 
 router.get('/application/:id', function (req, res, next) {
-    var pageOptions = computePage(req);
     Application.findOne(SessionCache.filterAddProductionCompanyCode(req, {
         _id: req.params.id
     })).populate('profiles default_profile workflows').exec(function (err,
@@ -263,7 +262,6 @@ router.get('/user/', function (req, res, next) {
             errUser: 'Not enough user rights'
         });
     }
-    var user = SessionCache.userData[token];
     var pageOptions = computePage(req);
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
     var search_criteria = {

@@ -92,13 +92,13 @@
                     <div ng-switch-when="file">
                         <div ng-if="application.file">
                             <p class="subtitle">
-                                <a class="md-body-2" href="/file/{{application.file._id}}" target="_blank">{{application.file.name}}</a>
+                                <a class="md-body-2" href="/client/file/{{application.file._id}}" target="_blank">{{application.file.name}}</a>
                                 <md-button ng-click="removeFile(application.file._id)" class="md-primary">X</md-button>
                             </p>
                         </div>
                         <p class="md-body-1" id="file_upload"></p>
                         <md-input-container class="md-block">
-                            <input accept=".doc,.docx,.xlsx,.xls,.ppt,.pptx,.txt,.pdf,image/*" type="file" ng-disabled="false" ng-required="false" aria-label="document" name="document" ng-model="appdocument" onchange="angular.element(this).scope().changeFile(this.files)">
+                            <input accept=".doc,.docx,.xlsx,.xls,.ppt,.pptx,.txt,.pdf,image/*" type="file" ng-disabled="false" ng-required="false" aria-label="document" name="document" ng-model="appdocument" onchange="changeFileInApplicationsJS(this.files)">
                         </md-input-container>
                     </div>
                 </div>

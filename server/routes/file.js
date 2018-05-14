@@ -1,40 +1,30 @@
 var express = require('express');
 var router = express.Router();
+var crypto = require('crypto');
+var fs = require('fs');
+var path = require('path');
+var crypto = require('crypto');
 
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');;
-var AWS = require('aws-sdk');
-AWS.config.update({
-    accessKeyId: Constants.ACCESS_KEY_ID,
-    secretAccessKey: Constants.SECRET_ACCESS_KEY,
-    region: Constants.REGION
-});
-var s3Instance = new AWS.S3({
-    params: {
-        Bucket: Constants.S3_BUCKET
-    }
-});
 
 router.get('/url/:id', function (req, res, next) {
-    Metadata.File.findOne(SessionCache.filterCompanyCode(req, {
+    Metadata.File.findOne({
         _id: req.params.id
-    }), function (err, object) {
+    }, function (err, file) {
         if (err) return next(err);
-        if (!object) return res.status(401).json({
+        if (!file) return res.status(401).json({
             'msg': 'Cannot find file object!'
         });
-        var params = {
-            Key: req.body._company_code + '/' + object._id + '/' + object.name
-        };
-        s3Instance.getSignedUrl('getObject', params, function (err, url) {
-            if (err) return next(err);
-            if (!url) return res.status(400).json({
-                'msg': 'Url is null!'
+        var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+        if (file._company_code != user._company_code && JSON.stringify(user.remote_profiles).indexOf(file._company_code) == -1) {
+            return res.status(400).json({
+                msg: 'Not enough access rights!'
             });
-            res.json({
-                'url': url
-            });
+        }
+        res.json({
+            url: 'https://localhost/client/file/' + file._id
         });
     });
 });
@@ -47,7 +37,7 @@ router.get('/', function (req, res, next) {
     var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
     search_criteria._company_code = {
         '$eq': SessionCache.userData[userToken]._company_code
-    };
+    }
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
     Metadata.File.find(search_criteria).skip(pageOptions.skip).limit(pageOptions.limit).sort(sort_by).exec(function (
         err, objects) {
@@ -56,47 +46,57 @@ router.get('/', function (req, res, next) {
     });
 });
 router.post('/', function (req, res, next) {
+    var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+    var company_code = user._company_code;
+    if (req.body.pid) {
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i]._id == req.body.pid) {
+                company_code = user.remote_profiles[i]._company_code;
+                break;
+            }
+        }
+    }
     if (req.body) {
         req.body._updated_at = Date.now();
-        req.body._company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
+        req.body._company_code = company_code;
     }
-    Metadata.File.create(req.body, function (err, object) {
+    Metadata.File.create(req.body, function (err, file) {
         if (err) return next(err);
-        var params = {
-            Key: req.body._company_code + '/' + object._id + '/' + object.name,
-            ContentType: object.type,
-            ACL: 'public-read'
-        };
-        s3Instance.getSignedUrl('putObject', params, function (err, data) {
-            if (err) return next(err);
-            var result = {
-                file: object,
-                signedRequest: data,
-                url: 'http://s3.' + Constants.REGION + '.amazonaws.com/' + Constants.S3_BUCKET + '/' + object._company_code + '/' + object._id + '/' + object.name
-            }
-            res.json(result);
-            res.end();
-        });
+        var result = {
+            file: file,
+            url: '/client/file/upload/' + company_code + '/' + file._id
+        }
+        res.json(result);
     });
 });
+router.put('/upload/:company_code/:fileid', function (req, res, next) {
+    var encrypt = crypto.createCipher(Constants.FilesCryptingAlgorithm, Constants.SecretKey);
+    var file = fs.createWriteStream('./files/' + req.params.company_code + '-' + req.params.fileid);
+    req.pipe(encrypt).pipe(file);
+    res.status(200).json({
+        msg: 'File uploaded successfully!'
+    });
+    res.end();
+});
 router.get('/:id', function (req, res, next) {
-    Metadata.File.findOne(SessionCache.filterCompanyCode(req, {
+    Metadata.File.findOne({
         _id: req.params.id
-    }), function (err, object) {
+    }, function (err, file) {
         if (err) return next(err);
-        if (!object) return res.status(401).json({
-            'msg': 'Cannot find file object!'
+        if (!file) return res.status(401).json({
+            msg: 'Cannot find file object!'
         });
-        var params = {
-            Key: req.body._company_code + '/' + object._id + '/' + object.name
-        };
-        s3Instance.getSignedUrl('getObject', params, function (err, url) {
-            if (err) return next(err);
-            if (!url) return res.status(400).json({
-                'msg': 'Url is null!'
+        var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+        if (file._company_code != user._company_code && JSON.stringify(user.remote_profiles).indexOf(file._company_code) == -1) {
+            return res.status(400).json({
+                msg: 'Not enough access rights!'
             });
-            res.redirect(url);
-        });
+        }
+        var decrypt = crypto.createDecipher(Constants.FilesCryptingAlgorithm, Constants.SecretKey);
+        var readStream = fs.createReadStream('./files/' + file._company_code + '-' + file._id);
+        res.setHeader("Content-Type", file.type);
+        res.writeHead(200);
+        readStream.pipe(decrypt).pipe(res);
     });
 });
 router.put('/:id', function (req, res, next) {
@@ -105,7 +105,7 @@ router.put('/:id', function (req, res, next) {
     Metadata.File.findOneAndUpdate({
         _id: req.params.id,
         _updated_at: lookup_date,
-        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]].code
+        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
     }, req.body, function (err, object) {
         if (err) return next(err);
         if (object) {
@@ -122,21 +122,26 @@ router.put('/:id', function (req, res, next) {
     });
 });
 router.delete('/:id', function (req, res, next) {
+    var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+    var company_code = user._company_code;
+    if (req.query.pid) {
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i]._id == req.query.pid) {
+                company_code = user.remote_profiles[i]._company_code;
+                break;
+            }
+        }
+    }
     Metadata.File.findOneAndRemove({
         _id: req.params.id,
-        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
-    }, function (err, object) {
+        _company_code: company_code
+    }, function (err, file) {
         if (err) return next(err);
-        var params = {
-            Key: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code + '/' + object._id + '/' + object.name
-        };
-        s3Instance.deleteObject(params, function (err, data) {
-            if (err) return next(err);
+        fs.unlink('./files/' + company_code + '-' + file._id, function () {
             res.json({
-                'msg': 'Object has been deleted!'
+                msg: 'File has been deleted!'
             });
         });
-
     });
 });
 module.exports = router;

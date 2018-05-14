@@ -20,6 +20,7 @@ const Constants = {
     SecretIterations: 8924,
     SecretByteSize: 256,
     SecretAlgorithm: 'sha512',
+    FilesCryptingAlgorithm: 'aes-256-ctr',
 
     PublicUser: 'public',
     PublicUserFirstName: 'Public',

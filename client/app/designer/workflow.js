@@ -97,9 +97,9 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
         });
     }
 
-    $scope.uploadFile = function (file, signedRequest, url) {
+    $scope.uploadFile = function (file, url) {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', signedRequest);
+        xhr.open('PUT', url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
@@ -114,7 +114,7 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
         };
         xhr.send(file);
     };
-    $scope.changeFile = function (files) {
+    changeFileInWorkflowsJS = function (files) {
         if (files.length != 1) return;
         for (k = files.length - 1; k >= 0; k--) {
             if (files[k].size / 1048576 > 35) {
@@ -123,16 +123,16 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
         }
         document.getElementById('file_upload').textContent = $scope.sessionData.appData.uploading_in_progress + ' 1/1';
         var file = new Files({
-            'name': files[0].name,
-            'type': files[0].type
+            name: files[0].name,
+            type: files[0].type
         });
         file.$save(function (res) {
             $scope.workflow.file = {
-                '_id': res.file._id,
-                'name': res.file.name,
-                'type': res.file.type
+                _id: res.file._id,
+                name: res.file.name,
+                type: res.file.type
             };
-            $scope.uploadFile(files[0], res.signedRequest, res.url);
+            $scope.uploadFile(files[0], res.url);
         });
     }
     $scope.removeFile = function (fileId) {

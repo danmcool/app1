@@ -80,7 +80,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     }
 ).factory('Files',
     function ($resource) {
-        return $resource('/file/:id', null, {
+        return $resource('/client/file/:id', null, {
             'update': {
                 method: 'PUT'
             }

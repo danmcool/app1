@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var fs = require('fs');
 var saml2 = require('saml2-js');
 
 var Metadata = require('../models/metadata.js');

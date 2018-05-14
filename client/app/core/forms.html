@@ -245,7 +245,7 @@
                                         <div ng-switch-when="true" layout-padding>
                                             <p class="md-body-1">{{field.translated_name}}</p>
                                             <div ng-repeat="file in localdata[field.id]">
-                                                <a class="md-body-2" href="/file/{{file._id}}" target="_blank">
+                                                <a class="md-body-2" href="/client/file/{{file._id}}" target="_blank">
                                                     <p class="subtitle">{{file.name}}</p>
                                                 </a>
                                             </div>
@@ -255,7 +255,7 @@
                                                 <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                                 <div ng-repeat="file in files[field.id]">
                                                     <p class="subtitle">
-                                                        <a class="md-body-2" href="/file/{{file._id}}" target="_blank">{{file.name}}</a>
+                                                        <a class="md-body-2" href="/client/file/{{file._id}}" target="_blank">{{file.name}}</a>
                                                         <md-button ng-click="removeFile(file._id, field.id)" class="md-primary">X</md-button>
                                                     </p>
                                                 </div>
@@ -281,7 +281,7 @@
                                                 <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                                 <div ng-repeat="image in files[field.id]">
                                                     <p class="subtitle">
-                                                        <a class="md-body-2" href="/file/{{image._id}}" target="_blank">{{image.name}}</a>
+                                                        <a class="md-body-2" href="/client/file/{{image._id}}" target="_blank">{{image.name}}</a>
                                                         <md-button ng-click="removeFile(image._id, field.id)" class="md-primary">X</md-button>
                                                     </p>
                                                 </div>

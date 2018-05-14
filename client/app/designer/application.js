@@ -124,9 +124,9 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         });
     }
 
-    $scope.uploadFile = function (file, signedRequest, url) {
+    $scope.uploadFile = function (file, url) {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', signedRequest);
+        xhr.open('PUT', url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
@@ -141,7 +141,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
         }
         xhr.send(file);
     };
-    $scope.changeFile = function (files) {
+    changeFileInApplicationsJS = function (files) {
         if (files.length != 1) return;
         for (k = files.length - 1; k >= 0; k--) {
             if (files[k].size / 1048576 > 35) {
@@ -159,7 +159,7 @@ app1.controller('ApplicationEditCtrl', ['$scope', 'SessionService', 'DesignAppli
                 name: res.file.name,
                 type: res.file.type
             };
-            $scope.uploadFile(files[0], res.signedRequest, res.url);
+            $scope.uploadFile(files[0], res.url);
         });
     }
     $scope.removeFile = function (fileId) {

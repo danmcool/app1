@@ -85,7 +85,7 @@
                         </div>
                         <p class="md-body-1" id="file_upload"></p>
                         <md-input-container class="md-block">
-                            <input accept=".doc,.docx,.xlsx,.xls,.ppt,.pptx,.txt,.pdf,image/*" type="file" ng-disabled="false" ng-required="false" aria-label="document" name="document" ng-model="workflowdocument" onchange="angular.element(this).scope().changeFile(this.files)">
+                            <input accept=".doc,.docx,.xlsx,.xls,.ppt,.pptx,.txt,.pdf,image/*" type="file" ng-disabled="false" ng-required="false" aria-label="document" name="document" ng-model="workflowdocument" onchange="changeFileInWorkflowsJS(this.files)">
                         </md-input-container>
                     </div>
                 </div>

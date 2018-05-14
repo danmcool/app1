@@ -580,9 +580,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    $scope.uploadFile = function (file, signedRequest, url, fieldId) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('PUT', signedRequest);
+    $scope.uploadFile = function (file, url, fieldId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', url);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
@@ -599,7 +599,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     alert('Could not upload file.');
                 }
             }
-        };
+        }
         xhr.send(file);
     }
     changeFilesInFormsJS = function (files, fieldId) {
@@ -619,7 +619,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         for (i = 0; i < $scope.filesCount[fieldId]; i++) {
             var file = new Files({
                 name: files[i].name,
-                type: files[i].type
+                type: files[i].type,
+                pid: $routeParams.pid
             });
             $scope.files[fieldId].push(files[i]);
             file.$save(function (res) {
@@ -631,7 +632,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                             type: res.file.type
                         });
                         $scope.files[fieldId][j]._id = res.file._id;
-                        $scope.uploadFile($scope.files[fieldId][j], res.signedRequest, res.url, fieldId);
+                        $scope.uploadFile($scope.files[fieldId][j], res.url, fieldId);
                     }
                 }
             });
@@ -643,7 +644,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (files[i]._id == fileId) {
                 files.splice(i, 1);
                 Files.remove({
-                    id: fileId
+                    id: fileId,
+                    pid: $routeParams.pid
                 }, function (res) {
                     for (var j = 0; j < $scope.files[fieldId].length; j++) {
                         if ($scope.files[fieldId][j]._id == fileId) {
