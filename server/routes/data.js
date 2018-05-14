@@ -315,7 +315,9 @@ router.put('/:datamodelid/:id', function (req, res, next) {
         search_criteria._user = {
             $eq: req.body._user
         }
-        objectToBeUpdated[remote_profile.constraint.key] = remote_profile.constraint.value;
+        if (remote_profile.constraint) {
+            objectToBeUpdated[remote_profile.constraint.key] = remote_profile.constraint.value;
+        }
     } else {
         search_criteria._company_code = {
             $eq: profile.datamodels[req.params.datamodelid].update._company_code
