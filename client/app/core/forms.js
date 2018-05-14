@@ -609,7 +609,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             $scope.localdata[fieldId] = [];
         }
         for (k = files.length - 1; k >= 0; k--) {
-            if (files[k].size / 1048576 > 35) {
+            if (files[k].size / 1048576 > 20) {
                 files.splice(k, 1);
             }
         }
