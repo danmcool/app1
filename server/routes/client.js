@@ -195,15 +195,14 @@ router.get('/application/', function (req, res, next) {
                 _company_code: {
                     $in: companyCodes
                 }
-            }, function (err,
-                companies) {
+            }, function (err, companies) {
                 if (err) return next(err);
                 if (!companies) return res.status(400).json({
                     msg: 'Missing company data!'
                 });
                 var resultAppsStr = JSON.stringify(resultApps);
                 for (var c = 0; c < companies.length; c++) {
-                    resultAppsStr = resultAppsStr.replace(companies[c]._company_code, companies[c].name);
+                    resultAppsStr = resultAppsStr.replace(new RegExp(companies[c]._company_code, 'g'), companies[c].name);
                 }
                 res.json(JSON.parse(resultAppsStr));
             });
