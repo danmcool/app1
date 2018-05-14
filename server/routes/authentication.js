@@ -287,7 +287,7 @@ router.post('/login', function (req, res, next) {
                 user: req.body.user.toLowerCase(),
                 password: hashPassword,
                 validated: true
-            }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            }, 'email firstname lastname user _company_code properties company profile remote_profiles remote_applications manager reports')
             .populate('company profile remote_profiles').exec(
                 function (errUser, userObject) {
                     if (errUser) return res.status(401).json({
@@ -371,7 +371,7 @@ router.get('/open', function (req, res, next) {
                     user: Constants.PublicUser + '@' + objectProfile._company_code,
                     _company_code: objectProfile._company_code,
                     validated: true
-                }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports').populate('company profile remote_profiles').exec(
+                }, 'email firstname lastname user _company_code properties company profile remote_profiles remote_applications manager reports').populate('company profile remote_profiles').exec(
                     function (errUser, userObject) {
                         if (errUser) return res.status(401).json({
                             msg: errUser
@@ -547,7 +547,7 @@ router.post('/saml_callback', function (req, res) {
         User.findOne({
                 user: objectSaml.user.attributes.EmailAddress[0],
                 _company_code: company_code
-            }, 'email firstname lastname user _company_code properties company profile remote_profiles manager reports')
+            }, 'email firstname lastname user _company_code properties company profile remote_profiles remote_applications manager reports')
             .populate('company profile remote_profiles').exec(
                 function (errUser, userObject) {
                     if (errUser) return res.status(401).json({
