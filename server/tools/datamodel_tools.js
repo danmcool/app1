@@ -30,6 +30,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
         return datamodel;
     }
     var datamodelkeys = Object.keys(projection);
+    var addedCreated = false;
     var addedUpdated = false;
     var addedUser = false;
     for (var i = 0; i < datamodelkeys.length; i++) {
@@ -42,6 +43,12 @@ DatamodelTools.buildDataModel = function (projection, index) {
             index.options.weights[fullPath] = projectionItem.index_weight;
         }
 
+        if (projectionItem.path == '' && projectionItem.technical_name == '_created_at') {
+            addedCreated = true;
+            projectionItem.full_path = '_created_at';
+            projectionItem.type = 'date';
+            continue;
+        }
         if (projectionItem.path == '' && projectionItem.technical_name == '_updated_at') {
             addedUpdated = true;
             projectionItem.full_path = '_updated_at';
@@ -92,6 +99,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
             //console.log('Type error for datamodel - ' + projectionItem.type);
         }
     }
+    datamodel._created_at = 'Date';
     datamodel._updated_at = 'Date';
     datamodel._company_code = 'String';
     datamodel._user = {
@@ -101,6 +109,18 @@ DatamodelTools.buildDataModel = function (projection, index) {
     datamodel._appointments = Schema.Types.Mixed;
     datamodel._appointment_properties = Schema.Types.Mixed;
 
+    if (!addedCreated) {
+        projection[newId(projection)] = {
+            path: '',
+            full_path: '_created_at',
+            technical_name: '_created_at',
+            type: 'date',
+            name: {
+                en: 'Created at',
+                fr: 'Créé le'
+            }
+        }
+    }
     if (!addedUpdated) {
         projection[newId(projection)] = {
             path: '',

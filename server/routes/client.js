@@ -155,36 +155,38 @@ router.get('/application/', function (req, res, next) {
             }
         }
         var companyCodes = [];
-        for (var r = 0; r < userData.remote_applications.length; r++) {
-            for (var i = 0; i < apps.length; i++) {
-                if (userData.remote_applications[r] != apps[i]._id) {
-                    continue;
-                }
-                var profilesFound = [];
-                for (var j = 0; j < remoteProfiles.length; j++) {
-                    if (remoteProfiles[j].profile.applications[apps[i]._id]) {
-                        if (remoteProfiles[j].type == Constants.UserProfileApplication || remoteProfiles[j].type == Constants.UserProfileShare) {
-                            profilesFound.push(remoteProfiles[j]);
-                        }
+        if (userData.remote_applications) {
+            for (var r = 0; r < userData.remote_applications.length; r++) {
+                for (var i = 0; i < apps.length; i++) {
+                    if (userData.remote_applications[r] != apps[i]._id) {
+                        continue;
                     }
-                }
-                if (profilesFound.length > 0) {
-                    for (var p = 0; p < profilesFound.length; p++) {
-                        var currentApp = JSON.parse(JSON.stringify(apps[i]));
-                        if (profilesFound[p] && profilesFound[p].type == Constants.UserProfileShare) {
-                            currentApp.remote = true;
-                            currentApp.pid = profilesFound[p]._id;
-                            currentApp.company_name = profilesFound[p]._company_code;
-                            companyCodes.push(profilesFound[p]._company_code);
-                        }
-                        if (profilesFound[p]) {
-                            for (var k = currentApp.workflows.length - 1; k >= 0; k--) {
-                                if (!profilesFound[p].profile.applications[currentApp._id].workflows[currentApp.workflows[k]._id]) {
-                                    currentApp.workflows.splice(k, 1);
-                                }
+                    var profilesFound = [];
+                    for (var j = 0; j < remoteProfiles.length; j++) {
+                        if (remoteProfiles[j].profile.applications[apps[i]._id]) {
+                            if (remoteProfiles[j].type == Constants.UserProfileApplication || remoteProfiles[j].type == Constants.UserProfileShare) {
+                                profilesFound.push(remoteProfiles[j]);
                             }
                         }
-                        resultApps.push(currentApp);
+                    }
+                    if (profilesFound.length > 0) {
+                        for (var p = 0; p < profilesFound.length; p++) {
+                            var currentApp = JSON.parse(JSON.stringify(apps[i]));
+                            if (profilesFound[p] && profilesFound[p].type == Constants.UserProfileShare) {
+                                currentApp.remote = true;
+                                currentApp.pid = profilesFound[p]._id;
+                                currentApp.company_name = profilesFound[p]._company_code;
+                                companyCodes.push(profilesFound[p]._company_code);
+                            }
+                            if (profilesFound[p]) {
+                                for (var k = currentApp.workflows.length - 1; k >= 0; k--) {
+                                    if (!profilesFound[p].profile.applications[currentApp._id].workflows[currentApp.workflows[k]._id]) {
+                                        currentApp.workflows.splice(k, 1);
+                                    }
+                                }
+                            }
+                            resultApps.push(currentApp);
+                        }
                     }
                 }
             }

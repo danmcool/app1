@@ -57,7 +57,8 @@ router.post('/', function (req, res, next) {
         }
     }
     if (req.body) {
-        req.body._updated_at = Date.now();
+        req.body._created_at = Date.now();
+        req.body._updated_at = req.body._created_at;
         req.body._company_code = company_code;
     }
     Metadata.File.create(req.body, function (err, file) {

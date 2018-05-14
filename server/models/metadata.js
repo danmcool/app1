@@ -16,6 +16,10 @@ var DataModelSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    _created_at: {
+        type: Date,
+        default: Date.now
+    },
     _company_code: String
 });
 Metadata.DataModel = mongoose.model('DataModel', DataModelSchema);
@@ -24,6 +28,10 @@ var ValueSchema = new Schema({
     type: String, // flat, search
     values: Schema.Types.Mixed,
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },
@@ -37,6 +45,10 @@ var FileSchema = new Schema({
     path: String, // file path
     file_id: String, // name on disk
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },
@@ -58,6 +70,10 @@ var FormSchema = new Schema({
         ref: 'Value'
     }],
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },
@@ -83,6 +99,10 @@ var WorkflowSchema = new Schema({
         ref: 'Form'
     }],
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },
@@ -120,6 +140,10 @@ var ApplicationSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    _created_at: {
+        type: Date,
+        default: Date.now
+    },
     _company_code: String
 });
 Metadata.Application = mongoose.model('Application', ApplicationSchema);
@@ -130,6 +154,10 @@ var UserProfileSchema = new Schema({
     profile: Schema.Types.Mixed,
     properties: Schema.Types.Mixed, // application,
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },
@@ -147,6 +175,10 @@ var SessionSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    _created_at: {
+        type: Date,
+        default: Date.now
+    },
     _company_code: String
 });
 Metadata.Session = mongoose.model('Session', SessionSchema);
@@ -158,6 +190,10 @@ var CompanySchema = new Schema({
     }],
     properties: Schema.Types.Mixed,
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },
@@ -206,6 +242,10 @@ var UserSchema = new Schema({
         ref: 'User'
     }],
     _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
         type: Date,
         default: Date.now
     },

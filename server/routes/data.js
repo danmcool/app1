@@ -157,7 +157,8 @@ router.post('/:datamodelid/', function (req, res, next) {
         }
     }
     if (req.body) {
-        req.body._updated_at = Date.now();
+        req.body._created_at = Date.now();
+        req.body._updated_at = req.body._created_at;
         delete req.body._appointments;
         if (remote) {
             req.body._company_code = remote_profile._company_code;
