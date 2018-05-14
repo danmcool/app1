@@ -442,7 +442,7 @@ router.get('/open', function (req, res, next) {
                         }
                         var app_id = Object.keys(objectProfile.profile.applications)[0];
                         if (profileFound) {
-                            res.redirect('/app/#!/workflows/' + app_id);
+                            res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
                         } else {
                             User.findOneAndUpdate({
                                 user: userWithRemoteProfile.user,
@@ -462,7 +462,7 @@ router.get('/open', function (req, res, next) {
                                 userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
                                 userWithRemoteProfile.remote_applications.push(app_id);
                                 SessionCache.update(token, userWithRemoteProfile);
-                                res.redirect('/app/#!/workflows/' + app_id);
+                                res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
                             });
                         }
                     } else {
