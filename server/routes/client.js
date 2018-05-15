@@ -657,7 +657,6 @@ router.put('/notify/:user_id', function (req, res, next) {
     });
     User.findOne({
         _id: req.params.user_id,
-        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code,
         validated: true
     }, 'email firstname lastname').populate('company').exec(function (errUser, userObject) {
         if (errUser) return next(errUser);
