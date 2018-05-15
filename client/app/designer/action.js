@@ -64,6 +64,33 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         });
     }
 
+    $scope.notifyuser_type = {
+        current: {
+            en: 'Current User',
+            fr: 'Utilisateur courant'
+        },
+        owner: {
+            en: 'Object Creator',
+            fr: 'Createur de l\'objet'
+        },
+        item: {
+            en: 'Selection User',
+            fr: 'Utilisateur de la selection'
+        },
+        none: {
+            en: 'None',
+            fr: 'Aucun'
+        }
+    }
+    var keysOfNotifyUserType = Object.keys($scope.notifyuser_type);
+    $scope.notifyuser_types = [];
+    for (i = 0; i < keysOfNotifyUserType.length; i++) {
+        $scope.notifyuser_types.push({
+            translated_name: SessionService.translate($scope.notifyuser_type[keysOfNotifyUserType[i]]),
+            id: keysOfNotifyUserType[i]
+        });
+    }
+
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {

@@ -602,6 +602,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Send value',
             fr: 'Envoyer valeur'
         },
+        action_notify_user: {
+            en: 'Notification Recipee User',
+            fr: 'Utilisateur destinataire de la notification'
+        },
+        new_action_email_title: {
+            en: 'Notification Email Title',
+            fr: 'Titre du courriel de notification'
+        },
+        new_action_email_html: {
+            en: 'Notification HTML Email Content',
+            fr: 'Contenu HTML du courriel de notification'
+        },
         value_editor: {
             en: 'Value',
             fr: 'Valeur'
