@@ -528,7 +528,7 @@
                                                 </div>
                                             </md-input-container>
                                             <div layout="row" layout-xs="column">
-                                                <md-input-container flex="70">
+                                                <md-input-container flex="70" flex-xs>
                                                     <label>{{field.address_city_translated_name}}</label>
                                                     <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
@@ -537,7 +537,7 @@
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container flex="30" style="margin-left: 14px">
+                                                <md-input-container flex="30" flex-xs style="margin-left: 14px">
                                                     <label>{{field.address_postal_code_translated_name}}</label>
                                                     <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
@@ -548,7 +548,7 @@
                                                 </md-input-container>
                                             </div>
                                             <div layout="row" layout-xs="column">
-                                                <md-input-container flex="50">
+                                                <md-input-container flex="50" flex-xs>
                                                     <label>{{field.address_state_translated_name}}</label>
                                                     <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
@@ -557,7 +557,7 @@
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container flex="50" style="margin-left: 14px">
+                                                <md-input-container flex="50" flex-xs style="margin-left: 14px">
                                                     <label>{{field.address_country_translated_name}}</label>
                                                     <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
