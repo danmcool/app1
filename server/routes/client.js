@@ -142,7 +142,7 @@ router.get('/application/', function (req, res, next) {
                 }
                 var currentApp = JSON.parse(JSON.stringify(apps[i]));
                 currentApp.remote = false;
-                if (profileFound) {
+                if (profileFound && profileFound.profile.applications[currentApp._id]) {
                     for (var k = currentApp.workflows.length - 1; k >= 0; k--) {
                         if (!profileFound.profile.applications[currentApp._id].workflows[currentApp.workflows[k]._id]) {
                             currentApp.workflows.splice(k, 1);
