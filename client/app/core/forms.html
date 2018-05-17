@@ -485,28 +485,36 @@
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <div layout="row" layout-xs="column" layout-sm="column">
-                                                <div flex flex-xs="100" flex-sm="100" layout="column">
+                                                <div flex="{{field.show_map?60:100}}" flex-xs="100" flex-sm="100" layout="column">
                                                     <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                                     <p class="md-body-1">{{field.address_line1_translated_name}}</p>
                                                     <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line1}}</p>
                                                     <p class="md-body-1">{{field.address_line2_translated_name}}</p>
                                                     <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line2?localdata[field.id].address_line2:'&nbsp;'}}</p>
                                                     <div flex layout="row" layout-xs="column">
-                                                        <div layout="column">
+                                                        <div ng-hide-gt-xs>
                                                             <p class="md-body-1">{{field.address_city_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
-                                                        </div>
-                                                        <div layout="column">
                                                             <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
                                                         </div>
+                                                        <div layout="column" ng-hide-xs>
+                                                            <p class="md-body-1">{{field.address_city_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
+                                                            <p class="md-body-1">{{field.address_state_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
+                                                        </div>
                                                     </div>
                                                     <div flex layout="row" layout-xs="column">
-                                                        <div layout="column">
+                                                        <div ng-hide-gt-xs>
                                                             <p class="md-body-1">{{field.address_state_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_stateL:'&nbsp;'}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
+                                                            <p class="md-body-1">{{field.address_country_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
                                                         </div>
-                                                        <div layout="column">
+                                                        <div layout="column" ng-hide-xs>
+                                                            <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
                                                             <p class="md-body-1">{{field.address_country_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
                                                         </div>
