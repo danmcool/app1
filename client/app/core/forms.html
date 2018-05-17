@@ -518,66 +518,66 @@
                                                 </div>
                                                 <div ng-if="field.show_map" flex="40" flex-xs="100" flex-sm="100" layout-align="center center" id="map{{field.id}}" style="width:100%;height:290px;background-color:grey"></div>
                                             </div>
-                                            <div ng-switch-when="false">
-                                                <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                                <md-input-container class="md-block">
-                                                    <label>{{field.address_line1_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
+                                        </div>
+                                        <div ng-switch-when="false">
+                                            <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                            <md-input-container class="md-block">
+                                                <label>{{field.address_line1_translated_name}}</label>
+                                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
+                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                        Your input must be between 1 and 200 characters long.
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                            <md-input-container class="md-block">
+                                                <label>{{field.address_line2_translated_name}}</label>
+                                                <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                        Your input must be between 0 and 200 characters long.
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                            <div layout="row" layout-xs="column">
+                                                <md-input-container flex="70" flex-xs="100">
+                                                    <label>{{field.address_city_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 1 and 200 characters long.
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container class="md-block">
-                                                    <label>{{field.address_line2_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
+                                                    <label>{{field.address_postal_code_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 0 and 200 characters long.
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <div layout="row" layout-xs="column">
-                                                    <md-input-container flex="70" flex-xs="100">
-                                                        <label>{{field.address_city_translated_name}}</label>
-                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
-                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                                Your input must be between 1 and 200 characters long.
-                                                            </div>
+                                            </div>
+                                            <div layout="row" layout-xs="column">
+                                                <md-input-container flex="50" flex-xs="100">
+                                                    <label>{{field.address_state_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                            Your input must be between 0 and 200 characters long.
                                                         </div>
-                                                    </md-input-container>
-                                                    <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
-                                                        <label>{{field.address_postal_code_translated_name}}</label>
-                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                                Your input must be between 0 and 200 characters long.
-                                                            </div>
+                                                    </div>
+                                                </md-input-container>
+                                                <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
+                                                    <label>{{field.address_country_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                            Your input must be between 0 and 200 characters long.
                                                         </div>
-                                                    </md-input-container>
-                                                </div>
-                                                <div layout="row" layout-xs="column">
-                                                    <md-input-container flex="50" flex-xs="100">
-                                                        <label>{{field.address_state_translated_name}}</label>
-                                                        <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                                Your input must be between 0 and 200 characters long.
-                                                            </div>
-                                                        </div>
-                                                    </md-input-container>
-                                                    <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
-                                                        <label>{{field.address_country_translated_name}}</label>
-                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                                Your input must be between 0 and 200 characters long.
-                                                            </div>
-                                                        </div>
-                                                    </md-input-container>
-                                                </div>
+                                                    </div>
+                                                </md-input-container>
                                             </div>
                                         </div>
                                     </div>
