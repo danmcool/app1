@@ -491,26 +491,22 @@
                                                     <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line1}}</p>
                                                     <p class="md-body-1">{{field.address_line2_translated_name}}</p>
                                                     <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line2?localdata[field.id].address_line2:'&nbsp;'}}</p>
-                                                    <div flex layout="row" layout-xs="column">
-                                                        <div hide-gt-xs>
-                                                            <p class="md-body-1">{{field.address_city_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
-                                                            <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
-                                                        </div>
-                                                        <div hide-xs layout="column">
-                                                            <p class="md-body-1">{{field.address_city_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
-                                                            <p class="md-body-1">{{field.address_state_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
-                                                        </div>
+                                                    <div flex layout="column" hide-gt-xs>
+                                                        <p class="md-body-1">{{field.address_city_translated_name}}</p>
+                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
+                                                        <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
+                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
+                                                        <p class="md-body-1">{{field.address_state_translated_name}}</p>
+                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
+                                                        <p class="md-body-1">{{field.address_country_translated_name}}</p>
+                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
                                                     </div>
-                                                    <div flex layout="row" layout-xs="column">
-                                                        <div hide-gt-xs>
+                                                    <div flex layout="row" hide-xs>
+                                                        <div layout="column">
+                                                            <p class="md-body-1">{{field.address_city_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
                                                             <p class="md-body-1">{{field.address_state_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
-                                                            <p class="md-body-1">{{field.address_country_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
                                                         </div>
                                                         <div hide-xs layout="column">
                                                             <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
@@ -522,122 +518,121 @@
                                                 </div>
                                                 <div ng-if="field.show_map" flex="40" flex-xs="100" flex-sm="100" layout-align="center center" id="map{{field.id}}" style="width:100%;height:290px;background-color:grey"></div>
                                             </div>
-                                        </div>
-                                        <div ng-switch-when="false">
-                                            <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                            <md-input-container class="md-block">
-                                                <label>{{field.address_line1_translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
-                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                        Your input must be between 1 and 200 characters long.
-                                                    </div>
-                                                </div>
-                                            </md-input-container>
-                                            <md-input-container class="md-block">
-                                                <label>{{field.address_line2_translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                        Your input must be between 0 and 200 characters long.
-                                                    </div>
-                                                </div>
-                                            </md-input-container>
-                                            <div layout="row" layout-xs="column">
-                                                <md-input-container flex="70" flex-xs="100">
-                                                    <label>{{field.address_city_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
+                                            <div ng-switch-when="false">
+                                                <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                <md-input-container class="md-block">
+                                                    <label>{{field.address_line1_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 1 and 200 characters long.
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
-                                                    <label>{{field.address_postal_code_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                <md-input-container class="md-block">
+                                                    <label>{{field.address_line2_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 0 and 200 characters long.
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                            </div>
-                                            <div layout="row" layout-xs="column">
-                                                <md-input-container flex="50" flex-xs="100">
-                                                    <label>{{field.address_state_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                            Your input must be between 0 and 200 characters long.
+                                                <div layout="row" layout-xs="column">
+                                                    <md-input-container flex="70" flex-xs="100">
+                                                        <label>{{field.address_city_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 1 and 200 characters long.
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </md-input-container>
-                                                <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
-                                                    <label>{{field.address_country_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                            Your input must be between 0 and 200 characters long.
+                                                    </md-input-container>
+                                                    <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
+                                                        <label>{{field.address_postal_code_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 0 and 200 characters long.
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </md-input-container>
+                                                    </md-input-container>
+                                                </div>
+                                                <div layout="row" layout-xs="column">
+                                                    <md-input-container flex="50" flex-xs="100">
+                                                        <label>{{field.address_state_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 0 and 200 characters long.
+                                                            </div>
+                                                        </div>
+                                                    </md-input-container>
+                                                    <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
+                                                        <label>{{field.address_country_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 0 and 200 characters long.
+                                                            </div>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
+                            </div>
 
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div layout="row" layout-align="end" layout-wrap>
-                    <div ng-repeat="action in form.actions">
-                        <div ng-switch="action.action">
-                            <div ng-switch-when="create">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="modify">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="delete">
-                                <md-button ng-click="delete(action.formula, action.next_form_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="link">
-                                <md-button ng-click="link(action.formula, action.next_form_id, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="subscribe">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="subscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="unsubscribe">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="unsubscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="new_item">
-                                <md-button ng-click="newItem(action.formula, action.next_form_id, action.set_value, data, item_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="download">
-                                <md-button ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="share">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint_path, action.constraint_value, action.email_path, action.app_profile_id, action.message, data)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="calendar">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="calendar(action.formula, action.next_form_id, action.set_value, action.forward_id, action.project_name_path, action.start_date_path, action.end_date_path, action.user_path, data)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="add_event">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="remove_event">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div layout="row" layout-align="end" layout-wrap>
+                        <div ng-repeat="action in form.actions">
+                            <div ng-switch="action.action">
+                                <div ng-switch-when="create">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="modify">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="delete">
+                                    <md-button ng-click="delete(action.formula, action.next_form_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="link">
+                                    <md-button ng-click="link(action.formula, action.next_form_id, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="subscribe">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="subscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="unsubscribe">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="unsubscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="new_item">
+                                    <md-button ng-click="newItem(action.formula, action.next_form_id, action.set_value, data, item_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="download">
+                                    <md-button ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="share">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint_path, action.constraint_value, action.email_path, action.app_profile_id, action.message, data)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="calendar">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="calendar(action.formula, action.next_form_id, action.set_value, action.forward_id, action.project_name_path, action.start_date_path, action.end_date_path, action.user_path, data)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="add_event">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="remove_event">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
             </form>
+            </div>
+            <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         </div>
-        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
-    </div>
 </md-content>
