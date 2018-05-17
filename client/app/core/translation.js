@@ -554,6 +554,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Date',
             fr: 'Date'
         },
+        field_show_map: {
+            en: 'Show Map',
+            fr: 'Afficher carte'
+        },
         action_editor: {
             en: 'Action',
             fr: 'Action'

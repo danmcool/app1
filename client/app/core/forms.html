@@ -492,19 +492,27 @@
                                                     <p class="md-body-1">{{field.address_line2_translated_name}}</p>
                                                     <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line2?localdata[field.id].address_line2:'&nbsp;'}}</p>
                                                     <div flex layout="row" layout-xs="column">
-                                                        <p class="md-body-1">{{field.address_city_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
-                                                        <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
+                                                        <div layout="column">
+                                                            <p class="md-body-1">{{field.address_city_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
+                                                        </div>
+                                                        <div layout="column">
+                                                            <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
+                                                        </div>
                                                     </div>
                                                     <div flex layout="row" layout-xs="column">
-                                                        <p class="md-body-1">{{field.address_state_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_stateL:'&nbsp;'}}</p>
-                                                        <p class="md-body-1">{{field.address_country_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
+                                                        <div layout="column">
+                                                            <p class="md-body-1">{{field.address_state_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_stateL:'&nbsp;'}}</p>
+                                                        </div>
+                                                        <div layout="column">
+                                                            <p class="md-body-1">{{field.address_country_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div flex="40" flex-xs="100" flex-sm="100" layout-align="center center" id="map{{field.id}}" style="width:100%;height:290px;background-color:grey"></div>
+                                                <div flex="40" flex-xs="100" flex-sm="100" ng-if="field.show_map" layout-align="center center" id="map{{field.id}}" style="width:100%;height:290px;background-color:grey"></div>
                                             </div>
                                         </div>
                                         <div ng-switch-when="false">
@@ -537,7 +545,7 @@
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container flex="30" flex-xs="100" style="margin-left: 14px">
+                                                <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
                                                     <label>{{field.address_postal_code_translated_name}}</label>
                                                     <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
@@ -557,7 +565,7 @@
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container flex="50" flex-xs="100" style="margin-left: 14px">
+                                                <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
                                                     <label>{{field.address_country_translated_name}}</label>
                                                     <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
