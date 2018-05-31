@@ -1,4 +1,4 @@
-var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'materialCarousel']).config(['$mdThemingProvider', function ($mdThemingProvider) {
+var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'ngCookies', 'materialCarousel']).config(['$mdThemingProvider', function ($mdThemingProvider) {
     $mdThemingProvider.theme('home')
         .primaryPalette('grey')
         .accentPalette('amber');
@@ -24,7 +24,7 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', function SessionService(AppTranslationService, $location, $resource, $window) {
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', '$cookies', '$mdDialog', function SessionService(AppTranslationService, $location, $resource, $window, $cookies, $mdDialog) {
     var sessionData = {
         userData: {
             properties: {
@@ -87,6 +87,19 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
     var init = function () {
         sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
+        var favoriteCookie = $cookies.get('app1_eu_cookies');
+        if (!favoriteCookie) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.body))
+                .clickOutsideToClose(true)
+                .title(sessionData.appData.cookie_policy)
+                .textContent(sessionData.appData.cookie_policy_content)
+                .ok(sessionData.appData.ok)
+            ).then(function () {
+                $cookies.put('app1_eu_cookies', 'OK');
+            });
+        }
     }
     var login = function (user, password) {
         location('/#login');

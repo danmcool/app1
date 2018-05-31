@@ -1,5 +1,13 @@
 home.factory('AppTranslationService', function AppTranslationService() {
     var text = {
+        cookie_policy: {
+            en: 'Cookie Policy',
+            fr: 'Politique de cookies'
+        },
+        cookie_policy_content: {
+            en: 'App1 uses cookies to assure your web browsing confort, to make visitor statistics, and to propose better performance for your applications. If you continue the browsing, you agree with this information.',
+            fr: 'App1 utilise des cookies pour assurer votre confort de navigation, pour réaliser des statistiques de visites ainsi que pour vous proposer des performances améliorées de vos applications. En poursuivant votre navigation, vous en acceptez l\'utilisation.'
+        },
         app_title: {
             en: 'Application ONE',
             fr: 'Application ONE'
