@@ -453,7 +453,7 @@ router.get('/session/', function (req, res, next) {
         });
     }
     var pageOptions = computePage(req);
-    Session.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
+    Session.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('user').exec(function (err,
         object) {
         if (err) return next(err);
         res.json(object);

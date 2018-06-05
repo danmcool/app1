@@ -291,7 +291,7 @@
             <input type="text" ng-model="search.name">
             <ul>
                 <li ng-repeat="session in sessions | filter: search">
-                    <a href="#sessions/{{session._id}}">{{session._id}} : {{session._updated_at}} - {{session.user?session.user:'--------'}}{{session.user}}</a>
+                    <a href="#sessions/{{session._id}}">{{session._id}} : {{session._updated_at}} - {{session.user.firstname +' ' + session.user.lastname}} id: {{session.user._id}}</a>
                     <button ng-click="remove($index)">remove</button>
                 </li>
             </ul>
