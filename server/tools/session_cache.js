@@ -22,7 +22,7 @@ setInterval(function () {
             $lt: Date(current_time)
         }
     }, function (err) {
-        console.log(err);
+        if (err) console.log(err);
     });
 }, Constants.DBSessionTimerCleanup);
 
