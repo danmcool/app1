@@ -29,7 +29,7 @@
             <ul>
                 <li ng-repeat="datamodel in datamodels | filter: search">
                     <a href="#datamodels/{{datamodel._id}}">{{datamodel._id}} : {{datamodel._updated_at}} - {{datamodel.name?datamodel.name.en:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(datamodel._id,$index)">remove</button>
                 </li>
             </ul>
             New datamodel
@@ -63,7 +63,7 @@
             <ul>
                 <li ng-repeat="form in forms | filter: search">
                     <a href="#forms/{{form._id}}">{{form._id}} : {{form._updated_at}} - {{form.name?form.name.en:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(form._id,$index)">remove</button>
                 </li>
             </ul>
             New form
@@ -112,7 +112,7 @@
             <ul>
                 <li ng-repeat="value in values | filter: search">
                     <a href="#values/{{value._id}}">{{value._id}} : {{value._updated_at}} - {{value.name?value.name.en:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(value._id,$index)">remove</button>
                 </li>
             </ul>
             New value
@@ -149,7 +149,7 @@
             <ul>
                 <li ng-repeat="user in users | filter: search">
                     <a href="#users/{{user._id}}">{{user._id}} : {{user._updated_at}} - {{user.user?user.user:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(user._id,$index)">remove</button>
                 </li>
             </ul>
             New user
@@ -218,7 +218,7 @@
             <ul>
                 <li ng-repeat="file in files | filter: search">
                     <a href="#files/{{file._id}}">{{file._id}} : {{file._updated_at}} - {{file.name?file.name:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(file._id,$index)">remove</button>
                 </li>
             </ul>
             New file
@@ -246,7 +246,7 @@
             <ul>
                 <li ng-repeat="userprofile in userprofiles | filter: search">
                     <a href="#userprofiles/{{userprofile._id}}">{{userprofile._id}} : {{userprofile._updated_at}} - {{userprofile.name?userprofile.name.en:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(userprofile._id,$index)">remove</button>
                 </li>
             </ul>
             New user profile
@@ -292,7 +292,7 @@
             <ul>
                 <li ng-repeat="session in sessions | filter: search">
                     <a href="#sessions/{{session._id}}">{{session._id}} : {{session.timeout}} - {{session.user.firstname}} {{session.user.lastname}} id: {{session.user._id}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(session._id,$index)">remove</button>
                 </li>
             </ul>
             New session
@@ -325,7 +325,7 @@
             <ul>
                 <li ng-repeat="company in companies | filter: search">
                     <a href="#companies/{{company._id}}">{{company._id}} : {{company._updated_at}} - {{company.name?company.name:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(company._id,$index)">remove</button>
                 </li>
             </ul>
             New company
@@ -359,7 +359,7 @@
             <ul>
                 <li ng-repeat="workflow in workflows | filter: search">
                     <a href="#workflows/{{workflow._id}}">{{workflow._id}} : {{workflow._updated_at}} - {{workflow.name?workflow.name.en:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(workflow._id,$index)">remove</button>
                 </li>
             </ul>
             New workflow
@@ -399,7 +399,7 @@
             <ul>
                 <li ng-repeat="application in applications | filter: search">
                     <a href="#applications/{{application._id}}">{{application._id}} : {{application._updated_at}} - {{application.name?application.name.en:'--------'}}</a>
-                    <button ng-click="remove($index)">remove</button>
+                    <button ng-click="remove(application._id,$index)">remove</button>
                 </li>
             </ul>
             New application

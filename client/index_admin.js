@@ -120,7 +120,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newWorkflow = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -129,9 +129,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var workflow = $scope.workflows[index];
                     Workflows.remove({
-                        id: workflow._id
+                        id: object_id
                     }, function () {
                         $scope.workflows.splice(index, 1);
                     });
@@ -156,7 +155,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newApplication = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -165,9 +164,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var application = $scope.applications[index];
                     Applications.remove({
-                        id: application._id
+                        id: object_id
                     }, function () {
                         $scope.applications.splice(index, 1);
                     });
@@ -192,7 +190,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newForm = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -201,9 +199,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var form = $scope.forms[index];
                     Forms.remove({
-                        id: form._id
+                        id: object_id
                     }, function () {
                         $scope.forms.splice(index, 1);
                     });
@@ -227,7 +224,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
             $scope.newValue = '';
         });
     }
-    $scope.remove = function (index) {
+    $scope.remove = function (object_id, index) {
         $mdDialog.show(
             $mdDialog.confirm()
             .parent(angular.element(document.body))
@@ -236,9 +233,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
             .ok('Yes')
             .cancel('No')).then(
             function () {
-                var value = $scope.values[index];
                 Values.remove({
-                    id: value._id
+                    id: object_id
                 }, function () {
                     $scope.values.splice(index, 1);
                 });
@@ -262,7 +258,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newUserProfile = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -271,9 +267,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var userprofile = $scope.userprofiles[index];
                     UserProfiles.remove({
-                        id: userprofile._id
+                        id: object_id
                     }, function () {
                         $scope.userprofiles.splice(index, 1);
                     });
@@ -297,7 +292,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newSession = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -306,9 +301,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var session = $scope.sessions[index];
                     Sessions.remove({
-                        id: session._id
+                        id: object_id
                     }, function () {
                         $scope.sessions.splice(index, 1);
                     });
@@ -332,7 +326,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newCompany = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -341,9 +335,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var company = $scope.companies[index];
                     Companies.remove({
-                        id: company._id
+                        id: object_id
                     }, function () {
                         $scope.companies.splice(index, 1);
                     });
@@ -366,7 +359,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newUser = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -375,9 +368,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var user = $scope.users[index];
                     Users.remove({
-                        id: user._id
+                        id: object_id
                     }, function () {
                         $scope.users.splice(index, 1);
                     });
@@ -400,7 +392,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newFile = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -409,9 +401,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var user = $scope.files[index];
                     Files.remove({
-                        id: file._id
+                        id: object_id
                     }, function () {
                         $scope.files.splice(index, 1);
                     });
@@ -436,7 +427,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 $scope.newDataModel = '';
             });
         }
-        $scope.remove = function (index) {
+        $scope.remove = function (object_id, index) {
             $mdDialog.show(
                 $mdDialog.confirm()
                 .parent(angular.element(document.body))
@@ -445,9 +436,8 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
                 .ok('Yes')
                 .cancel('No')).then(
                 function () {
-                    var datamodel = $scope.datamodels[index];
                     DataModels.remove({
-                        id: datamodel._id
+                        id: object_id
                     }, function () {
                         $scope.datamodels.splice(index, 1);
                     });

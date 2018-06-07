@@ -133,8 +133,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Preuve de concept gratuit -> Créez votre transformation digitale avec App1'
         },
         pricing_package: {
-            en: 'Package',
-            fr: 'Package'
+            en: 'Subscription',
+            fr: 'Souscription'
         },
         pricing_users: {
             en: 'Users',
