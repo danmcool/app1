@@ -137,7 +137,16 @@ router.get('/application/', function (req, res, next) {
                             }
                         }
                     } else {
-                        profileFound = apps[i].default_profile;
+                        for (var j = 0; j < remoteProfiles.length; j++) {
+                            if (remoteProfiles[j].profile.applications[apps[i]._id]) {
+                                if (remoteProfiles[j].type == Constants.UserProfileApplication) {
+                                    profileFound = remoteProfiles[j];
+                                }
+                            }
+                        }
+                        if (!profileFound) {
+                            profileFound = apps[i].default_profile;
+                        }
                     }
                 }
                 var currentApp = JSON.parse(JSON.stringify(apps[i]));
