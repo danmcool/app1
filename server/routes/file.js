@@ -93,11 +93,18 @@ router.get('/:id', function (req, res, next) {
                 msg: 'Not enough access rights!'
             });
         }
-        var decrypt = crypto.createDecipher(Constants.FilesCryptingAlgorithm, Constants.SecretKey);
         var readStream = fs.createReadStream('./files/' + file._company_code + '-' + file._id);
-        res.setHeader("Content-Type", file.type);
-        res.writeHead(200);
-        readStream.pipe(decrypt).pipe(res);
+        readStream.on('error', function () {
+            return res.status(500).json({
+                msg: 'File read error!'
+            });
+        });
+        readStream.on('open', function () {
+            res.setHeader("Content-Type", file.type);
+            res.writeHead(200);
+            var decrypt = crypto.createDecipher(Constants.FilesCryptingAlgorithm, Constants.SecretKey);
+            readStream.pipe(decrypt).pipe(res);
+        });
     });
 });
 router.put('/:id', function (req, res, next) {
