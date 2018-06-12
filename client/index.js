@@ -97,7 +97,11 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
                 .textContent(sessionData.appData.cookie_policy_content)
                 .ok(sessionData.appData.ok)
             ).then(function () {
-                $cookies.put('app1_eu_cookies', 'OK');
+                var expireDate = new Date();
+                expireDate.setDate(expireDate.getDate() + 10000);
+                $cookies.put('app1_eu_cookies', 'OK', {
+                    'expires': expireDate
+                });
             });
         }
     }
