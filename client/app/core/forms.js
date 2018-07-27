@@ -462,7 +462,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 if ($scope.localdata[formFields[i].id]) {
                     for (var j = 0; j < $scope.localdata[formFields[i].id].length; j++) {
                         $scope.slides.push({
-                            url: '/file/' + $scope.localdata[formFields[i].id][j]._id,
+                            url: '/client/file/' + $scope.localdata[formFields[i].id][j]._id,
                             caption: ''
                         });
                     }
