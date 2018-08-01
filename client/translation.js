@@ -173,8 +173,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Grand groupe'
         },
         users_unlimited: {
-            en: 'TBD',
-            fr: 'A definir'
+            en: 'Unlimited',
+            fr: 'Sans limite'
         },
         pricing_per_user: {
             en: '$1 per user per month',
