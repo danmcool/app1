@@ -165,8 +165,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Equipe'
         },
         pricing_5k: {
-            en: '$5.000 per year',
-            fr: '5.000€ par an'
+            en: '$99 per month',
+            fr: '99€ par mois'
         },
         package_enterprise: {
             en: 'Big enterprise',
@@ -177,8 +177,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'A definir'
         },
         pricing_per_user: {
-            en: 'From $10 per user per year',
-            fr: 'A partir de 10€ par utilisateur par an'
+            en: '$1 per user per month',
+            fr: '1€ par utilisateur par mois'
         },
         new_app: {
             en: 'New application',
