@@ -61,16 +61,19 @@ router.put('/password', function (req, res) {
     });
 });
 
-router.post('/register', function (req, res) {
+router.post('/register_company', function (req, res) {
     if (!req.body.email) {
         return res.status(400).json({
             msg: 'Registration: email is not provided!'
         });
     }
-    var userName = req.body.email.toLowerCase();
-    if (req.body.company_name) {
-        req.body.company_name = req.body.company_name.trim();
+    if (!req.body.company_id) {
+        return res.status(400).json({
+            msg: 'Registration: company_id is not provided!'
+        });
     }
+    var userName = req.body.email.toLowerCase();
+    if (!req.body.properties) req.body.properties = {};
     User.findOne({
         user: userName
     }, function (errUserFind, objectUserFind) {
@@ -78,6 +81,67 @@ router.post('/register', function (req, res) {
         if (objectUserFind) return res.status(400).json({
             msg: 'Registration: email is already used, please choose another email!'
         });
+        UserProfile.findOne({
+            _company_id: {
+                $eq: req.body.company_id
+            },
+            type: {
+                $eq: Constants.UserProfilePrivate
+            }
+        }, function (err, userprofile) {
+            if (err) return next(err);
+            if (!userprofile) return res.status(401).json({
+                err: 'Not found user profile!'
+            });
+            var newPassword = randomString();
+            crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+                if (errCrypto) return next(errCrypto);
+                var hashPassword = key.toString('hex');
+                var user = {
+                    user: userName,
+                    password: hashPassword,
+                    email: req.body.email,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    properties: {
+                        theme: 'default',
+                        uiLanguage: 'auto',
+                        extra: req.body.properties.extra
+                    },
+                    profile: userprofile._id,
+                    validated: false,
+                    company: req.body.company_id,
+                    _company_code: req.body.company_id
+                };
+                User.create(user, function (errNewUser, newUser) {
+                    if (errNewUser) return next(errNewUser);
+                    res.status(200).json({
+                        msg: 'Registration: please check your email inbox to validate the registration!'
+                    });
+                    Email.sendValidation(newUser.email, newUser.user, newUser._company_code, newPassword);
+                });
+            });
+        });
+    });
+});
+
+router.post('/register', function (req, res) {
+    if (!req.body.email) {
+        return res.status(400).json({
+            msg: 'Registration: email is not provided!'
+        });
+    }
+    var userName = req.body.email.toLowerCase();
+    User.findOne({
+        user: userName
+    }, function (errUserFind, objectUserFind) {
+        if (errUserFind) return next(errUserFind);
+        if (objectUserFind) return res.status(400).json({
+            msg: 'Registration: email is already used, please choose another email!'
+        });
+        if (req.body.company_name) {
+            req.body.company_name = req.body.company_name.trim();
+        }
         var company = {
             name: req.body.company_name,
             applications: ['58209e223ee6583658eceedb', '586bbda98983994e00fc9757', '58223c8dfaa281219c13beaf', '5981c48700ba0804fc43b9b0']
@@ -93,7 +157,7 @@ router.post('/register', function (req, res) {
                 if (errCompanyFind) return next(errCompanyFind);
                 var userprofileAdministrator = {
                     name: {
-                        'en': 'Administrator'
+                        en: 'Administrator'
                     },
                     type: Constants.UserProfileAdministrator,
                     _company_code: req.body.code
@@ -102,7 +166,7 @@ router.post('/register', function (req, res) {
                     if (errUserProfileAdministrator) return next(errUserProfileAdministrator);
                     var userprofilePrivate = {
                         name: {
-                            'en': 'Private'
+                            en: 'Private'
                         },
                         type: Constants.UserProfilePrivate,
                         _company_code: req.body.code
@@ -111,7 +175,7 @@ router.post('/register', function (req, res) {
                         if (errUserProfilePrivate) return next(errUserProfile);
                         var userprofilePublic = {
                             name: {
-                                'en': 'Public'
+                                en: 'Public'
                             },
                             type: Constants.UserProfilePublic,
                             _company_code: req.body.code
@@ -271,6 +335,70 @@ router.post('/invite', function (req, res, next) {
                 msg: 'Invitation: users have been invited to join App1!'
             });
         });
+    });
+});
+
+router.get('/login', function (req, res, next) {
+    if (!req.query.pid) return res.status(400).json({
+        err: 'Invalid parameters!'
+    });
+    UserProfile.findOne({
+        _id: req.query.pid
+    }, function (errProfile, objectProfile) {
+        if (errProfile) return next(errProfile);
+        if (!objectProfile || objectProfile.type != Constants.UserProfileShare) return res.status(400).json({
+            err: 'Invalid parameters!'
+        });
+        if (objectProfile.properties && objectProfile.properties.user == Constants.UserProfilePublic) {
+            User.findOne({
+                user: Constants.PublicUser + '@' + objectProfile._company_code,
+                _company_code: objectProfile._company_code,
+                validated: true
+            }, 'email firstname lastname user _company_code properties company profile remote_profiles remote_applications manager reports').populate('company profile remote_profiles').exec(
+                function (errUser, userObject) {
+                    if (errUser) return res.status(401).json({
+                        msg: errUser
+                    });
+                    if (!userObject) return res.status(401).json({
+                        err: 'Invalid user name or password!'
+                    });
+                    Session.findOneAndUpdate({
+                        user: userObject._id,
+                        _company_code: userObject._company_code
+                    }, {
+                        user: userObject._id,
+                        _company_code: userObject._company_code,
+                        timeout: Date.now() + Constants.MaxSessionPublicTimeout
+                    }, {
+                        upsert: true,
+                        new: true
+                    }, function (err, newSession) {
+                        if (err) return next(err);
+                        userObject.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
+                        SessionCache.cacheUser(newSession._id, userObject);
+                        var application_id = Object.keys(objectProfile.profile.applications)[0];
+                        Workflow.findOne({
+                            _id: Object.keys(objectProfile.profile.applications[application_id].workflows)[0]
+                        }).exec(function (errWorkflow, workflow) {
+                            if (errWorkflow) return res.status(400).json({
+                                err: 'Workflow error'
+                            });
+                            res.cookie(Constants.SessionCookie, newSession._id, {
+                                maxAge: Constants.MaxSessionPublicTimeout,
+                                httpOnly: true
+                            }).status(200).json({
+                                token: newSession._id,
+                                user: SessionCache.userData[newSession._id],
+                                application_id: application_id,
+                                workflow_id: workflow._id,
+                                startup_form: workflow.startup_form
+                            });
+                        });
+                    });
+                });
+        } else {
+            return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + Constants.WebAddress + '/#!/register">Register</a><br><a href="https://' + Constants.WebAddress + '' + '/#!/login">Login</a>');
+        }
     });
 });
 
