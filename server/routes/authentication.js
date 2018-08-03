@@ -70,7 +70,7 @@ router.post('/register_company', function (req, res) {
     }
     SessionCache.isActiveToken(token, function (active) {
         if (active) {
-            activePublicUser: SessionCache.userData[req.cookies[Constants.SessionCookie]];
+            var activePublicUser = SessionCache.userData[req.cookies[Constants.SessionCookie]];
             if (!req.body.email) {
                 return res.status(400).json({
                     msg: 'Registration: email is not provided!'
@@ -127,8 +127,7 @@ router.post('/register_company', function (req, res) {
                     });
                 });
             });
-        }
-        else {
+        } else {
             return res.clearCookie(Constants.SessionCookie).status(401).json({
                 err: 'Invalid session!'
             });
