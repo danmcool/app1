@@ -356,7 +356,7 @@ router.get('/login', function (req, res, next) {
         _id: req.query.pid
     }, function (errProfile, objectProfile) {
         if (errProfile) return next(errProfile);
-        if (!objectProfile || objectProfile.type != Constants.UserProfileShare) return res.status(400).json({
+        if (!objectProfile || objectProfile.type != Constants.UserProfilePublic) return res.status(400).json({
             err: 'Invalid parameters!'
         });
         if (objectProfile.properties && objectProfile.properties.user == Constants.UserProfilePublic) {
