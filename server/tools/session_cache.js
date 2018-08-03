@@ -192,7 +192,6 @@ SessionCache.filterAddRemoteAppsAndProductionCompanyCode = function (req, compan
     return filter;
 }
 
-
 SessionCache.filterApplicationCompanyCode = function (req, filter) {
     var company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
     if (company_code != Constants.AdminCompany) {

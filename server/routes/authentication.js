@@ -70,7 +70,7 @@ router.post('/register_company', function (req, res) {
     }
     SessionCache.isActiveToken(token, function (active) {
         if (active) {
-            var activePublicUser = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+            var activePublicUser = SessionCache.userData[token];
             if (!req.body.email) {
                 return res.status(400).json({
                     msg: 'Registration: email is not provided!'
