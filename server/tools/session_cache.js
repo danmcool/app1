@@ -73,6 +73,17 @@ SessionCache.isActive = function (req, callback) {
         callback(false);
         return;
     }
+    SessionCache.isActiveToken(token, function (active) {
+        callback(active);
+    });
+}
+
+SessionCache.isActiveToken = function (token, callback) {
+    var token = req.cookies[Constants.SessionCookie];
+    if (!token) {
+        callback(false);
+        return;
+    }
     var current_time = Date.now();
     if (SessionCache.userTimeout[token] && SessionCache.userTimeout[token] > current_time) {
         callback(true);

@@ -62,7 +62,13 @@ router.put('/password', function (req, res) {
 });
 
 router.post('/register_company', function (req, res) {
-    SessionCache.isActive(req, function (active) {
+    var token = req.body.sid;
+    if (!token) {
+        return res.status(400).json({
+            msg: 'Registration: session id is not provided!'
+        });
+    }
+    SessionCache.isActiveToken(token, function (active) {
         if (active) {
             activePublicUser: SessionCache.userData[req.cookies[Constants.SessionCookie]];
             if (!req.body.email) {
