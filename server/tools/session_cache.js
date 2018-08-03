@@ -69,17 +69,12 @@ SessionCache.update = function (token, userObject) {
 
 SessionCache.isActive = function (req, callback) {
     var token = req.cookies[Constants.SessionCookie];
-    if (!token) {
-        callback(false);
-        return;
-    }
     SessionCache.isActiveToken(token, function (active) {
         callback(active);
     });
 }
 
 SessionCache.isActiveToken = function (token, callback) {
-    var token = req.cookies[Constants.SessionCookie];
     if (!token) {
         callback(false);
         return;
