@@ -62,66 +62,71 @@ router.put('/password', function (req, res) {
 });
 
 router.post('/register_company', function (req, res) {
-    if (!req.body.email) {
-        return res.status(400).json({
-            msg: 'Registration: email is not provided!'
-        });
-    }
-    if (!req.body.company_id) {
-        return res.status(400).json({
-            msg: 'Registration: company_id is not provided!'
-        });
-    }
-    var userName = req.body.email.toLowerCase();
-    if (!req.body.properties) req.body.properties = {};
-    User.findOne({
-        user: userName
-    }, function (errUserFind, objectUserFind) {
-        if (errUserFind) return next(errUserFind);
-        if (objectUserFind) return res.status(400).json({
-            msg: 'Registration: email is already used, please choose another email!'
-        });
-        UserProfile.findOne({
-            _company_id: {
-                $eq: req.body.company_id
-            },
-            type: {
-                $eq: Constants.UserProfilePrivate
+    SessionCache.isActive(req, function (active) {
+        if (active) {
+            activePublicUser: SessionCache.userData[req.cookies[Constants.SessionCookie]];
+            if (!req.body.email) {
+                return res.status(400).json({
+                    msg: 'Registration: email is not provided!'
+                });
             }
-        }, function (err, userprofile) {
-            if (err) return next(err);
-            if (!userprofile) return res.status(401).json({
-                err: 'Not found user profile!'
-            });
-            var newPassword = randomString();
-            crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
-                if (errCrypto) return next(errCrypto);
-                var hashPassword = key.toString('hex');
-                var user = {
-                    user: userName,
-                    password: hashPassword,
-                    email: req.body.email,
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    properties: {
-                        theme: 'default',
-                        uiLanguage: 'auto',
-                        extra: req.body.properties.extra
+            var userName = req.body.email.toLowerCase();
+            if (!req.body.properties) req.body.properties = {};
+            User.findOne({
+                user: userName
+            }, function (errUserFind, objectUserFind) {
+                if (errUserFind) return next(errUserFind);
+                if (objectUserFind) return res.status(400).json({
+                    msg: 'Registration: email is already used, please choose another email!'
+                });
+                UserProfile.findOne({
+                    _company_code: {
+                        $eq: activePublicUser._company_code
                     },
-                    profile: userprofile._id,
-                    validated: false,
-                    company: req.body.company_id,
-                    _company_code: req.body.company_id
-                };
-                User.create(user, function (errNewUser, newUser) {
-                    if (errNewUser) return next(errNewUser);
-                    res.status(200).json({
-                        msg: 'Registration: please check your email inbox to validate the registration!'
+                    type: {
+                        $eq: Constants.UserProfilePrivate
+                    }
+                }, function (err, userprofile) {
+                    if (err) return next(err);
+                    if (!userprofile) return res.status(401).json({
+                        err: 'Not found user profile!'
                     });
-                    Email.sendValidation(newUser.email, newUser.user, newUser._company_code, newPassword);
+                    var newPassword = randomString();
+                    crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+                        if (errCrypto) return next(errCrypto);
+                        var hashPassword = key.toString('hex');
+                        var user = {
+                            user: userName,
+                            password: hashPassword,
+                            email: req.body.email,
+                            firstname: req.body.firstname,
+                            lastname: req.body.lastname,
+                            properties: {
+                                theme: 'default',
+                                uiLanguage: 'auto',
+                                extra: req.body.properties.extra
+                            },
+                            profile: userprofile._id,
+                            validated: false,
+                            company: activePublicUser.company._id,
+                            _company_code: activePublicUser._company_code
+                        };
+                        User.create(user, function (errNewUser, newUser) {
+                            if (errNewUser) return next(errNewUser);
+                            res.status(200).json({
+                                msg: 'Registration: please check your email inbox to validate the registration!'
+                            });
+                            Email.sendValidation(newUser.email, newUser.user, newUser._company_code, newPassword);
+                        });
+                    });
                 });
             });
-        });
+        }
+        else {
+            return res.clearCookie(Constants.SessionCookie).status(401).json({
+                err: 'Invalid session!'
+            });
+        }
     });
 });
 
