@@ -356,55 +356,60 @@ router.get('/login', function (req, res, next) {
         _id: req.query.pid
     }, function (errProfile, objectProfile) {
         if (errProfile) return next(errProfile);
-        if (!objectProfile || objectProfile.type != Constants.UserProfilePublic) return res.status(400).json({
+
+        if (!objectProfile || objectProfile.type != Constants.UserProfileShare) return res.status(400).json({
             err: 'Invalid parameters!'
         });
-        User.findOne({
-            user: Constants.PublicUser + '@' + objectProfile._company_code,
-            _company_code: objectProfile._company_code,
-            validated: true
-        }, 'email firstname lastname user _company_code properties company profile remote_profiles remote_applications manager reports').populate('company profile remote_profiles').exec(
-            function (errUser, userObject) {
-                if (errUser) return res.status(401).json({
-                    msg: errUser
-                });
-                if (!userObject) return res.status(401).json({
-                    err: 'Invalid user name or password!'
-                });
-                Session.findOneAndUpdate({
-                    user: userObject._id,
-                    _company_code: userObject._company_code
-                }, {
-                    user: userObject._id,
-                    _company_code: userObject._company_code,
-                    timeout: Date.now() + Constants.MaxSessionPublicTimeout
-                }, {
-                    upsert: true,
-                    new: true
-                }, function (err, newSession) {
-                    if (err) return next(err);
-                    userObject.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
-                    SessionCache.cacheUser(newSession._id, userObject);
-                    var application_id = Object.keys(objectProfile.profile.applications)[0];
-                    Workflow.findOne({
-                        _id: Object.keys(objectProfile.profile.applications[application_id].workflows)[0]
-                    }).exec(function (errWorkflow, workflow) {
-                        if (errWorkflow) return res.status(400).json({
-                            err: 'Workflow error'
+        if (objectProfile.properties) {
+            if (objectProfile.properties.user == Constants.UserProfilePublic) {
+                User.findOne({
+                    user: Constants.PublicUser + '@' + objectProfile._company_code,
+                    _company_code: objectProfile._company_code,
+                    validated: true
+                }, 'email firstname lastname user _company_code properties company profile remote_profiles remote_applications manager reports').populate('company profile remote_profiles').exec(
+                    function (errUser, userObject) {
+                        if (errUser) return res.status(401).json({
+                            msg: errUser
                         });
-                        res.cookie(Constants.SessionCookie, newSession._id, {
-                            maxAge: Constants.MaxSessionPublicTimeout,
-                            httpOnly: true
-                        }).status(200).json({
-                            token: newSession._id,
-                            user: SessionCache.userData[newSession._id],
-                            application_id: application_id,
-                            workflow_id: workflow._id,
-                            startup_form: workflow.startup_form
+                        if (!userObject) return res.status(401).json({
+                            err: 'Invalid user name or password!'
+                        });
+                        Session.findOneAndUpdate({
+                            user: userObject._id,
+                            _company_code: userObject._company_code
+                        }, {
+                            user: userObject._id,
+                            _company_code: userObject._company_code,
+                            timeout: Date.now() + Constants.MaxSessionPublicTimeout
+                        }, {
+                            upsert: true,
+                            new: true
+                        }, function (err, newSession) {
+                            if (err) return next(err);
+                            userObject.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
+                            SessionCache.cacheUser(newSession._id, userObject);
+                            var application_id = Object.keys(objectProfile.profile.applications)[0];
+                            Workflow.findOne({
+                                _id: Object.keys(objectProfile.profile.applications[application_id].workflows)[0]
+                            }).exec(function (errWorkflow, workflow) {
+                                if (errWorkflow) return res.status(400).json({
+                                    err: 'Workflow error'
+                                });
+                                res.cookie(Constants.SessionCookie, newSession._id, {
+                                    maxAge: Constants.MaxSessionPublicTimeout,
+                                    httpOnly: true
+                                }).status(200).json({
+                                    token: newSession._id,
+                                    user: SessionCache.userData[newSession._id],
+                                    application_id: application_id,
+                                    workflow_id: workflow._id,
+                                    startup_form: workflow.startup_form
+                                });
+                            });
                         });
                     });
-                });
-            });
+            }
+        }
     });
 });
 
