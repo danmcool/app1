@@ -400,6 +400,9 @@ router.put('/datamodel/:id', function (req, res, next) {
             _id: req.body._id
         }), req.body, function (err, object) {
             if (err) return next(err);
+            if (!object) return res.status(401).json({
+                err: 'Not enough user rights'
+            });
             if (mongoose.connections[0].collections[Constants.DataModelPrefix + object._id]) {
                 mongoose.connections[0].collections[Constants.DataModelPrefix + object._id].dropIndex(Constants.DataModelIndexName);
             }
