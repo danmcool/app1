@@ -46,6 +46,11 @@ router.get('/', function (req, res, next) {
     });
 });
 router.post('/', function (req, res, next) {
+    if (!req.body.name || !req.body.type) {
+        return res.status(400).json({
+            msg: 'Missing file name or type!'
+        });
+    }
     var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
     var company_code = user._company_code;
     if (req.body.pid) {
