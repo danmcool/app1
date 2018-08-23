@@ -577,6 +577,7 @@ router.put('/event/:id', function (req, res, next) {
                 res.status(400).json(object);
             });
         } else {
+            object._updated_at = Date.now();
             if (!object._appointments) {
                 object._appointments = {};
             }
@@ -731,6 +732,7 @@ router.put('/office/:id', function (req, res, next) {
                 res.status(400).json(object);
             });
         } else {
+            object._updated_at = Date.now();
             if (!object._appointments) {
                 object._appointments = {};
             }
