@@ -663,7 +663,7 @@ router.put('/event/:id', function (req, res, next) {
 });
 
 router.put('/office/:id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body._updated_at || !req.body.rezervation_type) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body._updated_at || !req.body.reservation_type) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
@@ -748,15 +748,15 @@ router.put('/office/:id', function (req, res, next) {
                     }
                     var dayAgenda = object._appointments[dateKey];
                     var timeSlotValid = true;
-                    // rezervation type:
+                    // reservation type:
                     // 0 - morning; 1 - afternoon; 2 - whole day; 3 - night; 4 - day and night
-                    if (req.body.rezervation_type == 4 && dayAgenda.length > 0) {
+                    if (req.body.reservation_type == 4 && dayAgenda.length > 0) {
                         return res.status(400).json({
                             msg: 'Timeslot unavailable!'
                         });
                     }
                     for (var i = 0; i < dayAgenda.length; i++) {
-                        if ((dayAgenda[i].rezervation_type == req.body.rezervation_type) || ((dayAgenda[i].rezervation_type == 0 || dayAgenda[i].rezervation_type == 1) && req.body.rezervation_type == 2) || ((req.body.rezervation_type == 0 || req.body.rezervation_type == 1) && dayAgenda[i].rezervation_type == 2)) {
+                        if ((dayAgenda[i].reservation_type == req.body.reservation_type) || ((dayAgenda[i].reservation_type == 0 || dayAgenda[i].reservation_type == 1) && req.body.reservation_type == 2) || ((req.body.reservation_type == 0 || req.body.reservation_type == 1) && dayAgenda[i].reservation_type == 2)) {
                             timeSlotValid = false;
                             break;
                         }
@@ -765,7 +765,7 @@ router.put('/office/:id', function (req, res, next) {
                         // create appointment
                         var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
                         dayAgenda.push({
-                            rezervation_type: req.body.rezervation_type,
+                            reservation_type: req.body.reservation_type,
                             start_time: {
                                 hours: (startTime.getHours() < 10 ? '0' + startTime.getHours() : startTime.getHours()),
                                 minutes: (startTime.getMinutes() < 10 ? '0' + startTime.getMinutes() : startTime.getMinutes())
