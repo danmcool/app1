@@ -584,8 +584,9 @@ router.put('/event/:id', function (req, res, next) {
             if (startTime.getDay() == endTime.getDay()) {
                 var dateKey = computeDateKey(startTime);
                 if (!object._appointment_properties || !object._appointment_properties.days) {
-                    return res.status(400);
-                    // no days available!
+                    return res.status(400).json({
+                        msg: 'No days available!'
+                    });
                 }
                 var daysProperties = object._appointment_properties.days[startTime.getDay()];
                 if (daysProperties.enabled) {
@@ -739,8 +740,9 @@ router.put('/office/:id', function (req, res, next) {
             if (startTime.getDay() == endTime.getDay()) {
                 var dateKey = computeDateKey(startTime);
                 if (!object._appointment_properties || !object._appointment_properties.days) {
-                    return res.status(400);
-                    // no days available!
+                    return res.status(400).json({
+                        msg: 'No days available!'
+                    });
                 }
                 var daysProperties = object._appointment_properties.days[startTime.getDay()];
                 if (daysProperties.enabled) {
