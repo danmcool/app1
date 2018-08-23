@@ -87,13 +87,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.minutes = [];
     $scope.full_hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.full_minutes = ['00', '15', '30', '45'];
-    $scope.days = [{
-            value: 0,
-            name: {
-                en: 'Sunday',
-                fr: 'Dimanche'
-            }
-        },
+    $scope.days = [
         {
             value: 1,
             name: {
@@ -134,6 +128,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             name: {
                 en: 'Saturday',
                 fr: 'Samedi'
+            }
+        },
+        {
+            value: 0,
+            name: {
+                en: 'Sunday',
+                fr: 'Dimanche'
             }
         }
     ];
