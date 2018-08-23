@@ -523,7 +523,7 @@ router.put('/event/:id', function (req, res, next) {
     }
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.body.datamodel_id);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
@@ -675,7 +675,7 @@ router.put('/office/:id', function (req, res, next) {
     }
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, req.params.datamodelid);
+    var profile = SessionCache.getProfile(token, req.body.datamodel_id);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
