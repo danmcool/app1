@@ -647,14 +647,16 @@ router.put('/event/:id', function (req, res, next) {
                                 });
                             });
                         } else {
-                            return res.status(400);
-                            // Timeslot is unavailable!
+                            return res.status(400).json({
+                                msg: 'Timeslot is unavailable!'
+                            });
                         }
                     }
                 }
             } else {
-                return res.status(400);
-                //Multiple day reservation is not yet available!
+                return res.status(400).json({
+                    msg: 'Multiple day reservation is not yet available!'
+                });
             }
         }
     });
@@ -794,13 +796,15 @@ router.put('/office/:id', function (req, res, next) {
                             });
                         });
                     } else {
-                        return res.status(400);
-                        // Timeslot is unavailable!
+                        return res.status(400).json({
+                            msg: 'Timeslot is unavailable!'
+                        });
                     }
                 }
             } else {
-                return res.status(400);
-                //Multiple day reservation is not yet available!
+                return res.status(400).json({
+                    msg: 'Multiple day reservation is not yet available!'
+                });
             }
         }
     });
