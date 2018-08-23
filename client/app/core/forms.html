@@ -427,7 +427,6 @@
                                                                 <md-option ng-repeat="hour in full_hours" value="{{hour}}" ng-selected="hour=='08'">{{hour}}</md-option>
                                                             </md-select>
                                                         </md-input-container>
-                                                        <p class="md-body-1">:</p>
                                                         <md-input-container class="md-block">
                                                             <label>{{sessionData.appData.minute}}</label>
                                                             <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].start_time.minutes" ng-required="field.required">
