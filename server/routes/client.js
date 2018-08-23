@@ -654,6 +654,10 @@ router.put('/event/:id', function (req, res, next) {
                             });
                         }
                     }
+                } else {
+                    return res.status(400).json({
+                        msg: 'Day not enabled!'
+                    });
                 }
             } else {
                 return res.status(400).json({
@@ -804,6 +808,10 @@ router.put('/office/:id', function (req, res, next) {
                             msg: 'Timeslot is unavailable!'
                         });
                     }
+                } else {
+                    return res.status(400).json({
+                        msg: 'Day not enabled!'
+                    });
                 }
             } else {
                 return res.status(400).json({
