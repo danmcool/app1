@@ -28,6 +28,12 @@ require('./tools/init_objects.js');
 var app = express();
 //app.use(compression())
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 var SessionCache = require('./tools/session_cache.js');
 var Constants = require('./tools/constants.js');
 
