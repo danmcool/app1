@@ -78,10 +78,10 @@ app.use(function (req, res, next) {
 
 // routes
 app.use('/authentication', authentication);
-app.use('/client', client);
 app.use('/client/design', design);
 app.use('/client/data', data);
 app.use('/client/file', file);
+app.use('/client', client);
 app.use('/api', api);
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -96,7 +96,7 @@ app.get('/admin', function (req, res) {
 
 // error hndlers
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
+    var err = new Error('Not Found URL:' + req.path);
     err.status = 404;
     next(err);
 });
