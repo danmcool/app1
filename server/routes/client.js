@@ -734,7 +734,8 @@ router.put('/office/:id', function (req, res, next) {
             delete search_criteria._updated_at;
             Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
                 if (err) return next(err);
-                res.status(400).json(object);
+                console.log(search_criteria);
+                return res.status(400).json(object);
             });
         } else {
             object._updated_at = Date.now();
@@ -794,7 +795,8 @@ router.put('/office/:id', function (req, res, next) {
                                 delete search_criteria._updated_at;
                                 Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
                                     if (err) return next(err);
-                                    res.status(400).json(object);
+                                    console.log(search_criteria);
+                                    return res.status(400).json(object);
                                     // Timeslot is unavailable!
                                 });
                             }
