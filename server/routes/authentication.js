@@ -481,6 +481,9 @@ router.get('/status', function (req, res) {
 
 router.get('/logout', function (req, res) {
     var token = req.cookies[Constants.SessionCookie];
+    if (!token) return res.status(401).json({
+        err: 'Invalid session!'
+    });
     Session.findOneAndRemove({
         _id: token
     }, function (err, object) {
@@ -489,7 +492,9 @@ router.get('/logout', function (req, res) {
             err: 'Invalid session!'
         });
         SessionCache.removeUserCache(req.cookies[Constants.SessionCookie]);
-        res.clearCookie(Constants.SessionCookie).status(200);
+        return res.clearCookie(Constants.SessionCookie).status(200).json({
+            msg: 'Logged out!'
+        });
     });
 });
 
