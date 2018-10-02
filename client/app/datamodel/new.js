@@ -53,6 +53,10 @@ app1.controller('NewFieldCtrl', ['$scope', '$mdDialog', 'SessionService', functi
         node: {
             en: 'Node',
             fr: 'Noeud'
+        },
+        array: {
+            en: 'Array',
+            fr: 'Tableau'
         }
     }
     var keysOfFieldType = Object.keys($scope.field_type);
