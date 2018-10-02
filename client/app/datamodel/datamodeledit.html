@@ -25,7 +25,7 @@
                             <label>{{sessionData.appData.new_datamodel_name}}</label>
                             <input type="text" ng-disabled="false" ng-required="true" ng-model="field.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editTextCopy(field,'name',false)" aria-label="field">
                         </md-input-container>
-                        <md-button ng-if="field.type=='node'" class="md-fab md-primary" aria-label="NewField" ng-click="newField(field.path, field.technical_name)">
+                        <md-button ng-if="field.type=='node'||field.type=='array'" class="md-fab md-primary" aria-label="NewField" ng-click="newField(field.path, field.technical_name)">
                             <md-icon>add</md-icon>
                         </md-button>
                         <md-button class="md-fab md-primary" aria-label="DeleteField" ng-click="deleteField(field.full_path)">

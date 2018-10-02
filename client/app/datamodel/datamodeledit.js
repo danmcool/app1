@@ -59,6 +59,10 @@ app1.controller('DatamodelEditCtrl', ['$scope', 'SessionService', 'DesignDataMod
         node: {
             en: 'Node',
             fr: 'Noeud'
+        },
+        array: {
+            en: 'Array',
+            fr: 'Tableau'
         }
     }
     var keysOfFieldType = Object.keys($scope.field_type);

@@ -78,7 +78,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
                 date: 'Date',
                 text: 'String'
             }];
-        } else if (projectionItem.type == 'address' || projectionItem.type == 'node' || projectionItem.type == 'currency' || projectionItem.type == 'period') {
+        } else if (projectionItem.type == 'address' || projectionItem.type == 'node' || projectionItem.type == 'currency' || projectionItem.type == 'period' || projectionItem.type == 'array') {
             currentField[projectionItem.technical_name] = {};
         } else if (projectionItem.type == 'file') {
             currentField[projectionItem.technical_name] = [{
@@ -145,6 +145,16 @@ DatamodelTools.buildDataModel = function (projection, index) {
                 en: 'User',
                 fr: 'Utilisateur'
             }
+        }
+    }
+
+    for (var j = 0; j < datamodelkeys.length; j++) {
+        var projectionItem = projection[datamodelkeys[j]];
+        var currentField = resolvePathObject(datamodel, projectionItem.path);
+        if (projectionItem.type == 'array') {
+            var arrayContent = currentField[projectionItem.technical_name];
+            currentField[projectionItem.technical_name] = [];
+            currentField[projectionItem.technical_name].push(arrayContent);
         }
     }
 
