@@ -721,7 +721,10 @@ router.put('/office/:id', function (req, res, next) {
             delete search_criteria._updated_at;
             Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, notFoundObject) {
                 if (err) return next(err);
-                return res.status(400).json(notFoundObject);
+                if (notFoundObject) return res.status(400).json(notFoundObject);
+                else return res.status(400).json({
+                    msg: 'Object not found!'
+                });
             });
         } else {
             object._updated_at = Date.now();
