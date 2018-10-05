@@ -513,14 +513,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         updateAppName();
         initText();
         if ($scope.form.search_criteria) {
+            $scope.form.search_criteria = $scope.form.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
+            $scope.form.search_criteria = $scope.form.search_criteria.replace(/@@today/g, new Date());
+            var keysOfParameters = Object.keys($routeParams);
+            for (k = 0, l = keysOfParameters.length; k < l; k++) {
+                $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
+                    keysOfParameters[k]]);
+            }
             $scope.search_criteria = $scope.form.search_criteria;
-        }
-        $scope.search_criteria = $scope.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
-        $scope.search_criteria = $scope.search_criteria.replace(/@@today/g, new Date());
-        var keysOfParameters = Object.keys($routeParams);
-        for (k = 0, l = keysOfParameters.length; k < l; k++) {
-            $scope.search_criteria = $scope.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
-                keysOfParameters[k]]);
         }
         if ($scope.form.datamodel) {
             if ($routeParams.entry_id == '0') {
@@ -1181,5 +1181,19 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.tempStopScroll = false;
         $scope.datas = [];
         $scope.getNextData();
+    }
+
+    $scope.interval = function (fieldId, dateEntry, dateValueObject) {
+        if (dateValueObject.date) {
+            var date = dateValueObject.date;
+            date.setHours(parseInt(dateValueObject.hours ? dateValueObject.hours : '0'));
+            date.setMinutes(parseInt(dateValueObject.minutes ? dateValueObject.minutes : '0'));
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            if (!$scope.localdata[fieldId]) {
+                $scope.localdata[fieldId] = {};
+            }
+            $scope.localdata[fieldId][dateEntry] = date;
+        }
     }
 }]);

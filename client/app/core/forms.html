@@ -15,10 +15,55 @@
                             <div ng-switch="field.display" flex="auto">
 
                                 <div ng-switch-when="list" layout-padding>
-                                    <md-input-container ng-if="show_search" flex="auto" class="md-block">
+                                    <md-input-container ng-if="field.show_search" flex="auto" class="md-block">
                                         <label>{{sessionData.appData.search_text}}</label>
                                         <input ng-model="search_text" name="SearchTextList" ng-change="search(search_text)">
                                     </md-input-container>
+
+                                    <div ng-if="field.show_interval" layout-xs="column" layout-sm="column" layout="row">
+                                        <div layout="column" layout-align="space-between space-between">
+                                            <p class="subtitle" style="margin-bottom: 14px; color: rgba(0,0,0,0.38)">{{sessionData.appData.start_time}}</p>
+                                            <div layout="row" class="md-inline-form">
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.day}}</label>
+                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_appointment.start_time.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, 'start_time', list_appointment.start_time)"></md-datepicker>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.hour}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.start_time.hours" ng-change="interval(field.id, 'start_time', list_appointment.start_time)">
+                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.minute}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.start_time.minutes" ng-change="interval(field.id, 'start_time', list_appointment.start_time)">
+                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                        <div layout="column">
+                                            <p class="subtitle" style="margin-bottom: 14px; color: rgba(0,0,0,0.38)">{{sessionData.appData.end_time}}</p>
+                                            <div layout="row" class="md-inline-form">
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.day}}</label>
+                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_appointment.end_time.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, 'end_time', list_appointment.end_time)"></md-datepicker>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.hour}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.end_time.hours" ng-change="interval(field.id, 'end_time', list_appointment.end_time)">
+                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.minute}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.end_time.minutes" ng-required="field.required" ng-change="interval(field.id, 'end_time', list_appointment.end_time)">
+                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <md-list flex="auto" infinite-scroll="getNextData()" infinite-scroll-distance="10">
                                         <md-list-item class="md-3-line" ng-repeat="data in datas">

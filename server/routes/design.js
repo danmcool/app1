@@ -8,19 +8,13 @@ var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 var DatamodelTools = require('../tools/datamodel_tools.js');
+var Tools = require('../tools/tools.js');
 
 var DataModel = Metadata.DataModel;
 var Application = Metadata.Application;
 var Workflow = Metadata.Workflow;
 var Form = Metadata.Form;
 var Value = Metadata.Value;
-
-var computePage = function (req) {
-    return {
-        skip: parseInt(req.query.skip) || Constants.QuerySkip,
-        limit: parseInt(req.query.limit) || Constants.QueryLimit
-    }
-}
 
 router.get('/application', function (req, res, next) {
     var userToken = req.cookies[Constants.SessionCookie];
@@ -29,7 +23,7 @@ router.get('/application', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Application.find(SessionCache.filterApplicationCompanyCode(req)).populate('profiles').skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         apps) {
         if (err) return next(err);
@@ -217,7 +211,7 @@ router.get('/value', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Value.find(SessionCache.filterAddProductionCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, value) {
         if (err) return next(err);
         res.json(value);
@@ -291,7 +285,7 @@ router.get('/datamodel', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     DataModel.find(SessionCache.filterAddProductionCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         datamodels) {
         if (err) return next(err);

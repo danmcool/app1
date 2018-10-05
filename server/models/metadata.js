@@ -23,6 +23,7 @@ var DataModelSchema = new Schema({
     _company_code: String
 });
 Metadata.DataModel = mongoose.model('DataModel', DataModelSchema);
+
 var ValueSchema = new Schema({
     name: Schema.Types.Mixed,
     type: String, // flat, search
@@ -38,6 +39,7 @@ var ValueSchema = new Schema({
     _company_code: String
 });
 Metadata.Value = mongoose.model('Value', ValueSchema);
+
 var FileSchema = new Schema({
     name: String,
     type: String, // file type (pdf, jpeg, etc.)
@@ -55,6 +57,7 @@ var FileSchema = new Schema({
     _company_code: String
 });
 Metadata.File = mongoose.model('File', FileSchema);
+
 var FormSchema = new Schema({
     name: Schema.Types.Mixed,
     datamodel: {
@@ -63,8 +66,8 @@ var FormSchema = new Schema({
     },
     search_criteria: String,
     sort_by: String,
-    display: Schema.Types.Mixed, //[{text:String, disabled: Boolean, required: Boolean, display:String, validation: Schema.Types.Mixed}],
-    actions: Schema.Types.Mixed, //[{name:String, icon:String, next_form_id: Schema.Types.ObjectId, action: String, next_form_parameters: String, replace_value:Schema.Types.Mixed}],
+    display: Schema.Types.Mixed,
+    actions: Schema.Types.Mixed,
     values: [{
         type: Schema.Types.ObjectId,
         ref: 'Value'
@@ -80,6 +83,7 @@ var FormSchema = new Schema({
     _company_code: String
 });
 Metadata.Form = mongoose.model('Form', FormSchema);
+
 var WorkflowSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
@@ -109,6 +113,7 @@ var WorkflowSchema = new Schema({
     _company_code: String
 });
 Metadata.Workflow = mongoose.model('Workflow', WorkflowSchema);
+
 var ApplicationSchema = new Schema({
     name: Schema.Types.Mixed,
     description: Schema.Types.Mixed,
@@ -164,6 +169,7 @@ var UserProfileSchema = new Schema({
     _company_code: String
 });
 Metadata.UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+
 var SessionSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
@@ -182,12 +188,51 @@ var SessionSchema = new Schema({
     _company_code: String
 });
 Metadata.Session = mongoose.model('Session', SessionSchema);
+
+var SubscriptionSchema = new Schema({
+    name: String,
+    users: {
+        type: Number,
+        default: 10
+    },
+    applications: {
+        type: Number,
+        default: 10
+    },
+    create_applications: {
+        type: Number,
+        default: 1
+    },
+    datamodels: {
+        type: Number,
+        default: 1
+    },
+    properties: Schema.Types.Mixed,
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: {
+        type: String,
+        unique: true
+    }
+});
+Metadata.Subscription = mongoose.model('Subscription', SubscriptionSchema);
+
 var CompanySchema = new Schema({
     name: String,
     applications: [{
         type: Schema.Types.ObjectId,
         ref: 'Application'
     }],
+    subscription: {
+        type: Schema.Types.ObjectId,
+        ref: 'Subscription'
+    },
     properties: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
@@ -203,6 +248,7 @@ var CompanySchema = new Schema({
     }
 });
 Metadata.Company = mongoose.model('Company', CompanySchema);
+
 var UserSchema = new Schema({
     user: {
         type: String,

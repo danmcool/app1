@@ -8,13 +8,7 @@ var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 var DatamodelTools = require('../tools/datamodel_tools.js');
-
-var computePage = function (req) {
-    return pageOptions = {
-        skip: parseInt(req.query.skip) || Constants.QuerySkip,
-        limit: parseInt(req.query.limit) || Constants.QueryLimit
-    }
-}
+var Tools = require('../tools/tools.js');
 
 var DataModel = Metadata.DataModel;
 router.get('/datamodel/', function (req, res, next) {
@@ -24,7 +18,7 @@ router.get('/datamodel/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     DataModel.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         object) {
         if (err) return next(err);
@@ -170,7 +164,7 @@ router.get('/value/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Value.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, object) {
         if (err) return next(err);
         res.json(object);
@@ -240,7 +234,7 @@ router.get('/form/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Form.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, object) {
         if (err) return next(err);
         res.json(object);
@@ -310,7 +304,7 @@ router.get('/company/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Company.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         object) {
         if (err) return next(err);
@@ -381,7 +375,7 @@ router.get('/userprofile/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     UserProfile.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         object) {
         if (err) return next(err);
@@ -452,7 +446,7 @@ router.get('/session/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Session.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).populate('user').exec(function (err,
         object) {
         if (err) return next(err);
@@ -523,7 +517,7 @@ router.get('/user/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     User.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err, object) {
         if (err) return next(err);
         res.json(object);
@@ -595,7 +589,7 @@ router.get('/workflow/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Workflow.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         object) {
         if (err) return next(err);
@@ -665,7 +659,7 @@ router.get('/application/', function (req, res, next) {
             err: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     Application.find(SessionCache.filterCompanyCode(req, {})).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (err,
         object) {
         if (err) return next(err);

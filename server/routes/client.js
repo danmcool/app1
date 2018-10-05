@@ -5,21 +5,15 @@ var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
+var Tools = require('../tools/tools.js');
 
 var User = Metadata.User;
 var Company = Metadata.Company;
 var UserProfile = Metadata.UserProfile;
 var Application = Metadata.Application;
 
-var computePage = function (req) {
-    return {
-        skip: parseInt(req.query.skip) || Constants.QuerySkip,
-        limit: parseInt(req.query.limit) || Constants.QueryLimit
-    }
-}
-
 router.put('/value/:id', function (req, res, next) {
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     if (!req.query.type || !req.body) return res.status(400).json({
         'msg': 'Missing values parameters!'
     });
@@ -113,7 +107,7 @@ router.get('/form/:id', function (req, res, next) {
 });
 
 router.get('/application/', function (req, res, next) {
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     var userData = SessionCache.userData[req.cookies[Constants.SessionCookie]];
     Application.find(SessionCache.filterAddRemoteAppsAndProductionCompanyCode(req, userData.company.applications, userData.remote_applications)).skip(pageOptions.skip).limit(pageOptions.limit).populate('profiles default_profile workflows').exec(function (err, apps) {
         if (err) return next(err);
@@ -269,7 +263,7 @@ router.get('/user/', function (req, res, next) {
             errUser: 'Not enough user rights'
         });
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
     var search_criteria = {
         _company_code: {
@@ -494,20 +488,6 @@ router.get('/calendar', function (req, res, next) {
     });
 });
 
-var computeDateKey = function (date) {
-    return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("-");
-}
-var computeTimeObject = function (time) {
-    return time.hours * 60 + time.minutes * 1;
-}
-var computeTimeDate = function (time) {
-    return time.getHours() * 60 + time.getMinutes();
-}
-var checkTimeIntersection = function (startTime1, endTime1, startTime2, endTime2) {
-    if (computeTimeObject(startTime1) <= computeTimeDate(startTime2) && computeTimeDate(startTime2) < computeTimeObject(endTime1)) return true;
-    if (computeTimeDate(startTime2) <= computeTimeObject(startTime1) && computeTimeObject(startTime1) < computeTimeDate(endTime2)) return true;
-    return false;
-}
 router.put('/event/:id', function (req, res, next) {
     if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body._updated_at) {
         return res.status(400).json({
@@ -581,24 +561,31 @@ router.put('/event/:id', function (req, res, next) {
             if (!object._appointments) {
                 object._appointments = {};
             }
+            if (!object._appointment_properties || !object._appointment_properties.days) {
+                return res.status(400).json({
+                    msg: 'No days available!'
+                });
+            }
+            if (Math.floor(startTime.getTime() / Constants.OneDay) == Math.floor(endTime.getTime() / Constants.OneDay)) {
+
+            } else if (Math.floor(startTime.getTime() / Constants.OneDay) + 1 == Math.floor(endTime.getTime() / Constants.OneDay)) {
+
+            } else {
+
+            }
             if (startTime.getDay() == endTime.getDay()) {
-                var dateKey = computeDateKey(startTime);
-                if (!object._appointment_properties || !object._appointment_properties.days) {
-                    return res.status(400).json({
-                        msg: 'No days available!'
-                    });
-                }
+                var dateKey = Tools.computeDateKey(startTime);
                 var daysProperties = object._appointment_properties.days[startTime.getDay()];
                 if (daysProperties.enabled) {
                     // instersection available between appointment and time allowed
-                    if (computeTimeDate(endTime) >= computeTimeObject(daysProperties.start_time) ||
-                        computeTimeDate(startTime) <= computeTimeObject(daysProperties.end_time)) {
+                    if (Tools.computeTimeDate(endTime) >= Tools.computeTimeObject(daysProperties.start_time) ||
+                        Tools.computeTimeDate(startTime) <= Tools.computeTimeObject(daysProperties.end_time)) {
                         // adjust start time and end time
-                        if (computeTimeDate(startTime) < computeTimeObject(daysProperties.start_time)) {
+                        if (Tools.computeTimeDate(startTime) < Tools.computeTimeObject(daysProperties.start_time)) {
                             startTime.setHours(daysProperties.start_time.hours);
                             startTime.setMinutes(daysProperties.start_time.minutes);
                         }
-                        if (computeTimeDate(endTime) > computeTimeObject(daysProperties.end_time)) {
+                        if (Tools.computeTimeDate(endTime) > Tools.computeTimeObject(daysProperties.end_time)) {
                             endTime.setHours(daysProperties.end_time.hours);
                             endTime.setMinutes(daysProperties.end_time.minutes);
                         }
@@ -610,7 +597,7 @@ router.put('/event/:id', function (req, res, next) {
                         var dayAgenda = object._appointments[dateKey];
                         var timeSlotValid = true;
                         for (var i = 0; i < dayAgenda.length; i++) {
-                            if (checkTimeIntersection(dayAgenda[i].start_time, dayAgenda[i].end_time, startTime, endTime)) {
+                            if (Tools.checkTimeIntersection(dayAgenda[i].start_time, dayAgenda[i].end_time, startTime, endTime)) {
                                 timeSlotValid = false;
                                 break;
                             }
@@ -742,7 +729,7 @@ router.put('/office/:id', function (req, res, next) {
                 object._appointments = {};
             }
             if (startTime.getDay() == endTime.getDay()) {
-                var dateKey = computeDateKey(startTime);
+                var dateKey = Tools.computeDateKey(startTime);
                 if (!object._appointment_properties || !object._appointment_properties.days) {
                     return res.status(400).json({
                         msg: 'No days available!'
@@ -772,7 +759,7 @@ router.put('/office/:id', function (req, res, next) {
                     if (timeSlotValid) {
                         // create appointment
                         var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-                        dayAgenda.push({
+                        var dayInfo = {
                             reservation_type: req.body.reservation_type,
                             start_time: {
                                 hours: (startTime.getHours() < 10 ? '0' + startTime.getHours() : startTime.getHours()),
@@ -787,19 +774,47 @@ router.put('/office/:id', function (req, res, next) {
                                 email: user.email,
                                 name: ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : ''))
                             }
-                        });
-                        Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
-                            if (err) return next(err);
-                            if (!object) {
-                                delete search_criteria._updated_at;
-                                Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
-                                    if (err) return next(err);
-                                    return res.status(400).json(object);
+                        }
+                        var price = 0;
+                        // 0 - morning; 1 - afternoon; 2 - whole day; 3 - night; 4 - day and night
+                        if (req.body.reservation_type == 4) {
+                            price = object.pricing.day_night;
+                        } else if (req.body.reservation_type == 0 || req.body.reservation_type == 1) {
+                            price = object.pricing.half_day;
+                        } else if (req.body.reservation_type == 1) {
+                            price = object.pricing.full_day;
+                        } else if (req.body.reservation_type == 3) {
+                            price = object.pricing.night;
+                        }
+                        var reservation = {
+                            office: req.body._id,
+                            items: [{
+                                price: price,
+                                description: dayInfo,
+                                quantity: 1
+                                }],
+                            user: user._id
+                        }
+                        Metadata.Objects[req.body.reservation_datamodel_id].create(reservation, function (errRes, objectRes) {
+                            if (errRes) return next(errRes);
+                            if (!objectRes) return res.status(400).json({
+                                msg: 'Cannot create reservation!'
+                            });
+                            dayInfo.reservation_id = objectRes._id;
+                            dayAgenda.push(dayInfo);
+                            Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (errUpdate, objectUpdate) {
+                                if (errUpdate) return next(errUpdate);
+                                if (!objectUpdate) {
+                                    delete search_criteria._updated_at;
+                                    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (errExistingObject, objectExisting) {
+                                        if (errExistingObject) return next(errExistingObject);
+                                        return res.status(400).json(objectExisting);
+                                    });
+                                }
+                                Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
+                                return res.status(200).json({
+                                    msg: 'Reservation done!'
                                 });
-                            }
-                            Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
-                            return res.status(200).json({
-                                msg: 'Reservation done!'
                             });
                         });
                     } else {

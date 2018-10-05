@@ -4,13 +4,7 @@ var router = express.Router();
 var Constants = require('../tools/constants.js');
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
-
-var computePage = function (req) {
-    return {
-        skip: parseInt(req.query.skip) || 0,
-        limit: parseInt(req.query.limit) || 10
-    }
-}
+var Tools = require('../tools/tools.js');
 
 router.get('/:datamodelid/', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
@@ -52,7 +46,7 @@ router.get('/:datamodelid/', function (req, res, next) {
             });
         }
     }
-    var pageOptions = computePage(req);
+    var pageOptions = Tools.computePage(req);
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
     var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
     if (remote) {
@@ -87,6 +81,26 @@ router.get('/:datamodelid/', function (req, res, next) {
         sort_by = {
             score: {
                 $meta: 'textScore'
+            }
+        }
+    }
+    if (req.query.interval_start && req.query.interval_start != '' && req.query.interval_end && req.query.interval_end != '') {
+        /*{"_appointments.2018-9-29.reservation_type":{"$ne":"0"}}*/
+        var startTime = new Date(req.query.interval_start);
+        var endTime = new Date(req.query.interval_end);
+        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
+            return res.status(400).json({
+                err: 'Invalid time parameter!'
+            });
+        }
+        if (startTime.getDay() == endTime.getDay()) {
+            search_criteria['_appointments'][Tools.computeDateKey(startTime)]['free'] = {
+                start_time: {
+                    $lte: Tools.computeTimeDate(startTime)
+                },
+                end_time: {
+                    $gte: Tools.computeTimeDate(endTime)
+                }
             }
         }
     }

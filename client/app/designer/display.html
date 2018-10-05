@@ -18,6 +18,14 @@
 
                     <div ng-switch-when="list">
                         <div layout="row" layout-xs="column">
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.show_search">{{sessionData.appData.field_show_search}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.show_interval">{{sessionData.appData.field_show_interval}}</md-checkbox>
+                            </md-input-container>
+                        </div>
+                        <div layout="row" layout-xs="column">
                             <div flex>
                                 <div style="margin-bottom: 30px">
                                     <md-header>{{sessionData.appData.field_list_title}}</md-header>

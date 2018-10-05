@@ -522,6 +522,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Mandatory',
             fr: 'Obligatoire'
         },
+        field_show_search: {
+            en: 'Display search field',
+            fr: 'Afficher le champs de recherche'
+        },
+        field_show_interval: {
+            en: 'Interval selection',
+            fr: 'Sélection de la période '
+        },
         field_destination_datafield: {
             en: 'Destination Data field',
             fr: 'Champ de données de destination'
