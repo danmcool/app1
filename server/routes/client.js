@@ -656,7 +656,7 @@ router.put('/event/:id', function (req, res, next) {
 });
 
 router.put('/office/:id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body._updated_at || !req.body.reservation_type) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body._updated_at || !req.body.reservation_type || !req.body.reservation_datamodel_id) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
