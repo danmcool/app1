@@ -663,7 +663,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     var computeDateKey = function (date) {
-        return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-');
+        return [date.getFullYear(), (((date.getMonth() + 1) < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)), (date.getDate() < 10) ? '0' + date.getDate() : date.getDate()].join("-");
     }
 
     $scope.updateWholeWeek = function (properties) {

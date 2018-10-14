@@ -6,6 +6,7 @@ var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
 var Tools = require('../tools/tools.js');
+var CalendarTools = require('../tools/calendar_tools.js');
 
 var User = Metadata.User;
 var Company = Metadata.Company;
@@ -489,7 +490,7 @@ router.get('/calendar', function (req, res, next) {
 });
 
 router.put('/event/:id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body._updated_at) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
@@ -522,24 +523,23 @@ router.put('/event/:id', function (req, res, next) {
             });
         }
     }
-    var search_criteria = {
-        _id: {
-            '$eq': req.params.id
-        }
+    var search_criteria = CalendarTools.computeQuery(startTime, endTime);
+    search_criteria._id = {
+        $eq: req.params.id
     }
     if (remote) {
         search_criteria._company_code = {
-            '$eq': remote_profile._company_code
+            $eq: remote_profile._company_code
         }
         search_criteria._user = {
-            '$eq': req.body._user
+            $eq: req.body._user
         }
         search_criteria[remote_profile.constraint.key] = {
-            '$eq': remote_profile.constraint.value
+            $eq: remote_profile.constraint.value
         }
     } else {
         search_criteria._company_code = {
-            '$eq': profile.datamodels[req.body.datamodel_id].update._company_code
+            $eq: profile.datamodels[req.body.datamodel_id].update._company_code
         }
         if (profile.datamodels[req.body.datamodel_id].update._user) {
             search_criteria._user = {
@@ -547,16 +547,14 @@ router.put('/event/:id', function (req, res, next) {
             }
         }
     }
-    search_criteria._updated_at = Date.parse(req.body._updated_at);
     Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
         if (err) return next(err);
         if (!object) {
-            delete search_criteria._updated_at;
-            Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
-                if (err) return next(err);
-                res.status(400).json(object);
+            res.status(400).json({
+                msg: 'No object found!'
             });
         } else {
+            search_criteria._updated_at = object._updated_at;
             object._updated_at = Date.now();
             if (!object._appointments) {
                 object._appointments = {};
@@ -566,92 +564,47 @@ router.put('/event/:id', function (req, res, next) {
                     msg: 'No days available!'
                 });
             }
-            if (Math.floor(startTime.getTime() / Constants.OneDay) == Math.floor(endTime.getTime() / Constants.OneDay)) {
-
-            } else if (Math.floor(startTime.getTime() / Constants.OneDay) + 1 == Math.floor(endTime.getTime() / Constants.OneDay)) {
-
-            } else {
-
-            }
-            if (startTime.getDay() == endTime.getDay()) {
-                var dateKey = Tools.computeDateKey(startTime);
-                var daysProperties = object._appointment_properties.days[startTime.getDay()];
-                if (daysProperties.enabled) {
-                    // instersection available between appointment and time allowed
-                    if (Tools.computeTimeDate(endTime) >= Tools.computeTimeObject(daysProperties.start_time) ||
-                        Tools.computeTimeDate(startTime) <= Tools.computeTimeObject(daysProperties.end_time)) {
-                        // adjust start time and end time
-                        if (Tools.computeTimeDate(startTime) < Tools.computeTimeObject(daysProperties.start_time)) {
-                            startTime.setHours(daysProperties.start_time.hours);
-                            startTime.setMinutes(daysProperties.start_time.minutes);
-                        }
-                        if (Tools.computeTimeDate(endTime) > Tools.computeTimeObject(daysProperties.end_time)) {
-                            endTime.setHours(daysProperties.end_time.hours);
-                            endTime.setMinutes(daysProperties.end_time.minutes);
-                        }
-
-                        // rdv for one day - check available timeslot
-                        if (!object._appointments[dateKey]) {
-                            object._appointments[dateKey] = [];
-                        }
-                        var dayAgenda = object._appointments[dateKey];
-                        var timeSlotValid = true;
-                        for (var i = 0; i < dayAgenda.length; i++) {
-                            if (Tools.checkTimeIntersection(dayAgenda[i].start_time, dayAgenda[i].end_time, startTime, endTime)) {
-                                timeSlotValid = false;
-                                break;
-                            }
-                        }
-                        if (timeSlotValid) {
-                            // create appointment
-                            var user = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-                            dayAgenda.push({
-                                start_time: {
-                                    hours: (startTime.getHours() < 10 ? '0' + startTime.getHours() : startTime.getHours()),
-                                    minutes: (startTime.getMinutes() < 10 ? '0' + startTime.getMinutes() : startTime.getMinutes())
-                                },
-                                end_time: {
-                                    hours: (endTime.getHours() < 10 ? '0' + endTime.getHours() : endTime.getHours()),
-                                    minutes: (endTime.getMinutes() < 10 ? '0' + endTime.getMinutes() : endTime.getMinutes())
-                                },
-                                user: {
-                                    id: user._id,
-                                    email: user.email,
-                                    name: ((user.firstname ? user.firstname : '') + ' ' + (user.lastname ? user.lastname : ''))
-                                }
-                            });
-                            Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
-                                if (err) return next(err);
-                                if (!object) {
-                                    delete search_criteria._updated_at;
-                                    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
-                                        if (err) return next(err);
-                                        res.status(400).json(object);
-                                        // Timeslot is unavailable!
-                                    });
-                                }
-                                Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
-                                return res.status(200).json({
-                                    msg: 'Reservation done!'
-                                });
-                            });
-                        } else {
-                            return res.status(400).json({
-                                msg: 'Timeslot is unavailable!'
-                            });
-                        }
+            if (CalendarTools.addEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, 'xxx')) {
+                Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
+                    if (err) return next(err);
+                    if (!object) {
+                        delete search_criteria._updated_at;
+                        Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+                            if (err) return next(err);
+                            res.status(400).json(object);
+                            // Timeslot is unavailable!
+                        });
                     }
-                } else {
-                    return res.status(400).json({
-                        msg: 'Day not enabled!'
+                    Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
+                    return res.status(200).json({
+                        msg: 'Reservation done!'
                     });
-                }
+                });
             } else {
                 return res.status(400).json({
-                    msg: 'Multiple day reservation is not yet available!'
+                    msg: 'Timeslot is unavailable!'
                 });
             }
         }
+    });
+});
+
+router.put('/notify/:user_id', function (req, res, next) {
+    if (!req.body.email_title || !req.body.email_html) return res.status(400).json({
+        err: 'Invalid parameters!'
+    });
+    User.findOne({
+        _id: req.params.user_id,
+        validated: true
+    }, 'email firstname lastname').populate('company').exec(function (errUser, userObject) {
+        if (errUser) return next(errUser);
+        if (!userObject) return res.status(400).json({
+            err: 'Invalid parameters!'
+        });
+        res.status(200).json({
+            msg: 'Email sent!'
+        });
+        Email.send(userObject.email, null, req.body.email_title, 'Automatic message from App1', Email.prepareMessage(req.body.email_html, userObject));
     });
 });
 
@@ -732,7 +685,7 @@ router.put('/office/:id', function (req, res, next) {
                 object._appointments = {};
             }
             if (startTime.getDay() == endTime.getDay()) {
-                var dateKey = Tools.computeDateKey(startTime);
+                var dateKey = CalendarTools.computeDateKey(startTime);
                 if (!object._appointment_properties || !object._appointment_properties.days) {
                     return res.status(400).json({
                         msg: 'No days available!'
@@ -839,23 +792,5 @@ router.put('/office/:id', function (req, res, next) {
     });
 });
 
-router.put('/notify/:user_id', function (req, res, next) {
-    if (!req.body.email_title || !req.body.email_html) return res.status(400).json({
-        err: 'Invalid parameters!'
-    });
-    User.findOne({
-        _id: req.params.user_id,
-        validated: true
-    }, 'email firstname lastname').populate('company').exec(function (errUser, userObject) {
-        if (errUser) return next(errUser);
-        if (!userObject) return res.status(400).json({
-            err: 'Invalid parameters!'
-        });
-        res.status(200).json({
-            msg: 'Email sent!'
-        });
-        Email.send(userObject.email, null, req.body.email_title, 'Automatic message from App1', Email.prepareMessage(req.body.email_html, userObject));
-    });
-});
 
 module.exports = router;

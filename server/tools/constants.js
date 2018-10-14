@@ -11,6 +11,8 @@ const Constants = {
 
     OneWeek: 7 * 24 * 60 * 60 * 1000, // 1 week of time
     OneDay: 1 * 24 * 60 * 60 * 1000, // 1 week of time
+    StartOfDay: 0,
+    EndOfDay: 24 * 60,
 
     AdminCompany: '00000',
     ProductionCompany: '00000',
