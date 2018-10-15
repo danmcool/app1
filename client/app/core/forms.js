@@ -1214,8 +1214,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             date.setMilliseconds(0);
         }
         if ($scope.list_interval_validation[0] && $scope.list_interval_validation[1] && $scope.list_interval_validation[2] && $scope.list_interval_validation[3] && $scope.list_interval_validation[4] && $scope.list_interval_validation[5]) {
-            $scope.list_interval.start = $scope.list_interval.start_date;
-            $scope.list_interval.end = $scope.list_interval.end_date;
+            $scope.list_interval.start = $scope.list_interval.start_date.date;
+            $scope.list_interval.end = $scope.list_interval.end_date.date;
             $scope.skip = 0;
             $scope.limit = 10;
             $scope.stopScroll = false;
