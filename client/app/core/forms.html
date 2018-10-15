@@ -26,17 +26,17 @@
                                             <div layout="row" class="md-inline-form">
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.day}}</label>
-                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_appointment.start_date.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, list_appointment.start_date, 0)"></md-datepicker>
+                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_interval.start_date.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, list_interval.start_date, 0)"></md-datepicker>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.hour}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.start_date.hours" ng-change="interval(field.id, list_appointment.start_date, 1)">
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.start_date.hours" ng-change="interval(field.id, list_interval.start_date, 1)">
                                                         <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.minute}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.start_date.minutes" ng-change="interval(field.id, list_appointment.start_date, 2)">
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.start_date.minutes" ng-change="interval(field.id, list_interval.start_date, 2)">
                                                         <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
@@ -47,17 +47,17 @@
                                             <div layout="row" class="md-inline-form">
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.day}}</label>
-                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_appointment.end_date.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, list_appointment.end_date, 3)"></md-datepicker>
+                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_interval.end_date.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, list_interval.end_date, 3)"></md-datepicker>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.hour}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.end_date.hours" ng-change="interval(field.id, list_appointment.end_date, 4)">
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.end_date.hours" ng-change="interval(field.id, list_interval.end_date, 4)">
                                                         <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.minute}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_appointment.end_date.minutes" ng-required="field.required" ng-change="interval(field.id, list_appointment.end_date, 5)">
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.end_date.minutes" ng-required="field.required" ng-change="interval(field.id, list_interval.end_date, 5)">
                                                         <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
