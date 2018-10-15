@@ -7,4 +7,11 @@ Tools.computePage = function (req) {
     }
 }
 
+Tools.appendProperties = function (source, destination) {
+    var keysArray = Object.keys(source);
+    for (var i = 0; i < keysArray.length; i++) {
+        destination[keysArray[i]] = source[keysArray[i]];
+    }
+}
+
 module.exports = Tools;

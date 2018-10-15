@@ -80,6 +80,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.formLoaded = false;
     $scope.slides = [];
     $scope.appointments = [];
+    $scope.list_interval = {
+        start: '',
+        end: ''
+    };
+    $scope.list_interval_validation = {};
     $scope.selectedDate = undefined;
     $scope.today = new Date();
     $scope.today_plus_1_year = new Date($scope.today.getTime() + 365 * 24 * 60 * 60 * 1000);
@@ -152,6 +157,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             datamodel_id: $scope.form.datamodel._id,
             search_criteria: $scope.search_criteria,
             search_text: $scope.search_text,
+            interval_start: $scope.list_interval.start,
+            interval_end: $scope.list_interval.end,
             skip: localSkip,
             limit: localLimit,
             sort_by: $scope.form.sort_by,
@@ -1197,17 +1204,24 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.getNextData();
     }
 
-    $scope.interval = function (fieldId, dateEntry, dateValueObject) {
+    $scope.interval = function (fieldId, dateValueObject, objectId) {
+        $scope.list_interval_validation[objectId] = true;
         if (dateValueObject.date) {
             var date = dateValueObject.date;
             date.setHours(parseInt(dateValueObject.hours ? dateValueObject.hours : '0'));
             date.setMinutes(parseInt(dateValueObject.minutes ? dateValueObject.minutes : '0'));
             date.setSeconds(0);
             date.setMilliseconds(0);
-            if (!$scope.localdata[fieldId]) {
-                $scope.localdata[fieldId] = {};
-            }
-            $scope.localdata[fieldId][dateEntry] = date;
+        }
+        if ($scope.list_interval_validation[0] && $scope.list_interval_validation[1] && $scope.list_interval_validation[2] && $scope.list_interval_validation[3] && $scope.list_interval_validation[4] && $scope.list_interval_validation[5]) {
+            $scope.list_interval.start = $scope.list_interval.start_date;
+            $scope.list_interval.end = $scope.list_interval.end_date;
+            $scope.skip = 0;
+            $scope.limit = 10;
+            $scope.stopScroll = false;
+            $scope.tempStopScroll = false;
+            $scope.datas = [];
+            $scope.getNextData();
         }
     }
 }]);

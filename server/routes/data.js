@@ -5,6 +5,7 @@ var Constants = require('../tools/constants.js');
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Tools = require('../tools/tools.js');
+var CalendarTools = require('../tools/calendar_tools.js');
 
 router.get('/:datamodelid/', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
@@ -85,24 +86,14 @@ router.get('/:datamodelid/', function (req, res, next) {
         }
     }
     if (req.query.interval_start && req.query.interval_start != '' && req.query.interval_end && req.query.interval_end != '') {
-        /*{"_appointments.2018-9-29.reservation_type":{"$ne":"0"}}*/
         var startTime = new Date(req.query.interval_start);
         var endTime = new Date(req.query.interval_end);
         if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
             return res.status(400).json({
-                err: 'Invalid time parameter!'
+                err: 'Invalid time interval parameters!'
             });
         }
-        if (startTime.getDay() == endTime.getDay()) {
-            search_criteria['_appointments'][Tools.computeDateKey(startTime)]['free'] = {
-                start_time: {
-                    $lte: Tools.computeTimeDate(startTime)
-                },
-                end_time: {
-                    $gte: Tools.computeTimeDate(endTime)
-                }
-            }
-        }
+        Tools.appendProperties(CalendarTools.computeQuery(startTime, endTime), search_criteria);
     }
     if (!req.query.populate) {
         req.query.populate = '';
