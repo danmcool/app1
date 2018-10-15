@@ -791,14 +791,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             });
             for (var i = 0; i < $scope.appointments.length; i++) {
                 var appointment = $scope.appointments[i];
-                appointment.start_time.hours = Math.floor(appointment.start / 60);
-                appointment.start_time.minutes = appointment.start - appointment.start_time.hours * 60;
-                appointment.end_time.hours = Math.floor(appointment.end / 60);
-                appointment.end_time.minutes = appointment.end - appointment.end_time.hours * 60;
-                appointment.start_time.hours = addZero(appointment.start_time.hours);
-                appointment.start_time.minutes = addZero(appointment.start_time.minutes);
-                appointment.end_time.hours = addZero(appointment.end_time.hours);
-                appointment.end_time.minutes = addZero(appointment.end_time.minutes);
+                appointment.start_hours = Math.floor(appointment.start / 60);
+                appointment.start_minutes = appointment.start - appointment.start_hours * 60;
+                appointment.end_hours = Math.floor(appointment.end / 60);
+                appointment.end_minutes = appointment.end - appointment.end_hours * 60;
+                appointment.start_hours = addZero(appointment.start_hours);
+                appointment.start_minutes = addZero(appointment.start_minutes);
+                appointment.end_hours = addZero(appointment.end_hours);
+                appointment.end_minutes = addZero(appointment.end_minutes);
             }
         } else {
             $scope.appointments = [];
