@@ -779,6 +779,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
+    var addZero = function (value) {
+        return (value > 9 ? '' + value : '0' + value);
+    }
     $scope.dayClick = function (date) {
         $scope.selectedDate = date;
         var dateKey = computeDateKey(date);
@@ -786,6 +789,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             $scope.appointments = $scope.data._appointments[dateKey].busy.sort(function (a, b) {
                 return (a.start - b.start);
             });
+            for (var i = 0; i < $scope.appointments.length; i++) {
+                var appointment = $scope.appointments[i];
+                appointment.start_time.hours = Math.floor(appointment.start / 60);
+                appointment.start_time.minutes = appointment.start - appointment.start_time.hours * 60;
+                appointment.end_time.hours = Math.floor(appointment.end / 60);
+                appointment.end_time.minutes = appointment.end - appointment.end_time.hours * 60;
+                appointment.start_time.hours = addZero(appointment.start_time.hours);
+                appointment.start_time.minutes = addZero(appointment.start_time.minutes);
+                appointment.end_time.hours = addZero(appointment.end_time.hours);
+                appointment.end_time.minutes = addZero(appointment.end_time.minutes);
+            }
         } else {
             $scope.appointments = [];
         }
