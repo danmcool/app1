@@ -751,7 +751,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             return true;
 
             // check if there are free time slots
-            if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
+            if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].busy && $scope.data._appointments[dateKey].busy.length > 0) {
                 return true;
             } else {
                 return true;
@@ -772,8 +772,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         var dateKey = computeDateKey(date);
         // check if there are free time slots
-        if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
-            return '' + $scope.data._appointments[dateKey].length;
+        if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].busy && $scope.data._appointments[dateKey].busy.length > 0) {
+            return '' + $scope.data._appointments[dateKey].busy.length;
         } else {
             return '';
         }
@@ -782,9 +782,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.dayClick = function (date) {
         $scope.selectedDate = date;
         var dateKey = computeDateKey(date);
-        if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].length > 0) {
-            $scope.appointments = $scope.data._appointments[dateKey].sort(function (a, b) {
-                return (a.start_time.hours * 60 + a.start_time.minutes * 1) - (b.start_time.hours * 60 + b.start_time.minutes * 1);
+        if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].busy && $scope.data._appointments[dateKey].busy.length > 0) {
+            $scope.appointments = $scope.data._appointments[dateKey].busy.sort(function (a, b) {
+                return (a.start - b.start);
             });
         } else {
             $scope.appointments = [];
