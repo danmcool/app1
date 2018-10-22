@@ -407,7 +407,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             } else if (formFields[i].display == 'calendar') {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                if (formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
+                    $scope.localdata[formFields[i].id] = $routeParams[formFields[i].init_value];
+                } else {
+                    $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                }
                 if ($scope.localdata[formFields[i].id]) {
                     $scope.localdata[formFields[i].id] = new Date($scope.localdata[formFields[i].id]);
                 }
@@ -468,9 +472,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     });
                 }
                 if ($scope.localdata[formFields[i].id]) {
-                    for (var j = 0; j < $scope.localdata[formFields[i].id].length; j++) {
+                    for (var k = 0; k < $scope.localdata[formFields[i].id].length; k++) {
                         $scope.slides.push({
-                            url: '/client/file/' + $scope.localdata[formFields[i].id][j]._id,
+                            url: '/client/file/' + $scope.localdata[formFields[i].id][k]._id,
                             caption: ''
                         });
                     }
@@ -485,7 +489,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.updateWholeWeek($scope.data._appointment_properties);
                 }
             } else {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                if (formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
+                    $scope.localdata[formFields[i].id] = $routeParams[formFields[i].init_value];
+                } else {
+                    $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                }
             }
         }
     }
@@ -523,9 +531,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             $scope.form.search_criteria = $scope.form.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
             $scope.form.search_criteria = $scope.form.search_criteria.replace(/@@today/g, new Date());
             var keysOfParameters = Object.keys($routeParams);
-            for (k = 0, l = keysOfParameters.length; k < l; k++) {
-                $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[k], $routeParams[
-                    keysOfParameters[k]]);
+            for (var m = 0, l = keysOfParameters.length; m < l; m++) {
+                $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[m], $routeParams[
+                    keysOfParameters[m]]);
             }
             $scope.search_criteria = $scope.form.search_criteria;
         }
@@ -553,10 +561,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     });
 
-    var rand = function () {
-        return Math.random().toString(16).substr(2);
-    };
-
     var gotoNextForm = function (formula, nextFormId, data) {
         if (nextFormId == 'home') {
             if ($routeParams.pid) {
@@ -569,8 +573,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (data && data._id) {
                 formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
                 if (formula) {
-                    keys = Object.keys(formula);
-                    for (i = 0; i < keys.length; i++) {
+                    var keys = Object.keys(formula);
+                    for (var i = 0; i < keys.length; i++) {
                         formUrl = formUrl + '&' + formula[keys[i]] + '=' + data[formula[keys[i]]];
                     }
                 }
@@ -579,6 +583,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
             if ($routeParams.pid) {
                 formUrl = formUrl + '&pid=' + $routeParams.pid;
+            }
+            if ($scope.list_interval_validation[0] && $scope.list_interval_validation[1] && $scope.list_interval_validation[2] && $scope.list_interval_validation[3] && $scope.list_interval_validation[4] && $scope.list_interval_validation[5]) {
+                formUrl = formUrl + '&_interval_start=' + $scope.list_interval.start.getTime();
+                formUrl = formUrl + '&_interval_end=' + $scope.list_interval.end.getTime();
             }
             if (formUrl != $location.url()) {
                 SessionService.location(formUrl);
@@ -610,13 +618,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         xhr.send(file);
     }
-    changeFilesInFormsJS = function (files, fieldId) {
+    var changeFilesInFormsJS = function (files, fieldId) {
         if (files.length == 0) return;
         //$scope.dynamicForm.$setValidity({'Attachments': true});
         if (!$scope.localdata[fieldId]) {
             $scope.localdata[fieldId] = [];
         }
-        for (k = files.length - 1; k >= 0; k--) {
+        for (var k = files.length - 1; k >= 0; k--) {
             if (files[k].size / 1048576 > 20) {
                 files.splice(k, 1);
             }
@@ -624,7 +632,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.filesCount[fieldId] = files.length;
         $scope.currentFile[fieldId] = 1;
         document.getElementById('file_upload_' + fieldId).textContent = $scope.sessionData.appData.uploading_in_progress + ' ' + $scope.currentFile[fieldId] + '/' + $scope.filesCount[fieldId];
-        for (i = 0; i < $scope.filesCount[fieldId]; i++) {
+        for (var i = 0; i < $scope.filesCount[fieldId]; i++) {
             var file = new Files({
                 name: files[i].name,
                 type: files[i].type,
@@ -686,12 +694,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.updateWholeDay(properties.days[i]);
             }
         } else {
-            for (var i = 0; i < 7; i++) {
-                properties.days[i] = {
+            for (var j = 0; j < 7; j++) {
+                properties.days[j] = {
                     whole_day: false,
                     enabled: false
                 }
-                $scope.updateWholeDay(properties.days[i]);
+                $scope.updateWholeDay(properties.days[j]);
             }
         }
     }
@@ -1194,7 +1202,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.search = function (search_text) {
         if (!search_text) {
             search_text = ''
-        };
+        }
         $scope.search_text = search_text;
         $scope.skip = 0;
         $scope.limit = 10;

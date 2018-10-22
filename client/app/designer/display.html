@@ -339,12 +339,16 @@
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_init_value}}</label>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="field_init_value" ng-model="field.init_value" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
+                        </md-input-container>
                         <md-input-container flex="auto" class="md-block" ng-if="field.display=='address'">
                             <md-checkbox ng-model="field.show_map">{{sessionData.appData.field_show_map}}</md-checkbox>
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block" ng-if="field.display=='feed'">
                             <label>{{sessionData.appData.field_list_date}}</label>
-                            <textarea type="text" ng-disabled="false" ng-required="false" name="dateformat" ng-model="field.date_format" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="1"></textarea>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="dateformat" ng-model="field.date_format" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
                         </md-input-container>
                     </div>
 
@@ -377,6 +381,9 @@
                             </md-input-container>
                         </div>
                         <md-input-container flex="auto" class="md-block">
+                            <md-checkbox ng-model="field.show_busy_calendar">{{sessionData.appData.field_show_busy_calendar}}</md-checkbox>
+                        </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
                             <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
                         </md-input-container>
@@ -386,6 +393,16 @@
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.field_init_value_start}}</label>
+                                <textarea type="text" ng-disabled="false" ng-required="false" name="field_init_value_start" ng-model="field.init_value_start" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.field_init_value_end}}</label>
+                                <textarea type="text" ng-disabled="false" ng-required="false" name="field_init_value_end" ng-model="field.init_value_end" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
+                            </md-input-container>
+                        </div>
                     </div>
 
                     <div ng-switch-when="currency">

@@ -566,6 +566,22 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Show Map',
             fr: 'Afficher carte'
         },
+        field_show_busy_calendar: {
+            en: 'Show calendar with busy schedules',
+            fr: 'Afficher le calendrier avec les créneaux occupés'
+        },
+        field_init_value: {
+            en: 'Query parameter as initial value',
+            fr: 'Paramètre utilisé comme valeur initiale'
+        },
+        field_init_value_start: {
+            en: 'Query parameter as initial value for start',
+            fr: 'Paramètre utilisé comme valeur initiale pour debut'
+        },
+        field_init_value_end: {
+            en: 'Query parameter as initial value for end',
+            fr: 'Paramètre utilisé comme valeur initiale pour fin'
+        },
         action_editor: {
             en: 'Action',
             fr: 'Action'
