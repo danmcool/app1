@@ -482,14 +482,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else if (formFields[i].display == 'appointment') {
                 $scope.localdata[formFields[i].id] = {};
                 if (formFields[i].init_value_start && formFields[i].init_value_start != '' && $routeParams[formFields[i].init_value_start]) {
-                    $scope.localdata[formFields[i].id].start_time = new Date($routeParams[formFields[i].init_value_start]);
+                    $scope.localdata[formFields[i].id].start_time = new Date();
+                    $scope.localdata[formFields[i].id].start_time.setTime($routeParams[formFields[i].init_value_start]);
                 } else {
                     $scope.localdata[formFields[i].id].start_time = new Date($scope.resolvePath($scope.data, formFields[i].full_path + '.start_time'));
                 }
                 $scope.localdata[formFields[i].id].start_time_hours = addZero($scope.localdata[formFields[i].id].start_time.getHours());
                 $scope.localdata[formFields[i].id].start_time_minutes = addZero($scope.localdata[formFields[i].id].start_time.getMinutes());
                 if (formFields[i].init_value_end && formFields[i].init_value_end != '' && $routeParams[formFields[i].init_value_end]) {
-                    $scope.localdata[formFields[i].id].end_time = new Date($routeParams[formFields[i].init_value_end]);
+                    $scope.localdata[formFields[i].id].end_time = new Date();
+                    $scope.localdata[formFields[i].id].end_time.setTime($routeParams[formFields[i].init_value_end]);
                 } else {
                     $scope.localdata[formFields[i].id].end_time = new Date($scope.resolvePath($scope.data, formFields[i].full_path + '.end_time'));
                 }
@@ -601,8 +603,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 formUrl = formUrl + '&pid=' + $routeParams.pid;
             }
             if ($scope.list_interval_validation[0] && $scope.list_interval_validation[1] && $scope.list_interval_validation[2] && $scope.list_interval_validation[3] && $scope.list_interval_validation[4] && $scope.list_interval_validation[5]) {
-                formUrl = formUrl + '&_interval_start=' + $scope.list_interval.start;
-                formUrl = formUrl + '&_interval_end=' + $scope.list_interval.end;
+                formUrl = formUrl + '&_interval_start=' + $scope.list_interval.start.getTime();
+                formUrl = formUrl + '&_interval_end=' + $scope.list_interval.end.getTime();
             }
             if (formUrl != $location.url()) {
                 SessionService.location(formUrl);
