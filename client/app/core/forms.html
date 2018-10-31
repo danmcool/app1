@@ -398,18 +398,18 @@
                                             <div layout="row" class="md-inline-form">
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.day}}</label>
-                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="appointment.start_time.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'start_time', appointment.start_time)"></md-datepicker>
+                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="localdata[field.id].start_time" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'start_time')"></md-datepicker>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.hour}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.start_time.hours" ng-required="field.required" ng-change="updateDate(field.id, 'start_time', appointment.start_time)">
-                                                        <md-option ng-repeat="hour in hours" value="{{hour}}">{{hour}}</md-option>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].start_time_hours" ng-required="field.required" ng-change="updateDate(field.id, 'start_time')">
+                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.minute}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.start_time.minutes" ng-required="field.required" ng-change="updateDate(field.id, 'start_time', appointment.start_time)">
-                                                        <md-option ng-repeat="minute in minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].start_time_minutes" ng-required="field.required" ng-change="updateDate(field.id, 'start_time')">
+                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
                                             </div>
@@ -419,18 +419,18 @@
                                             <div layout="row" class="md-inline-form">
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.day}}</label>
-                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="appointment.end_time.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'end_time', appointment.end_time)"></md-datepicker>
+                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="localdata[field.id].end_time" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'end_time')"></md-datepicker>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.hour}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.end_time.hours" ng-required="field.required" ng-change="updateDate(field.id, 'end_time', appointment.end_time)">
-                                                        <md-option ng-repeat="hour in hours" value="{{hour}}">{{hour}}</md-option>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].end_time_hours" ng-required="field.required" ng-change="updateDate(field.id, 'end_time')">
+                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.minute}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="appointment.end_time.minutes" ng-required="field.required" ng-change="updateDate(field.id, 'end_time', appointment.end_time)">
-                                                        <md-option ng-repeat="minute in minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].end_time_minutes" ng-required="field.required" ng-change="updateDate(field.id, 'end_time')">
+                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
                                                     </md-select>
                                                 </md-input-container>
                                             </div>
