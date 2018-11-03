@@ -136,11 +136,6 @@ CalendarTools.removeEvent = function (appointments, appointment_properties, star
     var endDay = Math.floor(endDate.getTime() / Constants.OneDay);
     var startDateKey = computeDateKey(startDate);
     var endDateKey = computeDateKey(endDate);
-    var dayProperties = {};
-    var startTime = computeTimeDate(startDate);
-    var endTime = computeTimeDate(endDate);
-    var startTimeProperties;
-    var endTimeProperties;
     var interval = {};
     if (startDate.getDay() == endDate.getDay() && (endDate.getTime() - startDate.getTime() < Constants.OneDay)) {
         interval = removeBusyInterval(appointments[startDateKey].busy, user, object);

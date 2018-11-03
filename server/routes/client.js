@@ -515,16 +515,93 @@ router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
             }
         }
     }
-    if (CalendarTools.)
-        Metadata.Objects[req.body.datamodel_id].findOneAndUpdate({
-            _id: req.params.id,
-            _company_code: profile.datamodels[req.body.datamodel_id].update._company_code
-        }, function (err, object) {
-            if (err) return next(err);
-            res.status(200).json({
-                msg: 'Data: entry deleted!'
-            });
+    var startTime = new Date(req.body.start_time);
+    var endTime = new Date(req.body.end_time);
+    if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
+        return res.status(400).json({
+            err: 'Invalid time parameter!'
         });
+    }
+    var token = req.cookies[Constants.SessionCookie];
+    var user = SessionCache.userData[token];
+    var profile = SessionCache.getProfile(token, req.body.datamodel_id);
+    var remote_profile = {};
+    var remote = false;
+    if (user.remote_profiles && user.remote_profiles.length > 0) {
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id];
+                remote = true;
+                break;
+            }
+        }
+    }
+    if (!profile || !profile.datamodels[req.body.datamodel_id] || !profile.datamodels[req.body.datamodel_id].update || !req.body._user) {
+        if (!remote) {
+            return res.status(401).json({
+                err: 'Not enough user rights!'
+            });
+        }
+    }
+    var search_criteria = {
+        _id: {
+            $eq: req.params.object_id
+        }
+    }
+    if (remote) {
+        search_criteria._company_code = {
+            $eq: remote_profile._company_code
+        }
+        search_criteria._user = {
+            $eq: req.body._user
+        }
+        search_criteria[remote_profile.constraint.key] = {
+            $eq: remote_profile.constraint.value
+        }
+    } else {
+        search_criteria._company_code = {
+            $eq: profile.datamodels[req.body.datamodel_id].update._company_code
+        }
+        if (profile.datamodels[req.body.datamodel_id].update._user) {
+            search_criteria._user = {
+                $in: profile.datamodels[req.body.datamodel_id].update._user
+            }
+        }
+    }
+    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+        if (err) return next(err);
+        if (!object) {
+            res.status(400).json({
+                msg: 'No object found!'
+            });
+        } else {
+            search_criteria._updated_at = object._updated_at;
+            object._updated_at = Date.now();
+            if (!object._appointments) {
+                object._appointments = {};
+            }
+            Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove({
+                _id: req.params.reservation_id
+            }, function (errRes, objectRes) {
+                if (errRes) return next(errRes);
+                if (!objectRes) {
+                    res.status(400).json({
+                        msg: 'No reservation object found!'
+                    });
+                }
+                if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id))
+                    Metadata.Objects[req.body.datamodel_id].findOneAndUpdate({
+                        _id: req.params.object_id,
+                        _company_code: profile.datamodels[req.body.datamodel_id].update._company_code
+                    }, object, function (err, object) {
+                        if (err) return next(err);
+                        res.status(200).json({
+                            msg: 'Reservation deleted!'
+                        });
+                    });
+            });
+        }
+    });
 });
 
 router.put('/event/:object_id', function (req, res, next) {
