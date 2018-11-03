@@ -734,6 +734,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Period',
             fr: 'Période'
         },
+        action_event_reservation: {
+            en: 'Reservation Data Model',
+            fr: 'Modèle de données pour les reservations'
+        },
         whole_day: {
             en: 'Whole Day',
             fr: 'Journée entière'

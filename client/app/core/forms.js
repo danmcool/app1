@@ -480,12 +480,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             } else if (formFields[i].display == 'appointment') {
+                var dateValue;
                 $scope.localdata[formFields[i].id] = {};
                 if (formFields[i].init_value_start && formFields[i].init_value_start != '' && $routeParams[formFields[i].init_value_start]) {
                     $scope.localdata[formFields[i].id].start_time = new Date();
                     $scope.localdata[formFields[i].id].start_time.setTime($routeParams[formFields[i].init_value_start]);
                 } else {
-                    $scope.localdata[formFields[i].id].start_time = new Date($scope.resolvePath($scope.data, formFields[i].full_path + '.start_time'));
+                    dateValue = $scope.resolvePath($scope.data, formFields[i].full_path + '.start_time');
+                    if (dateValue) {
+                        $scope.localdata[formFields[i].id].start_time = new Date(dateValue);
+                    }
                 }
                 $scope.localdata[formFields[i].id].start_time_hours = addZero($scope.localdata[formFields[i].id].start_time.getHours());
                 $scope.localdata[formFields[i].id].start_time_minutes = addZero($scope.localdata[formFields[i].id].start_time.getMinutes());
@@ -493,7 +497,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.localdata[formFields[i].id].end_time = new Date();
                     $scope.localdata[formFields[i].id].end_time.setTime($routeParams[formFields[i].init_value_end]);
                 } else {
-                    $scope.localdata[formFields[i].id].end_time = new Date($scope.resolvePath($scope.data, formFields[i].full_path + '.end_time'));
+                    dateValue = $scope.resolvePath($scope.data, formFields[i].full_path + '.end_time');
+                    if (dateValue) {
+                        $scope.localdata[formFields[i].id].end_time = new Date(dateValue);
+                    }
                 }
                 $scope.localdata[formFields[i].id].end_time_hours = addZero($scope.localdata[formFields[i].id].end_time.getHours());
                 $scope.localdata[formFields[i].id].end_time_minutes = addZero($scope.localdata[formFields[i].id].end_time.getMinutes());

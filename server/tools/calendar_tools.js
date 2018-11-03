@@ -63,6 +63,46 @@ var addBusyInterval = function (intervals, start, end, user, object) {
     });
 }
 
+var removeBusyInterval = function (intervals, user, object) {
+    var interval = {};
+    for (var i = 0; i < intervals.length; i++) {
+        if (intervals[i].user == user && intervals[i].object == object) {
+            interval.start = intervals[i].start;
+            interval.end = intervals[i].end;
+            intervals.splice(i, 1);
+            removed = true;
+            break;
+        }
+    }
+    if (!removed) {
+        console.log('error removing interval: ' + intervals.toString() + ' ' + start + ' ' + end);
+    }
+    return interval;
+}
+
+var addFreeInterval = function (intervals, start, end) {
+    if (!start || !end) return;
+    var added = false;
+    for (var i = 0; i < intervals.length; i++) {
+        if (intervals[i].start == end) {
+            intervals[i].start = start;
+            added = true;
+            break;
+        }
+        if (intervals[i].end == start) {
+            intervals[i].end = end;
+            added = true;
+            break;
+        }
+    }
+    if (!added) {
+        intervals.push({
+            start: start,
+            end: end
+        });
+    }
+}
+
 var removeFreeInterval = function (intervals, start, end) {
     var removed = false;
     for (var i = 0; i < intervals.length; i++) {
@@ -89,6 +129,35 @@ var removeFreeInterval = function (intervals, start, end) {
     if (!removed) {
         console.log('error removing interval: ' + intervals.toString() + ' ' + start + ' ' + end);
     }
+}
+
+CalendarTools.removeEvent = function (appointments, appointment_properties, startDate, endDate, user, object) {
+    var startDay = Math.floor(startDate.getTime() / Constants.OneDay);
+    var endDay = Math.floor(endDate.getTime() / Constants.OneDay);
+    var startDateKey = computeDateKey(startDate);
+    var endDateKey = computeDateKey(endDate);
+    var dayProperties = {};
+    var startTime = computeTimeDate(startDate);
+    var endTime = computeTimeDate(endDate);
+    var startTimeProperties;
+    var endTimeProperties;
+    var interval = {};
+    if (startDate.getDay() == endDate.getDay() && (endDate.getTime() - startDate.getTime() < Constants.OneDay)) {
+        interval = removeBusyInterval(appointments[startDateKey].busy, user, object);
+        addFreeInterval(appointments[startDateKey].free, interval.startTime, interval.endTime);
+    } else if (startDay < endDay) {
+        interval = removeBusyInterval(appointments[startDateKey].busy, user, object);
+        addFreeInterval(appointments[startDateKey].free, interval.startTime, interval.endTime);
+        interval = removeBusyInterval(appointments[endDateKey].busy, user, object);
+        addFreeInterval(appointments[endDateKey].free, interval.startTime, interval.endTime);
+        for (var i = 1; i < (endDay - startDay); i++) {
+            var currentDate = startDate + (startDay + i) * Constants.OneDay;
+            var dateKey = computeDateKey(currentDate);
+            interval = removeBusyInterval(appointments[dateKey].busy, user, object);
+            addFreeInterval(appointments[dateKey].free, interval.startTime, interval.endTime);
+        }
+    }
+    return true;
 }
 
 CalendarTools.addEvent = function (appointments, appointment_properties, startDate, endDate, user, object) {

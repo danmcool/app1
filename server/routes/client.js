@@ -489,8 +489,46 @@ router.get('/calendar', function (req, res, next) {
     });
 });
 
-router.put('/event/:id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id) {
+router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body.reservation_datamodel_id) {
+        return res.status(400).json({
+            err: 'Invalid parameters!'
+        });
+    }
+    var profile = SessionCache.getProfile(req.cookies[Constants.SessionCookie], req.body.datamodel_id);
+    if (!profile || !profile.datamodels[req.body.datamodel_id] || !profile.datamodels[req.body.datamodel_id].delete) {
+        return res.status(401).json({
+            err: 'Not enough user rights!'
+        });
+    }
+    if (profile.datamodels[req.body.datamodel_id].update._user) {
+        var found = false;
+        for (var i = 0; i < profile.datamodels[req.body.datamodel_id].update._user.length; i++) {
+            if (profile.datamodels[req.body.datamodel_id].update._user[i] == SessionCache.userData[req.cookies[Constants.SessionCookie]]._id) {
+                found = true;
+                break;
+            }
+            if (!found) {
+                return res.status(401).json({
+                    err: 'Not enough user rights!'
+                });
+            }
+        }
+    }
+    if (CalendarTools.)
+        Metadata.Objects[req.body.datamodel_id].findOneAndUpdate({
+            _id: req.params.id,
+            _company_code: profile.datamodels[req.body.datamodel_id].update._company_code
+        }, function (err, object) {
+            if (err) return next(err);
+            res.status(200).json({
+                msg: 'Data: entry deleted!'
+            });
+        });
+});
+
+router.put('/event/:object_id', function (req, res, next) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body.reservation_datamodel_id) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
@@ -509,8 +547,8 @@ router.put('/event/:id', function (req, res, next) {
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id];
                 remote = true;
                 break;
             }
@@ -525,7 +563,7 @@ router.put('/event/:id', function (req, res, next) {
     }
     var search_criteria = CalendarTools.computeQuery(startTime, endTime);
     search_criteria._id = {
-        $eq: req.params.id
+        $eq: req.params.object_id
     }
     if (remote) {
         search_criteria._company_code = {
@@ -564,27 +602,49 @@ router.put('/event/:id', function (req, res, next) {
                     msg: 'No days available!'
                 });
             }
-            if (CalendarTools.addEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, 'xxx')) {
-                Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
-                    if (err) return next(err);
-                    if (!object) {
-                        delete search_criteria._updated_at;
-                        Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
-                            if (err) return next(err);
-                            res.status(400).json(object);
-                            // Timeslot is unavailable!
-                        });
-                    }
-                    Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
-                    return res.status(200).json({
-                        msg: 'Reservation done!'
-                    });
-                });
-            } else {
-                return res.status(400).json({
-                    msg: 'Timeslot is unavailable!'
-                });
+            var reservation = {
+                object: object._id,
+                name: req.body.object_name,
+                timeslot: {
+                    start: startTime,
+                    end: endTime
+                },
+                _user: user._id
             }
+            Metadata.Objects[req.body.reservation_datamodel_id].create(reservation, function (errRes, objectRes) {
+                if (errRes) return next(errRes);
+                if (!objectRes) {
+                    res.status(400).json({
+                        msg: 'Invalid reservation object!'
+                    });
+                }
+                if (CalendarTools.addEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
+                    Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
+                        if (err) {
+                            Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
+                            return next(err);
+                        }
+                        if (!object) {
+                            Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
+                            delete search_criteria._updated_at;
+                            Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+                                if (err) return next(err);
+                                res.status(400).json(object);
+                                // Timeslot is unavailable!
+                            });
+                        }
+                        Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
+                        return res.status(200).json({
+                            msg: 'Reservation done!'
+                        });
+                    });
+                } else {
+                    Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
+                    return res.status(400).json({
+                        msg: 'Timeslot is unavailable!'
+                    });
+                }
+            });
         }
     });
 });
@@ -628,8 +688,8 @@ router.put('/office/:id', function (req, res, next) {
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid][req.params.id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.id];
                 remote = true;
                 break;
             }

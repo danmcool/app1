@@ -64,6 +64,7 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         });
     }
 
+    $scope.datamodels = [];
     $scope.notifyuser_type = {
         current: {
             en: 'Current User',
@@ -94,6 +95,15 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {
+        DesignDataModel.query({
+            skip: 0,
+            limit: 500,
+        }, function (datamodels) {
+            for (var i = 0; i < datamodels.length; i++) {
+                datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+            }
+            $scope.datamodels = datamodels;
+        });
         $scope.form = resultForm;
         $scope.action = $scope.form.actions[$routeParams.action];
         if (!$scope.action.formula) {

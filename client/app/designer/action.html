@@ -59,6 +59,12 @@
                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
+                    <label>{{sessionData.appData.action_event_reservation}}</label>
+                    <md-select ng-model="action.reservation_datamodel" ng-required="true">
+                        <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='calendar'">
                     <label>{{sessionData.appData.action_project_name}}</label>
                     <md-select ng-model="action.project_name_path" ng-required="true">
