@@ -668,8 +668,11 @@ router.put('/event/:object_id', function (req, res, next) {
                     msg: 'No days available!'
                 });
             }
-            var reservation =req.body.reservation_object;
-            reservation._user =  user._id;
+            var reservation = req.body.reservation_object;
+            reservation._user = search_criteria._user;
+            reservation._company_code = search_criteria._company_code;
+            reservation._created_at = object._updated_at;
+            reservation._updated_at = object._updated_at;
             Metadata.Objects[req.body.reservation_datamodel_id].create(reservation, function (errRes, objectRes) {
                 if (errRes) return next(errRes);
                 if (!objectRes) {
