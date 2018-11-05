@@ -52,6 +52,10 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         add_event: {
             en: 'Add Event',
             fr: 'Ajouter événement'
+        },
+        remove_event: {
+            en: 'Remove Event',
+            fr: 'Supprimer événement'
         }
     }
 
@@ -95,14 +99,16 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
     DesignForm.get({
         id: $routeParams.id
     }, function (resultForm, err) {
+        var i;
         DesignDataModel.query({
             skip: 0,
             limit: 500,
         }, function (datamodels) {
-            for (var i = 0; i < datamodels.length; i++) {
+            for (i = 0; i < datamodels.length; i++) {
                 datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
             }
             $scope.datamodels = datamodels;
+            $scope.updateReservationDatamodel();
         });
         $scope.form = resultForm;
         $scope.action = $scope.form.actions[$routeParams.action];
@@ -111,22 +117,22 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         }
         $scope.datamodel_keys = [];
         if ($scope.form.datamodel) {
-            var datamodelkeys = Object.keys($scope.form.datamodel.projection);
-            for (var i = 0; i < datamodelkeys.length; i++) {
+            var datamodelKeys = Object.keys($scope.form.datamodel.projection);
+            for (i = 0; i < datamodelKeys.length; i++) {
                 $scope.datamodel_keys.push({
-                    full_path: $scope.form.datamodel.projection[datamodelkeys[i]].full_path,
-                    translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelkeys[i]].name),
-                    id: datamodelkeys[i]
+                    full_path: $scope.form.datamodel.projection[datamodelKeys[i]].full_path,
+                    translated_name: SessionService.translate($scope.form.datamodel.projection[datamodelKeys[i]].name),
+                    id: datamodelKeys[i]
                 });
             }
         }
         if ($scope.form.actions) {
-            for (var i = 0; i < $scope.form.actions.length; i++) {
+            for (i = 0; i < $scope.form.actions.length; i++) {
                 $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
             }
         }
         if ($scope.form.values) {
-            for (var i = 0; i < $scope.form.values.length; i++) {
+            for (i = 0; i < $scope.form.values.length; i++) {
                 $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
             }
         }
@@ -214,6 +220,28 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
 
     $scope.existsInFormula = function (item) {
         return $scope.action.formula.indexOf(item.id) > -1;
+    }
+
+    $scope.updateReservationDatamodel = function () {
+        $scope.reservation_datamodel_keys = [];
+        var i;
+        if ($scope.action.reservation_datamodel) {
+            var reservationDatamodel;
+            for (i = 0; i < $scope.datamodels.length; i++) {
+                if ($scope.datamodels[i]._id == $scope.action.reservation_datamodel) {
+                    reservationDatamodel = $scope.datamodels[i];
+                    break;
+                }
+            }
+            var reservationDatamodelKeys = Object.keys(reservationDatamodel.projection);
+            for (i = 0; i < reservationDatamodelKeys.length; i++) {
+                $scope.reservation_datamodel_keys.push({
+                    full_path: reservationDatamodel.projection[reservationDatamodelKeys[i]].full_path,
+                    translated_name: SessionService.translate(reservationDatamodel.projection[reservationDatamodelKeys[i]].name),
+                    id: reservationDatamodelKeys[i]
+                });
+            }
+        }
     }
 
     var updateErrorAlert = function () {

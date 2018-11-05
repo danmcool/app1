@@ -667,10 +667,10 @@
                                 <md-button ng-disabled="dynamicForm.$invalid" ng-click="calendar(action.formula, action.next_form_id, action.set_value, action.forward_id, action.project_name_path, action.start_date_path, action.end_date_path, action.user_path, data)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="add_event">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path, action.reservation_datamodel, action.object_id_reservation_path, action.name_reservation_path, action.period_reservation_path)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="remove_event">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="removeEvent(action.formula, action.next_form_id, action.set_value, action.object_id_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                         </div>
                     </div>

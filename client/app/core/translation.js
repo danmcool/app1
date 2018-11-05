@@ -26,7 +26,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         homepage_architecture: {
             en: 'Modern architecture allows App1 to be one of the fastest cloud enterprise software',
-            fr: 'L\'architecture moderne permet à App1 d\'etre un des plus rapides logiciel cloud pour entreprise'
+            fr: 'L\'architecture moderne permet à App1 d\'être un des plus rapides logiciel cloud pour entreprise'
         },
         homepage_looks: {
             en: 'Easy to use, designed for mobile first, there\'s no need to read the manual',
@@ -438,6 +438,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Reservation cannot be created, please verify the date and try again!',
             fr: 'Le reservation n\'est pas possible veuillez verifier les dates et re-essayer!'
         },
+        error_removing_appointment: {
+            en: 'Reservation cannot be removed, please verify the date and try again!',
+            fr: 'Le reservation ne peut pas être supprimée, veuillez verifier les dates et re-essayer!'
+        },
         removal_confirmation: {
             en: 'Remove the object?',
             fr: 'Supprimer l’objet?'
@@ -571,16 +575,16 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Afficher le calendrier avec les créneaux occupés'
         },
         field_init_value: {
-            en: 'Query parameter as initial value',
-            fr: 'Paramètre utilisé comme valeur initiale'
+            en: 'Initial value parameter',
+            fr: 'Paramètre pour la valeur initiale'
         },
         field_init_value_start: {
-            en: 'Query parameter as initial value for start',
-            fr: 'Paramètre utilisé comme valeur initiale pour debut'
+            en: 'Initial value parameter for start',
+            fr: 'Paramètre pour la valeur initiale pour debut'
         },
         field_init_value_end: {
-            en: 'Query parameter as initial value for end',
-            fr: 'Paramètre utilisé comme valeur initiale pour fin'
+            en: 'Initial value parameter for end',
+            fr: 'Paramètre pour la valeur initiale pour fin'
         },
         action_editor: {
             en: 'Action',
@@ -708,11 +712,11 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         start_time: {
             en: 'Start Time',
-            fr: 'Heure de début'
+            fr: 'Temps de début'
         },
         end_time: {
             en: 'End Time',
-            fr: 'Heure de fin'
+            fr: 'Temps de fin'
         },
         day: {
             en: 'Day',
@@ -737,6 +741,18 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         action_event_reservation: {
             en: 'Reservation Data Model',
             fr: 'Modèle de données pour les reservations'
+        },
+        action_event_reservation_object_id_path: {
+            en: 'Object Id Field',
+            fr: 'Champs pour l\'id de l\'objet'
+        },
+        action_event_reservation_name_path: {
+            en: 'Object Name Field',
+            fr: 'Champs pour le nom de l\'objet'
+        },
+        action_event_reservation_period_path: {
+            en: 'Reservation Period Field',
+            fr: 'Champs pour la période de la reservation'
         },
         whole_day: {
             en: 'Whole Day',

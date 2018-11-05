@@ -554,7 +554,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         initText();
         if ($scope.form.search_criteria) {
             $scope.form.search_criteria = $scope.form.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
-            $scope.form.search_criteria = $scope.form.search_criteria.replace(/@@today/g, new Date());
+            var dateNow = new Date();
+            $scope.form.search_criteria = $scope.form.search_criteria.replace(/@@today/g, dateNow.toISOString());
             var keysOfParameters = Object.keys($routeParams);
             for (var m = 0, l = keysOfParameters.length; m < l; m++) {
                 $scope.form.search_criteria = $scope.form.search_criteria.replace('@' + keysOfParameters[m], $routeParams[
@@ -1199,8 +1200,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         });
     }
 
-    $scope.addEvent = function (formula, nextFormId, setValue, objectNamePath, periodPath) {
-        updateComponents($scope.form, setValue, $scope.data);;
+    $scope.addEvent = function (formula, nextFormId, setValue, objectNamePath, periodPath, reservation_datamodel, objectIdReservationPath, nameReservationPath, periodReservationPath) {
+        updateComponents($scope.form, setValue, $scope.data);
+        var reservation = {};
+        $scope.resolvePathUpdate(reservation, objectIdReservationPath, $scope.data._id);
+        $scope.resolvePathUpdate(reservation, nameReservationPath, $scope.resolvePath($scope.data, objectNamePath));
+        $scope.resolvePathUpdate(reservation, periodReservationPath + '.start_time', $scope.resolvePath($scope.data, periodPath).start_time);
+        $scope.resolvePathUpdate(reservation, periodReservationPath + '.end_time', $scope.resolvePath($scope.data, periodPath).end_time);
         Event.update({
             id: $scope.data._id
         }, {
@@ -1208,8 +1214,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             object_name: $scope.resolvePath($scope.data, objectNamePath),
             start_time: $scope.resolvePath($scope.data, periodPath).start_time,
             end_time: $scope.resolvePath($scope.data, periodPath).end_time,
+            reservation_object: reservation,
             _user: $scope.data._user,
-            _updated_at: $scope.data._updated_at
+            reservation_datamodel_id: reservation_datamodel
         }, function (res) {
             gotoNextForm(formula, nextFormId, $scope.data);
         }, function (res) {
@@ -1218,6 +1225,27 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 initComponents();
             }
             errorAlert($scope.sessionData.appData.error_creating_appointment);
+        });
+    }
+
+    $scope.removeEvent = function (formula, nextFormId, setValue, objectIdPath, periodPath) {
+        updateComponents($scope.form, setValue, $scope.data);
+        Event.remove({
+            id: $scope.data._id
+        }, {
+            object_id: $scope.resolvePath($scope.data, objectIdPath),
+            start_time: $scope.resolvePath($scope.data, periodPath).start_time,
+            end_time: $scope.resolvePath($scope.data, periodPath).end_time,
+            _user: $scope.data._user,
+            reservation_datamodel_id: $scope.form.datamodel._id
+        }, function (res) {
+            gotoNextForm(formula, nextFormId, $scope.data);
+        }, function (res) {
+            if (res.data) {
+                $scope.data = res.data;
+                initComponents();
+            }
+            errorAlert($scope.sessionData.appData.error_removing_appointment);
         });
     }
 

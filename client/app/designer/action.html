@@ -61,8 +61,38 @@
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
                     <label>{{sessionData.appData.action_event_reservation}}</label>
-                    <md-select ng-model="action.reservation_datamodel" ng-required="true">
+                    <md-select ng-model="action.reservation_datamodel" ng-required="true" ng-change="updateReservationDatamodel()">
                         <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
+                    <label>{{sessionData.appData.action_event_reservation_object_id_path}}</label>
+                    <md-select ng-model="action.object_id_reservation_path" ng-required="true">
+                        <md-option ng-repeat="datakey in reservation_datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
+                    <label>{{sessionData.appData.action_event_reservation_name_path}}</label>
+                    <md-select ng-model="action.name_reservation_path" ng-required="true">
+                        <md-option ng-repeat="datakey in reservation_datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='add_event'">
+                    <label>{{sessionData.appData.action_event_reservation_period_path}}</label>
+                    <md-select ng-model="action.period_reservation_path" ng-required="true">
+                        <md-option ng-repeat="datakey in reservation_datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='remove_event'">
+                    <label>{{sessionData.appData.action_event_reservation_object_id_path}}</label>
+                    <md-select ng-model="action.object_id_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='remove_event'">
+                    <label>{{sessionData.appData.action_event_reservation_period_path}}</label>
+                    <md-select ng-model="action.period_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='calendar'">

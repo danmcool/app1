@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var mongoose = require('mongoose');
+
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
@@ -489,32 +491,19 @@ router.get('/calendar', function (req, res, next) {
     });
 });
 
-router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body.reservation_datamodel_id) {
+router.delete('/event/:reservation_id', function (req, res, next) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_id || !req.body.reservation_datamodel_id) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
     }
-    var profile = SessionCache.getProfile(req.cookies[Constants.SessionCookie], req.body.datamodel_id);
-    if (!profile || !profile.datamodels[req.body.datamodel_id] || !profile.datamodels[req.body.datamodel_id].delete) {
-        return res.status(401).json({
-            err: 'Not enough user rights!'
+    var model = mongoose.model(Constants.DataModelPrefix + req.body.reservation_datamodel_id).schema.obj;
+    if (!model || !model['object'] || !model['object'].ref) {
+        res.status(400).json({
+            msg: 'Invalid reservation model!'
         });
     }
-    if (profile.datamodels[req.body.datamodel_id].update._user) {
-        var found = false;
-        for (var i = 0; i < profile.datamodels[req.body.datamodel_id].update._user.length; i++) {
-            if (profile.datamodels[req.body.datamodel_id].update._user[i] == SessionCache.userData[req.cookies[Constants.SessionCookie]]._id) {
-                found = true;
-                break;
-            }
-            if (!found) {
-                return res.status(401).json({
-                    err: 'Not enough user rights!'
-                });
-            }
-        }
-    }
+    var object_datamodel_id = model['object'].ref;
     var startTime = new Date(req.body.start_time);
     var endTime = new Date(req.body.end_time);
     if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
@@ -524,19 +513,19 @@ router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
     }
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, req.body.datamodel_id);
+    var profile = SessionCache.getProfile(token, object_datamodel_id);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[object_datamodel_id] && user.remote_profiles[i].profile.datamodels[object_datamodel_id][req.params.object_id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[object_datamodel_id][req.params.object_id];
                 remote = true;
                 break;
             }
         }
     }
-    if (!profile || !profile.datamodels[req.body.datamodel_id] || !profile.datamodels[req.body.datamodel_id].update || !req.body._user) {
+    if (!profile || !profile.datamodels[object_datamodel_id] || !profile.datamodels[object_datamodel_id].update || !req.body._user) {
         if (!remote) {
             return res.status(401).json({
                 err: 'Not enough user rights!'
@@ -560,15 +549,15 @@ router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
         }
     } else {
         search_criteria._company_code = {
-            $eq: profile.datamodels[req.body.datamodel_id].update._company_code
+            $eq: profile.datamodels[object_datamodel_id].update._company_code
         }
-        if (profile.datamodels[req.body.datamodel_id].update._user) {
+        if (profile.datamodels[object_datamodel_id].update._user) {
             search_criteria._user = {
-                $in: profile.datamodels[req.body.datamodel_id].update._user
+                $in: profile.datamodels[object_datamodel_id].update._user
             }
         }
     }
-    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+    Metadata.Objects[object_datamodel_id].findOne(search_criteria, function (err, object) {
         if (err) return next(err);
         if (!object) {
             res.status(400).json({
@@ -590,9 +579,9 @@ router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
                     });
                 }
                 if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id))
-                    Metadata.Objects[req.body.datamodel_id].findOneAndUpdate({
+                    Metadata.Objects[object_datamodel_id].findOneAndUpdate({
                         _id: req.params.object_id,
-                        _company_code: profile.datamodels[req.body.datamodel_id].update._company_code
+                        _company_code: profile.datamodels[object_datamodel_id].update._company_code
                     }, object, function (err, object) {
                         if (err) return next(err);
                         res.status(200).json({
@@ -605,7 +594,7 @@ router.delete('/event/:object_id/:reservation_id', function (req, res, next) {
 });
 
 router.put('/event/:object_id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body.reservation_datamodel_id) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body.reservation_datamodel_id || !req.body.reservation_object) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
@@ -679,15 +668,8 @@ router.put('/event/:object_id', function (req, res, next) {
                     msg: 'No days available!'
                 });
             }
-            var reservation = {
-                object: object._id,
-                name: req.body.object_name,
-                timeslot: {
-                    start: startTime,
-                    end: endTime
-                },
-                _user: user._id
-            }
+            var reservation =req.body.reservation_object;
+            reservation._user =  user._id;
             Metadata.Objects[req.body.reservation_datamodel_id].create(reservation, function (errRes, objectRes) {
                 if (errRes) return next(errRes);
                 if (!objectRes) {
