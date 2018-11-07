@@ -569,7 +569,7 @@ router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
         Metadata.Objects[object_datamodel_id].findOne(search_criteria, function (err, object) {
             if (err) return next(err);
             if (!object) {
-                res.status(400).json({
+                return res.status(400).json({
                     msg: 'No object found!'
                 });
             } else {
@@ -579,12 +579,14 @@ router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
                     object._appointments = {};
                 }
                 if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
-                    Metadata.Objects[object_datamodel_id].findOneAndUpdate({
-                        _id: req.params.object_id,
-                        _company_code: profile.datamodels[object_datamodel_id].update._company_code
-                    }, object, function (err, object) {
-                        if (err) return next(err);
-                        res.status(200).json({
+                    Metadata.Objects[object_datamodel_id].findOneAndUpdate(search_criteria, object, function (errUpdated, objectUpdated) {
+                        if (errUpdated) return next(errUpdated);
+                        if (!objectUpdated) {
+                            return res.status(400).json({
+                                msg: 'No object found!'
+                            });
+                        }
+                        return res.status(200).json({
                             msg: 'Reservation deleted!'
                         });
                     });
