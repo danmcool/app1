@@ -561,7 +561,7 @@ router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
         var object_datamodel_id = datamodel_id.ref.substr(5);
         var startTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.start_time'));
         var endTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.end_time'));
-        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
+        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime()) {
             return res.status(400).json({
                 err: 'Invalid time parameter!'
             });
