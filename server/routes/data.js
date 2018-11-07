@@ -88,7 +88,7 @@ router.get('/:datamodelid/', function (req, res, next) {
     if (req.query.interval_start && req.query.interval_start != '' && req.query.interval_end && req.query.interval_end != '') {
         var startTime = new Date(req.query.interval_start);
         var endTime = new Date(req.query.interval_end);
-        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
+        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime()) {
             return res.status(400).json({
                 err: 'Invalid time interval parameters!'
             });

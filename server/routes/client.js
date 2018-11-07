@@ -491,41 +491,28 @@ router.get('/calendar', function (req, res, next) {
     });
 });
 
-router.delete('/event/:reservation_id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_id || !req.body.reservation_datamodel_id) {
+router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
+    if (!req.query.object_id_path || !req.query.period_path) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
     }
-    var model = mongoose.model(Constants.DataModelPrefix + req.body.reservation_datamodel_id).schema.obj;
-    if (!model || !model['object'] || !model['object'].ref) {
-        res.status(400).json({
-            msg: 'Invalid reservation model!'
-        });
-    }
-    var object_datamodel_id = model['object'].ref;
-    var startTime = new Date(req.body.start_time);
-    var endTime = new Date(req.body.end_time);
-    if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
-        return res.status(400).json({
-            err: 'Invalid time parameter!'
-        });
-    }
+    var reservation_datamodel_id = req.params.datamodel_id;
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, object_datamodel_id);
+    var profile = SessionCache.getProfile(token, reservation_datamodel_id);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[object_datamodel_id] && user.remote_profiles[i].profile.datamodels[object_datamodel_id][req.params.object_id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[object_datamodel_id][req.params.object_id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[reservation_datamodel_id] && user.remote_profiles[i].profile.datamodels[reservation_datamodel_id][req.params.object_id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[reservation_datamodel_id][req.params.object_id];
                 remote = true;
                 break;
             }
         }
     }
-    if (!profile || !profile.datamodels[object_datamodel_id] || !profile.datamodels[object_datamodel_id].update || !req.body._user) {
+    if (!profile || !profile.datamodels[reservation_datamodel_id] || !profile.datamodels[reservation_datamodel_id].delete) {
         if (!remote) {
             return res.status(401).json({
                 err: 'Not enough user rights!'
@@ -534,7 +521,7 @@ router.delete('/event/:reservation_id', function (req, res, next) {
     }
     var search_criteria = {
         _id: {
-            $eq: req.params.object_id
+            $eq: req.params.id
         }
     }
     if (remote) {
@@ -549,36 +536,49 @@ router.delete('/event/:reservation_id', function (req, res, next) {
         }
     } else {
         search_criteria._company_code = {
-            $eq: profile.datamodels[object_datamodel_id].update._company_code
+            $eq: profile.datamodels[reservation_datamodel_id].delete._company_code
         }
-        if (profile.datamodels[object_datamodel_id].update._user) {
+        if (profile.datamodels[reservation_datamodel_id].delete._user) {
             search_criteria._user = {
-                $in: profile.datamodels[object_datamodel_id].update._user
+                $in: profile.datamodels[reservation_datamodel_id].delete._user
             }
         }
     }
-    Metadata.Objects[object_datamodel_id].findOne(search_criteria, function (err, object) {
-        if (err) return next(err);
-        if (!object) {
+    Metadata.Objects[reservation_datamodel_id].findOneAndRemove(search_criteria, function (errRes, objectRes) {
+        if (errRes) return next(errRes);
+        if (!objectRes) {
             res.status(400).json({
-                msg: 'No object found!'
+                msg: 'No reservation object found!'
             });
-        } else {
-            search_criteria._updated_at = object._updated_at;
-            object._updated_at = Date.now();
-            if (!object._appointments) {
-                object._appointments = {};
-            }
-            Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove({
-                _id: req.params.reservation_id
-            }, function (errRes, objectRes) {
-                if (errRes) return next(errRes);
-                if (!objectRes) {
-                    res.status(400).json({
-                        msg: 'No reservation object found!'
-                    });
+        }
+        var model = mongoose.model(Constants.DataModelPrefix + reservation_datamodel_id).schema.obj;
+        var datamodel_id = Tools.resolvePath(model, req.query.object_id_path);
+        if (!datamodel_id || !datamodel_id.ref) {
+            res.status(400).json({
+                msg: 'Incompatible reservation model!'
+            });
+        }
+        var object_datamodel_id = datamodel_id.ref.substr(5);
+        var startTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.start_time'));
+        var endTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.end_time'));
+        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
+            return res.status(400).json({
+                err: 'Invalid time parameter!'
+            });
+        }
+        Metadata.Objects[object_datamodel_id].findOne(search_criteria, function (err, object) {
+            if (err) return next(err);
+            if (!object) {
+                res.status(400).json({
+                    msg: 'No object found!'
+                });
+            } else {
+                search_criteria._updated_at = object._updated_at;
+                object._updated_at = Date.now();
+                if (!object._appointments) {
+                    object._appointments = {};
                 }
-                if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id))
+                if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
                     Metadata.Objects[object_datamodel_id].findOneAndUpdate({
                         _id: req.params.object_id,
                         _company_code: profile.datamodels[object_datamodel_id].update._company_code
@@ -588,39 +588,40 @@ router.delete('/event/:reservation_id', function (req, res, next) {
                             msg: 'Reservation deleted!'
                         });
                     });
-            });
-        }
+                }
+            }
+        });
     });
 });
 
-router.put('/event/:object_id', function (req, res, next) {
-    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.datamodel_id || !req.body.reservation_datamodel_id || !req.body.reservation_object) {
+router.put('/event/:datamodel_id/:object_id', function (req, res, next) {
+    if (!req.body.start_time || !req.body.end_time || !req.body.object_name || !req.body.reservation_datamodel_id || !req.body.reservation_object) {
         return res.status(400).json({
             err: 'Invalid parameters!'
         });
     }
     var startTime = new Date(req.body.start_time);
     var endTime = new Date(req.body.end_time);
-    if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime() || startTime.getDay() > endTime.getDay()) {
+    if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime()) {
         return res.status(400).json({
             err: 'Invalid time parameter!'
         });
     }
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, req.body.datamodel_id);
+    var profile = SessionCache.getProfile(token, req.params.datamodel_id);
     var remote_profile = {};
     var remote = false;
     if (user.remote_profiles && user.remote_profiles.length > 0) {
         for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.body.datamodel_id][req.params.object_id];
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.params.datamodel_id][req.params.object_id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodel_id][req.params.object_id];
                 remote = true;
                 break;
             }
         }
     }
-    if (!profile || !profile.datamodels[req.body.datamodel_id] || !profile.datamodels[req.body.datamodel_id].update || !req.body._user) {
+    if (!profile || !profile.datamodels[req.params.datamodel_id] || !profile.datamodels[req.params.datamodel_id].update || !req.body._user) {
         if (!remote) {
             return res.status(401).json({
                 err: 'Not enough user rights!'
@@ -643,15 +644,15 @@ router.put('/event/:object_id', function (req, res, next) {
         }
     } else {
         search_criteria._company_code = {
-            $eq: profile.datamodels[req.body.datamodel_id].update._company_code
+            $eq: profile.datamodels[req.params.datamodel_id].update._company_code
         }
-        if (profile.datamodels[req.body.datamodel_id].update._user) {
+        if (profile.datamodels[req.params.datamodel_id].update._user) {
             search_criteria._user = {
-                $in: profile.datamodels[req.body.datamodel_id].update._user
+                $in: profile.datamodels[req.params.datamodel_id].update._user
             }
         }
     }
-    Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+    Metadata.Objects[req.params.datamodel_id].findOne(search_criteria, function (err, object) {
         if (err) return next(err);
         if (!object) {
             res.status(400).json({
@@ -681,7 +682,7 @@ router.put('/event/:object_id', function (req, res, next) {
                     });
                 }
                 if (CalendarTools.addEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
-                    Metadata.Objects[req.body.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
+                    Metadata.Objects[req.params.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
                         if (err) {
                             Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
                             return next(err);
@@ -689,7 +690,7 @@ router.put('/event/:object_id', function (req, res, next) {
                         if (!object) {
                             Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
                             delete search_criteria._updated_at;
-                            Metadata.Objects[req.body.datamodel_id].findOne(search_criteria, function (err, object) {
+                            Metadata.Objects[req.params.datamodel_id].findOne(search_criteria, function (err, object) {
                                 if (err) return next(err);
                                 res.status(400).json(object);
                                 // Timeslot is unavailable!

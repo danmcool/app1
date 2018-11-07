@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event) {
+app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', 'Reservation', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event, Reservation) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function () {
@@ -1208,9 +1208,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.resolvePathUpdate(reservation, periodReservationPath + '.start_time', $scope.resolvePath($scope.data, periodPath).start_time);
         $scope.resolvePathUpdate(reservation, periodReservationPath + '.end_time', $scope.resolvePath($scope.data, periodPath).end_time);
         Event.update({
+            datamodel_id: $scope.form.datamodel._id,
             id: $scope.data._id
         }, {
-            datamodel_id: $scope.form.datamodel._id,
             object_name: $scope.resolvePath($scope.data, objectNamePath),
             start_time: $scope.resolvePath($scope.data, periodPath).start_time,
             end_time: $scope.resolvePath($scope.data, periodPath).end_time,
@@ -1229,24 +1229,30 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.removeEvent = function (formula, nextFormId, setValue, objectIdPath, periodPath) {
-        updateComponents($scope.form, setValue, $scope.data);
-        Event.remove({
-            id: $scope.data._id
-        }, {
-            object_id: $scope.resolvePath($scope.data, objectIdPath),
-            start_time: $scope.resolvePath($scope.data, periodPath).start_time,
-            end_time: $scope.resolvePath($scope.data, periodPath).end_time,
-            _user: $scope.data._user,
-            reservation_datamodel_id: $scope.form.datamodel._id
-        }, function (res) {
-            gotoNextForm(formula, nextFormId, $scope.data);
-        }, function (res) {
-            if (res.data) {
-                $scope.data = res.data;
-                initComponents();
-            }
-            errorAlert($scope.sessionData.appData.error_removing_appointment);
-        });
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.confirmation)
+            .textContent($scope.sessionData.appData.removal_confirmation)
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)).then(
+            function () {
+                Reservation.remove({
+                    datamodel_id: $scope.form.datamodel._id,
+                    id: $scope.data._id,
+                    object_id_path: objectIdPath,
+                    period_path: periodPath
+                }, function (res) {
+                    gotoNextForm(formula, nextFormId, $scope.data);
+                }, function (res) {
+                    if (res.data) {
+                        $scope.data = res.data;
+                        initComponents();
+                    }
+                    errorAlert($scope.sessionData.appData.error_removing_appointment);
+                });
+            });
     }
 
     $scope.search = function (search_text) {

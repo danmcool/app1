@@ -14,4 +14,26 @@ Tools.appendProperties = function (source, destination) {
     }
 }
 
+Tools.resolvePath = function (object, path) {
+    if (!path) return undefined;
+    return path.split('.').reduce(function (previous, current) {
+        return (previous ? previous[current] : undefined);
+    }, object);
+}
+
+Tools.resolvePathUpdate = function (object, path, value) {
+    if (!path) return undefined;
+    path.split('.').reduce(function (previous, current, index, array) {
+        if (index < array.length - 1) {
+            if (!previous[current]) {
+                previous[current] = {};
+            }
+            return previous[current];
+        } else {
+            previous[current] = value;
+        }
+    }, object);
+}
+
+
 module.exports = Tools;
