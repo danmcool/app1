@@ -497,103 +497,73 @@ router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
             err: 'Invalid parameters!'
         });
     }
-    var reservation_datamodel_id = req.params.datamodel_id;
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, reservation_datamodel_id);
-    var remote_profile = {};
-    var remote = false;
-    if (user.remote_profiles && user.remote_profiles.length > 0) {
-        for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[reservation_datamodel_id] && user.remote_profiles[i].profile.datamodels[reservation_datamodel_id][req.params.object_id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[reservation_datamodel_id][req.params.object_id];
-                remote = true;
-                break;
-            }
-        }
+    var reservation_search_criteria = {
+        _id: req.params.id
     }
-    if (!profile || !profile.datamodels[reservation_datamodel_id] || !profile.datamodels[reservation_datamodel_id].delete) {
-        if (!remote) {
-            return res.status(401).json({
-                err: 'Not enough user rights!'
-            });
-        }
-    }
-    var search_criteria = {
-        _id: {
-            $eq: req.params.id
-        }
-    }
-    if (remote) {
-        search_criteria._company_code = {
-            $eq: remote_profile._company_code
-        }
-        search_criteria._user = {
-            $eq: req.body._user
-        }
-        search_criteria[remote_profile.constraint.key] = {
-            $eq: remote_profile.constraint.value
-        }
-    } else {
-        search_criteria._company_code = {
-            $eq: profile.datamodels[reservation_datamodel_id].delete._company_code
-        }
-        if (profile.datamodels[reservation_datamodel_id].delete._user) {
-            search_criteria._user = {
-                $in: profile.datamodels[reservation_datamodel_id].delete._user
-            }
-        }
-    }
-    Metadata.Objects[reservation_datamodel_id].findOneAndRemove(search_criteria, function (errRes, objectRes) {
-        if (errRes) return next(errRes);
-        if (!objectRes) {
-            res.status(400).json({
-                msg: 'No reservation object found!'
-            });
-        }
-        var model = mongoose.model(Constants.DataModelPrefix + reservation_datamodel_id).schema.obj;
-        var datamodel_id = Tools.resolvePath(model, req.query.object_id_path);
-        if (!datamodel_id || !datamodel_id.ref) {
-            res.status(400).json({
-                msg: 'Incompatible reservation model!'
-            });
-        }
-        var object_datamodel_id = datamodel_id.ref.substr(5);
-        var startTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.start_time'));
-        var endTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.end_time'));
-        if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime()) {
-            return res.status(400).json({
-                err: 'Invalid time parameter!'
-            });
-        }
-        Metadata.Objects[object_datamodel_id].findOne(search_criteria, function (err, object) {
-            if (err) return next(err);
-            if (!object) {
-                return res.status(400).json({
-                    msg: 'No object found!'
+    var reservation_datamodel_id = req.params.datamodel_id;
+    if (SessionCache.createSecurityFiltersDelete(token, null, reservation_datamodel_id, req.params.id, reservation_search_criteria)) {
+        Metadata.Objects[reservation_datamodel_id].findOneAndRemove(reservation_search_criteria, function (errRes, objectRes) {
+            if (errRes) return next(errRes);
+            if (!objectRes) {
+                res.status(400).json({
+                    msg: 'No reservation object found!'
                 });
-            } else {
-                search_criteria._updated_at = object._updated_at;
-                object._updated_at = Date.now();
-                if (!object._appointments) {
-                    object._appointments = {};
-                }
-                if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
-                    Metadata.Objects[object_datamodel_id].findOneAndUpdate(search_criteria, object, function (errUpdated, objectUpdated) {
-                        if (errUpdated) return next(errUpdated);
-                        if (!objectUpdated) {
-                            return res.status(400).json({
-                                msg: 'No object found!'
+            }
+            var model = mongoose.model(Constants.DataModelPrefix + reservation_datamodel_id).schema.obj;
+            var datamodel_id = Tools.resolvePath(model, req.query.object_id_path);
+            var object_search_criteria = {
+                _id: Tools.resolvePath(objectRes, req.query.object_id_path)
+            }
+            if (!datamodel_id || !datamodel_id.ref) {
+                res.status(400).json({
+                    msg: 'Incompatible reservation model!'
+                });
+            }
+            var object_datamodel_id = datamodel_id.ref.substr(5);
+            var startTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.start_time'));
+            var endTime = new Date(Tools.resolvePath(objectRes, req.query.period_path + '.end_time'));
+            if (!startTime || !endTime || startTime >= endTime || (startTime.getTime() + Constants.OneWeek) < endTime.getTime()) {
+                return res.status(400).json({
+                    err: 'Invalid time parameter!'
+                });
+            }
+            if (SessionCache.createSecurityFiltersUpdate(token, null, object_datamodel_id, object_search_criteria._id, object_search_criteria)) {
+                Metadata.Objects[object_datamodel_id].findOne(object_search_criteria, function (err, object) {
+                    if (err) return next(err);
+                    if (!object) {
+                        return res.status(400).json({
+                            msg: 'No object found!'
+                        });
+                    } else {
+                        object_search_criteria._updated_at = object._updated_at;
+                        object._updated_at = Date.now();
+                        if (!object._appointments) {
+                            object._appointments = {};
+                        }
+                        if (CalendarTools.removeEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
+                            Metadata.Objects[object_datamodel_id].findOneAndUpdate(object_search_criteria, object, function (errUpdated, objectUpdated) {
+                                if (errUpdated) return next(errUpdated);
+                                if (!objectUpdated) {
+                                    return res.status(400).json({
+                                        msg: 'No object found!'
+                                    });
+                                }
+                                return res.status(200).json({
+                                    msg: 'Reservation deleted!'
+                                });
                             });
                         }
-                        return res.status(200).json({
-                            msg: 'Reservation deleted!'
-                        });
-                    });
-                }
+                    }
+                });
             }
         });
-    });
+    } else {
+        return res.status(401).json({
+            err: 'Not enough user rights!'
+        });
+    }
 });
 
 router.put('/event/:datamodel_id/:object_id', function (req, res, next) {
@@ -611,107 +581,74 @@ router.put('/event/:datamodel_id/:object_id', function (req, res, next) {
     }
     var token = req.cookies[Constants.SessionCookie];
     var user = SessionCache.userData[token];
-    var profile = SessionCache.getProfile(token, req.params.datamodel_id);
-    var remote_profile = {};
-    var remote = false;
-    if (user.remote_profiles && user.remote_profiles.length > 0) {
-        for (var i = 0; i < user.remote_profiles.length; i++) {
-            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodel_id] && user.remote_profiles[i].profile.datamodels[req.params.datamodel_id][req.params.object_id]) {
-                remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodel_id][req.params.object_id];
-                remote = true;
-                break;
-            }
-        }
-    }
-    if (!profile || !profile.datamodels[req.params.datamodel_id] || !profile.datamodels[req.params.datamodel_id].update || !req.body._user) {
-        if (!remote) {
-            return res.status(401).json({
-                err: 'Not enough user rights!'
-            });
-        }
-    }
     var search_criteria = CalendarTools.computeQuery(startTime, endTime);
     search_criteria._id = {
         $eq: req.params.object_id
     }
-    if (remote) {
-        search_criteria._company_code = {
-            $eq: remote_profile._company_code
-        }
-        search_criteria._user = {
-            $eq: req.body._user
-        }
-        search_criteria[remote_profile.constraint.key] = {
-            $eq: remote_profile.constraint.value
-        }
-    } else {
-        search_criteria._company_code = {
-            $eq: profile.datamodels[req.params.datamodel_id].update._company_code
-        }
-        if (profile.datamodels[req.params.datamodel_id].update._user) {
-            search_criteria._user = {
-                $in: profile.datamodels[req.params.datamodel_id].update._user
-            }
-        }
-    }
-    Metadata.Objects[req.params.datamodel_id].findOne(search_criteria, function (err, object) {
-        if (err) return next(err);
-        if (!object) {
-            res.status(400).json({
-                msg: 'No object found!'
-            });
-        } else {
-            search_criteria._updated_at = object._updated_at;
-            object._updated_at = Date.now();
-            if (!object._appointments) {
-                object._appointments = {};
-            }
-            if (!object._appointment_properties || !object._appointment_properties.days) {
-                return res.status(400).json({
-                    msg: 'No days available!'
+    if (SessionCache.createSecurityFiltersUpdate(token, null, req.params.datamodel_id, search_criteria._id, search_criteria)) {
+        Metadata.Objects[req.params.datamodel_id].findOne(search_criteria, function (err, object) {
+            if (err) return next(err);
+            if (!object) {
+                res.status(400).json({
+                    msg: 'No object found!'
+                });
+            } else {
+                search_criteria._updated_at = object._updated_at;
+                object._updated_at = Date.now();
+                if (!object._appointments) {
+                    object._appointments = {};
+                }
+                if (!object._appointment_properties || !object._appointment_properties.days) {
+                    return res.status(400).json({
+                        msg: 'No days available!'
+                    });
+                }
+                var reservation = req.body.reservation_object;
+                reservation._user = user._id;
+                reservation._company_code = object._company_code;
+                reservation._created_at = object._updated_at;
+                reservation._updated_at = object._updated_at;
+                Metadata.Objects[req.body.reservation_datamodel_id].create(reservation, function (errRes, objectRes) {
+                    if (errRes) return next(errRes);
+                    if (!objectRes) {
+                        res.status(400).json({
+                            msg: 'Invalid reservation object!'
+                        });
+                    }
+                    if (CalendarTools.addEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes.id)) {
+                        Metadata.Objects[req.params.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
+                            if (err) {
+                                Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes.id);
+                                return next(err);
+                            }
+                            if (!object) {
+                                Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes.id);
+                                delete search_criteria._updated_at;
+                                Metadata.Objects[req.params.datamodel_id].findOne(search_criteria, function (err, object) {
+                                    if (err) return next(err);
+                                    res.status(400).json(object);
+                                    // Timeslot is unavailable!
+                                });
+                            }
+                            Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
+                            return res.status(200).json({
+                                msg: 'Reservation done!'
+                            });
+                        });
+                    } else {
+                        Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes.id);
+                        return res.status(400).json({
+                            msg: 'Timeslot is unavailable!'
+                        });
+                    }
                 });
             }
-            var reservation = req.body.reservation_object;
-            reservation._user = user._id;
-            reservation._company_code = object._company_code;
-            reservation._created_at = object._updated_at;
-            reservation._updated_at = object._updated_at;
-            Metadata.Objects[req.body.reservation_datamodel_id].create(reservation, function (errRes, objectRes) {
-                if (errRes) return next(errRes);
-                if (!objectRes) {
-                    res.status(400).json({
-                        msg: 'Invalid reservation object!'
-                    });
-                }
-                if (CalendarTools.addEvent(object._appointments, object._appointment_properties, startTime, endTime, user._id, objectRes._id)) {
-                    Metadata.Objects[req.params.datamodel_id].findOneAndUpdate(search_criteria, object, function (err, object) {
-                        if (err) {
-                            Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
-                            return next(err);
-                        }
-                        if (!object) {
-                            Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
-                            delete search_criteria._updated_at;
-                            Metadata.Objects[req.params.datamodel_id].findOne(search_criteria, function (err, object) {
-                                if (err) return next(err);
-                                res.status(400).json(object);
-                                // Timeslot is unavailable!
-                            });
-                        }
-                        Email.sendCalendar(user.email, req.body.object_name, req.body.start_time, req.body.end_time, false, user.firstname);
-                        return res.status(200).json({
-                            msg: 'Reservation done!'
-                        });
-                    });
-                } else {
-                    Metadata.Objects[req.body.reservation_datamodel_id].findOneAndRemove(objectRes._id);
-                    return res.status(400).json({
-                        msg: 'Timeslot is unavailable!'
-                    });
-                }
-            });
-        }
-    });
+        });
+    } else {
+        return res.status(401).json({
+            err: 'Not enough user rights!'
+        });
+    }
 });
 
 router.put('/notify/:user_id', function (req, res, next) {

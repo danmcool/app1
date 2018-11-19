@@ -260,4 +260,75 @@ SessionCache.getProfile = function (token, datamodel_id) {
     return profile;
 }
 
+SessionCache.createSecurityFiltersUpdate = function (token, remote_user_id, datamodel_id, object_id, security_filter) {
+    var user = SessionCache.userData[token];
+    var profile = SessionCache.getProfile(token, datamodel_id);
+    var remote_profile = {};
+    var remote = false;
+    if (user.remote_profiles && user.remote_profiles.length > 0) {
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[datamodel_id] && user.remote_profiles[i].profile.datamodels[datamodel_id][object_id]) {
+                remote_profile = user.remote_profiles[i].profile.datamodels[datamodel_id][object_id];
+                remote = true;
+                break;
+            }
+        }
+    }
+    if (!profile || !profile.datamodels[datamodel_id] || !profile.datamodels[datamodel_id].update) {
+        if (!remote) return false;
+    }
+    if (remote) {
+        security_filter._company_code = {
+            $eq: remote_profile._company_code
+        }
+        security_filter._user = {
+            $eq: remote_user_id
+        }
+        if (remote_profile.constraint.key) {
+            security_filter[remote_profile.constraint.key] = {
+                $eq: remote_profile.constraint.value
+            }
+        }
+    } else {
+        security_filter._company_code = {
+            $eq: profile.datamodels[datamodel_id].update._company_code
+        }
+        if (profile.datamodels[datamodel_id].update._user) {
+            security_filter._user = {
+                $in: profile.datamodels[datamodel_id].update._user
+            }
+        }
+    }
+    return true;
+}
+
+SessionCache.createSecurityFiltersDelete = function (token, remote_user_id, datamodel_id, object_id, security_filter) {
+    var user = SessionCache.userData[token];
+    var profile = SessionCache.getProfile(token, datamodel_id);
+    if (!profile || !profile.datamodels[datamodel_id] || !profile.datamodels[datamodel_id].delete) {
+        return false;
+    }
+    if (profile.datamodels[datamodel_id].delete._user) {
+        var found = false;
+        for (var i = 0; i < profile.datamodels[datamodel_id].delete._user.length; i++) {
+            if (profile.datamodels[datamodel_id].delete._user[i] == user._id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+    security_filter._company_code = {
+        $eq: profile.datamodels[datamodel_id].delete._company_code
+    }
+    if (profile.datamodels[datamodel_id].delete._user) {
+        security_filter._user = {
+            $in: profile.datamodels[datamodel_id].delete._user
+        }
+    }
+    return true;
+}
+
 module.exports = SessionCache;

@@ -98,7 +98,29 @@ var addFreeInterval = function (intervals, start, end) {
             break;
         }
     }
-    if (!added) {
+    if (added) {
+        // merge contiguous intervals
+        var removed = false;
+        for (var j = 0; j < intervals.length; j++) {
+            for (var k = 0; k < intervals.length; k++) {
+                if (intervals[j].end == intervals[k].start) {
+                    intervals[j].end = intervals[k].end;
+                    intervals.splice(k, 1);
+                    removed = true;
+                    break;
+                }
+                if (intervals[j].start == intervals[k].end) {
+                    intervals[j].start = intervals[k].start;
+                    intervals.splice(k, 1);
+                    removed = true;
+                    break;
+                }
+            }
+            if (removed) {
+                break;
+            }
+        }
+    } else {
         intervals.push({
             start: start,
             end: end
@@ -147,18 +169,34 @@ CalendarTools.removeEvent = function (appointments, appointment_properties, star
     var interval = {};
     if (startDate.getDay() == endDate.getDay() && (endDate.getTime() - startDate.getTime() < Constants.OneDay)) {
         interval = removeBusyInterval(appointments[startDateKey].busy, user, object);
-        addFreeInterval(appointments[startDateKey].free, interval.startTime, interval.endTime);
+        if (appointments[startDateKey].busy.length == 0) {
+            delete appointments[startDateKey];
+        } else {
+            addFreeInterval(appointments[startDateKey].free, interval.start, interval.end);
+        }
     } else if (startDay < endDay) {
         interval = removeBusyInterval(appointments[startDateKey].busy, user, object);
-        addFreeInterval(appointments[startDateKey].free, interval.startTime, interval.endTime);
+        if (appointments[startDateKey].busy.length == 0) {
+            delete appointments[startDateKey];
+        } else {
+            addFreeInterval(appointments[startDateKey].free, interval.start, interval.end);
+        }
         interval = removeBusyInterval(appointments[endDateKey].busy, user, object);
-        addFreeInterval(appointments[endDateKey].free, interval.startTime, interval.endTime);
+        if (appointments[endDateKey].busy.length == 0) {
+            delete appointments[endDateKey];
+        } else {
+            addFreeInterval(appointments[endDateKey].free, interval.start, interval.end);
+        }
         for (var i = 1; i < (endDay - startDay); i++) {
             var currentDate = new Date();
             currentDate.setTime(startDate.getTime() + i * Constants.OneDay);
             var dateKey = computeDateKey(currentDate);
             interval = removeBusyInterval(appointments[dateKey].busy, user, object);
-            addFreeInterval(appointments[dateKey].free, interval.startTime, interval.endTime);
+            if (appointments[dateKey].busy.length == 0) {
+                delete appointments[dateKey];
+            } else {
+                addFreeInterval(appointments[dateKey].free, interval.start, interval.end);
+            }
         }
     }
     return true;
