@@ -47,7 +47,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
         if (projectionItem.path == '' && projectionItem.technical_name == '_id') {
             addedId = true;
             projectionItem.full_path = '_id';
-            projectionItem.type = 'number';
+            projectionItem.type = 'text';
             continue;
         }
         if (projectionItem.path == '' && projectionItem.technical_name == '_created_at') {
@@ -121,7 +121,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
             path: '',
             full_path: '_id',
             technical_name: '_id',
-            type: 'number',
+            type: 'text',
             name: {
                 en: 'Object Id',
                 fr: 'Id de l\'objet'

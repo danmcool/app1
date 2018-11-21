@@ -35,7 +35,7 @@
                     <div>
                         <span class="md-title"><i>{{field_type[field.type].translated_name}}</i> - {{field.full_path}}</span></div>
                     <div layout="row">
-                        <md-input-container flex="auto" class="md-block" ng-if="field.type=='text'||field.type=='number'">
+                        <md-input-container flex="auto" class="md-block" ng-if="(field.type=='text'||field.type=='number') && field.full_path!='_id'">
                             <md-checkbox ng-model="field.index">{{sessionData.appData.datamodel_field_index}}</md-checkbox>
                         </md-input-container>
                         <md-slider-container flex="70" ng-if="(field.type=='text'||field.type=='number')&&field.index">
