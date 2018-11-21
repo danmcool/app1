@@ -491,8 +491,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         $scope.localdata[formFields[i].id].start_time = new Date(dateValue);
                     }
                 }
-                $scope.localdata[formFields[i].id].start_time_hours = addZero($scope.localdata[formFields[i].id].start_time.getHours());
-                $scope.localdata[formFields[i].id].start_time_minutes = addZero($scope.localdata[formFields[i].id].start_time.getMinutes());
+                if ($scope.localdata[formFields[i].id].start_time) {
+                    $scope.localdata[formFields[i].id].start_time_hours = addZero($scope.localdata[formFields[i].id].start_time.getHours());
+                    $scope.localdata[formFields[i].id].start_time_minutes = addZero($scope.localdata[formFields[i].id].start_time.getMinutes());
+                }
                 if (formFields[i].init_value_end && formFields[i].init_value_end != '' && $routeParams[formFields[i].init_value_end]) {
                     $scope.localdata[formFields[i].id].end_time = new Date();
                     $scope.localdata[formFields[i].id].end_time.setTime($routeParams[formFields[i].init_value_end]);
@@ -502,8 +504,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         $scope.localdata[formFields[i].id].end_time = new Date(dateValue);
                     }
                 }
-                $scope.localdata[formFields[i].id].end_time_hours = addZero($scope.localdata[formFields[i].id].end_time.getHours());
-                $scope.localdata[formFields[i].id].end_time_minutes = addZero($scope.localdata[formFields[i].id].end_time.getMinutes());
+                if ($scope.localdata[formFields[i].id].end_time) {
+                    $scope.localdata[formFields[i].id].end_time_hours = addZero($scope.localdata[formFields[i].id].end_time.getHours());
+                    $scope.localdata[formFields[i].id].end_time_minutes = addZero($scope.localdata[formFields[i].id].end_time.getMinutes());
+                }
             } else if (formFields[i].display == 'appointment_properties') {
                 if (!$scope.data._appointment_properties || !$scope.data._appointment_properties.non_stop) {
                     $scope.data._appointment_properties = {
