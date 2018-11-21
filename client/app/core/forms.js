@@ -648,7 +648,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         xhr.send(file);
     }
-    var changeFilesInFormsJS = function (files, fieldId) {
+
+    changeFilesInFormsJS = function (files, fieldId) {
         if (files.length == 0) return;
         //$scope.dynamicForm.$setValidity({'Attachments': true});
         if (!$scope.localdata[fieldId]) {
@@ -684,6 +685,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             });
         }
     }
+
     $scope.removeFile = function (fileId, fieldId) {
         var files = $scope.localdata[fieldId];
         for (var i = 0; i < files.length; i++) {
