@@ -6,7 +6,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }, function (newValue, oldValue) {
         if (newValue != oldValue) {
             $scope.sessionData = newValue;
-            updateAppName();
+            $scope.updateAppName();
         }
     });
 
@@ -36,15 +36,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }, object);
     }
 
-    var toString = function (object) {
+    /*$scope.toString = function (object) {
         if (object) {
             return object + '';
         } else {
             return '';
         }
-    }
+    }*/
 
-    var updateAppName = function () {
+    $scope.updateAppName = function () {
         var apps = $scope.sessionData.applications;
         if (apps) {
             for (var i = 0; i < apps.length; i++) {
@@ -175,7 +175,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
                     }
                     itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[$scope.form_field_list.title].full_path);
-                    queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
+                    $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                 }
                 if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
                     var itemValues = {};
@@ -184,7 +184,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     for (var i = 0; i < datas.length; i++) {
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
                     }
-                    queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
+                    $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
                 }
             }
             for (var i = 0; i < datas.length; i++) {
@@ -194,7 +194,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         });
     }
 
-    var initText = function () {
+    $scope.initText = function () {
         for (var i = 0; i < $scope.days.length; i++) {
             $scope.days[i].translated_name = SessionService.translate($scope.days[i].name);
         }
@@ -245,7 +245,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    var matchField = function (string) {
+    $scope.matchField = function (string) {
         if (!string) return '';
         var fields = string.match(/data.([a-z_])+/g);
         if (!fields) return '';
@@ -255,7 +255,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         return result;
     }
-    var computeFields = function (fullPath, calculation) {
+    $scope.computeFields = function (fullPath, calculation) {
         var userFields = '';
         if (fullPath) {
             var point = fullPath.indexOf('.');
@@ -265,28 +265,28 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 userFields += fullPath + ' ';
             }
         }
-        userFields += matchField(calculation);
+        userFields += $scope.matchField(calculation);
         userFields = userFields.trim();
         return userFields;
     }
 
-    var queryValues = function (valuesId, valuesType, valuesObject, formField, valuesDisplay, extData) {
+    $scope.queryValues = function (valuesId, valuesType, valuesObject, formField, valuesDisplay, extData) {
         Value.update({
             id: valuesId,
             type: valuesType
         }, valuesObject, function (resValues) {
             if (valuesDisplay == 'title') {
-                updateValuesTitle(formField, resValues.values, extData);
+                $scope.updateValuesTitle(formField, resValues.values, extData);
             } else if (valuesDisplay == 'subtitle') {
-                updateValuesSubTitle(formField, resValues.values, extData);
+                $scope.updateValuesSubTitle(formField, resValues.values, extData);
             } else if (valuesDisplay == 'items') {
-                updateValuesItems(formField, resValues.values);
+                $scope.updateValuesItems(formField, resValues.values);
             } else if (valuesDisplay == 'form') {
-                updateValuesForm(formField, resValues.values, extData);
+                $scope.updateValuesForm(formField, resValues.values, extData);
             }
         });
     }
-    var updateValuesForm = function (formField, newValues, extData) {
+    $scope.updateValuesForm = function (formField, newValues, extData) {
         formField.values = [];
         formField.values_key = {};
         var k;
@@ -319,7 +319,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
     }
-    var updateValuesTitle = function (formField, newValues, extData) {
+    $scope.updateValuesTitle = function (formField, newValues, extData) {
         formField.title_values = {};
         var k;
         if (extData) {
@@ -339,7 +339,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
     }
-    var updateValuesSubTitle = function (formField, newValues, extData) {
+    $scope.updateValuesSubTitle = function (formField, newValues, extData) {
         formField.subtitle_values = {};
         var k;
         if (extData) {
@@ -359,12 +359,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
     }
-    var updateValuesItems = function (formField, newValues) {
+    $scope.updateValuesItems = function (formField, newValues) {
         var valuesFieldName = formField.projectionid + '_values';
         formField[valuesFieldName] = newValues;
         $scope.data[formField.projectionid] = newValues;
     }
-    var initComponents = function () {
+    $scope.initComponents = function () {
         var formFields = $scope.form.fields;
         var formValues = $scope.form.values;
         for (var i = 0; i < formFields.length; i++) {
@@ -380,9 +380,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesForm(formFields[i], formValues[j].values);
+                            $scope.updateValuesForm(formFields[i], formValues[j].values);
                         } else {
-                            queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, formFields[i], 'form', formFields[i]);
+                            $scope.queryValues(formValues[j]._id, formValues[j].type, formValues[j].values, formFields[i], 'form', formFields[i]);
                         }
                         break;
                     }
@@ -392,16 +392,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesForm(formFields[i], formValues[j].values);
+                            $scope.updateValuesForm(formFields[i], formValues[j].values);
                         } else {
                             var itemValues = {};
                             itemValues.relation = formValues[j].values.relation;
-                            itemValues.user_fields = computeFields(formFields[i].selection_full_path, formFields[i].selection_calculation);
+                            itemValues.user_fields = $scope.computeFields(formFields[i].selection_full_path, formFields[i].selection_calculation);
                             itemValues.id_list = [];
                             if (formFields[i].disabled) {
                                 itemValues.id_list.push($scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path));
                             }
-                            queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'form', formFields[i]);
+                            $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'form', formFields[i]);
                         }
                         break;
                     }
@@ -426,15 +426,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].title_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesTitle(formFields[i], formValues[j].values);
+                            $scope.updateValuesTitle(formFields[i], formValues[j].values);
                         } else {
-                            $scope.form_field_list_title_user_fields = computeFields(formFields[i].title_full_path, formFields[i].title_calculation);
+                            $scope.form_field_list_title_user_fields = $scope.computeFields(formFields[i].title_full_path, formFields[i].title_calculation);
                         }
                     } else if (formFields[i].subtitle_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesSubTitle(formFields[i], formValues[j].values);
+                            $scope.updateValuesSubTitle(formFields[i], formValues[j].values);
                         } else {
-                            $scope.form_field_list_subtitle_user_fields = computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
+                            $scope.form_field_list_subtitle_user_fields = $scope.computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
                         }
                     }
                 }
@@ -444,15 +444,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (var j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
-                            updateValuesItems(i, formValues[j].values);
+                            $scope.updateValuesItems(i, formValues[j].values);
                         } else {
                             var itemValues = {};
                             itemValues.relation = formValues[j].values.relation;
                             itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path);
-                            itemValues.user_fields = computeFields(formFields[i].title_full_path, formFields[i].title_calculation) + ' ';
-                            itemValues.user_fields += computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
+                            itemValues.user_fields = $scope.computeFields(formFields[i].title_full_path, formFields[i].title_calculation) + ' ';
+                            itemValues.user_fields += $scope.computeFields(formFields[i].subtitle_full_path, formFields[i].subtitle_calculation);
                             itemValues.user_fields = itemValues.user_fields.trim();
-                            queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'items');
+                            $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'items');
                         }
                     }
                 }
@@ -492,8 +492,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
                 if ($scope.localdata[formFields[i].id].start_time) {
-                    $scope.localdata[formFields[i].id].start_time_hours = addZero($scope.localdata[formFields[i].id].start_time.getHours());
-                    $scope.localdata[formFields[i].id].start_time_minutes = addZero($scope.localdata[formFields[i].id].start_time.getMinutes());
+                    $scope.localdata[formFields[i].id].start_time_hours = $scope.addZero($scope.localdata[formFields[i].id].start_time.getHours());
+                    $scope.localdata[formFields[i].id].start_time_minutes = $scope.addZero($scope.localdata[formFields[i].id].start_time.getMinutes());
                 }
                 if (formFields[i].init_value_end && formFields[i].init_value_end != '' && $routeParams[formFields[i].init_value_end]) {
                     $scope.localdata[formFields[i].id].end_time = new Date();
@@ -505,8 +505,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
                 if ($scope.localdata[formFields[i].id].end_time) {
-                    $scope.localdata[formFields[i].id].end_time_hours = addZero($scope.localdata[formFields[i].id].end_time.getHours());
-                    $scope.localdata[formFields[i].id].end_time_minutes = addZero($scope.localdata[formFields[i].id].end_time.getMinutes());
+                    $scope.localdata[formFields[i].id].end_time_hours = $scope.addZero($scope.localdata[formFields[i].id].end_time.getHours());
+                    $scope.localdata[formFields[i].id].end_time_minutes = $scope.addZero($scope.localdata[formFields[i].id].end_time.getMinutes());
                 }
             } else if (formFields[i].display == 'appointment_properties') {
                 if (!$scope.data._appointment_properties || !$scope.data._appointment_properties.non_stop) {
@@ -554,8 +554,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             }
         }
-        updateAppName();
-        initText();
+        $scope.updateAppName();
+        $scope.initText();
         if ($scope.form.search_criteria) {
             $scope.form.search_criteria = $scope.form.search_criteria.replace(/@_user_id/g, $scope.sessionData.userData._id);
             var dateNow = new Date();
@@ -574,7 +574,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 });
                 $scope.data._user = $scope.sessionData.userData._id;
                 $scope.dataLoaded = true;
-                initComponents();
+                $scope.initComponents();
             } else {
                 Datas.get({
                     datamodel_id: $scope.form.datamodel._id,
@@ -585,13 +585,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }, function (data) {
                     $scope.data = data;
                     $scope.dataLoaded = true;
-                    initComponents();
+                    $scope.initComponents();
                 });
             }
         }
     });
 
-    var gotoNextForm = function (formula, nextFormId, data) {
+    $scope.gotoNextForm = function (formula, nextFormId, data) {
         if (nextFormId == 'home') {
             if ($routeParams.pid) {
                 SessionService.location('/workflows/' + $scope.sessionData.application_id + '?pid=' + $routeParams.pid);
@@ -649,6 +649,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         xhr.send(file);
     }
 
+    // do not add var in front of the function name neither put it in the scope!!!
     changeFilesInFormsJS = function (files, fieldId) {
         if (files.length == 0) return;
         //$scope.dynamicForm.$setValidity({'Attachments': true});
@@ -709,8 +710,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    var computeDateKey = function (date) {
-        return [date.getFullYear(), addZero(date.getMonth() + 1), addZero(date.getDate())].join("-");
+    $scope.computeDateKey = function (date) {
+        return [date.getFullYear(), $scope.addZero(date.getMonth() + 1), $scope.addZero(date.getDate())].join("-");
     }
 
     $scope.updateWholeWeek = function (properties) {
@@ -789,7 +790,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (date < today) {
             return false;
         }
-        var dateKey = computeDateKey(date);
+        var dateKey = $scope.computeDateKey(date);
         // check if day of week is allowed
         if ($scope.data._appointment_properties && $scope.data._appointment_properties.days && $scope.data._appointment_properties.days[date.getDay()] && $scope.data._appointment_properties.days[date.getDay()].enabled) {
             return true;
@@ -814,7 +815,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (date < today) {
             return '';
         }
-        var dateKey = computeDateKey(date);
+        var dateKey = $scope.computeDateKey(date);
         // check if there are free time slots
         if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].busy && $scope.data._appointments[dateKey].busy.length > 0) {
             return '' + $scope.data._appointments[dateKey].busy.length;
@@ -823,12 +824,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    var addZero = function (value) {
+    $scope.addZero = function (value) {
         return (value > 9 ? '' + value : '0' + value);
     }
     $scope.dayClick = function (date) {
         $scope.selectedDate = date;
-        var dateKey = computeDateKey(date);
+        var dateKey = $scope.computeDateKey(date);
         if ($scope.data._appointments && $scope.data._appointments[dateKey] && $scope.data._appointments[dateKey].busy && $scope.data._appointments[dateKey].busy.length > 0) {
             $scope.appointments = $scope.data._appointments[dateKey].busy.sort(function (a, b) {
                 return (a.start - b.start);
@@ -839,17 +840,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 appointment.start_minutes = appointment.start - appointment.start_hours * 60;
                 appointment.end_hours = Math.floor(appointment.end / 60);
                 appointment.end_minutes = appointment.end - appointment.end_hours * 60;
-                appointment.start_hours = addZero(appointment.start_hours);
-                appointment.start_minutes = addZero(appointment.start_minutes);
-                appointment.end_hours = addZero(appointment.end_hours);
-                appointment.end_minutes = addZero(appointment.end_minutes);
+                appointment.start_hours = $scope.addZero(appointment.start_hours);
+                appointment.start_minutes = $scope.addZero(appointment.start_minutes);
+                appointment.end_hours = $scope.addZero(appointment.end_hours);
+                appointment.end_minutes = $scope.addZero(appointment.end_minutes);
             }
         } else {
             $scope.appointments = [];
         }
     }
 
-    var updateComponents = function (form, setValue, data) {
+    $scope.updateComponents = function (form, setValue, data) {
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
@@ -873,7 +874,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    var updateErrorAlert = function () {
+    $scope.updateErrorAlert = function () {
         $mdDialog.show(
             $mdDialog.alert()
             .parent(angular.element(document.body))
@@ -884,7 +885,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         );
     }
 
-    var errorAlert = function (error) {
+    $scope.errorAlert = function (error) {
         $mdDialog.show(
             $mdDialog.alert()
             .parent(angular.element(document.body))
@@ -895,7 +896,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         );
     }
 
-    var notify = function (notifyUser, emailTitle, emailHtml, itemId) {
+    $scope.notify = function (notifyUser, emailTitle, emailHtml, itemId) {
         if (!notifyUser) return;
         var notifyUserId;
         if (notifyUser == 'current') {
@@ -925,29 +926,29 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data);
         if ($routeParams.pid) {
             $scope.data.pid = $routeParams.pid;
         }
         $scope.data.$save(function (res) {
-            notify(notifyUser, emailTitle, emailHtml);
-            gotoNextForm(formula, nextFormId, (forwardId ? res : null));
+            $scope.notify(notifyUser, emailTitle, emailHtml);
+            $scope.gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }, function (res) {
             $scope.data = res.data;
         });
     }
     $scope.modify = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id,
             pid: $routeParams.pid
         }, $scope.data, function (res) {
-            notify(notifyUser, emailTitle, emailHtml);
-            gotoNextForm(formula, nextFormId, (forwardId ? res : null));
+            $scope.notify(notifyUser, emailTitle, emailHtml);
+            $scope.gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
     $scope.delete = function (formula, nextFormId, notifyUser, emailTitle, emailHtml) {
@@ -965,35 +966,35 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     entry_id: $scope.data._id,
                     pid: $routeParams.pid
                 }, function (res) {
-                    notify(notifyUser, emailTitle, emailHtml);
-                    gotoNextForm(formula, nextFormId, null);
+                    $scope.notify(notifyUser, emailTitle, emailHtml);
+                    $scope.gotoNextForm(formula, nextFormId, null);
                 }, function (error) {
                     /* show error*/
                 });
             });
     }
     $scope.link = function (formula, nextFormId, forwardId, notifyUser, emailTitle, emailHtml) {
-        notify(notifyUser, emailTitle, emailHtml);
-        gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
+        $scope.notify(notifyUser, emailTitle, emailHtml);
+        $scope.gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
     }
 
     $scope.subscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data);
         $scope.resolvePath($scope.data, itemPath).push($scope.sessionData.userData._id);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id,
             pid: $routeParams.pid
         }, $scope.data, function (res) {
-            notify(notifyUser, emailTitle, emailHtml);
-            gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
+            $scope.notify(notifyUser, emailTitle, emailHtml);
+            $scope.gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
     $scope.unsubscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data);
         var itemList = $scope.resolvePath($scope.data, itemPath);
         for (var i = itemList.length - 1; i >= 0; i--) {
             if (itemList[i] == $scope.sessionData.userData._id || itemList[i]._id == $scope.sessionData.userData._id) {
@@ -1005,11 +1006,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             entry_id: $scope.data._id,
             pid: $routeParams.pid
         }, $scope.data, function (res) {
-            notify(notifyUser, emailTitle, emailHtml);
-            gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
+            $scope.notify(notifyUser, emailTitle, emailHtml);
+            $scope.gotoNextForm(formula, nextFormId, (forwardId ? $scope.data : null));
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
 
@@ -1023,7 +1024,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)).then(
             function () {
-                updateComponents($scope.form, setValue, $scope.data);
+                $scope.updateComponents($scope.form, setValue, $scope.data);
                 var itemList = $scope.resolvePath($scope.data, itemPath);
                 for (var i = itemList.length - 1; i >= 0; i--) {
                     if (itemList[i] == itemId || itemList[i]._id == itemId) {
@@ -1035,16 +1036,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     entry_id: $scope.data._id,
                     pid: $routeParams.pid
                 }, $scope.data, function (res) {
-                    notify(notifyUser, emailTitle, emailHtml, itemId);
-                    gotoNextForm(formula, nextFormId, $scope.data);
+                    $scope.notify(notifyUser, emailTitle, emailHtml, itemId);
+                    $scope.gotoNextForm(formula, nextFormId, $scope.data);
                 }, function (res) {
                     $scope.data = res.data;
-                    updateErrorAlert();
+                    $scope.updateErrorAlert();
                 });
             });
     }
     $scope.moveItem = function (formula, nextFormId, setValue, itemId, itemPath, destinationItemPath, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data);
         var itemList = $scope.resolvePath($scope.data, itemPath);
         for (var i = itemList.length - 1; i >= 0; i--) {
             if (itemList[i] == itemId || itemList[i]._id == itemId) {
@@ -1057,26 +1058,26 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             entry_id: $scope.data._id,
             pid: $routeParams.pid
         }, $scope.data, function (res) {
-            notify(notifyUser, emailTitle, emailHtml, itemId);
-            gotoNextForm(formula, nextFormId, $scope.data);
+            $scope.notify(notifyUser, emailTitle, emailHtml, itemId);
+            $scope.gotoNextForm(formula, nextFormId, $scope.data);
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
 
     $scope.modifyList = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
-        updateComponents($scope.form, setValue, data);
+        $scope.updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id,
             pid: $routeParams.pid
         }, data, function (res) {
-            notify(notifyUser, emailTitle, emailHtml);
-            gotoNextForm(formula, nextFormId, res);
+            $scope.notify(notifyUser, emailTitle, emailHtml);
+            $scope.gotoNextForm(formula, nextFormId, res);
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
     $scope.deleteList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
@@ -1094,16 +1095,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     entry_id: data._id,
                     pid: $routeParams.pid
                 }, function (res) {
-                    notify(notifyUser, emailTitle, emailHtml);
-                    gotoNextForm(formula, nextFormId, null);
+                    $scope.notify(notifyUser, emailTitle, emailHtml);
+                    $scope.gotoNextForm(formula, nextFormId, null);
                 }, function (res) {
                     /* show error*/
                 });
             });
     }
     $scope.linkList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
-        notify(notifyUser, emailTitle, emailHtml);
-        gotoNextForm(formula, nextFormId, data);
+        $scope.notify(notifyUser, emailTitle, emailHtml);
+        $scope.gotoNextForm(formula, nextFormId, data);
     }
     /*    $scope.download = function (data, dataFields, fileName) {
             var content = 'sep=,\n';
@@ -1163,7 +1164,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }*/
     $scope.share = function (formula, nextFormId, setValue, constraintPath, constraintValue, emailPath, shareAppProfileId, message, data) {
-        updateComponents($scope.form, setValue, data);
+        $scope.updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id,
@@ -1178,15 +1179,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 key: constraintPath,
                 value: constraintValue
             }, function (res) {
-                gotoNextForm(formula, nextFormId, data);
+                $scope.gotoNextForm(formula, nextFormId, data);
             })
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
     $scope.calendar = function (formula, nextFormId, setValue, forwardId, projectNamePath, startDatePath, endDatePath, userPath, data) {
-        updateComponents($scope.form, setValue, data);
+        $scope.updateComponents($scope.form, setValue, data);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id,
@@ -1198,16 +1199,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 end_date: $scope.resolvePath(data, endDatePath),
                 user_id: $scope.resolvePath(data, userPath)
             }, function (res) {
-                gotoNextForm(formula, nextFormId, (forwardId ? data : null));
+                $scope.gotoNextForm(formula, nextFormId, (forwardId ? data : null));
             })
         }, function (res) {
             $scope.data = res.data;
-            updateErrorAlert();
+            $scope.updateErrorAlert();
         });
     }
 
     $scope.addEvent = function (formula, nextFormId, setValue, objectNamePath, periodPath, reservation_datamodel, objectIdReservationPath, nameReservationPath, periodReservationPath) {
-        updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data);
         var reservation = {};
         $scope.resolvePathUpdate(reservation, objectIdReservationPath, $scope.data._id);
         $scope.resolvePathUpdate(reservation, nameReservationPath, $scope.resolvePath($scope.data, objectNamePath));
@@ -1224,13 +1225,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             _user: $scope.data._user,
             reservation_datamodel_id: reservation_datamodel
         }, function (res) {
-            gotoNextForm(formula, nextFormId, $scope.data);
+            $scope.gotoNextForm(formula, nextFormId, $scope.data);
         }, function (res) {
             if (res.data) {
                 $scope.data = res.data;
-                initComponents();
+                $scope.initComponents();
             }
-            errorAlert($scope.sessionData.appData.error_creating_appointment);
+            $scope.errorAlert($scope.sessionData.appData.error_creating_appointment);
         });
     }
 
@@ -1250,13 +1251,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     object_id_path: objectIdPath,
                     period_path: periodPath
                 }, function (res) {
-                    gotoNextForm(formula, nextFormId, $scope.data);
+                    $scope.gotoNextForm(formula, nextFormId, $scope.data);
                 }, function (res) {
                     if (res.data) {
                         $scope.data = res.data;
-                        initComponents();
+                        $scope.initComponents();
                     }
-                    errorAlert($scope.sessionData.appData.error_removing_appointment);
+                    $scope.errorAlert($scope.sessionData.appData.error_removing_appointment);
                 });
             });
     }
