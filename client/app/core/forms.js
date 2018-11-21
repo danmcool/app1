@@ -599,9 +599,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (data && data._id) {
                 formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
                 if (formula) {
-                    var keys = Object.keys(formula);
-                    for (var i = 0; i < keys.length; i++) {
-                        formUrl = formUrl + '&' + formula[keys[i]] + '=' + data[formula[keys[i]]];
+                    for (var i = 0; i < formula.length; i++) {
+                        formUrl = formUrl + '&' + $scope.form.datamodel.projection[formula[i]].full_path +
+                            '=' + $scope.resolvePath(data, $scope.form.datamodel.projection[formula[i]].full_path);
                     }
                 }
             } else {

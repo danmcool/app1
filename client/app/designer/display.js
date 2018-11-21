@@ -386,6 +386,25 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             });
     }
 
+    $scope.toggleInFormula = function (action, item) {
+        if (!action.formula) {
+            action.formula = [];
+        }
+        var idx = action.formula.indexOf(item.id);
+        if (idx > -1) {
+            action.formula.splice(idx, 1);
+        } else {
+            action.formula.push(item.id);
+        }
+    }
+
+    $scope.existsInFormula = function (action, item) {
+        if (!action.formula) {
+            action.formula = [];
+        }
+        return action.formula.indexOf(item.id) > -1;
+    }
+
     $scope.save = function () {
         if ($scope.field.projectionid) {
             $scope.field.full_path = ($scope.form.datamodel.projection[$scope.field.projectionid].path == '' ? $scope.form.datamodel.projection[$scope.field.projectionid].technical_name : $scope.form.datamodel.projection[$scope.field.projectionid].path + '.' + $scope.form.datamodel.projection[$scope.field.projectionid].technical_name);

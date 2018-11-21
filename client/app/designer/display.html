@@ -161,7 +161,7 @@
                                         <legend>{{sessionData.appData.action_formula}}</legend>
                                         <div layout="row" layout-wrap flex>
                                             <div flex="50" ng-repeat="datafield in datamodel_keys">
-                                                <md-checkbox ng-checked="existsInFormula(datafield)" ng-click="toggleInFormula(datafield)">
+                                                <md-checkbox ng-checked="existsInFormula(item_action, datafield)" ng-click="toggleInFormula(item_action, datafield)">
                                                     {{datafield.translated_name}}
                                                 </md-checkbox>
                                             </div>

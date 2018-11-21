@@ -30,6 +30,7 @@ DatamodelTools.buildDataModel = function (projection, index) {
         return datamodel;
     }
     var datamodelkeys = Object.keys(projection);
+    var addedId = false;
     var addedCreated = false;
     var addedUpdated = false;
     var addedUser = false;
@@ -43,6 +44,12 @@ DatamodelTools.buildDataModel = function (projection, index) {
             index.options.weights[fullPath] = projectionItem.index_weight;
         }
 
+        if (projectionItem.path == '' && projectionItem.technical_name == '_id') {
+            addedId = true;
+            projectionItem.full_path = '_id';
+            projectionItem.type = 'number';
+            continue;
+        }
         if (projectionItem.path == '' && projectionItem.technical_name == '_created_at') {
             addedCreated = true;
             projectionItem.full_path = '_created_at';
@@ -109,6 +116,18 @@ DatamodelTools.buildDataModel = function (projection, index) {
     datamodel._appointments = Schema.Types.Mixed;
     datamodel._appointment_properties = Schema.Types.Mixed;
 
+    if (!addedId) {
+        projection[newId(projection)] = {
+            path: '',
+            full_path: '_id',
+            technical_name: '_id',
+            type: 'number',
+            name: {
+                en: 'Object Id',
+                fr: 'Id de l\'objet'
+            }
+        }
+    }
     if (!addedCreated) {
         projection[newId(projection)] = {
             path: '',
