@@ -269,7 +269,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         }, function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
-            location('/login');
+            location('/login', false);
         });
     }
     var openApp = function (appId) {
@@ -296,7 +296,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             initSessionData(userResult, true);
         }, function (error) {
             sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
-            location('/');
+            location('/', false);
         });
     }
     var logout = function () {
@@ -312,10 +312,16 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }
         sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
-        window.location = '/';
+        location('/', false);
     }
     var location = function (url, noScroll) {
         $location.url(url);
+        if (noScroll) {} else {
+            $window.scrollTo(0, 0);
+        }
+    }
+    var locationBack = function (noScroll) {
+        $location.back();
         if (noScroll) {} else {
             $window.scrollTo(0, 0);
         }
@@ -329,6 +335,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         login: login,
         logout: logout,
         location: location,
+        locationBack: locationBack,
         computeLanguage: computeLanguage
     }
 }]).factory('MapService', function MapService() {
