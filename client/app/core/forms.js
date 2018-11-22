@@ -599,7 +599,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 SessionService.location('/workflows/' + $scope.sessionData.application_id);
             }
         } else if (nextFormId == 'back') {
-            SessionService.location(false);
+            SessionService.locationBack(false);
         } else {
             var formUrl = '/form/' + nextFormId + '/';
             if (data && data._id) {
