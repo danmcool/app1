@@ -174,7 +174,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     for (var i = 0; i < datas.length; i++) {
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
                     }
-                    itemValues.id_list = $scope.resolvePath($scope.data, $scope.form.datamodel.projection[$scope.form_field_list.title].full_path);
                     $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                 }
                 if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
