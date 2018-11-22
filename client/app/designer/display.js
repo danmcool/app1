@@ -303,6 +303,15 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         };
         form_home.translated_name = SessionService.translate(form_home.name);
         $scope.forms.push(form_home);
+        var form_back = {
+            _id: 'back',
+            name: {
+                en: 'Back',
+                fr: 'Retour'
+            }
+        }
+        form_back.translated_name = SessionService.translate(form_back.name);
+        $scope.forms.push(form_back);
     });
 
     $scope.changeFieldDisplay = function (field) {

@@ -153,11 +153,20 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
             _id: 'home',
             name: {
                 en: 'Application Home',
-                fr: 'Accueil de l`application'
+                fr: 'Accueil de l\'application'
             }
-        };
+        }
         form_home.translated_name = SessionService.translate(form_home.name);
         $scope.forms.push(form_home);
+        var form_back = {
+            _id: 'back',
+            name: {
+                en: 'Back',
+                fr: 'Retour'
+            }
+        }
+        form_back.translated_name = SessionService.translate(form_back.name);
+        $scope.forms.push(form_back);
     });
 
     DesignApplication.get({
