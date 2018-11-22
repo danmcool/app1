@@ -321,7 +321,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         }
     }
     var locationBack = function (noScroll) {
-        $location.back();
+        $window.history.back();
         if (noScroll) {} else {
             $window.scrollTo(0, 0);
         }
