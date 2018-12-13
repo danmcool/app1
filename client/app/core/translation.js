@@ -534,6 +534,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Interval selection',
             fr: 'Sélection de la période '
         },
+        field_show_icon: {
+            en: 'Show icon',
+            fr: 'Afficher icône'
+        },
         field_destination_datafield: {
             en: 'Destination Data field',
             fr: 'Champ de données de destination'

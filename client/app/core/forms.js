@@ -166,27 +166,27 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }, function (datas) {
             if (datas.length < $scope.limit) $scope.stopScroll = true;
             var formValues = $scope.form.values;
+            var i;
             for (var j = 0; j < formValues.length; j++) {
+                var itemValues = {};
                 if ($scope.form_field_list.title_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
-                    var itemValues = {};
                     itemValues.relation = formValues[j].values.relation;
                     itemValues.id_list = [];
-                    for (var i = 0; i < datas.length; i++) {
+                    for (i = 0; i < datas.length; i++) {
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
                     }
                     $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                 }
                 if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
-                    var itemValues = {};
                     itemValues.relation = formValues[j].values.relation;
                     itemValues.id_list = [];
-                    for (var i = 0; i < datas.length; i++) {
+                    for (i = 0; i < datas.length; i++) {
                         itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
                     }
                     $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
                 }
             }
-            for (var i = 0; i < datas.length; i++) {
+            for (i = 0; i < datas.length; i++) {
                 $scope.datas.push(datas[i]);
             }
             $scope.tempStopScroll = false;
@@ -194,21 +194,22 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.initText = function () {
-        for (var i = 0; i < $scope.days.length; i++) {
+        var i, j;
+        for (i = 0; i < $scope.days.length; i++) {
             $scope.days[i].translated_name = SessionService.translate($scope.days[i].name);
         }
         $scope.form.title = SessionService.translate($scope.form.name);
         if ($scope.form.actions) {
-            for (var i = 0; i < $scope.form.actions.length; i++) {
+            for (i = 0; i < $scope.form.actions.length; i++) {
                 $scope.form.actions[i].translated_name = SessionService.translate($scope.form.actions[i].name);
             }
         }
         if ($scope.form.fields) {
             var fields = $scope.form.fields;
-            for (var i = 0; i < fields.length; i++) {
+            for (i = 0; i < fields.length; i++) {
                 if (fields[i].display == 'address') {
                     var projectionKeys = Object.keys($scope.form.datamodel.projection);
-                    for (var j = 0; j < projectionKeys.length; j++) {
+                    for (j = 0; j < projectionKeys.length; j++) {
                         var childField = $scope.form.datamodel.projection[projectionKeys[j]];
                         if (childField.path == fields[i].full_path) {
                             if (childField.technical_name == 'address_line1') {
@@ -228,7 +229,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 } else if (fields[i].display == 'list' || fields[i].display == 'item') {
                     if (fields[i].item_actions) {
-                        for (var j = 0; j < fields[i].item_actions.length; j++) {
+                        for (j = 0; j < fields[i].item_actions.length; j++) {
                             fields[i].item_actions[j].translated_name = SessionService.translate(fields[i].item_actions[j].name);
                         }
                     }
@@ -241,6 +242,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     fields[i].translated_name = SessionService.translate($scope.form.datamodel.projection[fields[i].projectionid].name);
                 }
             }
+        }
+    }
+
+    $scope.getIcon = function (data, iconFieldId) {
+        if (!iconFieldId) {
+            return "/images/noimage.jpg";
+        }
+        var images = $scope.resolvePath(data, $scope.form.datamodel.projection[iconFieldId].full_path);
+        if (images && images.length > 0) {
+            return "/client/file/" + images[0]._id;
+        } else {
+            return "/images/noimage.jpg";
         }
     }
 
@@ -366,7 +379,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.initComponents = function () {
         var formFields = $scope.form.fields;
         var formValues = $scope.form.values;
-        for (var i = 0; i < formFields.length; i++) {
+        var i, j;
+        for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'address') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 if (formFields[i].disabled && formFields[i].show_map) {
@@ -376,7 +390,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             } else if (formFields[i].display == 'currency') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
-                for (var j = 0; j < formValues.length; j++) {
+                for (j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             $scope.updateValuesForm(formFields[i], formValues[j].values);
@@ -388,7 +402,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             } else if (formFields[i].display == 'selection') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
-                for (var j = 0; j < formValues.length; j++) {
+                for (j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             $scope.updateValuesForm(formFields[i], formValues[j].values);
@@ -422,7 +436,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.form_field_list = formFields[i];
                 $scope.form_field_list_title_user_fields = '';
                 $scope.form_field_list_subtitle_user_fields = '';
-                for (var j = 0; j < formValues.length; j++) {
+                for (j = 0; j < formValues.length; j++) {
                     if (formFields[i].title_listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             $scope.updateValuesTitle(formFields[i], formValues[j].values);
@@ -440,7 +454,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.formLoaded = true;
                 $scope.getNextData();
             } else if (formFields[i].display == 'item') {
-                for (var j = 0; j < formValues.length; j++) {
+                for (j = 0; j < formValues.length; j++) {
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             $scope.updateValuesItems(i, formValues[j].values);
