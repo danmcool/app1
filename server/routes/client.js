@@ -517,7 +517,7 @@ router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
                 _id: Tools.resolvePath(objectRes, req.query.object_id_path)
             }
             if (!datamodel_id || !datamodel_id.ref) {
-                res.status(400).json({
+                return res.status(400).json({
                     msg: 'Incompatible reservation model!'
                 });
             }
