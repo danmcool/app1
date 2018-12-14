@@ -251,7 +251,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         var images = $scope.resolvePath(data, $scope.form.datamodel.projection[iconFieldId].full_path);
         if (images && images.length > 0) {
-            return "/client/file/" + images[0]._id;
+            return "/client/file/" + images[0];
         } else {
             return "/images/noimage.jpg";
         }
@@ -407,14 +407,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         if (formValues[j].type == 'list') {
                             $scope.updateValuesForm(formFields[i], formValues[j].values);
                         } else {
-                            var itemValues = {};
-                            itemValues.relation = formValues[j].values.relation;
-                            itemValues.user_fields = $scope.computeFields(formFields[i].selection_full_path, formFields[i].selection_calculation);
-                            itemValues.id_list = [];
+                            var selectionValues = {};
+                            selectionValues.relation = formValues[j].values.relation;
+                            selectionValues.user_fields = $scope.computeFields(formFields[i].selection_full_path, formFields[i].selection_calculation);
+                            selectionValues.id_list = [];
                             if (formFields[i].disabled) {
-                                itemValues.id_list.push($scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path));
+                                selectionValues.id_list.push($scope.resolvePath($scope.data, $scope.form.datamodel.projection[formFields[i].projectionid].full_path));
                             }
-                            $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, formFields[i], 'form', formFields[i]);
+                            $scope.queryValues(formValues[j]._id, formValues[j].type, selectionValues, formFields[i], 'form', formFields[i]);
                         }
                         break;
                     }
