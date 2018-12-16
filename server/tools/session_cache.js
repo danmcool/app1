@@ -48,6 +48,7 @@ SessionCache.prepareUser = function (userObject) {
         }
     }
     var strUser = JSON.stringify(userObject);
+    console.log(strUser);
     if (userObject.user) strUser = strUser.replace(/@@user/g, userObject._id);
     if (userObject.manager) strUser = strUser.replace(/@@manager/g, userObject.manager);
     strUser = strUser.replace(/@@public/g, Constants.PublicUser + '@' + userObject._company_code);
