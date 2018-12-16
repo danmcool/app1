@@ -504,6 +504,7 @@ router.delete('/reservation/:datamodel_id/:id', function (req, res, next) {
     }
     var reservation_datamodel_id = req.params.datamodel_id;
     if (SessionCache.createSecurityFiltersDelete(token, null, reservation_datamodel_id, req.params.id, reservation_search_criteria)) {
+        console.log(reservation_search_criteria);
         Metadata.Objects[reservation_datamodel_id].findOneAndRemove(reservation_search_criteria, function (errRes, objectRes) {
             if (errRes) return next(errRes);
             if (!objectRes) {
