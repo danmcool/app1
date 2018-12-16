@@ -333,6 +333,10 @@ router.post('/invite', function (req, res, next) {
                             invitedUser._company_code = existingSession.user._company_code;
                             invitedUser.profile = userprofile._id;
                             invitedUser.validated = false;
+                            invitedUser.properties = {
+                                theme: 'default',
+                                uiLanguage: 'auto'
+                            }
                             User.create(invitedUser, function (errNewUser, newUser) {
                                 if (errNewUser) return next(errNewUser);
                                 Email.sendValidation(newUser.email, newUser.user, newUser._company_code, newPassword);
