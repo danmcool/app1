@@ -66,7 +66,7 @@ const Constants = {
         },
         delete: {
             _company_code: '@@company_code',
-            _user: ['@@user', '@@reports', '@@public']
+            _user: ['@@reports', '@@user']
         }
     },
     UserProfilePublicDefault: {
