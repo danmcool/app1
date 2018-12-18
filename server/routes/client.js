@@ -123,7 +123,7 @@ router.get('/application/', function (req, res, next) {
                 if (userData.company.applications[c] != apps[i]._id) {
                     continue;
                 }
-                var profileFound;
+                var profileFound = null;
                 if (SessionCache.userData[userToken].profile.type == Constants.UserProfilePublic && (!apps[i].profiles || apps[i].profiles.length == 0)) {
                     continue;
                 } else {
