@@ -139,13 +139,11 @@ router.get('/application/', function (req, res, next) {
                             if (remoteProfiles[j].profile.applications[apps[i]._id]) {
                                 if (remoteProfiles[j].type == Constants.UserProfileApplication) {
                                     profileFound = remoteProfiles[j];
-                                    console.log('bbbb       ' + profileFound);
                                 }
                             }
                         }
                         if (!profileFound) {
                             profileFound = apps[i].default_profile;
-                            console.log('aaaa       ' + profileFound);
                         }
                     }
                 }
