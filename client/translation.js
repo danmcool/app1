@@ -109,8 +109,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Laissez nous faire une preuve de concept live pour vous'
         },
         homepage_buildpoc: {
-            en: 'Our consulting team can help you define your digital requirements; then rapidly create a App1 application and help you with the deployment of the solution in your enterprise',
-            fr: 'Notre équipe de conseil peut vous aider à concrétiser vos besoins dans le numérique; ensuite créer très rapidement une application App1 et vous accompagner dans le déploiement de la solution dans votre entreprise'
+            en: 'Our consulting team can help you define your digital requirements; then rapidly create a App1 application and help you with the deployment of the paper-free solution in your enterprise',
+            fr: 'Notre équipe de conseil peut vous aider à concrétiser vos besoins dans le numérique; ensuite créer très rapidement une application App1 et vous accompagner dans le déploiement de la solution de dématérialisation dans votre entreprise'
         },
         homepage_appcreation_title: {
             en: 'Training for partners and power users',
