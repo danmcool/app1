@@ -37,8 +37,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Faites votre transformation digitale avec nous!\nEnregistrement gratuit!'
         },
         homepage_ent_platform: {
-            en: 'Run your digital business process on App1 platform',
-            fr: 'Démarrez vos processus numériques sur la plateforme App1'
+            en: 'Create your paper-free workflows on App1 platform',
+            fr: 'Dématérialisez vos processus sur la plateforme App1'
         },
         homepage_power: {
             en: 'Applications',
