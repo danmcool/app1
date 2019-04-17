@@ -42,6 +42,8 @@ CalendarTools.computeQuery = function (startTime, endTime) {
     var query = {};
     if (startTime.getDay() == endTime.getDay() && (endTime.getTime() - startTime.getTime() < Constants.OneDay)) {
         query = JSON.parse('{"$or":[{"_appointments.' + startTimeKey + '":null},{"_appointments.' + startTimeKey + '.free":{"$elemMatch":{"start":{"$lte":' + computeTimeDate(startTime) + '},"end":{"$gte":' + computeTimeDate(endTime) + '}}}}]}');
+        // tbd -> check if timeslot is usable!
+        //query = JSON.parse('{"$and": ["$or": ["_appointment_properties.non_stop.enabled":true, "_appointment_properties.days[' + startTime.getDay() + '].enabled":true], "$or":[{"_appointments.' + startTimeKey + '":null},{"_appointments.' + startTimeKey + '.free": {"$elemMatch":{"start": {"$lte":' + computeTimeDate(startTime) + '}, "end":{"$gte":' + computeTimeDate(endTime) + '}}}}]]}');
     } else {
         var queryString = '{"$and":[{"$or":[{"_appointments.' + startTimeKey + '":null},{"_appointments.' + startTimeKey + '.free":{"$elemMatch":{"start":{"$lte":' + computeTimeDate(startTime) + '},"end":{"$gte":' + Constants.EndOfDay + '}}}}]},{"$or":[{"_appointments.' + endTimeKey + '":null},{"_appointments.' + endTimeKey + '.free":{"$elemMatch":{"start":{"$lte":' + Constants.StartOfDay + '},"end":{"$gte":' + computeTimeDate(endTime) + '}}}}]}';
         for (var i = 1; i < (endDay - startDay); i++) {

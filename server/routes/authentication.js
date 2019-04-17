@@ -559,9 +559,9 @@ router.get('/open', function (req, res, next) {
             } else if (objectProfile.properties.object) {
                 SessionCache.isActive(req, function (active) {
                     if (active) {
-                        var userWithRemoteProfile = SessionCache.userData[req.cookies[Constants.SessionCookie]];
-                        userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
-                        SessionCache.update(req.cookies[Constants.SessionCookie], userWithRemoteProfile);
+                        var userRemoteProfile = SessionCache.userData[req.cookies[Constants.SessionCookie]];
+                        userRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
+                        SessionCache.update(req.cookies[Constants.SessionCookie], userRemoteProfile);
                         var app_id = Object.keys(objectProfile.profile.applications)[0];
                         Workflow.findOne({
                             _id: Object.keys(objectProfile.profile.applications[app_id].workflows)[0]
@@ -580,10 +580,10 @@ router.get('/open', function (req, res, next) {
                 SessionCache.isActive(req, function (active) {
                     if (active) {
                         var token = req.cookies[Constants.SessionCookie];
-                        var userWithRemoteProfile = SessionCache.userData[token];
+                        var userRemoteProfile = SessionCache.userData[token];
                         var profileFound = false;
-                        for (var i = 0; i < userWithRemoteProfile.remote_profiles.length; i++) {
-                            if (userWithRemoteProfile.remote_profiles[i]._id == objectProfile._id) {
+                        for (var i = 0; i < userRemoteProfile.remote_profiles.length; i++) {
+                            if (userRemoteProfile.remote_profiles[i]._id == objectProfile._id) {
                                 profileFound = true;
                                 break;
                             }
@@ -593,8 +593,14 @@ router.get('/open', function (req, res, next) {
                             res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
                         } else {
                             User.findOneAndUpdate({
-                                user: userWithRemoteProfile.user,
-                                validated: true
+                                user: userRemoteProfile.user,
+                                validated: true,
+                                remote_profiles: {
+                                    $nin: [objectProfile.id]
+                                },
+                                remote_applications: {
+                                    $nin: [app_id]
+                                }
                             }, {
                                 $push: {
                                     remote_profiles: objectProfile.id,
@@ -604,13 +610,33 @@ router.get('/open', function (req, res, next) {
                                 if (errUser) return res.status(401).json({
                                     err: errUser
                                 });
-                                if (!userObject) return res.status(401).json({
-                                    err: 'Invalid user name or password!'
-                                });
-                                userWithRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
-                                userWithRemoteProfile.remote_applications.push(app_id);
-                                SessionCache.update(token, userWithRemoteProfile);
-                                res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
+                                if (!userObject) {
+                                    User.findOneAndUpdate({
+                                        user: userRemoteProfile.user,
+                                        validated: true,
+                                        remote_profiles: {
+                                            $nin: [objectProfile.id]
+                                        },
+                                        remote_applications: {
+                                            $in: [app_id]
+                                        }
+                                    }, {
+                                        $push: {
+                                            remote_profiles: objectProfile.id
+                                        }
+                                    }).exec(function (errUser2, userObject2) {
+                                        if (errUser2) return res.status(401).json({
+                                            err: errUser
+                                        });
+                                        if (!userObject2) return res.status(401).json({
+                                            err: 'Invalid user name or password!'
+                                        });
+                                        userRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
+                                        userRemoteProfile.remote_applications.push(app_id);
+                                        SessionCache.update(token, userRemoteProfile);
+                                        res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
+                                    });
+                                }
                             });
                         }
                     } else {
