@@ -9,6 +9,8 @@ var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');;
 
+var SecretKey = process.argv[Constants.CommandLineParameterSecretKey];
+
 router.get('/url/:id', function (req, res, next) {
     Metadata.File.findOne({
         _id: req.params.id
@@ -76,7 +78,7 @@ router.post('/', function (req, res, next) {
     });
 });
 router.put('/upload/:company_code/:fileid', function (req, res, next) {
-    var encrypt = crypto.createCipher(Constants.FilesCryptingAlgorithm, Constants.SecretKey);
+    var encrypt = crypto.createCipher(Constants.FilesCryptingAlgorithm, SecretKey);
     var file = fs.createWriteStream('./files/' + req.params.company_code + '-' + req.params.fileid);
     req.pipe(encrypt).pipe(file);
     res.status(200).json({

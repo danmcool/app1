@@ -6,10 +6,12 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var path = require('path');
 
+var Constants = require('./tools/constants.js');
+
 mongoose.Promise = global.Promise;
 
 // connect to mongo db -> apps is the name of app1 data
-mongoose.connect('mongodb://app1:123Apps@127.0.0.1:55055/apps', {
+mongoose.connect('mongodb://app1:' + process.argv[Constants.CommandLineParameterDatabasePassword] + '@' + process.argv[Constants.CommandLineParameterDatabaseIp] + ':' + process.argv[Constants.CommandLineParameterDatabasePort] + '/apps', {
     useMongoClient: true
 });
 

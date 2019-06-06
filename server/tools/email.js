@@ -8,8 +8,8 @@ var Email = {};
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: Constants.EmailUserName,
-        pass: Constants.EmailPassword
+        user: process.argv[Constants.CommandLineParameterEmailUsername],
+        pass: process.argv[Constants.CommandLineParameterEmailPassword]
     },
     //debug: true, // include SMTP traffic in the logs
     logger: false // log to console

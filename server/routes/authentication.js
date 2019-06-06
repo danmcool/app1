@@ -17,6 +17,8 @@ var Application = Metadata.Application;
 var Workflow = Metadata.Workflow;
 var Session = Metadata.Session;
 
+var SecretKey = process.argv[Constants.CommandLineParameterSecretKey];
+
 var randomString = function () {
     return Math.random().toString(36).substr(2, 8);
 }
@@ -30,10 +32,10 @@ router.put('/password', function (req, res) {
     SessionCache.isActive(req.cookies[Constants.SessionCookie], function (active) {
         if (active) {
             var user = SessionCache.userData[req.cookies[Constants.SessionCookie]].user;
-            crypto.pbkdf2(req.body.old, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCryptoOld, keyOld) {
+            crypto.pbkdf2(req.body.old, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCryptoOld, keyOld) {
                 if (errCryptoOld) return next(errCryptoOld);
                 var hashPassword = keyOld.toString('hex');
-                crypto.pbkdf2(req.body.new, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCryptoNew, keyNew) {
+                crypto.pbkdf2(req.body.new, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCryptoNew, keyNew) {
                     if (errCryptoNew) return next(errCryptoNew);
                     var newHashPassword = keyNew.toString('hex');
                     User.findOneAndUpdate({
@@ -98,7 +100,7 @@ router.post('/register_company', function (req, res) {
                         err: 'Not found user profile!'
                     });
                     var newPassword = randomString();
-                    crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+                    crypto.pbkdf2(newPassword, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
                         if (errCrypto) return next(errCrypto);
                         var hashPassword = key.toString('hex');
                         var user = {
@@ -193,7 +195,7 @@ router.post('/register', function (req, res) {
                         UserProfile.create(userprofilePublic, function (errUserProfilePublic, newUserprofilePublic) {
                             if (errUserProfilePublic) return next(errUserProfilePublic);
                             var newPassword = randomString();
-                            crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+                            crypto.pbkdf2(newPassword, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
                                 if (errCrypto) return next(errCrypto);
                                 var hashPassword = key.toString('hex');
                                 var user = {
@@ -326,7 +328,7 @@ router.post('/invite', function (req, res, next) {
                     if (errUserFind) return next(errUserFind);
                     if (!objectUserFind) {
                         var newPassword = randomString();
-                        crypto.pbkdf2(newPassword, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+                        crypto.pbkdf2(newPassword, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
                             if (errCrypto) return next(errCrypto);
                             invitedUser.password = key.toString('hex');
                             invitedUser.company = existingSession.user.company;
@@ -422,7 +424,7 @@ router.post('/login', function (req, res, next) {
         err: 'Invalid user name or password!'
     });
     //console.log(Date.now());
-    crypto.pbkdf2(req.body.password, Constants.SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
+    crypto.pbkdf2(req.body.password, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
         if (errCrypto) return next(errCrypto);
         var hashPassword = key.toString('hex');
         //console.log(Date.now());

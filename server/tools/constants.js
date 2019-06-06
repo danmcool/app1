@@ -1,4 +1,12 @@
 const Constants = {
+    CommandLineParameterCount: 8,
+    CommandLineParameterDatabaseIp: 2,
+    CommandLineParameterDatabasePort: 3,
+    CommandLineParameterDatabasePassword: 4,
+    CommandLineParameterEmailUsername: 5,
+    CommandLineParameterEmailPassword: 6,
+    CommandLineParameterSecretKey: 7,
+
     WebAddress: 'app1.digital',
     MaxSessionTimeout: 14 * 24 * 60 * 60 * 1000, // 2 weeks cookie validity
     MaxSessionPublicTimeout: 15 * 60 * 1000, // 15 minutes cookie validity
@@ -18,7 +26,6 @@ const Constants = {
     ProductionCompany: '00000',
     ApplicationHome: 'home',
 
-    SecretKey: 'App1!;ZXC',
     SecretIterations: 8924,
     SecretByteSize: 256,
     SecretAlgorithm: 'sha512',
@@ -90,13 +97,11 @@ const Constants = {
     UserProfileApplicationTypeDefault: 'default',
     UserProfileApplicationTypePublic: 'public',
 
-    S3_BUCKET: 'app1data',
-    REGION: 'eu-central-1',
-    ACCESS_KEY_ID: 'AKIAIYXUGMUVMMXJXR3A',
-    SECRET_ACCESS_KEY: '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',
+    S3_BUCKET: '',
+    REGION: '',
+    ACCESS_KEY_ID: '',
+    SECRET_ACCESS_KEY: '',
 
-    EmailUserName: 'app1.noreply@gmail.com',
-    EmailPassword: 'Admin;App1New',
     EmailHost: 'smtp.gmail.com',
     EmailPort: '465',
     EmailSSL: true,
