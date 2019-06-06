@@ -1,7 +1,15 @@
-var Constants = require('./tools/constants.js');
+if (!process.env.APP1_DB_PASSWORD || !process.env.APP1_DB_ADDRESS || !process.env.APP1_DB_PORT) {
+    console.log('Invalid database configuration');
+    process.exit(1);
+}
 
-if (process.argv.length != Constants.CommandLineParameterCount) {
-    console.log('Invalid parameter count:' + process.argv.length);
+if (!process.env.APP1_EMAIL_USERNAME || !process.env.APP1_EMAIL_PASSWORD) {
+    console.log('Invalid email configuration');
+    process.exit(1);
+}
+
+if (!process.env.APP1_SECRET_KEY) {
+    console.log('Invalid secret key configuration');
     process.exit(1);
 }
 

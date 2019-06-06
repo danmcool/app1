@@ -17,7 +17,7 @@ var Application = Metadata.Application;
 var Workflow = Metadata.Workflow;
 var Session = Metadata.Session;
 
-var SecretKey = process.argv[Constants.CommandLineParameterSecretKey];
+var SecretKey = process.env.APP1_SECRET_KEY;
 
 var randomString = function () {
     return Math.random().toString(36).substr(2, 8);

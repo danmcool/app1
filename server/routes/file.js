@@ -9,7 +9,7 @@ var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');;
 
-var SecretKey = process.argv[Constants.CommandLineParameterSecretKey];
+var SecretKey = process.env.APP1_SECRET_KEY;
 
 router.get('/url/:id', function (req, res, next) {
     Metadata.File.findOne({
