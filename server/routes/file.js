@@ -109,7 +109,7 @@ router.get('/:id', function (req, res, next) {
         readStream.on('open', function () {
             res.setHeader("Content-Type", file.type);
             res.writeHead(200);
-            var decrypt = crypto.createDecipher(Constants.FilesCryptingAlgorithm, Constants.SecretKey);
+            var decrypt = crypto.createDecipher(Constants.FilesCryptingAlgorithm, SecretKey);
             readStream.pipe(decrypt).pipe(res);
         });
     });
