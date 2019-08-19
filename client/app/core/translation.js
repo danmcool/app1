@@ -773,6 +773,34 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         previous_messages: {
             en: 'Previous Messages',
             fr: 'Messages precedents'
+        },
+        stripe_key: {
+            en: 'Stripe Key',
+            fr: 'Clé Stripe'
+        },
+        stripe_secret: {
+            en: 'Stripe Secret',
+            fr: 'Secret Stripe'
+        },
+        payment_country: {
+            en: 'Payment country',
+            fr: 'Pays pour paiement'
+        },
+        payment_currency: {
+            en: 'Payment currency',
+            fr: 'Monnaie pour paiement'
+        },
+        payment_value: {
+            en: 'Payement value',
+            fr: 'Montant pour paiement'
+        },
+        payment_label: {
+            en: 'Payment label',
+            fr: 'Etiquette pour paiement'
+        },
+        payment_using_stripe: {
+            en: 'Payment using Stripe (http://stripe.com)',
+            fr: 'Payment avec Stripe (http://stripe.com)'
         }
     }
     var translate = function translate(language) {

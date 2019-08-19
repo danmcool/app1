@@ -1277,6 +1277,55 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             });
     }
 
+    $scope.pay = function (formula, nextFormId, setValue, paymentCountry, paymentCurrency, paymentValuePath, paymentLabelPath) {
+        $scope.updateComponents($scope.form, setValue, $scope.data);
+        var stripe = Stripe($scope.sessionData.userData.company.properties.payment.stripe_key);
+        var paymentRequest = stripe.paymentRequest({
+            country: paymentCountry,
+            currency: paymentCurrency,
+            total: {
+                label: $scope.resolvePath($scope.data, paymentLabelPath),
+                amount: parseFloat($scope.resolvePath($scope.data, paymentValuePath)),
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+        });
+        var clientSecret = $scope.sessionData.userData.company.properties.payment.stripe_secret;
+        paymentRequest.on('paymentmethod', function (ev) {
+            stripe.confirmPaymentIntent(clientSecret, {
+                payment_method: ev.paymentMethod.id,
+            }).then(function (confirmResult) {
+                if (confirmResult.error) {
+                    // Report to the browser that the payment failed, prompting it to
+                    // re-show the payment interface, or show an error message and close
+                    // the payment interface.
+                    ev.complete('fail');
+                } else {
+                    // Report to the browser that the confirmation was successful, prompting
+                    // it to close the browser payment method collection interface.
+                    ev.complete('success');
+                    // Let Stripe.js handle the rest of the payment flow.
+                    stripe.handleCardPayment(clientSecret).then(function (result) {
+                        if (result.error) {
+                            // The payment failed -- ask your customer for a new payment method.
+                        } else {
+                            // The payment has succeeded.
+                        }
+                    });
+                }
+            });
+        });
+        var elements = stripe.elements();
+        var prButton = elements.create('paymentRequestButton', {
+            paymentRequest: paymentRequest,
+        });
+        paymentRequest.canMakePayment().then(function (result) {
+            if (result) {
+                paymentRequest.show();
+            } else {}
+        });
+    }
+
     $scope.search = function (search_text) {
         if (!search_text) {
             search_text = ''

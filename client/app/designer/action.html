@@ -145,6 +145,26 @@
                     <label>{{sessionData.appData.html_message}}</label>
                     <textarea type="text" ng-disabled="false" ng-required="true" name="action_message" ng-model="action.message" md-minlength="0" ng-minlength="0" md-maxlength="1000" ng-maxlength="1000" rows="4"></textarea>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='pay'">
+                    <label>{{sessionData.appData.payment_country}}</label>
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.payment_country" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='pay'">
+                    <label>{{sessionData.appData.payment_currency}}</label>
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.payment_currency" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='pay'">
+                    <label>{{sessionData.appData.payment_value}}</label>
+                    <md-select ng-model="action.payment_value_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='pay'">
+                    <label>{{sessionData.appData.payment_label}}</label>
+                    <md-select ng-model="action.payment_label_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">

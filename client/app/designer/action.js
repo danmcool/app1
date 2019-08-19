@@ -56,6 +56,10 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
         remove_event: {
             en: 'Remove Event',
             fr: 'Supprimer événement'
+        },
+        pay: {
+            en: 'Pay',
+            fr: 'Payer'
         }
     }
 

@@ -687,6 +687,9 @@
                             <div ng-switch-when="remove_event">
                                 <md-button ng-disabled="dynamicForm.$invalid" ng-click="removeEvent(action.formula, action.next_form_id, action.set_value, action.object_id_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
+                            <div ng-switch-when="pay">
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="pay(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path)" class="md-primary">{{action.translated_name}}</md-button>
+                            </div>
                         </div>
                     </div>
                 </div>
