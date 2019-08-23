@@ -526,6 +526,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Mandatory',
             fr: 'Obligatoire'
         },
+        field_show_name: {
+            en: 'Display name',
+            fr: 'Afficher le nom'
+        },
         field_show_search: {
             en: 'Display search field',
             fr: 'Afficher le champs de recherche'
