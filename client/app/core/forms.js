@@ -472,7 +472,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else if (formFields[i].display == 'file' || formFields[i].display == 'image') {
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                if (formFields[i].display == 'image' && formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
+                    $scope.localdata[formFields[i].id] = $routeParams[formFields[i].init_value];
+                } else {
+                    $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                }
                 if (!$scope.localdata[formFields[i].id]) {
                     $scope.localdata[formFields[i].id] = [];
                 }
@@ -533,6 +537,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else {
                 if (formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
                     $scope.localdata[formFields[i].id] = $routeParams[formFields[i].init_value];
+                } else if (formFields[i].default_value && formFields[i].default_value != '') {
+                    $scope.localdata[formFields[i].id] = formFields[i].default_value;
                 } else {
                     $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 }
@@ -1279,51 +1285,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     $scope.pay = function (formula, nextFormId, setValue, paymentCountry, paymentCurrency, paymentValuePath, paymentLabelPath) {
         $scope.updateComponents($scope.form, setValue, $scope.data);
-        var stripe = Stripe($scope.sessionData.userData.company.properties.payment.stripe_key);
-        var paymentRequest = stripe.paymentRequest({
-            country: paymentCountry,
-            currency: paymentCurrency,
-            total: {
-                label: $scope.resolvePath($scope.data, paymentLabelPath),
-                amount: parseFloat($scope.resolvePath($scope.data, paymentValuePath)),
-            },
-            requestPayerName: true,
-            requestPayerEmail: true,
-        });
-        var clientSecret = $scope.sessionData.userData.company.properties.payment.stripe_secret;
-        paymentRequest.on('paymentmethod', function (ev) {
-            stripe.confirmPaymentIntent(clientSecret, {
-                payment_method: ev.paymentMethod.id,
-            }).then(function (confirmResult) {
-                if (confirmResult.error) {
-                    // Report to the browser that the payment failed, prompting it to
-                    // re-show the payment interface, or show an error message and close
-                    // the payment interface.
-                    ev.complete('fail');
-                } else {
-                    // Report to the browser that the confirmation was successful, prompting
-                    // it to close the browser payment method collection interface.
-                    ev.complete('success');
-                    // Let Stripe.js handle the rest of the payment flow.
-                    stripe.handleCardPayment(clientSecret).then(function (result) {
-                        if (result.error) {
-                            // The payment failed -- ask your customer for a new payment method.
-                        } else {
-                            // The payment has succeeded.
-                        }
-                    });
-                }
-            });
-        });
-        var elements = stripe.elements();
-        var prButton = elements.create('paymentRequestButton', {
-            paymentRequest: paymentRequest,
-        });
-        paymentRequest.canMakePayment().then(function (result) {
-            if (result) {
-                paymentRequest.show();
-            } else {}
-        });
+        document.getElementById('paypal_country').value = paymentCountry;
+        document.getElementById('paypal_currency').value = paymentCurrency;
+        document.getElementById('paypal_merchant_id').value = $scope.sessionData.userData.company.properties.payment.paypal_merchant_id;
+        document.getElementById('paypal_label').value = $scope.resolvePath($scope.data, paymentLabelPath);
+        document.getElementById('paypal_amount').value = $scope.resolvePath($scope.data, paymentValuePath);
+        document.getElementById('paypal_return').value = "https://app1.digital/app/#!/form/5d5b1428258b030998ff4180/0?application_id=5d5b13f6258b030998ff417e&workflow_id=5d5b1411258b030998ff417f";
+        document.getElementById('paypal_cancel_return').value = "https://app1.digital/app/#!/form/5d5b1428258b030998ff4180/0?application_id=5d5b13f6258b030998ff417e&workflow_id=5d5b1411258b030998ff417f";
+        document.getElementById('paypal').submit();
     }
 
     $scope.search = function (search_text) {

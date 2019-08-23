@@ -582,6 +582,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Initial value parameter',
             fr: 'Paramètre pour la valeur initiale'
         },
+        field_default_value: {
+            en: 'Default value',
+            fr: 'Valeur par defaut'
+        },
         field_init_value_start: {
             en: 'Initial value parameter for start',
             fr: 'Paramètre pour la valeur initiale pour debut'
@@ -774,13 +778,9 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Previous Messages',
             fr: 'Messages precedents'
         },
-        stripe_key: {
-            en: 'Stripe Key',
-            fr: 'Clé Stripe'
-        },
-        stripe_secret: {
-            en: 'Stripe Secret',
-            fr: 'Secret Stripe'
+        paypal_merchant_id: {
+            en: 'PayPal merchant ID (Account settings/Business Information)',
+            fr: 'ID vendeur PayPal (Configuration compte/Information vendeur)'
         },
         payment_country: {
             en: 'Payment country',
@@ -798,9 +798,9 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Payment label',
             fr: 'Etiquette pour paiement'
         },
-        payment_using_stripe: {
-            en: 'Payment using Stripe (http://stripe.com)',
-            fr: 'Payment avec Stripe (http://stripe.com)'
+        payment_using_paypal: {
+            en: 'Payment using PayPal (http://www.paypal.com)',
+            fr: 'Payment avec PayPal (http://www.paypal.com)'
         }
     }
     var translate = function translate(language) {

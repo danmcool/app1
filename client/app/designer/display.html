@@ -354,6 +354,10 @@
                             <label>{{sessionData.appData.field_init_value}}</label>
                             <textarea type="text" ng-disabled="false" ng-required="false" name="field_init_value" ng-model="field.init_value" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
                         </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_default_value}}</label>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="field_default_value" ng-model="field.default_value" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
+                        </md-input-container>
                         <md-input-container flex="auto" class="md-block" ng-if="field.display=='address'">
                             <md-checkbox ng-model="field.show_map">{{sessionData.appData.field_show_map}}</md-checkbox>
                         </md-input-container>
