@@ -191,12 +191,12 @@
                                 <div ng-switch-when="shorttext" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <p ng-if="field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id]}}</p>
                                         </div>
                                         <div ng-switch-when="false">
                                             <md-input-container flex="auto" class="md-block">
-                                                <label ng-if="field.hide_name">{{field.translated_name}}</label>
+                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
                                                 <input type="text" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
@@ -211,12 +211,12 @@
                                 <div ng-switch-when="number" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <p ng-if="field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id]}}</p>
                                         </div>
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
-                                                <label ng-if="field.hide_name">{{field.translated_name}}</label>
+                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
                                                 <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max">
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'pattern']">
@@ -258,12 +258,12 @@
                                 <div ng-switch-when="editor" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <p ng-if="field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle" style="white-space:pre-wrap">{{localdata[field.id]}}</p>
                                         </div>
                                         <div ng-switch-when="false">
                                             <md-input-container flex="auto" class="md-block">
-                                                <label ng-if="field.hide_name">{{field.translated_name}}</label>
+                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
                                                 <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="8"></textarea>
                                             </md-input-container>
                                         </div>
@@ -274,13 +274,13 @@
                                     <p class="md-body-1" style="margin-bottom: 14px">{{sessionData.appData.previous_messages}}</p>
                                     <div flex>
                                         <div ng-repeat="existing_feed in localdata[field.id]">
-                                            <p ng-if="field.hide_name" class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{existing_feed.from}} {{existing_feed.date|date:field.date_format}}</p>
                                             <p class="subtitle">{{existing_feed.text}}</p>
                                         </div>
                                     </div>
                                     <div ng-if="!field.disabled">
                                         <md-input-container flex="auto" class="md-block">
-                                            <label ng-if="field.hide_name">{{field.translated_name}}</label>
+                                            <label ng-if="!field.hide_name">{{field.translated_name}}</label>
                                             <textarea ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="form.newvalues[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" rows="4"></textarea>
                                         </md-input-container>
                                     </div>
@@ -289,7 +289,7 @@
                                 <div ng-switch-when="file">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true" layout-padding>
-                                            <p ng-if="field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
                                             <div ng-repeat="file in localdata[field.id]">
                                                 <a class="md-body-2" href="/client/file/{{file._id}}" target="_blank">
                                                     <p class="subtitle">{{file.name}}</p>
@@ -298,7 +298,7 @@
                                         </div>
                                         <div ng-switch-when="false">
                                             <div layout-padding>
-                                                <p ng-if="field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                <p ng-if="!field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                                 <div ng-repeat="file in files[field.id]">
                                                     <p class="subtitle">
                                                         <a class="md-body-2" href="/client/file/{{file._id}}" target="_blank">{{file.name}}</a>
@@ -319,12 +319,12 @@
                                 <div ng-switch-when="image">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true" layout-padding>
-                                            <p ng-if="field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                             <div class="material-carousel-container" material-carousel material-carousel-slides="slides"></div>
                                         </div>
                                         <div ng-switch-when="false">
                                             <div layout-padding>
-                                                <p ng-if="field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                <p ng-if="!field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                                 <div ng-repeat="image in files[field.id]">
                                                     <p class="subtitle">
                                                         <a class="md-body-2" href="/client/file/{{image._id}}" target="_blank">{{image.name}}</a>
@@ -368,12 +368,12 @@
                                 <div ng-switch-when="calendar" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <p ng-if="field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle">{{localdata[field.id]|date:"yyyy-MM-dd"}}</p>
                                         </div>
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
-                                                <label ng-if="field.hide_name">{{field.translated_name}}</label>
+                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
                                                 <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" md-open-on-focus ng-model="localdata[field.id]"></md-datepicker>
                                             </md-input-container>
                                         </div>
@@ -520,7 +520,7 @@
                                     <p class="subtitle">{{localdata[field.id]}}</p>
                                 </div>
 
-                                <div ng-if="field.hide_name" ng-switch-when="email" layout-padding>
+                                <div ng-if="!field.hide_name" ng-switch-when="email" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -540,7 +540,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="field.hide_name" ng-switch-when="address" layout-padding>
+                                <div ng-if="!field.hide_name" ng-switch-when="address" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <div layout="row" layout-xs="column" layout-sm="column">

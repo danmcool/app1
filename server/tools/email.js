@@ -1,4 +1,3 @@
-var email = require('mailer');
 var nodemailer = require('nodemailer');
 var ical = require('ical-generator');
 var Constants = require('../tools/constants.js');
