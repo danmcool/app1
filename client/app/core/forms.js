@@ -473,7 +473,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
                 if (formFields[i].display == 'image' && formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
-                    $scope.localdata[formFields[i].id] = $routeParams[formFields[i].init_value];
+                    $scope.localdata[formFields[i].id] = eval($routeParams[formFields[i].init_value]);
                 } else {
                     $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 }
