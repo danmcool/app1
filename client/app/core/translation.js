@@ -802,6 +802,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Payment label',
             fr: 'Etiquette pour paiement'
         },
+        payment_update_path: {
+            en: 'Field to be updated after payment',
+            fr: 'Champs à mettre à jour après paiement'
+        },
+        payment_update_value: {
+            en: 'Value to set after payment',
+            fr: 'Valeur à mettre après paiement'
+        },
         payment_using_paypal: {
             en: 'Payment using PayPal (http://www.paypal.com)',
             fr: 'Payment avec PayPal (http://www.paypal.com)'

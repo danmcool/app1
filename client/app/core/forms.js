@@ -1285,15 +1285,34 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             });
     }
 
-    $scope.pay = function (formula, nextFormId, setValue, paymentCountry, paymentCurrency, paymentValuePath, paymentLabelPath) {
+    $scope.pay = function (formula, nextFormId, setValue, paymentCountry, paymentCurrency, paymentValuePath, paymentLabelPath, updatePath, updateValue) {
         $scope.updateComponents($scope.form, setValue, $scope.data);
         document.getElementById('paypal_country').value = paymentCountry;
         document.getElementById('paypal_currency').value = paymentCurrency;
         document.getElementById('paypal_merchant_id').value = $scope.sessionData.userData.company.properties.payment.paypal_merchant_id;
         document.getElementById('paypal_label').value = $scope.resolvePath($scope.data, paymentLabelPath);
         document.getElementById('paypal_amount').value = $scope.resolvePath($scope.data, paymentValuePath);
-        document.getElementById('paypal_return').value = "https://app1.digital/app/#!/form/5d5b1428258b030998ff4180/0?application_id=5d5b13f6258b030998ff417e&workflow_id=5d5b1411258b030998ff417f";
-        document.getElementById('paypal_cancel_return').value = "https://app1.digital/app/#!/form/5d5b1428258b030998ff4180/0?application_id=5d5b13f6258b030998ff417e&workflow_id=5d5b1411258b030998ff417f";
+        document.getElementById('paypal_return').value = 'https://app1.digital/client/payment_callback/' + $scope.form.datamodel._id + '/' + $scope.data._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id + '&next_form_id=' + nextFormId + '&value_path=' + updatePath + '&value=' + updateValue + '&pid=' + $scope.sessionData.token;
+        var apps = $scope.sessionData.applications;
+        var next_cancel_form = null;
+        if (apps) {
+            for (var i = 0; i < apps.length; i++) {
+                if (apps[i]._id == $routeParams.application_id) {
+                    for (var j = 0; j < apps[i].workflows.length; j++) {
+                        if (apps[i].workflows[j]._id == $routeParams.workflow_id) {
+                            next_cancel_form = apps[i].workflows[j].startup_form;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        if (next_cancel_form) {
+            document.getElementById('paypal_cancel_return').value = 'https://app1.digital/app/#!/form/' + next_cancel_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
+        } else {
+            document.getElementById('paypal_cancel_return').value = 'https://app1.digital/';
+        }
         document.getElementById('paypal').submit();
     }
 

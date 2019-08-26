@@ -671,20 +671,40 @@ router.put('/notify/:user_id', function (req, res, next) {
     });
 });
 
-router.get('/payment_callback/:id', function (req, res, next) {
-    if (!req.params.id || !req.query.change_path || !req.query.change_value) return res.status(400).json({
-        msg: 'Form id is null!'
-    });
-    Metadata.Form.findOne({
-        _id: {
-            $eq: req.params.id
-        }
-    }).populate('datamodel values').exec(function (err, formObject) {
-        if (err) return next(err);
-        if (!formObject) return res.status(400).json({
-            msg: 'Url is null!'
+router.get('/payment_callback/:datamodel_id/:id', function (req, res, next) {
+    if (!req.query.pid || !req.query.value_path || !req.query.value || !req.query.next_form_id || !req.query.workflow_id || !req.query.application_id) {
+        return res.status(400).json({
+            err: 'Invalid parameters!'
         });
-        return res.status(200).json(formObject);
+    }
+    var token = req.query.pid;
+    SessionCache.isActiveToken(token, function (active) {
+        if (!active) {
+            return res.status(401).json({
+                err: 'Session no longer active!'
+            });
+        }
+        var datamodel_id = req.params.datamodel_id;
+        var search_criteria = {
+            _id: req.params.id
+        }
+        if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.id, search_criteria)) {
+            var object = {};
+            Tools.resolvePathUpdate(object, req.query.value_path, req.query.value);
+            Metadata.Objects[datamodel_id].findOneAndUpdate(search_criteria, object, function (errUpdated, objectUpdated) {
+                if (errUpdated) return next(errUpdated);
+                if (!objectUpdated) {
+                    return res.status(400).json({
+                        msg: 'No object found!'
+                    });
+                }
+                return res.redirect('/app/#!/form/' + req.query.next_form_id + '/' + req.params.id + '?application_id=' + req.query.application_id + '&workflow_id=' + req.query.workflow_id);
+            });
+        } else {
+            return res.status(401).json({
+                err: 'Not enough user rights!'
+            });
+        }
     });
 });
 

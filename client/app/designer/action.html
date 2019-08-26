@@ -165,6 +165,16 @@
                         <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='pay'">
+                    <label>{{sessionData.appData.payment_update_path}}</label>
+                    <md-select ng-model="action.payment_update_path" ng-required="true">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='pay'">
+                    <label>{{sessionData.appData.payment_update_value}}</label>
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.payment_update_value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                </md-input-container>
                 <div flex layout="column">
                     <div>
                         <fieldset class="standard">
