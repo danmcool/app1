@@ -35,20 +35,13 @@ Email.send2 = function (email_address, cc_email_address, subject, text, html, ic
 }
 
 Email.send = function (email_address, cc_email_address, subject, text, html) {
-    email.send({
-        host: Constants.EmailHost,
-        port: Constants.EmailPort,
-        ssl: Constants.EmailSSL,
-        domain: Constants.EmailDomain,
+    transporter.sendMail({
         to: email_address,
         cc: cc_email_address,
         from: Constants.EmailUserName,
         subject: subject,
         text: text,
         html: html,
-        authentication: Constants.EmailAuthentication,
-        username: Constants.EmailUserName,
-        password: Constants.EmailPassword
     }, function (err, result) {});
 }
 
