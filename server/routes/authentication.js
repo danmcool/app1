@@ -29,7 +29,7 @@ router.put('/password', function (req, res) {
             msg: 'Password missing data!'
         });
     }
-    SessionCache.isActive(req.cookies[Constants.SessionCookie], function (active) {
+    SessionCache.isActiveToken(req.cookies[Constants.SessionCookie], function (active) {
         if (active) {
             var user = SessionCache.userData[req.cookies[Constants.SessionCookie]].user;
             crypto.pbkdf2(req.body.old, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCryptoOld, keyOld) {
