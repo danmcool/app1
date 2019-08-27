@@ -188,7 +188,7 @@
                                     </md-list>
                                 </div>
 
-                                <div ng-switch-when="shorttext" layout-padding>
+                                <div ng-switch-when="shorttext" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
@@ -208,7 +208,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="number" layout-padding>
+                                <div ng-switch-when="number" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
@@ -228,7 +228,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="currency" layout-padding>
+                                <div ng-switch-when="currency" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -255,7 +255,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="editor" layout-padding>
+                                <div ng-switch-when="editor" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
@@ -270,7 +270,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="feed" layout-padding>
+                                <div ng-switch-when="feed" layout-padding ng-if="!field.hide">
                                     <p class="md-body-1" style="margin-bottom: 14px">{{sessionData.appData.previous_messages}}</p>
                                     <div flex>
                                         <div ng-repeat="existing_feed in localdata[field.id]">
@@ -286,7 +286,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="file">
+                                <div ng-switch-when="file" ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true" layout-padding>
                                             <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
@@ -316,7 +316,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="image">
+                                <div ng-switch-when="image" ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true" layout-padding>
                                             <p ng-if="!field.hide_name" class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
@@ -342,7 +342,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="selection" layout-padding>
+                                <div ng-switch-when="selection" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1">{{field.translated_name}}</p>
@@ -359,13 +359,13 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="check" layout-padding>
+                                <div ng-switch-when="check" layout-padding ng-if="!field.hide">
                                     <md-input-container>
                                         <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
                                     </md-input-container>
                                 </div>
 
-                                <div ng-switch-when="calendar" layout-padding>
+                                <div ng-switch-when="calendar" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
@@ -380,7 +380,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="appointment">
+                                <div ng-switch-when="appointment" ng-if="!field.hide">
                                     <div layout-padding>
                                         <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                     </div>
@@ -453,7 +453,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="appointment_properties" layout-padding>
+                                <div ng-switch-when="appointment_properties" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
@@ -515,20 +515,20 @@
                                     </div>
                                 </div>
 
-                                <div ng-switch-when="calculation" flex layout-padding>
+                                <div ng-switch-when="calculation" flex layout-padding ng-if="!field.hide">
                                     <p class="md-body-1">{{field.translated_name}}</p>
                                     <p class="subtitle">{{localdata[field.id]}}</p>
                                 </div>
 
-                                <div ng-if="!field.hide_name" ng-switch-when="email" layout-padding>
+                                <div ng-switch-when="email" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <p class="md-body-1">{{field.translated_name}}</p>
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
                                             <p class="subtitle"><a href="mailto:{{localdata[field.id]}}">{{localdata[field.id]}}</a></p>
                                         </div>
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
-                                                <label>{{field.translated_name}}</label>
+                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
                                                 <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
@@ -540,7 +540,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="!field.hide_name" ng-switch-when="address" layout-padding>
+                                <div ng-switch-when="address" layout-padding>
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
                                             <div layout="row" layout-xs="column" layout-sm="column">

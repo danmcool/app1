@@ -527,8 +527,12 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Obligatoire'
         },
         field_hide_name: {
-            en: 'Hide name',
-            fr: 'Cacher le nom'
+            en: 'Hide only the name',
+            fr: 'Cacher seulement le nom'
+        },
+        field_hide: {
+            en: 'Do not display',
+            fr: 'Ne pas afficher'
         },
         field_show_search: {
             en: 'Display search field',
