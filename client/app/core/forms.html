@@ -67,7 +67,7 @@
 
                                     <md-list flex="auto" infinite-scroll="getNextData()" infinite-scroll-distance="10">
                                         <md-list-item class="md-3-line" ng-repeat="data in datas">
-                                            <img ng-if="field.show_icon" src="{{getIcon(data,field.icon)}}" class="md-avatar">
+                                            <img ng-if="field.show_icon" ng-src="{{getIcon(data,field.icon)}}" class="md-avatar">
                                             <div class="md-list-item-text" layout="column">
                                                 <div ng-switch="field.title_display">
                                                     <div ng-switch-when="text">
