@@ -38,6 +38,12 @@ setInterval(function () {
 }, Constants.CacheSessionTimerCleanup);
 
 SessionCache.prepareUser = function (userObject) {
+    var publicUserId;
+    if (userObject.profile.type == Constants.UserProfilePublic) {
+        publicUserId = userObject._id;
+    } else {
+        publicUserId = Constants.PublicUser + '@' + userObject._company_code;
+    }
     if (userObject.remote_profiles && userObject.remote_profiles.length > 0) {
         for (var i = 0; i < userObject.remote_profiles.length; i++) {
             if (userObject.remote_profiles[i].type == Constants.UserProfileShare && userObject.remote_profiles[i].properties.workflow) {
@@ -50,7 +56,7 @@ SessionCache.prepareUser = function (userObject) {
     var strUser = JSON.stringify(userObject);
     if (userObject.user) strUser = strUser.replace(/@@user/g, userObject._id);
     if (userObject.manager) strUser = strUser.replace(/@@manager/g, userObject.manager);
-    strUser = strUser.replace(/@@public/g, Constants.PublicUser + '@' + userObject._company_code);
+    strUser = strUser.replace(/@@public/g, publicUserId);
     if (userObject.reports && userObject.reports.length > 0) strUser = strUser.replace(/"@@reports"/g, JSON.stringify(userObject.reports).replace(/\[|\]/g, ''));
     else strUser = strUser.replace(/"@@reports",/g, '');
     if (userObject._company_code) strUser = strUser.replace(/@@company_code/g, userObject._company_code);
