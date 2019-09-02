@@ -106,7 +106,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Workflows, $mdDialog) {
         $scope.workflows = Workflows.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newWorkflow || $scope.newWorkflow.length < 1) return;
@@ -141,7 +141,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Applications, $mdDialog) {
         $scope.applications = Applications.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newApplication || $scope.newApplication.length < 1) return;
@@ -176,7 +176,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Forms, $mdDialog) {
         $scope.forms = Forms.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newForm || $scope.newForm.length < 1) return;
@@ -210,7 +210,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
 ).controller('ValuesCtrl', function ($scope, Values, $mdDialog) {
     $scope.values = Values.query({
         skip: 0,
-        limit: 100
+        limit: 1000
     });
     $scope.save = function () {
         if (!$scope.newValue || $scope.newValue.length < 1) return;
@@ -244,7 +244,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, UserProfiles, $mdDialog) {
         $scope.userprofiles = UserProfiles.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newUserProfile || $scope.newUserProfile.length < 1) return;
@@ -278,7 +278,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Sessions, $mdDialog) {
         $scope.sessions = Sessions.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newSession || $scope.newSession.length < 1) return;
@@ -313,7 +313,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Companies, $mdDialog) {
         $scope.companies = Companies.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newCompany || $scope.newCompany.length < 1) return;
@@ -347,7 +347,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Users, $mdDialog) {
         $scope.users = Users.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newUser || $scope.newUser.length < 1) return;
@@ -380,7 +380,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, Files, $mdDialog) {
         $scope.files = Files.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newFile || $scope.newFile.length < 1) return;
@@ -413,7 +413,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
     function ($scope, DataModels, $mdDialog) {
         $scope.datamodels = DataModels.query({
             skip: 0,
-            limit: 100
+            limit: 1000
         });
         $scope.save = function () {
             if (!$scope.newDataModel || $scope.newDataModel.length < 1) return;
