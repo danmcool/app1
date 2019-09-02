@@ -81,6 +81,9 @@
             <textarea json-text ng-model="form.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{form._id}}</p>
+        <p>Company code:
+            <input type="text" ng-model="form._company_code">
+        </p>
         <p>DataModel:
             <input type="text" ea ng-model="form.datamodel">
         </p>
@@ -130,6 +133,9 @@
             <textarea json-text ng-model="value.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{value._id}}</p>
+        <p>Company code:
+            <input type="text" ng-model="value._company_code">
+        </p>
         <p>Type:
             <select ng-model="value.type">
                 <option value="list">Simple list</option>
@@ -235,6 +241,9 @@
             <input type="text" ng-model="file.file.name">
         </p>
         <p>Id: {{file.file._id}}</p>
+        <p>Company code:
+            <input type="text" ng-model="file._company_code">
+        </p>
         <p>Type:
             <input type="text" ng-model="file.file.type">
         </p>
@@ -377,6 +386,9 @@
             <textarea json-text ng-model="workflow.name" rows="3" cols="60"></textarea>
         </p>
         <p>Id: {{workflow._id}}</p>
+        <p>Company code:
+            <input type="text" ng-model="workflow._company_code">
+        </p>
         <p>Description:
             <br>
             <textarea json-text ng-model="workflow.description" rows="6" cols="60"></textarea>
