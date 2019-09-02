@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport({
         pass: process.env.APP1_EMAIL_PASSWORD
     },
     //debug: true, // include SMTP traffic in the logs
-    logger: false // log to console
+    logger: true // log to console
 });
 
 Email.send2 = function (email_address, cc_email_address, subject, text, html, ical_content) {
