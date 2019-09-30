@@ -4,9 +4,9 @@
 
 App1 is an open source framework that allows you to build an Application as a Service infrastructure.
 
-It is desiged to allow end-users to easily create and modify applications, to model underneath data, to run applications using only a browser whther on mobile, tablet or desktop.
+It is designed to allow end-users to easily create and modify applications, to model underneath data, to run, edit or share an application using only a browser whether on mobile, tablet or desktop.
 
-The framework lets you focus on business aspects like application creation and rollout by covering many apllications development tasks like :
+The framework lets you focus on business aspects like application creation and rollout by covering many applications development tasks like :
 * application livecycle
 * application design
 * data modeling
@@ -24,8 +24,8 @@ We encourage to check the framework capabilities by using the demo website at ht
 
 ## Basics of App1 applications
 
-Applications are structured into workflows, each workflow contains a list of forms.
-Forms are an interpretation of underneath data, whether read only or read write.
+Applications are structured into workflows; each workflow contains a list of forms.
+Forms are an interpretation of underneath data, whether in read or write mode or a mix of the two.
 
 ## Most common use cases are:
 
