@@ -4,8 +4,65 @@ Login command
 *	Request Method: POST
 *	Request Payload : {"user":"adminapp1@easy.com","password":"Start123"}
 *	Response :
-```json
-{"token":"5b5ae1ccb25ae8bb19fab92e","user": {"_id":"58b5ed6833d1262f448e6bb4","user":"adminapp1@easy.com","_company_code":"demo1","email":"adminapp1@easy.com","firstname":"Admin","lastname":"Demo","properties":{"theme":"default","language":"fr","app_score":{"58209e223ee6583658eceedb":75,"58223c8dfaa281219c13beaf":75,"586bbda98983994e00fc9757":75,"584185e59b20a92dd877ee9f":75}},"company":{"_id":"58b87bf651edbb381c36e8ac","name":"Cloud Ltd","_company_code":"demo1","__v":0,"properties":{"logo_url":"http://www.publicis.com/typo3conf/ext/pww_templates/Resources/Public/images/Publicis_Worldwide_logo.png","description":"Hello ! Bonjour ! Guten Tag ! Ciao ! Hola ! Kon-nichiwa ! Nei Ho !","saml":{}},"_created_at":"2018-07-27T09:11:40.345Z","_updated_at":"2017-03-02T20:09:26.275Z","applications":["58223c8dfaa281219c13beaf","582b981f6c2db903cce2dbdf","586bbda98983994e00fc9757","58d4f5e4009d6c317864bf36","58d522863c82531a1c9f22f9","58d7cc4fffd112317c577509","584185e59b20a92dd877ee9f","58209e223ee6583658eceedb"]},"profile":{"_id":"58b5ed3d33d1262f448e6bb2","name":{"en":"Administrator"},"_company_code":"demo1","__v":0,"type":"administrator","_created_at":"2018-07-27T09:11:40.345Z","_updated_at":"2017-02-28T21:35:57.277Z"},"reports":[],"remote_applications":[],"remote_profiles":[]}}
+```
+{
+  "token": "5b5ae1ccb25ae8bb19fab92e",
+  "user": {
+    "_id": "58b5ed6833d1262f448e6bb4",
+    "user": "adminapp1@easy.com",
+    "_company_code": "demo1",
+    "email": "adminapp1@easy.com",
+    "firstname": "Admin",
+    "lastname": "Demo",
+    "properties": {
+      "theme": "default",
+      "language": "fr",
+      "app_score": {
+        "58209e223ee6583658eceedb": 75,
+        "58223c8dfaa281219c13beaf": 75,
+        "586bbda98983994e00fc9757": 75,
+        "584185e59b20a92dd877ee9f": 75
+      }
+    },
+    "company": {
+      "_id": "58b87bf651edbb381c36e8ac",
+      "name": "Cloud Ltd",
+      "_company_code": "demo1",
+      "__v": 0,
+      "properties": {
+        "logo_url": "http://www.publicis.com/typo3conf/ext/pww_templates/Resources/Public/images/Publicis_Worldwide_logo.png",
+        "description": "Hello ! Bonjour ! Guten Tag ! Ciao ! Hola ! Kon-nichiwa ! Nei Ho !",
+        "saml": {}
+      },
+      "_created_at": "2018-07-27T09:11:40.345Z",
+      "_updated_at": "2017-03-02T20:09:26.275Z",
+      "applications": [
+        "58223c8dfaa281219c13beaf",
+        "582b981f6c2db903cce2dbdf",
+        "586bbda98983994e00fc9757",
+        "58d4f5e4009d6c317864bf36",
+        "58d522863c82531a1c9f22f9",
+        "58d7cc4fffd112317c577509",
+        "584185e59b20a92dd877ee9f",
+        "58209e223ee6583658eceedb"
+      ]
+    },
+    "profile": {
+      "_id": "58b5ed3d33d1262f448e6bb2",
+      "name": {
+        "en": "Administrator"
+      },
+      "_company_code": "demo1",
+      "__v": 0,
+      "type": "administrator",
+      "_created_at": "2018-07-27T09:11:40.345Z",
+      "_updated_at": "2017-02-28T21:35:57.277Z"
+    },
+    "reports": [],
+    "remote_applications": [],
+    "remote_profiles": []
+  }
+}
 ```
 
 Login command
@@ -13,7 +70,89 @@ Login command
 *	Request Method: GET
 *	Response :
 ```
-{"token":"5b68158eb25ae8bb19fd66a5","user":{"_id":"5b646bdf8bca6160b0bec05b","user":"public@demo1","_company_code":"demo1","email":"adminapp1@easy.com","firstname":"Public","lastname":"User","company":{"_id":"58b87bf651edbb381c36e8ac","name":"Cloud Ltd","_company_code":"demo1","__v":0,"properties":{"logo_url":"http://www.publicis.com/typo3conf/ext/pww_templates/Resources/Public/images/Publicis_Worldwide_logo.png","description":"Hello ! Bonjour ! Guten Tag ! Ciao ! Hola ! Kon-nichiwa ! Nei Ho !","saml":{}},"_created_at":"2018-08-06T09:32:17.061Z","_updated_at":"2017-03-02T20:09:26.275Z","applications":["58223c8dfaa281219c13beaf","582b981f6c2db903cce2dbdf","586bbda98983994e00fc9757","58d4f5e4009d6c317864bf36","58d522863c82531a1c9f22f9","58d7cc4fffd112317c577509","584185e59b20a92dd877ee9f","58209e223ee6583658eceedb","5b641f0dd0946d7e287ede3f"]},"profile":{"_id":"5b64699aefb4965b1b41a3c3","name":{"en":"Public"},"_company_code":"demo1","__v":0,"type":"public","_created_at":"2018-08-03T14:41:30.544Z","_updated_at":"2018-08-03T14:41:30.544Z"},"reports":[],"remote_applications":[],"remote_profiles":[{"_id":"5b68155f19e6a544a2280542","name":{"en":"Share"},"profile":{"applications":{"5b641f0dd0946d7e287ede3f":{"workflows":{"5b643e96d0946d7e287ede42":true}}},"datamodels":{"5b5a1605e65a093a51156ecf":{"read":{"_company_code":"demo1"}}}},"properties":{"user":"public"},"type":"share","_company_code":"demo1","__v":0,"_created_at":"2018-08-06T09:31:11.997Z","_updated_at":"2018-08-06T09:31:11.997Z"}]},"application_id":"5b641f0dd0946d7e287ede3f","workflow_id":"5b643e96d0946d7e287ede42","startup_form":"5b643ed5d0946d7e287ede43"}
+{
+  "token": "5b68158eb25ae8bb19fd66a5",
+  "user": {
+    "_id": "5b646bdf8bca6160b0bec05b",
+    "user": "public@demo1",
+    "_company_code": "demo1",
+    "email": "adminapp1@easy.com",
+    "firstname": "Public",
+    "lastname": "User",
+    "company": {
+      "_id": "58b87bf651edbb381c36e8ac",
+      "name": "Cloud Ltd",
+      "_company_code": "demo1",
+      "__v": 0,
+      "properties": {
+        "logo_url": "http://www.publicis.com/typo3conf/ext/pww_templates/Resources/Public/images/Publicis_Worldwide_logo.png",
+        "description": "Hello ! Bonjour ! Guten Tag ! Ciao ! Hola ! Kon-nichiwa ! Nei Ho !",
+        "saml": {}
+      },
+      "_created_at": "2018-08-06T09:32:17.061Z",
+      "_updated_at": "2017-03-02T20:09:26.275Z",
+      "applications": [
+        "58223c8dfaa281219c13beaf",
+        "582b981f6c2db903cce2dbdf",
+        "586bbda98983994e00fc9757",
+        "58d4f5e4009d6c317864bf36",
+        "58d522863c82531a1c9f22f9",
+        "58d7cc4fffd112317c577509",
+        "584185e59b20a92dd877ee9f",
+        "58209e223ee6583658eceedb",
+        "5b641f0dd0946d7e287ede3f"
+      ]
+    },
+    "profile": {
+      "_id": "5b64699aefb4965b1b41a3c3",
+      "name": {
+        "en": "Public"
+      },
+      "_company_code": "demo1",
+      "__v": 0,
+      "type": "public",
+      "_created_at": "2018-08-03T14:41:30.544Z",
+      "_updated_at": "2018-08-03T14:41:30.544Z"
+    },
+    "reports": [],
+    "remote_applications": [],
+    "remote_profiles": [
+      {
+        "_id": "5b68155f19e6a544a2280542",
+        "name": {
+          "en": "Share"
+        },
+        "profile": {
+          "applications": {
+            "5b641f0dd0946d7e287ede3f": {
+              "workflows": {
+                "5b643e96d0946d7e287ede42": true
+              }
+            }
+          },
+          "datamodels": {
+            "5b5a1605e65a093a51156ecf": {
+              "read": {
+                "_company_code": "demo1"
+              }
+            }
+          }
+        },
+        "properties": {
+          "user": "public"
+        },
+        "type": "share",
+        "_company_code": "demo1",
+        "__v": 0,
+        "_created_at": "2018-08-06T09:31:11.997Z",
+        "_updated_at": "2018-08-06T09:31:11.997Z"
+      }
+    ]
+  },
+  "application_id": "5b641f0dd0946d7e287ede3f",
+  "workflow_id": "5b643e96d0946d7e287ede42",
+  "startup_form": "5b643ed5d0946d7e287ede43"
+}
 ```
 
 Logout command
