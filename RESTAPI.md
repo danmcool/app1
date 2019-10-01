@@ -2,7 +2,7 @@ Login command
 
 *	Request URL: https://app1.digital/authentication/login
 *	Request Method: POST
-*	Request Payload : {"user":"adminapp1@easy.com","password":"Start123"}
+*	Request Payload : ```{"user":"adminapp1@easy.com","password":"Start123"}```
 *	Response :
 ```
 {
