@@ -4,7 +4,7 @@ Login command
 *	Request Method: POST
 *	Request Payload : {"user":"adminapp1@easy.com","password":"Start123"}
 *	Response :
-```
+```json
 {"token":"5b5ae1ccb25ae8bb19fab92e","user": {"_id":"58b5ed6833d1262f448e6bb4","user":"adminapp1@easy.com","_company_code":"demo1","email":"adminapp1@easy.com","firstname":"Admin","lastname":"Demo","properties":{"theme":"default","language":"fr","app_score":{"58209e223ee6583658eceedb":75,"58223c8dfaa281219c13beaf":75,"586bbda98983994e00fc9757":75,"584185e59b20a92dd877ee9f":75}},"company":{"_id":"58b87bf651edbb381c36e8ac","name":"Cloud Ltd","_company_code":"demo1","__v":0,"properties":{"logo_url":"http://www.publicis.com/typo3conf/ext/pww_templates/Resources/Public/images/Publicis_Worldwide_logo.png","description":"Hello ! Bonjour ! Guten Tag ! Ciao ! Hola ! Kon-nichiwa ! Nei Ho !","saml":{}},"_created_at":"2018-07-27T09:11:40.345Z","_updated_at":"2017-03-02T20:09:26.275Z","applications":["58223c8dfaa281219c13beaf","582b981f6c2db903cce2dbdf","586bbda98983994e00fc9757","58d4f5e4009d6c317864bf36","58d522863c82531a1c9f22f9","58d7cc4fffd112317c577509","584185e59b20a92dd877ee9f","58209e223ee6583658eceedb"]},"profile":{"_id":"58b5ed3d33d1262f448e6bb2","name":{"en":"Administrator"},"_company_code":"demo1","__v":0,"type":"administrator","_created_at":"2018-07-27T09:11:40.345Z","_updated_at":"2017-02-28T21:35:57.277Z"},"reports":[],"remote_applications":[],"remote_profiles":[]}}
 ```
 
