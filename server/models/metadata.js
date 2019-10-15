@@ -24,6 +24,51 @@ var DataModelSchema = new Schema({
 });
 Metadata.DataModel = mongoose.model('DataModel', DataModelSchema);
 
+var MachineLearningModelSchema = new Schema({
+    name: Schema.Types.Mixed,
+    description: Schema.Types.Mixed,
+    datamodel: {
+        type: Schema.Types.ObjectId,
+        ref: 'DataModel'
+    },
+    input: Schema.Types.Mixed,
+    output: Schema.Types.Mixed,
+    learning_configuration: {
+        error_threshold: {
+            type: Number,
+            default: 0.005
+        },
+        max_iterations: {
+            type: Number,
+            default: 20000
+        },
+        learning_rate: {
+            type: Number,
+            default: 0.3
+        }
+    },
+    learning_result: {
+        run_date: Date,
+        iterations: Number,
+        error: Number
+    },
+    values: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Value'
+    }],
+    properties: Schema.Types.Mixed,
+    _updated_at: {
+        type: Date,
+        default: Date.now
+    },
+    _created_at: {
+        type: Date,
+        default: Date.now
+    },
+    _company_code: String
+});
+Metadata.MachineLearningModel = mongoose.model('MachineLearningModel', MachineLearningModelSchema);
+
 var ValueSchema = new Schema({
     name: Schema.Types.Mixed,
     type: String, // flat, search

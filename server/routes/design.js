@@ -11,6 +11,7 @@ var DatamodelTools = require('../tools/datamodel_tools.js');
 var Tools = require('../tools/tools.js');
 
 var DataModel = Metadata.DataModel;
+var MachineLearningModel = Metadata.MachineLearningModel;
 var Application = Metadata.Application;
 var Workflow = Metadata.Workflow;
 var Form = Metadata.Form;
@@ -426,6 +427,67 @@ router.delete('/datamodel/:id', function (req, res, next) {
             delete mongoose.modelSchemas[Constants.DataModelPrefix + req.params._id];
             delete Metadata.Objects[req.params._id];
         }
+        res.json(object);
+    });
+});
+
+router.post('/machinelearningmodel', function (req, res, next) {
+    var userToken = req.cookies[Constants.SessionCookie];
+    if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+        return res.status(401).json({
+            err: 'Not enough user rights'
+        });
+    }
+    SessionCache.filterCompanyCode(req, {});
+    MachineLearningModel.create(req.body, function (err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.get('/machinelearningmodel/:id', function (req, res, next) {
+    var userToken = req.cookies[Constants.SessionCookie];
+    if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+        return res.status(401).json({
+            err: 'Not enough user rights'
+        });
+    }
+    MachineLearningModel.findOne(SessionCache.filterAddProductionCompanyCode(req, {
+        _id: {
+            $eq: req.params.id
+        }
+    })).populate('datamodel values').exec(function (err, machineLearningModelObject) {
+        if (err) return next(err);
+        if (!machineLearningModelObject) return res.status(400).json({
+            msg: 'Object is null!'
+        });
+        return res.status(200).json(machineLearningModelObject);
+    });
+});
+router.put('/machinelearningmodel/:id', function (req, res, next) {
+    var userToken = req.cookies[Constants.SessionCookie];
+    if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+        return res.status(401).json({
+            err: 'Not enough user rights'
+        });
+    }
+    MachineLearningModel.findOneAndUpdate(SessionCache.filterCompanyCode(req, {
+        _id: req.body._id
+    }), req.body, function (err, object) {
+        if (err) return next(err);
+        res.json(object);
+    });
+});
+router.delete('/machinelearningmodel/:id', function (req, res, next) {
+    var userToken = req.cookies[Constants.SessionCookie];
+    if (SessionCache.userData[userToken].profile.type != Constants.UserProfileAdministrator) {
+        return res.status(401).json({
+            err: 'Not enough user rights'
+        });
+    }
+    MachineLearningModel.findOneAndRemove(SessionCache.filterCompanyCode(req, {
+        _id: req.params.id
+    }), function (err, object) {
+        if (err) return next(err);
         res.json(object);
     });
 });
