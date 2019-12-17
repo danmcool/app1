@@ -193,7 +193,8 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
         });
     }
 
-    var initDatamodel = function (datamodelref_id, ref_datamodel, ref_datamodel_keys) {
+    var initDatamodel = function (datamodelref_id, ref_datamodel_keys) {
+        var ref_datamodel = {};
         for (var i = 0; i < $scope.datamodels.length; i++) {
             $scope.datamodels.translated_name = SessionService.translate($scope.datamodels[i].name);
             if ($scope.datamodels[i]._id == datamodelref_id) {
@@ -209,6 +210,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                 break;
             }
         }
+        return ref_datamodel;
     }
     var initDatamodelKeysRef = function () {
         $scope.ref_datamodel_selection_keys = [];
@@ -223,7 +225,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                 if (datamodelref_id) {
                     $scope.selection_ref.show = true;
                 }
-                initDatamodel(datamodelref_id, $scope.ref_datamodel_selection, $scope.ref_datamodel_selection_keys);
+                $scope.ref_datamodel_selection = initDatamodel(datamodelref_id, $scope.ref_datamodel_selection_keys);
             }
         } else if ($scope.field.display == 'list') {
             if ($scope.field) {
@@ -234,7 +236,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                     } else {
                         datamodelref_id = $scope.form.datamodel._id;
                     }
-                    initDatamodel(datamodelref_id, $scope.ref_datamodel_title, $scope.ref_datamodel_title_keys);
+                    $scope.ref_datamodel_title = initDatamodel(datamodelref_id, $scope.ref_datamodel_title_keys);
                 }
                 if ($scope.field.subtitle) {
                     var datamodelref_id = $scope.form.datamodel.projection[$scope.field.subtitle].ref_id;
@@ -243,7 +245,7 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                     } else {
                         datamodelref_id = $scope.form.datamodel._id;
                     }
-                    initDatamodel(datamodelref_id, $scope.ref_datamodel_subtitle, $scope.ref_datamodel_subtitle_keys);
+                    $scope.ref_datamodel_subtitle = initDatamodel(datamodelref_id, $scope.ref_datamodel_subtitle_keys);
                 }
             }
         }
