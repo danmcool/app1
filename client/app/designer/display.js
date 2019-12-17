@@ -231,6 +231,8 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                     var datamodelref_id = $scope.form.datamodel.projection[$scope.field.title].ref_id;
                     if (datamodelref_id) {
                         $scope.title_ref.show = true;
+                    } else {
+                        datamodelref_id = $scope.form.datamodel._id;
                     }
                     initDatamodel(datamodelref_id, $scope.ref_datamodel_title, $scope.ref_datamodel_title_keys);
                 }
@@ -238,6 +240,8 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
                     var datamodelref_id = $scope.form.datamodel.projection[$scope.field.subtitle].ref_id;
                     if (datamodelref_id) {
                         $scope.subtitle_ref.show = true;
+                    } else {
+                        datamodelref_id = $scope.form.datamodel._id;
                     }
                     initDatamodel(datamodelref_id, $scope.ref_datamodel_subtitle, $scope.ref_datamodel_subtitle_keys);
                 }
