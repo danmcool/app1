@@ -111,7 +111,7 @@ app1.controller('MachineLearningModelEditCtrl', ['$scope', 'SessionService', 'De
 
     $scope.newInputField = function () {
         $mdDialog.show({
-            templateUrl: 'machinelearningmodel/newInput.html',
+            templateUrl: 'machinelearningmodel/newinput.html',
             controller: 'NewInputFieldCtrl',
             locals: {
                 datamodel_keys: $scope.datamodel_keys_input
@@ -137,7 +137,7 @@ app1.controller('MachineLearningModelEditCtrl', ['$scope', 'SessionService', 'De
 
     $scope.newOutputField = function () {
         $mdDialog.show({
-            templateUrl: 'machinelearningmodel/newOutput.html',
+            templateUrl: 'machinelearningmodel/newoutput.html',
             controller: 'NewOutputFieldCtrl',
             locals: {
                 datamodel_keys: $scope.datamodel_keys_output
