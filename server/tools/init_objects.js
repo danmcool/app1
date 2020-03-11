@@ -23,7 +23,8 @@ DataModel.find(function (err, objects) {
                 fields: {},
                 options: {
                     name: Constants.DataModelIndexName,
-                    weights: {}
+                    weights: {},
+                    language_override: '_none'
                 }
             }
             try {
