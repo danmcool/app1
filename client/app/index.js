@@ -149,6 +149,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
+]).factory('RunMachineLearningModel', ['$resource',
+    function ($resource) {
+        return $resource('/client/model_run/:datamodel_id/:data_id/:mlmodel_id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
 ]).factory('Datas', ['$resource',
     function ($resource) {
         return $resource('/client/data/:datamodel_id/:entry_id', {
@@ -219,7 +227,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
-        Applications.query(function (appResult) {
+        Applications.query({
+            skip: 0,
+            limit: 500,
+        }, function (appResult) {
             sessionData.applications = appResult;
             var apps = sessionData.applications;
             var saveUserData = false;
@@ -481,6 +492,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             templateUrl: 'designer/applicationsecurity.html',
             controller: 'ApplicationSecurityCtrl'
         })
+        .when('/application_profile/:id', {
+            templateUrl: 'designer/applicationprofile.html',
+            controller: 'ApplicationProfileCtrl'
+        })
         .when('/application_users/:id', {
             templateUrl: 'designer/applicationusers.html',
             controller: 'ApplicationUsersCtrl'
@@ -516,6 +531,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         .when('/datamodel/:id', {
             templateUrl: 'datamodel/datamodeledit.html',
             controller: 'DatamodelEditCtrl'
+        })
+        .when('/machinelearningmodel', {
+            templateUrl: 'machinelearningmodel/machinelearningmodel.html',
+            controller: 'MachineLearningModelCtrl'
+        })
+        .when('/machinelearningmodel/:id', {
+            templateUrl: 'machinelearningmodel/machinelearningmodeledit.html',
+            controller: 'MachineLearningModelEditCtrl'
         })
         .otherwise({
             redirectTo: '/login',

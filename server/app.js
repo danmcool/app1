@@ -8,8 +8,12 @@ var path = require('path');
 mongoose.Promise = global.Promise;
 
 // connect to mongo db -> apps is the name of app1 data
-mongoose.connect('mongodb://app1:' + process.env.APP1_DB_PASSWORD + '@' + process.env.APP1_DB_ADDRESS + ':' + process.env.APP1_DB_PORT + '/apps', {
-    useMongoClient: true
+var mongodbUri = 'mongodb://app1:' + process.env.APP1_DB_PASSWORD + '@' + process.env.APP1_DB_ADDRESS + ':' + process.env.APP1_DB_PORT + '/apps';
+mongoose.connect(mongodbUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 });
 
 // require routes
@@ -92,7 +96,6 @@ app.get('/', function (req, res) {
 app.get('/admin', function (req, res) {
     res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
 });
-
 // error hndlers
 app.use(function (req, res, next) {
     var err = new Error('Not Found URL:' + req.path);

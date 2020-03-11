@@ -25,6 +25,9 @@
                     <md-button class="md-fab md-primary" ng-click="editDatamodel(datamodel._id)" aria-label="Edit" ng-if="(datamodel._company_code == sessionData.userData._company_code)">
                         <md-icon>edit</md-icon>
                     </md-button>
+                    <md-button class="md-fab md-primary" ng-click="newMachineLearningModel(datamodel._id)" aria-label="Edit" ng-if="(datamodel._company_code == sessionData.userData._company_code)">
+                        <md-icon>school</md-icon>
+                    </md-button>
                     <md-button class="md-fab md-primary" ng-click="delete(datamodel._id)" aria-label="Delete" ng-if="(datamodel._company_code == sessionData.userData._company_code)">
                         <md-icon>delete</md-icon>
                     </md-button>

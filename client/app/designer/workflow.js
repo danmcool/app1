@@ -72,17 +72,27 @@ app1.controller('WorkflowEditCtrl', ['$scope', 'SessionService', 'DesignWorkflow
     }
 
     $scope.deleteForm = function (formIndex) {
-        var formId = $scope.workflow.forms[formIndex]._id;
-        $scope.workflow.forms.splice(formIndex, 1);
-        DesignWorkflow.update({
-            id: $scope.workflow._id
-        }, $scope.workflow, function (resWkf) {
-            DesignForm.remove({
-                id: formId
-            }, function (res) {}, function (res) {
-                /* show error*/
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.confirmation)
+            .textContent($scope.sessionData.appData.removal_confirmation)
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)).then(
+            function () {
+                var formId = $scope.workflow.forms[formIndex]._id;
+                $scope.workflow.forms.splice(formIndex, 1);
+                DesignWorkflow.update({
+                    id: $scope.workflow._id
+                }, $scope.workflow, function (resWkf) {
+                    DesignForm.remove({
+                        id: formId
+                    }, function (res) {}, function (res) {
+                        /* show error*/
+                    });
+                });
             });
-        });
     }
 
     $scope.save = function () {

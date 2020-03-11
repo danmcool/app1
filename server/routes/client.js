@@ -2,12 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
+var brain = require('brain.js');
 
 var Metadata = require('../models/metadata.js');
 var SessionCache = require('../tools/session_cache.js');
 var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
 var Tools = require('../tools/tools.js');
+var MarchineLearning = require('../tools/machinelearning.js');
 var CalendarTools = require('../tools/calendar_tools.js');
 
 var User = Metadata.User;
@@ -149,7 +151,7 @@ router.get('/application/', function (req, res, next) {
                 }
                 var currentApp = JSON.parse(JSON.stringify(apps[i]));
                 currentApp.remote = false;
-                if (profileFound && profileFound.profile.applications[currentApp._id]) {
+                if (profileFound && profileFound.profile && profileFound.profile.applications && profileFound.profile.applications[currentApp._id]) {
                     for (k = currentApp.workflows.length - 1; k >= 0; k--) {
                         if (!profileFound.profile.applications[currentApp._id].workflows[currentApp.workflows[k]._id]) {
                             currentApp.workflows.splice(k, 1);
@@ -706,6 +708,121 @@ router.get('/payment_callback/:datamodel_id/:id', function (req, res, next) {
             });
         }
     });
+});
+
+router.get('/model_train/:datamodel_id/:mlmodel_id', function (req, res, next) {
+    var token = req.cookies[Constants.SessionCookie];
+    var searchCriteriaMlmodel = {
+        _id: req.params.mlmodel_id,
+        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+    }
+    var datamodel_id = req.params.datamodel_id;
+    var dataSearchCriteria = {};
+    var dataSearchScoreProjection = {};
+    if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, dataSearchCriteria, dataSearchCriteria)) {
+        Metadata.MachineLearningModel.findOne(searchCriteriaMlmodel).exec(function (err, mlObject) {
+            if (err) return next(err);
+            if (!mlObject) return res.status(400).json({
+                msg: 'No machine learning model found!'
+            });
+            if (SessionCache.createSecurityFiltersList(token, datamodel_id, null, dataSearchCriteria)) {
+                var trainData = [];
+                Metadata.Objects[datamodel_id].find(dataSearchCriteria, dataSearchScoreProjection).limit(Constants.MachineLearningMaxTrainingDataPoints).cursor({
+                    batchSize: Constants.MachineLearningMaxTrainingBatch
+                }).on('data', function (data) {
+                    var newPreparedData = {
+                        input: [],
+                        output: []
+                    }
+                    for (var j = 0; j < mlObject.output.length; j++) {
+                        newPreparedData.output.push(MarchineLearning.normalizeValue(eval(mlObject.output[j].formula)));
+                    }
+                    if (newPreparedData.output.length > 0) {
+                        for (var i = 0; i < mlObject.input.length; i++) {
+                            newPreparedData.input.push(eval(mlObject.input[i].formula));
+                        }
+                        //console.log(newPreparedData);
+                        trainData.push(newPreparedData);
+                    }
+                }).on('end', function () {
+                    mlObject.learning_result.run_date = Date.now();
+                    console.log(mlObject.learning_configuration);
+                    var config = {
+                        //binaryThresh: 0.5,
+                        hiddenLayers: [3], // array of ints for the sizes of the hidden layers in the network
+                        //activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
+                        //leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
+                        errorThresh: Math.max(0.005, mlObject.learning_configuration.error_threshold), // error threshold to reach
+                        iterations: Math.min(20000, mlObject.learning_configuration.max_iterations), // maximum training iterations
+                        log: true, // console.log() progress periodically
+                        logPeriod: 10000, // number of iterations between logging
+                        learningRate: Math.max(0.3, mlObject.learning_configuration.learning_rate) // learning rate
+                    }
+                    console.log('new brain');
+                    console.log(config);
+                    var net = new brain.NeuralNetwork(config);
+                    var trainingStream = new brain.TrainStream({
+                        neuralNetwork: net,
+                        floodCallback: function () {
+                            MarchineLearning.trainDataStream(trainingStream, trainData);
+                        },
+                        doneTrainingCallback: function (obj) {
+                            console.log(obj);
+                            mlObject.learning_result.iterations = obj.iterations;
+                            mlObject.learning_result.error = obj.error;
+                            mlObject.brain = net;
+                            Metadata.MachineLearningModel.findOneAndUpdate(searchCriteriaMlmodel, mlObject, function (errUpdated, objectUpdated) {
+                                if (errUpdated) return next(errUpdated);
+                                if (!objectUpdated) {
+                                    return res.status(400).json({
+                                        msg: 'No object found!'
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    console.log(trainData);
+                    MarchineLearning.trainDataStream(trainingStream, trainData);
+                });
+            } else {
+                return res.status(401).json({
+                    err: 'Not enough user rights!'
+                });
+            }
+            return res.status(200).json('');
+        });
+    }
+});
+
+router.get('/model_run/:datamodel_id/:data_id/:mlmodel_id', function (req, res, next) {
+    var token = req.cookies[Constants.SessionCookie];
+    var searchCriteriaMlmodel = {
+        _id: req.params.mlmodel_id,
+        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+    }
+    var datamodel_id = req.params.datamodel_id;
+    var mlSearchCriteria = {};
+    if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.mlmodel_id, mlSearchCriteria)) {
+        Metadata.MachineLearningModel.findOne(mlSearchCriteria).exec(function (errML, mlObject) {
+            if (errML) return next(errML);
+            if (!mlObject) return res.status(400).json({
+                msg: 'No machine learning model found!'
+            });
+
+            var dataSearchCriteria = {};
+            var datamodel_id = req.params.datamodel_id;
+            var search_criteria = {
+                _id: req.params.data_id
+            }
+            if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, search_criteria)) {
+                var object = {};
+                Tools.resolvePathUpdate(object, req.query.value_path, req.query.value);
+                Metadata.Objects[datamodel_id].findOne(search_criteria, object, function (errObject, object) {
+                    mlObject.brain.run();
+                });
+            }
+        });
+    }
 });
 
 module.exports = router;

@@ -31,6 +31,7 @@ var MachineLearningModelSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'DataModel'
     },
+    brain: Schema.Types.Mixed,
     input: Schema.Types.Mixed,
     output: Schema.Types.Mixed,
     learning_configuration: {
@@ -57,6 +58,7 @@ var MachineLearningModelSchema = new Schema({
         ref: 'Value'
     }],
     properties: Schema.Types.Mixed,
+    neural_network: Schema.Types.Mixed,
     _updated_at: {
         type: Date,
         default: Date.now

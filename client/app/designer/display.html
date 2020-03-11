@@ -188,7 +188,7 @@
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container flex="auto" class="md-block">
-                                    <label>{{sessionData.appData.value}}</label>
+                                    <label>{{sessionData.appData.value_editor}}</label>
                                     <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.set_value.value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                                 </md-input-container>
                             </div>
@@ -433,6 +433,12 @@
                             </md-input-container>
                             <md-input-container flex="auto" class="md-block">
                                 <md-checkbox ng-model="field.required">{{sessionData.appData.field_required}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.hide">{{sessionData.appData.field_hide}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.hide_name">{{sessionData.appData.field_hide_name}}</md-checkbox>
                             </md-input-container>
                         </div>
                         <md-input-container flex="auto" class="md-block">

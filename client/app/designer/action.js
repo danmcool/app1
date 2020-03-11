@@ -1,4 +1,4 @@
-app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignWorkflow', 'DesignApplication', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignWorkflow, DesignApplication) {
+app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignWorkflow', 'DesignApplication', 'DesignMachineLearningModel', function ($scope, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignWorkflow, DesignApplication, DesignMachineLearningModel) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -73,6 +73,8 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
     }
 
     $scope.datamodels = [];
+    $scope.machinelearning_models = [];
+
     $scope.notifyuser_type = {
         current: {
             en: 'Current User',
@@ -140,6 +142,17 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
                 $scope.form.values[i].translated_name = SessionService.translate($scope.form.values[i].name);
             }
         }
+        DesignMachineLearningModel.query({
+            datamodel: $scope.form.datamodel
+        }, function (machinelearningmodelsResult) {
+            if (machinelearningmodelsResult && machinelearningmodelsResult.length > 0) {
+                for (var i = 0; i < machinelearningmodelsResult.length; i++) {
+                    machinelearningmodelsResult[i].translated_name = SessionService.translate(machinelearningmodelsResult[i].name);
+                    machinelearningmodelsResult[i].translated_description = SessionService.translate(machinelearningmodelsResult[i].description);
+                    $scope.machinelearning_models.push(machinelearningmodelsResult[i]);
+                }
+            }
+        });
         $scope.action = $scope.form.actions[$routeParams.action];
         $scope.sessionData.applicationName = $scope.sessionData.appData.app_designer;
         SessionService.setSessionData($scope.sessionData);

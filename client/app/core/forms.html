@@ -652,10 +652,10 @@
                     <div ng-repeat="action in form.actions">
                         <div ng-switch="action.action">
                             <div ng-switch-when="create">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html, action.use_ai, action.ml_model, action.ml_min_score, action.ml_set_value)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="modify">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html, action.use_ai, action.ml_model, action.ml_min_score, action.ml_set_value)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="delete">
                                 <md-button ng-click="delete(action.formula, action.next_form_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>

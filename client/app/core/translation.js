@@ -140,6 +140,38 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'No public profile or workflow available',
             fr: 'Pas de profile publique ou de processus disponible'
         },
+        application_profile_is_public: {
+            en: 'Public profile',
+            fr: 'Profile publique'
+        },
+        application_add_profile: {
+            en: 'Add profile',
+            fr: 'Ajouter profile'
+        },
+        application_profile_list: {
+            en: 'List',
+            fr: 'Lister'
+        },
+        application_profile_create: {
+            en: 'Create',
+            fr: 'Créer'
+        },
+        application_profile_read: {
+            en: 'Read',
+            fr: 'Lire'
+        },
+        application_profile_update: {
+            en: 'Update',
+            fr: 'Mettre à jour'
+        },
+        application_profile_delete: {
+            en: 'Delete',
+            fr: 'Supprimer'
+        },
+        application_profile_datamodel_permissions: {
+            en: 'Data access permissions',
+            fr: 'Autorisations d\'accès aux données'
+        },
         error: {
             en: 'Error',
             fr: 'Erreur'
@@ -692,7 +724,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         new_datamodel: {
             en: 'New data model',
-            fr: 'Noveau model de données'
+            fr: 'Noveau modèle de données'
         },
         new_datamodel_name: {
             en: 'Name',
@@ -725,6 +757,94 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         datamodel_field_index_weight: {
             en: 'Importance',
             fr: 'Importance'
+        },
+        machinelearningmodel: {
+            en: 'Machine Learning Model',
+            fr: 'Modèle de l\'apprentissage machine'
+        },
+        machinelearningmodel_designer: {
+            en: 'Machine Learning Modeler',
+            fr: 'Modélisateur de l\'apprentissage machine'
+        },
+        new_machinelearningmodel: {
+            en: 'New machine learning model',
+            fr: 'Noveau modèle d\'apprentissage machine'
+        },
+        new_machinelearningmodel_name: {
+            en: 'Name',
+            fr: 'Nom'
+        },
+        machinelearningmodel_description: {
+            en: 'Description',
+            fr: 'Description'
+        },
+        machinelearningmodel_learning_configuration: {
+            en: 'Learning configuration',
+            fr: 'Configuration de l\'apprentissage'
+        },
+        machinelearningmodel_learning_configuration_err_threshold: {
+            en: 'Error threshold',
+            fr: 'Seuil d\'erreur'
+        },
+        machinelearningmodel_learning_configuration_max_iterations: {
+            en: 'Maximum iterations',
+            fr: 'Maximum d\'iterations'
+        },
+        machinelearningmodel_learning_configuration_learning_rate: {
+            en: 'Learning rate',
+            fr: 'Niveau d\'apprentissage'
+        },
+        machinelearningmodel_learning_result: {
+            en: 'Learning results',
+            fr: 'Resultats de l\'apprentissage'
+        },
+        machinelearningmodel_learning_result_run_date: {
+            en: 'Run date',
+            fr: 'Date d\'execution'
+        },
+        machinelearningmodel_learning_result_iterations: {
+            en: 'Number of iterations needed',
+            fr: 'Nombre d\'iterations requises'
+        },
+        machinelearningmodel_learning_result_error: {
+            en: 'Learning error',
+            fr: 'Erreur de l\'apprentissage'
+        },
+        machinelearningmodel_input_field_list: {
+            en: 'Input data fields',
+            fr: 'Champs de données en entrée'
+        },
+        machinelearningmodel_output_field_list: {
+            en: 'Output data fields',
+            fr: 'Champs de données en sortie'
+        },
+        machinelearningmodel_add_field: {
+            en: 'Add field',
+            fr: 'Ajouter champ'
+        },
+        machinelearningmodel_new_calculation: {
+            en: 'New calculation',
+            fr: 'Nouveau calcul'
+        },
+        machinelearningmodel_calculation: {
+            en: 'Calculation',
+            fr: 'Calcul'
+        },
+        machinelearningmodel_output_field_score: {
+            en: 'Score',
+            fr: 'Score'
+        },
+        machinelearningmodel_values: {
+            en: 'Values semicolon separated',
+            fr: 'Valeurs separées par point-virgule'
+        },
+        machinelearning_useai: {
+            en: 'Use Artificial Intelligence',
+            fr: 'Utiliser l\'intelligence artificielle'
+        },
+        machinelearning_score_action: {
+            en: 'When score is higher than',
+            fr: 'Quand le score est supérieur à'
         },
         start_time: {
             en: 'Start Time',

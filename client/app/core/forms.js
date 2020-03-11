@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', 'Reservation', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event, Reservation) {
+app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', 'Reservation', 'RunMachineLearningModel', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event, Reservation, RunMachineLearningModel) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function () {
@@ -948,13 +948,20 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
+    $scope.brain = function (objectId, mlModelId, mlMinScore, mlSetValue) {
+        //RunMachineLearningModel
+    }
+
+    $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml, useAI, mlModel, mlMinScore, mlSetValue) {
         $scope.updateComponents($scope.form, setValue, $scope.data);
         if ($routeParams.pid) {
             $scope.data.pid = $routeParams.pid;
         }
         $scope.data.$save(function (res) {
             $scope.notify(notifyUser, emailTitle, emailHtml);
+            if (useAI) {
+                $scope.brain(res.id, mlModel, mlMinScore, mlSetValue);
+            }
             $scope.gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }, function (res) {
             $scope.data = res.data;

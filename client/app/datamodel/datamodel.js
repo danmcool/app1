@@ -1,4 +1,4 @@
-app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignDataModel, $location, $routeParams, $mdDialog) {
+app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel', 'DesignMachineLearningModel', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignDataModel, DesignMachineLearningModel, $location, $routeParams, $mdDialog) {
     ga('send', 'pageview', '/app/datamodel');
 
     $scope.sessionData = SessionService.getSessionData();
@@ -70,6 +70,30 @@ app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel',
                 });
                 newDatamodel.$save(function () {
                     SessionService.location('/datamodel/' + newDatamodel._id);
+                });
+            });
+    }
+
+    $scope.newMachineLearningModel = function (datamodelId) {
+        $mdDialog.show(
+            $mdDialog.prompt()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.new_datamodel_name)
+            .initialValue('My Datamodel')
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)).then(
+            function (result) {
+                var name = {};
+                name[$scope.sessionData.userData.properties.correctedLanguage] = result;
+                var newMachineLearningModel = new DesignMachineLearningModel({
+                    name: name,
+                    datamodel: datamodelId,
+                    input: [],
+                    output: []
+                });
+                newMachineLearningModel.$save(function () {
+                    SessionService.location('/machinelearningmodel/' + newMachineLearningModel._id);
                 });
             });
     }

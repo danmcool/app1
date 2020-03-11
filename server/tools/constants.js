@@ -118,7 +118,10 @@ const Constants = {
     DataModelPrefix: 'datas',
     DataModelUserId: 'userdata',
     DataModelFileId: 'filedata',
-    DataModelIndexName: '_search'
+    DataModelIndexName: '_search',
+
+    MachineLearningMaxTrainingDataPoints: 2000,
+    MachineLearningMaxTrainingBatch: 100
 }
 
 module.exports = Constants;

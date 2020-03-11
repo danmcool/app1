@@ -1,0 +1,24 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex="auto" layout="column" class="fade" infinite-scroll="getNextMachineLearningModels()" infinite-scroll-distance="10">
+            <md-card ng-repeat="machinelearningmodel in machinelearningmodels">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{machinelearningmodel.translated_name}}</span>
+                        <span class="md-body-1">{{machinelearningmodel.translated_description}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button class="md-fab md-primary" ng-click="editMachineLearningModel(machinelearningmodel._id)" aria-label="Edit" ng-if="(machinelearningmodel._company_code == sessionData.userData._company_code)">
+                        <md-icon>edit</md-icon>
+                    </md-button>
+                    <md-button class="md-fab md-primary" ng-click="deleteMachineLearningModel(machinelearningmodel._id)" aria-label="Delete" ng-if="(machinelearningmodel._company_code == sessionData.userData._company_code)">
+                        <md-icon>delete</md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

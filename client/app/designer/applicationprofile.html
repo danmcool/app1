@@ -1,0 +1,60 @@
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+    <div layout="row">
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div layout-padding flex layout="column" class="fade">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span md-colors="{'color': 'primary-50'}">{{sessionData.appData.app_profile}}</span>
+                </div>
+            </md-toolbar>
+            <form name="appSecForm">
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.new_datamodel_name}}</label>
+                    <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="profile.name[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(profile, 'name', false)">
+                </md-input-container>
+                <div style="margin-top: 30px">
+                    <md-header>{{sessionData.appData.list_workflow}}</md-header>
+                </div>
+                <md-input-container flex="auto" class="md-block">
+                    <md-list flex="auto">
+                        <md-list-item ng-repeat="workflow in workflows">
+                            <md-switch ng-model="workflow.active" ng-change="updateWorkflow(workflow._id)">{{workflow.translated_name}}</md-switch>
+                        </md-list-item>
+                    </md-list>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.datamodel}}</label>
+                    <md-select ng-model="selected_datamodel" ng-change="updateDatamodel(selected_datamodel)">
+                        <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <div style="margin-top: 30px">
+                    <md-header>{{sessionData.appData.application_profile_datamodel_permissions}}</md-header>
+                </div>
+                <md-input-container flex="auto" class="md-block">
+                    <md-list flex="auto">
+                        <md-list-item>
+                            <md-switch ng-model="rights_for_list" ng-change="updateListSecurity()">{{sessionData.appData.application_profile_list}}</md-switch>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-switch ng-model="rights_for_create" ng-change="updateCreateSecurity()">{{sessionData.appData.application_profile_create}}</md-switch>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-switch ng-model="rights_for_read" ng-change="updateReadSecurity()">{{sessionData.appData.application_profile_read}}</md-switch>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-switch ng-model="rights_for_update" ng-change="updateUpdateSecurity()">{{sessionData.appData.application_profile_update}}</md-switch>
+                        </md-list-item>
+                        <md-list-item ng-if="!public_profile">
+                            <md-switch ng-model="rights_for_delete" ng-change="updateDeleteSecurity()">{{sessionData.appData.application_profile_delete}}</md-switch>
+                        </md-list-item>
+                    </md-list>
+                </md-input-container>
+                <div layout="row" layout-align="end" flex>
+                    <md-button ng-disabled="appSecForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
+                </div>
+            </form>
+        </div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+    </div>
+</md-content>

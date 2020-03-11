@@ -8,7 +8,6 @@ app1.controller('NewFieldCtrl', ['$scope', '$mdDialog', 'SessionService', functi
         }
     });
 
-
     $scope.field_type = {
         text: {
             en: 'Text',

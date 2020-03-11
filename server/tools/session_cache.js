@@ -17,7 +17,7 @@ var SamlServiceProviderCache = {};
 // clean server sessions
 setInterval(function () {
     var current_time = Date.now();
-    Metadata.Session.remove({
+    Metadata.Session.deleteMany({
         timeout: {
             $lt: Date(current_time)
         }
@@ -333,6 +333,63 @@ SessionCache.createSecurityFiltersDelete = function (token, remote_user_id, data
     if (profile.datamodels[datamodel_id].delete._user) {
         security_filter._user = {
             $in: profile.datamodels[datamodel_id].delete._user
+        }
+    }
+    return true;
+}
+
+SessionCache.createSecurityFiltersList = function (token, datamodel_id, query_pid, search_criteria) {
+    var user = SessionCache.userData[token];
+    var profile = SessionCache.getProfile(token, datamodel_id);
+    var remote_profile = {};
+    var remote = false;
+    if (query_pid) {
+        for (var i = 0; i < user.remote_profiles.length; i++) {
+            if (query_pid == user.remote_profiles[i]._id) {
+                if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list) {
+                    remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list;
+                    remote = true;
+                }
+                break;
+            } else {
+                continue;
+            }
+        }
+        if (!remote) {
+            return false;
+        }
+    }
+    /* else if (user.remote_profiles && user.remote_profiles.length > 0) {
+            for (var i = 0; i < user.remote_profiles.length; i++) {
+                if (user.remote_profiles[i].type == Constants.UserProfileShare && user.remote_profiles[i].profile.datamodels[req.params.datamodelid] && user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list) {
+                    remote_profile = user.remote_profiles[i].profile.datamodels[req.params.datamodelid].list;
+                    remote = true;
+                    break;
+                }
+            }
+        }*/
+    if (!profile || !profile.datamodels[datamodel_id] || !profile.datamodels[datamodel_id].list) {
+        if (!remote) {
+            return false;
+        }
+    }
+    if (remote) {
+        search_criteria._company_code = {
+            $eq: remote_profile._company_code
+        }
+        if (remote_profile._user) {
+            search_criteria._user = {
+                $in: remote_profile._user
+            }
+        }
+    } else {
+        search_criteria._company_code = {
+            $eq: profile.datamodels[datamodel_id].list._company_code
+        }
+        if (profile.datamodels[datamodel_id].list._user) {
+            search_criteria._user = {
+                $in: profile.datamodels[datamodel_id].list._user
+            }
         }
     }
     return true;

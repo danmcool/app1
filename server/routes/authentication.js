@@ -548,8 +548,16 @@ router.get('/open', function (req, res, next) {
                                 httpOnly: true
                             });
                             var application_id = Object.keys(objectProfile.profile.applications)[0];
+                            var workflows = Object.keys(objectProfile.profile.applications[application_id].workflows);
+                            var workflow_id;
+                            for (var j = 0; j < workflows.length; j++) {
+                                if (objectProfile.profile.applications[application_id].workflows[workflows[j]]) {
+                                    workflow_id = workflows[j];
+                                    break;
+                                }
+                            }
                             Workflow.findOne({
-                                _id: Object.keys(objectProfile.profile.applications[application_id].workflows)[0]
+                                _id: workflow_id
                             }).exec(function (errWorkflow, workflow) {
                                 if (errWorkflow) return res.status(400).json({
                                     err: 'Workflow error'

@@ -40,6 +40,8 @@
     <script defer src="designer/application.js"></script>
     <script defer src="designer/applicationsecurity.js"></script>
     <script defer src="designer/applicationusers.js"></script>
+    <script defer src="designer/applicationprofile.js"></script>
+    <script defer src="designer/newprofile.js"></script>
     <script defer src="designer/workflow.js"></script>
     <script defer src="designer/form.js"></script>
     <script defer src="designer/share.js"></script>
@@ -50,6 +52,10 @@
     <script defer src="datamodel/datamodel.js"></script>
     <script defer src="datamodel/datamodeledit.js"></script>
     <script defer src="datamodel/new.js"></script>
+    <script defer src="machinelearningmodel/machinelearningmodel.js"></script>
+    <script defer src="machinelearningmodel/machinelearningmodeledit.js"></script>
+    <script defer src="machinelearningmodel/newinput.js"></script>
+    <script defer src="machinelearningmodel/newoutput.js"></script>
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQcYSqCUwxCMGROL9JNR9_8jypYNqH63o"></script>
 
     <script>
@@ -114,6 +120,7 @@
             <md-button ng-if="!sessionData.userData.title" ng-href="/#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!datamodel" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.datamodel_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!machinelearningmodel" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.machinelearningmodel_designer}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#!user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
             <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>

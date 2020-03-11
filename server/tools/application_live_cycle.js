@@ -197,14 +197,9 @@ ApplicationLiveCycle.copyApplication = function (appObject, _company_code, objec
     newAppObject.isNew = true;
     newAppObject._company_code = _company_code;
     objectList['a_' + appObject._id] = newAppObject._id;
-    Metadata.Workflow.find({
-        _company_code: Constants.ProductionCompany,
-        application_id: appObject._id
-    }, function (err, workflowObjects) {
-        for (var j = 0; j < workflowObjects.length; j++) {
-            ApplicationLiveCycle.copyWorkflow(workflowObjects[j], _company_code, newAppObject._id, objectList);
-        }
-    });
+    for (var j = 0; j < appObject.workflows.length; j++) {
+        ApplicationLiveCycle.copyWorkflow(appObject.workflows[j], _company_code, newAppObject._id, objectList);
+    }
     newAppObject.save();
 };
 module.exports = ApplicationLiveCycle;

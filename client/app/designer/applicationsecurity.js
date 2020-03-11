@@ -1,4 +1,4 @@
-app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignApplication', 'DesignWorkflow', 'DesignForm', 'Files', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignApplication, DesignWorkflow, DesignForm, Files, $location, $routeParams, $mdDialog) {
+app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignApplication', 'DesignWorkflow', 'DesignForm', 'DesignProfile', 'Files', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignApplication, DesignWorkflow, DesignForm, DesignProfile, Files, $location, $routeParams, $mdDialog) {
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();
@@ -45,7 +45,7 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
             id: $scope.application._id
         }, $scope.application, function (res) {
             SessionService.init();
-            SessionService.location('/application_users/' + profileId + '?application_id=' + $scope.application._id);
+            SessionService.location('/application_profile/' + profileId + '?application_id=' + $scope.application._id);
         }, function (res) {
             $scope.application = res.application;
             updateErrorAlert();
@@ -53,38 +53,62 @@ app1.controller('ApplicationSecurityCtrl', ['$scope', 'SessionService', 'DesignA
     }
 
     $scope.newProfile = function () {
-        var name = {};
-        name[$scope.sessionData.userData.properties.correctedLanguage] = '';
-        var newProfile = new DesignProfile({
-            name: name
-        });
-        newProfile.$save(function () {
-            newProfile.translated_name = newProfile.name.en;
-            $scope.application.profiles.push(newProfile);
-            DesignApplication.update({
-                id: $scope.application._id
-            }, $scope.application, function (res) {
-                //SessionService.init();
-                //SessionService.location('/form_edit/' + newForm._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $scope.workflow._id);
-            }, function (res) {
-                $scope.application = res.application;
-                updateErrorAlert();
+        $mdDialog.show({
+            templateUrl: 'designer/newprofile.html',
+            controller: 'NewProfileCtrl',
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        }).then(function (result) {
+            var profile = {
+                applications: {}
+            };
+            profile.applications[$scope.application._id] = {
+                workflows: {}
+            };
+            for (var i = 0; i < $scope.application.workflows.length; i++) {
+                profile.applications[$scope.application._id].workflows[$scope.application.workflows[i]._id] = false;
+            }
+            var name = {};
+            name[$scope.sessionData.userData.properties.correctedLanguage] = result.name;
+            var newProfile = new DesignProfile({
+                name: name,
+                type: 'application',
+                profile: profile,
+                properties: {
+                    user: result.public ? 'public' : ''
+                }
+            });
+            newProfile.$save(function () {
+                $scope.application.profiles.push(newProfile);
+                DesignApplication.update({
+                    id: $scope.application._id
+                }, $scope.application, function (res) {
+                    SessionService.init();
+                    SessionService.location('/application_profile/' + newProfile._id + '?application_id=' + $routeParams.id);
+                }, function (res) {
+                    $scope.application = res.application;
+                    updateErrorAlert();
+                });
             });
         });
     }
 
-    $scope.deleteForm = function (formIndex) {
-        var formId = $scope.workflow.forms[formIndex]._id;
-        $scope.workflow.forms.splice(formIndex, 1);
-        DesignWorkflow.update({
-            id: $scope.workflow._id
-        }, $scope.workflow, function (resWkf) {
-            DesignForm.remove({
-                id: formId
-            }, function (res) {}, function (res) {
-                /* show error*/
+    $scope.deleteProfile = function (profileId) {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .clickOutsideToClose(true)
+            .title($scope.sessionData.appData.confirmation)
+            .textContent($scope.sessionData.appData.removal_confirmation)
+            .ok($scope.sessionData.appData.ok)
+            .cancel($scope.sessionData.appData.cancel)).then(
+            function () {
+                DesignProfile.remove({
+                    id: profileId
+                }, function (res) {}, function (res) {
+                    /* show error*/
+                });
             });
-        });
     }
 
     $scope.save = function () {

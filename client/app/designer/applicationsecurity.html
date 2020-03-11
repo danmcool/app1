@@ -10,7 +10,7 @@
             <form name="appSecForm">
                 <md-input-container flex="auto" class="md-block">
                     <label>{{sessionData.appData.default_profile}}</label>
-                    <md-select ng-model="application.default_profile" ng-required="(application.profiles.length > 0)">
+                    <md-select ng-model="application.default_profile">
                         <md-option ng-repeat="profile in application.profiles" ng-value="profile._id">{{profile.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
@@ -33,10 +33,10 @@
                         </md-card-title-text>
                     </md-card-title>
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button class="md-fab md-primary" ng-click="editProfile(form._id)" aria-label="Edit">
+                        <md-button class="md-fab md-primary" ng-click="editProfile(profile._id)" aria-label="Edit">
                             <md-icon>edit</md-icon>
                         </md-button>
-                        <md-button class="md-fab md-primary" ng-click="deleteProfile($index)" aria-label="Delete">
+                        <md-button class="md-fab md-primary" ng-click="deleteProfile(profile._id)" aria-label="Delete">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-card-actions>

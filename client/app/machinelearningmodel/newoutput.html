@@ -1,0 +1,31 @@
+<md-dialog aria-label="New Field">
+    <form ng-cloak name="formNew">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{sessionData.appData.datamodel_add_field}}</h2>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container flex="auto" class="md-block">
+                    <label>{{sessionData.appData.new_field}}</label>
+                    <md-select ng-model="new_selected_field" ng-required="true" ng-change="changeField()">
+                        <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey">{{datakey.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-show="show_values">
+                    <label>{{sessionData.appData.field_listofvalues}}</label>
+                    <input type="text" ng-disabled="false" ng-required="false" name="" ng-model="field_values" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" rows="3" autofocus>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">
+                {{sessionData.appData.cancel}}
+            </md-button>
+            <md-button ng-disabled="formNew.$invalid" ng-click="answer(technical_name)">
+                {{sessionData.appData.ok}}
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -203,6 +203,32 @@
                         <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.set_value.value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
                     </md-input-container>
                 </div>
+                <md-checkbox ng-model="action.use_ai" ng-if="action.action=='create'||action.action=='modify'">
+                    {{sessionData.appData.machinelearning_useai}}
+                </md-checkbox>
+                <md-input-container flex="auto" class="md-block" ng-if="action.use_ai&&(action.action=='create'||action.action=='modify')">
+                    <label>{{sessionData.appData.machinelearningmodel}}</label>
+                    <md-select ng-model="action.ml_model" ng-required="true">
+                        <md-option ng-repeat="ml_model in machinelearning_models" ng-value="ml_model._id">{{ml_model.translated_name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-header ng-if="action.use_ai&&(action.action=='create'||action.action=='modify')">{{sessionData.appData.action_set_value}}</md-header>
+                <div flex layout="row" ng-if="action.use_ai&&(action.action=='create'||action.action=='modify')">
+                    <md-input-container flex="auto" class="md-block">
+                        <label>{{sessionData.appData.field_datafield}}</label>
+                        <md-select ng-model="action.ml_set_value.full_path">
+                            <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex="auto" class="md-block">
+                        <label>{{sessionData.appData.value}}</label>
+                        <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="action.ml_set_value.value" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                    </md-input-container>
+                </div>
+                <md-input-container flex="auto" class="md-block" ng-if="action.use_ai&&(action.action=='create'||action.action=='modify')">
+                    <label>{{sessionData.appData.machinelearning_score_action}}</label>
+                    <input type="text" ng-disabled="false" ng-required="true" name="score" ng-model="action.ml_min_score" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100">
+                </md-input-container>
                 <div layout="row" layout-align="end" flex>
                     <md-button ng-disabled="actionForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>
                 </div>

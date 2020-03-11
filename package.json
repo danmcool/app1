@@ -7,13 +7,13 @@
     },
     "dependencies": {
         "body-parser": "^1.15.0",
-        "brainjs": "^0.7.4",
+        "brain.js": "^2.0.0-alpha.9",
         "cookie-parser": "^1.4.1",
         "debug": "^2.2.0",
         "express": "^4.14.0",
         "ical-generator": "^0.2.8",
-        "mongoose": "^4.6.5",
+        "mongoose": "^5.7.11",
         "nodemailer": "^4.0.1",
-        "saml2-js": "^2.0.2"
+        "saml2-js": "^2.0.5"
     }
 }

@@ -110,7 +110,7 @@ router.post('/:datamodelid/', function (req, res, next) {
     var profile = SessionCache.getProfile(token, req.params.datamodelid);
     var remote_profile = {};
     var remote = false;
-    if (req.body.pid) {
+    if (req.query.pid) {
         if (user.remote_profiles && user.remote_profiles.length > 0) {
             for (var i = 0; i < user.remote_profiles.length; i++) {
                 if (req.body.pid == user.remote_profiles[i]._id) {

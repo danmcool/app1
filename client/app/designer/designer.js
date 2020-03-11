@@ -16,6 +16,12 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
             method: 'PUT'
         }
     });
+}]).factory('DesignProfile', ['$resource', function ($resource) {
+    return $resource('/client/design/profile/:id', null, {
+        'update': {
+            method: 'PUT'
+        }
+    });
 }]).factory('DesignValue', ['$resource', function ($resource) {
     return $resource('/client/design/value/:id', null, {
         'update': {
@@ -24,6 +30,18 @@ app1.factory('DesignApplication', ['$resource', function ($resource) {
     });
 }]).factory('DesignDataModel', ['$resource', function ($resource) {
     return $resource('/client/design/datamodel/:id', null, {
+        'update': {
+            method: 'PUT'
+        }
+    });
+}]).factory('DesignMachineLearningModel', ['$resource', function ($resource) {
+    return $resource('/client/design/machinelearningmodel/:id', null, {
+        'update': {
+            method: 'PUT'
+        }
+    });
+}]).factory('TrainMachineLearningModel', ['$resource', function ($resource) {
+    return $resource('/client/model_train/:datamodel_id/:mlmodel_id', null, {
         'update': {
             method: 'PUT'
         }
