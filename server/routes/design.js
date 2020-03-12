@@ -445,7 +445,8 @@ router.put('/datamodel/:id', function (req, res, next) {
             options: {
                 name: Constants.DataModelIndexName,
                 weights: {}
-            }
+            },
+            language_override: '_none'
         }
         try {
             modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
