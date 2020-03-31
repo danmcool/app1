@@ -975,6 +975,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             pid: $routeParams.pid
         }, $scope.data, function (res) {
             $scope.notify(notifyUser, emailTitle, emailHtml);
+            res._id = $scope.data._id;
             $scope.gotoNextForm(formula, nextFormId, (forwardId ? res : null));
         }, function (res) {
             $scope.data = res.data;
