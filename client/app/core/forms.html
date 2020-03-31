@@ -362,349 +362,353 @@
                                 <div ng-switch-when="check" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <md-input-container>
-                                                <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" style="color:black" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
-                                            </md-input-container>
-                                        </div>
-                                        <div ng-switch-when="false">
-                                            <md-input-container>
-                                                <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
-                                            </md-input-container>
+                                            <div ng-switch="localdata[field.id]">
+                                                <div ng-switch-when="true">
+                                                    <p class="subtitle">{{field.translated_name}}</p>
+                                                </div>
+                                                <div ng-switch-when="true">
+                                                    <p class="subtitle"><del>{{field.translated_name}}</del></p>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-when="false">
+                                                <md-input-container>
+                                                    <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div ng-switch-when="calendar" layout-padding ng-if="!field.hide">
-                                    <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
-                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
-                                            <p class="subtitle">{{localdata[field.id]|date:"yyyy-MM-dd"}}</p>
-                                        </div>
-                                        <div ng-switch-when="false">
-                                            <md-input-container class="md-block">
-                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
-                                                <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" md-open-on-focus ng-model="localdata[field.id]"></md-datepicker>
-                                            </md-input-container>
+                                    <div ng-switch-when="calendar" layout-padding ng-if="!field.hide">
+                                        <div ng-switch="field.disabled">
+                                            <div ng-switch-when="true">
+                                                <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                                <p class="subtitle">{{localdata[field.id]|date:"yyyy-MM-dd"}}</p>
+                                            </div>
+                                            <div ng-switch-when="false">
+                                                <md-input-container class="md-block">
+                                                    <label ng-if="!field.hide_name">{{field.translated_name}}</label>
+                                                    <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" md-open-on-focus ng-model="localdata[field.id]"></md-datepicker>
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div ng-switch-when="appointment" ng-if="!field.hide">
-                                    <div layout-padding>
-                                        <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                    </div>
-                                    <div ng-if="field.show_busy_calendar" layout="row" layout-xs="column" layout-sm="column" layout-padding>
-                                        <calendar-md flex="50" flex-sm="100" flex-xs="100" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
-                                        <div flex="45" flex-xs="100" flex-sm="100" layout="column">
-                                            <header>{{sessionData.appData.appointments}}</header>
-                                            <div ng-repeat="appointment in appointments">
-                                                <md-subheader>{{appointment.start_hours}}:{{appointment.start_minutes}}-{{appointment.end_hours}}:{{appointment.end_minutes}} {{appointment.user.name}}</md-subheader>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-if="(field.disabled==false)" layout-xs="column" layout-sm="column" layout="row" layout-padding>
-                                        <div layout="column" layout-align="space-between space-between">
-                                            <p class="md-body-1">{{sessionData.appData.start_time}}</p>
-                                            <div layout="row" class="md-inline-form">
-                                                <md-input-container class="md-block">
-                                                    <label>{{sessionData.appData.day}}</label>
-                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="localdata[field.id].start_time" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'start_time')"></md-datepicker>
-                                                </md-input-container>
-                                                <md-input-container class="md-block">
-                                                    <label>{{sessionData.appData.hour}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].start_time_hours" ng-required="field.required" ng-change="updateDate(field.id, 'start_time')">
-                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
-                                                    </md-select>
-                                                </md-input-container>
-                                                <md-input-container class="md-block">
-                                                    <label>{{sessionData.appData.minute}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].start_time_minutes" ng-required="field.required" ng-change="updateDate(field.id, 'start_time')">
-                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
-                                                    </md-select>
-                                                </md-input-container>
-                                            </div>
-                                        </div>
-                                        <div layout="column">
-                                            <p class="md-body-1">{{sessionData.appData.end_time}}</p>
-                                            <div layout="row" class="md-inline-form">
-                                                <md-input-container class="md-block">
-                                                    <label>{{sessionData.appData.day}}</label>
-                                                    <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="localdata[field.id].end_time" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'end_time')"></md-datepicker>
-                                                </md-input-container>
-                                                <md-input-container class="md-block">
-                                                    <label>{{sessionData.appData.hour}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].end_time_hours" ng-required="field.required" ng-change="updateDate(field.id, 'end_time')">
-                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
-                                                    </md-select>
-                                                </md-input-container>
-                                                <md-input-container class="md-block">
-                                                    <label>{{sessionData.appData.minute}}</label>
-                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].end_time_minutes" ng-required="field.required" ng-change="updateDate(field.id, 'end_time')">
-                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
-                                                    </md-select>
-                                                </md-input-container>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-if="(field.disabled==true)" layout-xs="column" layout-sm="column" layout="row" layout-padding>
-                                        <div layout="column" layout-align="space-between space-between">
-                                            <p class="md-body-1">{{sessionData.appData.start_time}}</p>
-                                            <div layout="row" class="md-inline-form">
-                                                <p class="subtitle">{{localdata[field.id].start_time|date:"yyyy-MM-dd HH:mm"}}</p>
-                                            </div>
-                                        </div>
-                                        <div layout="column">
-                                            <p class="md-body-1">{{sessionData.appData.end_time}}</p>
-                                            <div layout="row" class="md-inline-form">
-                                                <p class="subtitle">{{localdata[field.id].end_time|date:"yyyy-MM-dd HH:mm"}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div ng-switch-when="appointment_properties" layout-padding ng-if="!field.hide">
-                                    <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
+                                    <div ng-switch-when="appointment" ng-if="!field.hide">
+                                        <div layout-padding>
                                             <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                            <div layout="row" layout-xs="column">
-                                                <calendar-md flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
+                                        </div>
+                                        <div ng-if="field.show_busy_calendar" layout="row" layout-xs="column" layout-sm="column" layout-padding>
+                                            <calendar-md flex="50" flex-sm="100" flex-xs="100" ng-if="dataLoaded" flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
+                                            <div flex="45" flex-xs="100" flex-sm="100" layout="column">
+                                                <header>{{sessionData.appData.appointments}}</header>
                                                 <div ng-repeat="appointment in appointments">
                                                     <md-subheader>{{appointment.start_hours}}:{{appointment.start_minutes}}-{{appointment.end_hours}}:{{appointment.end_minutes}} {{appointment.user.name}}</md-subheader>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div ng-switch-when="false" layout="column">
-                                            <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                            <md-input-container>
-                                                <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.non_stop.enabled" ng-change="updateWholeWeek(data._appointment_properties)">{{sessionData.appData.whole_week}}</md-checkbox>
-                                            </md-input-container>
-                                            <div ng-if="!data._appointment_properties.non_stop.enabled" ng-repeat="day in days">
-                                                <div layout-padding>
-                                                    <md-input-container>
-                                                        <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.days[day.value].enabled">{{day.translated_name}}</md-checkbox>
+                                        <div ng-if="(field.disabled==false)" layout-xs="column" layout-sm="column" layout="row" layout-padding>
+                                            <div layout="column" layout-align="space-between space-between">
+                                                <p class="md-body-1">{{sessionData.appData.start_time}}</p>
+                                                <div layout="row" class="md-inline-form">
+                                                    <md-input-container class="md-block">
+                                                        <label>{{sessionData.appData.day}}</label>
+                                                        <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="localdata[field.id].start_time" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'start_time')"></md-datepicker>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-block">
+                                                        <label>{{sessionData.appData.hour}}</label>
+                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].start_time_hours" ng-required="field.required" ng-change="updateDate(field.id, 'start_time')">
+                                                            <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-block">
+                                                        <label>{{sessionData.appData.minute}}</label>
+                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].start_time_minutes" ng-required="field.required" ng-change="updateDate(field.id, 'start_time')">
+                                                            <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
+                                                        </md-select>
                                                     </md-input-container>
                                                 </div>
-                                                <div ng-if="data._appointment_properties.days[day.value].enabled" layout="row" layout-xs="column" layout-sm="column" layout-fill layout-margin layout-align="start center">
-                                                    <md-input-container>
-                                                        <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.days[day.value].whole_day" ng-change="updateWholeDay(data._appointment_properties.days[day.value])">{{sessionData.appData.whole_day}}</md-checkbox>
+                                            </div>
+                                            <div layout="column">
+                                                <p class="md-body-1">{{sessionData.appData.end_time}}</p>
+                                                <div layout="row" class="md-inline-form">
+                                                    <md-input-container class="md-block">
+                                                        <label>{{sessionData.appData.day}}</label>
+                                                        <md-datepicker md-hide-icons="calendar" ng-required="field.required" md-open-on-focus ng-model="localdata[field.id].end_time" md-min-date="today" md-max-date="today_plus_1_year" ng-change="updateDate(field.id, 'end_time')"></md-datepicker>
                                                     </md-input-container>
-                                                    <div ng-if="!data._appointment_properties.days[day.value].whole_day" name="{{sessionData.appData.hours}}" layout="row" layout-fill layout-margin layout-align="start center">
-                                                        <p class="md-body-1">{{sessionData.appData.start_time}}</p>
-                                                        <md-input-container class="md-block">
-                                                            <label>{{sessionData.appData.hour}}</label>
-                                                            <md-select ng-model="data._appointment_properties.days[day.value].start_time.hours" ng-required="field.required">
-                                                                <md-option ng-repeat="hour in full_hours" value="{{hour}}" ng-selected="hour=='08'">{{hour}}</md-option>
-                                                            </md-select>
-                                                        </md-input-container>
-                                                        <md-input-container class="md-block">
-                                                            <label>{{sessionData.appData.minute}}</label>
-                                                            <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].start_time.minutes" ng-required="field.required">
-                                                                <md-option ng-repeat="minute in full_minutes" value="{{minute}}" ng-selected="minute=='00'">{{minute}}</md-option>
-                                                            </md-select>
+                                                    <md-input-container class="md-block">
+                                                        <label>{{sessionData.appData.hour}}</label>
+                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].end_time_hours" ng-required="field.required" ng-change="updateDate(field.id, 'end_time')">
+                                                            <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-block">
+                                                        <label>{{sessionData.appData.minute}}</label>
+                                                        <md-select name="{{sessionData.appData.hours}}" ng-model="localdata[field.id].end_time_minutes" ng-required="field.required" ng-change="updateDate(field.id, 'end_time')">
+                                                            <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div ng-if="(field.disabled==true)" layout-xs="column" layout-sm="column" layout="row" layout-padding>
+                                            <div layout="column" layout-align="space-between space-between">
+                                                <p class="md-body-1">{{sessionData.appData.start_time}}</p>
+                                                <div layout="row" class="md-inline-form">
+                                                    <p class="subtitle">{{localdata[field.id].start_time|date:"yyyy-MM-dd HH:mm"}}</p>
+                                                </div>
+                                            </div>
+                                            <div layout="column">
+                                                <p class="md-body-1">{{sessionData.appData.end_time}}</p>
+                                                <div layout="row" class="md-inline-form">
+                                                    <p class="subtitle">{{localdata[field.id].end_time|date:"yyyy-MM-dd HH:mm"}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div ng-switch-when="appointment_properties" layout-padding ng-if="!field.hide">
+                                        <div ng-switch="field.disabled">
+                                            <div ng-switch-when="true">
+                                                <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                <div layout="row" layout-xs="column">
+                                                    <calendar-md flex layout layout-fill on-day-click="dayClick" title-format="'MMMM y'" ng-model='selectedDate' day-format="'d'" day-label-format="'EEE'" day-label-tooltip-format="'EEEE'" day-tooltip-format="'fullDate'" week-starts-on="0" day-available="dayAvailable" day-content="dayContent" on-day-click="dayClick"></calendar-md>
+                                                    <div ng-repeat="appointment in appointments">
+                                                        <md-subheader>{{appointment.start_hours}}:{{appointment.start_minutes}}-{{appointment.end_hours}}:{{appointment.end_minutes}} {{appointment.user.name}}</md-subheader>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-when="false" layout="column">
+                                                <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                <md-input-container>
+                                                    <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.non_stop.enabled" ng-change="updateWholeWeek(data._appointment_properties)">{{sessionData.appData.whole_week}}</md-checkbox>
+                                                </md-input-container>
+                                                <div ng-if="!data._appointment_properties.non_stop.enabled" ng-repeat="day in days">
+                                                    <div layout-padding>
+                                                        <md-input-container>
+                                                            <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.days[day.value].enabled">{{day.translated_name}}</md-checkbox>
                                                         </md-input-container>
                                                     </div>
-                                                    <div ng-if="!data._appointment_properties.days[day.value].whole_day" layout="row" layout-fill layout-margin layout-align="start center">
-                                                        <p class="md-body-1">{{sessionData.appData.end_time}}</p>
-                                                        <md-input-container class="md-block">
-                                                            <label>{{sessionData.appData.hour}}</label>
-                                                            <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].end_time.hours" ng-required="field.required">
-                                                                <md-option ng-repeat="hour in full_hours" value="{{hour}}" ng-selected="hour=='19'">{{hour}}</md-option>
-                                                            </md-select>
+                                                    <div ng-if="data._appointment_properties.days[day.value].enabled" layout="row" layout-xs="column" layout-sm="column" layout-fill layout-margin layout-align="start center">
+                                                        <md-input-container>
+                                                            <md-checkbox name="{{day.translated_name}}" ng-model="data._appointment_properties.days[day.value].whole_day" ng-change="updateWholeDay(data._appointment_properties.days[day.value])">{{sessionData.appData.whole_day}}</md-checkbox>
                                                         </md-input-container>
-                                                        <md-input-container class="md-block">
-                                                            <label>{{sessionData.appData.minute}}</label>
-                                                            <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].end_time.minutes" ng-required="field.required">
-                                                                <md-option ng-repeat="minute in full_minutes" value="{{minute}}" ng-selected="minute=='00'">{{minute}}</md-option>
-                                                            </md-select>
-                                                        </md-input-container>
+                                                        <div ng-if="!data._appointment_properties.days[day.value].whole_day" name="{{sessionData.appData.hours}}" layout="row" layout-fill layout-margin layout-align="start center">
+                                                            <p class="md-body-1">{{sessionData.appData.start_time}}</p>
+                                                            <md-input-container class="md-block">
+                                                                <label>{{sessionData.appData.hour}}</label>
+                                                                <md-select ng-model="data._appointment_properties.days[day.value].start_time.hours" ng-required="field.required">
+                                                                    <md-option ng-repeat="hour in full_hours" value="{{hour}}" ng-selected="hour=='08'">{{hour}}</md-option>
+                                                                </md-select>
+                                                            </md-input-container>
+                                                            <md-input-container class="md-block">
+                                                                <label>{{sessionData.appData.minute}}</label>
+                                                                <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].start_time.minutes" ng-required="field.required">
+                                                                    <md-option ng-repeat="minute in full_minutes" value="{{minute}}" ng-selected="minute=='00'">{{minute}}</md-option>
+                                                                </md-select>
+                                                            </md-input-container>
+                                                        </div>
+                                                        <div ng-if="!data._appointment_properties.days[day.value].whole_day" layout="row" layout-fill layout-margin layout-align="start center">
+                                                            <p class="md-body-1">{{sessionData.appData.end_time}}</p>
+                                                            <md-input-container class="md-block">
+                                                                <label>{{sessionData.appData.hour}}</label>
+                                                                <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].end_time.hours" ng-required="field.required">
+                                                                    <md-option ng-repeat="hour in full_hours" value="{{hour}}" ng-selected="hour=='19'">{{hour}}</md-option>
+                                                                </md-select>
+                                                            </md-input-container>
+                                                            <md-input-container class="md-block">
+                                                                <label>{{sessionData.appData.minute}}</label>
+                                                                <md-select name="{{sessionData.appData.hours}}" ng-model="data._appointment_properties.days[day.value].end_time.minutes" ng-required="field.required">
+                                                                    <md-option ng-repeat="minute in full_minutes" value="{{minute}}" ng-selected="minute=='00'">{{minute}}</md-option>
+                                                                </md-select>
+                                                            </md-input-container>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div ng-switch-when="calculation" flex layout-padding ng-if="!field.hide">
-                                    <p class="md-body-1">{{field.translated_name}}</p>
-                                    <p class="subtitle">{{localdata[field.id]}}</p>
-                                </div>
+                                    <div ng-switch-when="calculation" flex layout-padding ng-if="!field.hide">
+                                        <p class="md-body-1">{{field.translated_name}}</p>
+                                        <p class="subtitle">{{localdata[field.id]}}</p>
+                                    </div>
 
-                                <div ng-switch-when="email" layout-padding ng-if="!field.hide">
-                                    <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
-                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
-                                            <p class="subtitle"><a href="mailto:{{localdata[field.id]}}">{{localdata[field.id]}}</a></p>
-                                        </div>
-                                        <div ng-switch-when="false">
-                                            <md-input-container class="md-block">
-                                                <label ng-if="!field.hide_name">{{field.translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
-                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                    <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-                                                        Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long and look like an e-mail address.
+                                    <div ng-switch-when="email" layout-padding ng-if="!field.hide">
+                                        <div ng-switch="field.disabled">
+                                            <div ng-switch-when="true">
+                                                <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                                <p class="subtitle"><a href="mailto:{{localdata[field.id]}}">{{localdata[field.id]}}</a></p>
+                                            </div>
+                                            <div ng-switch-when="false">
+                                                <md-input-container class="md-block">
+                                                    <label ng-if="!field.hide_name">{{field.translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
+                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                        <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                                                            Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long and look like an e-mail address.
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </md-input-container>
+                                                </md-input-container>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div ng-switch-when="address" layout-padding>
-                                    <div ng-switch="field.disabled">
-                                        <div ng-switch-when="true">
-                                            <div layout="row" layout-xs="column" layout-sm="column">
-                                                <div flex="{{field.show_map?60:100}}" flex-xs="100" flex-sm="100" layout="column">
-                                                    <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                                    <p class="md-body-1">{{field.address_line1_translated_name}}</p>
-                                                    <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line1}}</p>
-                                                    <p class="md-body-1">{{field.address_line2_translated_name}}</p>
-                                                    <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line2?localdata[field.id].address_line2:'&nbsp;'}}</p>
-                                                    <div flex layout="column" hide-gt-xs>
-                                                        <p class="md-body-1">{{field.address_city_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
-                                                        <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
-                                                        <p class="md-body-1">{{field.address_state_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
-                                                        <p class="md-body-1">{{field.address_country_translated_name}}</p>
-                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
-                                                    </div>
-                                                    <div flex layout="row" hide-xs>
-                                                        <div flex layout="column">
+                                    <div ng-switch-when="address" layout-padding>
+                                        <div ng-switch="field.disabled">
+                                            <div ng-switch-when="true">
+                                                <div layout="row" layout-xs="column" layout-sm="column">
+                                                    <div flex="{{field.show_map?60:100}}" flex-xs="100" flex-sm="100" layout="column">
+                                                        <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                        <p class="md-body-1">{{field.address_line1_translated_name}}</p>
+                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line1}}</p>
+                                                        <p class="md-body-1">{{field.address_line2_translated_name}}</p>
+                                                        <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_line2?localdata[field.id].address_line2:'&nbsp;'}}</p>
+                                                        <div flex layout="column" hide-gt-xs>
                                                             <p class="md-body-1">{{field.address_city_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
-                                                            <p class="md-body-1">{{field.address_state_translated_name}}</p>
-                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
-                                                        </div>
-                                                        <div flex layout="column" style="margin-left: 14px">
                                                             <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
+                                                            <p class="md-body-1">{{field.address_state_translated_name}}</p>
+                                                            <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
                                                             <p class="md-body-1">{{field.address_country_translated_name}}</p>
                                                             <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
                                                         </div>
+                                                        <div flex layout="row" hide-xs>
+                                                            <div flex layout="column">
+                                                                <p class="md-body-1">{{field.address_city_translated_name}}</p>
+                                                                <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_city}}</p>
+                                                                <p class="md-body-1">{{field.address_state_translated_name}}</p>
+                                                                <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_state?localdata[field.id].address_state:'&nbsp;'}}</p>
+                                                            </div>
+                                                            <div flex layout="column" style="margin-left: 14px">
+                                                                <p class="md-body-1">{{field.address_postal_code_translated_name}}</p>
+                                                                <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_postal_code}}</p>
+                                                                <p class="md-body-1">{{field.address_country_translated_name}}</p>
+                                                                <p class="subtitle" style="margin-bottom: 14px">{{localdata[field.id].address_country}}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <div ng-if="field.show_map" flex="40" flex-xs="100" flex-sm="100" layout-align="center center" id="map{{field.id}}" style="width:100%;height:290px;background-color:grey"></div>
                                                 </div>
-                                                <div ng-if="field.show_map" flex="40" flex-xs="100" flex-sm="100" layout-align="center center" id="map{{field.id}}" style="width:100%;height:290px;background-color:grey"></div>
                                             </div>
-                                        </div>
-                                        <div ng-switch-when="false">
-                                            <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
-                                            <md-input-container class="md-block">
-                                                <label>{{field.address_line1_translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
-                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                        Your input must be between 1 and 200 characters long.
-                                                    </div>
-                                                </div>
-                                            </md-input-container>
-                                            <md-input-container class="md-block">
-                                                <label>{{field.address_line2_translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                    <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                        Your input must be between 0 and 200 characters long.
-                                                    </div>
-                                                </div>
-                                            </md-input-container>
-                                            <div layout="row" layout-xs="column">
-                                                <md-input-container flex="70" flex-xs="100">
-                                                    <label>{{field.address_city_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
+                                            <div ng-switch-when="false">
+                                                <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                                <md-input-container class="md-block">
+                                                    <label>{{field.address_line1_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 1 and 200 characters long.
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                                <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
-                                                    <label>{{field.address_postal_code_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                <md-input-container class="md-block">
+                                                    <label>{{field.address_line2_translated_name}}</label>
+                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 0 and 200 characters long.
                                                         </div>
                                                     </div>
                                                 </md-input-container>
-                                            </div>
-                                            <div layout="row" layout-xs="column">
-                                                <md-input-container flex="50" flex-xs="100">
-                                                    <label>{{field.address_state_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                            Your input must be between 0 and 200 characters long.
+                                                <div layout="row" layout-xs="column">
+                                                    <md-input-container flex="70" flex-xs="100">
+                                                        <label>{{field.address_city_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 1 and 200 characters long.
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </md-input-container>
-                                                <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
-                                                    <label>{{field.address_country_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
-                                                    <div ng-messages="dynamicForm.$field.id.$error" role="alert">
-                                                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                                                            Your input must be between 0 and 200 characters long.
+                                                    </md-input-container>
+                                                    <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
+                                                        <label>{{field.address_postal_code_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 0 and 200 characters long.
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </md-input-container>
+                                                    </md-input-container>
+                                                </div>
+                                                <div layout="row" layout-xs="column">
+                                                    <md-input-container flex="50" flex-xs="100">
+                                                        <label>{{field.address_state_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 0 and 200 characters long.
+                                                            </div>
+                                                        </div>
+                                                    </md-input-container>
+                                                    <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
+                                                        <label>{{field.address_country_translated_name}}</label>
+                                                        <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                        <div ng-messages="dynamicForm.$field.id.$error" role="alert">
+                                                            <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                                                                Your input must be between 0 and 200 characters long.
+                                                            </div>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div layout="row" layout-align="end" layout-wrap>
+                        <div ng-repeat="action in form.actions">
+                            <div ng-switch="action.action">
+                                <div ng-switch-when="create">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html, action.use_ai, action.ml_model, action.ml_min_score, action.ml_set_value)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="modify">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html, action.use_ai, action.ml_model, action.ml_min_score, action.ml_set_value)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="delete">
+                                    <md-button ng-click="delete(action.formula, action.next_form_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="link">
+                                    <md-button ng-click="link(action.formula, action.next_form_id, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="subscribe">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="subscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="unsubscribe">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="unsubscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="new_item">
+                                    <md-button ng-click="newItem(action.formula, action.next_form_id, action.set_value, data, item_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="download">
+                                    <md-button ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="share">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint_path, action.constraint_value, action.email_path, action.app_profile_id, action.message, data)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="calendar">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="calendar(action.formula, action.next_form_id, action.set_value, action.forward_id, action.project_name_path, action.start_date_path, action.end_date_path, action.user_path, data)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="add_event">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path, action.reservation_datamodel, action.object_id_reservation_path, action.name_reservation_path, action.period_reservation_path)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="remove_event">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="removeEvent(action.formula, action.next_form_id, action.set_value, action.object_id_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
+                                </div>
+                                <div ng-switch-when="pay">
+                                    <md-button ng-disabled="dynamicForm.$invalid" ng-click="pay(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-primary">{{action.translated_name}}</md-button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                </div>
-
-                <div layout="row" layout-align="end" layout-wrap>
-                    <div ng-repeat="action in form.actions">
-                        <div ng-switch="action.action">
-                            <div ng-switch-when="create">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="create(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html, action.use_ai, action.ml_model, action.ml_min_score, action.ml_set_value)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="modify">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="modify(action.formula, action.next_form_id, action.set_value, action.forward_id, action.notify_user, action.email_title, action.email_html, action.use_ai, action.ml_model, action.ml_min_score, action.ml_set_value)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="delete">
-                                <md-button ng-click="delete(action.formula, action.next_form_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="link">
-                                <md-button ng-click="link(action.formula, action.next_form_id, action.forward_id, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="subscribe">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="subscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="unsubscribe">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="unsubscribe(action.formula, action.next_form_id, action.set_value, action.forward_id, action.item_path, action.notify_user, action.email_title, action.email_html)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="new_item">
-                                <md-button ng-click="newItem(action.formula, action.next_form_id, action.set_value, data, item_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="download">
-                                <md-button ng-click="download(data, action.data_fields, action.file_name)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="share">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="share(action.formula, action.next_form_id, action.set_value, action.constraint_path, action.constraint_value, action.email_path, action.app_profile_id, action.message, data)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="calendar">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="calendar(action.formula, action.next_form_id, action.set_value, action.forward_id, action.project_name_path, action.start_date_path, action.end_date_path, action.user_path, data)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="add_event">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="addEvent(action.formula, action.next_form_id, action.set_value, action.object_name_path, action.period_path, action.reservation_datamodel, action.object_id_reservation_path, action.name_reservation_path, action.period_reservation_path)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="remove_event">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="removeEvent(action.formula, action.next_form_id, action.set_value, action.object_id_path, action.period_path)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                            <div ng-switch-when="pay">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="pay(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-primary">{{action.translated_name}}</md-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </form>
+            </div>
+            <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         </div>
-        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
-    </div>
 </md-content>
