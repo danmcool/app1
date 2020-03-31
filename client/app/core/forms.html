@@ -362,19 +362,13 @@
                                 <div ng-switch-when="check" layout-padding ng-if="!field.hide">
                                     <div ng-switch="field.disabled">
                                         <div ng-switch-when="true">
-                                            <div ng-switch="localdata[field.id]">
-                                                <div ng-switch-when="true">
-                                                    <p class="subtitle">{{field.translated_name}}</p>
-                                                </div>
-                                                <div ng-switch-when="false">
-                                                    <p class="subtitle"><del>{{field.translated_name}}</del></p>
-                                                </div>
-                                            </div>
-                                            <div ng-switch-when="false">
-                                                <md-input-container>
-                                                    <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
-                                                </md-input-container>
-                                            </div>
+                                            <p ng-if="localdata[field.id]" class="subtitle">{{field.translated_name}}</p>
+                                            <p ng-if="!localdata[field.id]" class="subtitle"><del>{{field.translated_name}}</del></p>
+                                        </div>
+                                        <div ng-switch-when="false">
+                                            <md-input-container>
+                                                <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
+                                            </md-input-container>
                                         </div>
                                     </div>
                                 </div>
