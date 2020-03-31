@@ -590,7 +590,7 @@ angular.module('app1_admin', ['ngRoute', 'ngResource', 'ngMaterial']).directive(
         $scope.updaterepository = 'https://github.com/danmcool/app1';
         $scope.launch = function () {
             Update.update({}, {
-                repository: $scope.update.repository
+                repository: $scope.updaterepository
             }, function (result) {
                 $scope.update = result;
             });
