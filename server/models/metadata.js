@@ -358,7 +358,8 @@ var indexUser = {
             lastname: 5,
             email: 3,
             '$**': 2
-        }
+        },
+        language_override: Constants.DataModelIndexLanguageOverride
     }
 };
 UserSchema.index(indexUser.fields, indexUser.options);

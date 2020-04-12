@@ -119,6 +119,7 @@ const Constants = {
     DataModelUserId: 'userdata',
     DataModelFileId: 'filedata',
     DataModelIndexName: '_search',
+    DataModelIndexLanguageOverride: '_none_language',
 
     MachineLearningMaxTrainingDataPoints: 2000,
     MachineLearningMaxTrainingBatch: 100

@@ -387,7 +387,8 @@ router.post('/datamodel', function (req, res, next) {
             fields: {},
             options: {
                 name: Constants.DataModelIndexName,
-                weights: {}
+                weights: {},
+                language_override: Constants.DataModelIndexLanguageOverride
             }
         }
         try {
@@ -444,9 +445,9 @@ router.put('/datamodel/:id', function (req, res, next) {
             fields: {},
             options: {
                 name: Constants.DataModelIndexName,
-                weights: {}
-            },
-            language_override: '_none'
+                weights: {},
+                language_override: Constants.DataModelIndexLanguageOverride
+            }
         }
         try {
             modelSchema = new Schema(DatamodelTools.buildDataModel(req.body.projection, index));
@@ -463,11 +464,16 @@ router.put('/datamodel/:id', function (req, res, next) {
             if (!object) return res.status(401).json({
                 err: 'Not enough user rights'
             });
-            if (mongoose.connections[0].collections[Constants.DataModelPrefix + object._id]) {
-                mongoose.connections[0].collections[Constants.DataModelPrefix + object._id].dropIndex(Constants.DataModelIndexName);
+            var datamodelName = Constants.DataModelPrefix + object._id;
+            if (mongoose.connection.collections[datamodelName]) {
+                try {
+                    mongoose.connection.collections[datamodelName].dropIndex(Constants.DataModelIndexName);
+                } catch (err) {
+                    console.log(err);
+                }
             }
-            delete mongoose.connection.models[Constants.DataModelPrefix + object._id];
-            delete mongoose.modelSchemas[Constants.DataModelPrefix + object._id];
+            delete mongoose.connection.models[datamodelName];
+            delete mongoose.modelSchemas[datamodelName];
             delete Metadata.Objects[object._id];
             modelSchema.index(index.fields, index.options);
             Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + object._id);

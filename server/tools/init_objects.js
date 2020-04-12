@@ -23,9 +23,9 @@ DataModel.find(function (err, objects) {
                 fields: {},
                 options: {
                     name: Constants.DataModelIndexName,
-                    weights: {}
-                },
-                language_override: '_none'
+                    weights: {},
+                    language_override: Constants.DataModelIndexLanguageOverride
+                }
             }
             try {
                 modelSchema = new Schema(DatamodelTools.buildDataModel(objects[i].projection, index));
