@@ -1,8 +1,8 @@
-# Application As A Service Framework
+# NoCode Application Development As A Service Framework
 
 ## What is it?
 
-App1 is an open source framework that allows you to build an Application as a Service infrastructure.
+App1 is an open source framework that allows you to build an NoCode Applications as a Service infrastructure.
 
 It is designed to allow end-users to easily create and modify applications, to model underneath data, to run, edit or share an application using only a browser whether on mobile, tablet or desktop.
 
