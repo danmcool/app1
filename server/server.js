@@ -12,15 +12,15 @@ if (!process.env.APP1_SECRET_KEY) {
     console.log('Invalid secret key configuration');
     process.exit(1);
 }
-
+/*
 var http = require('http');
 http.createServer(function (req, res) {
     res.writeHead(301, {
         'Location': 'https://' + req.headers['host'] + req.url
     });
     res.end();
-}).listen(80);
-
+}).listen(8080);
+*/
 var app = require('./app.js');
 var fs = require('fs');
 var https = require('https');
@@ -30,11 +30,11 @@ var ssl = {
     ca: fs.readFileSync('./server/ssl/app1-intermediate-cert.crt', 'utf8')
 };
 
-//var server = http.createServer(app);
-//var port = 80;
+var server = http.createServer(app);
+var port = 8080;
 
-var server = https.createServer(ssl, app);
-var port = 443;
+//var server = https.createServer(ssl, app);
+//var port = 8443;
 
 server.listen(port);
 server.on('error', onError);
