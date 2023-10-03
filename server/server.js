@@ -12,8 +12,9 @@ if (!process.env.APP1_SECRET_KEY) {
     console.log('Invalid secret key configuration');
     process.exit(1);
 }
-/*
+
 var http = require('http');
+/*
 http.createServer(function (req, res) {
     res.writeHead(301, {
         'Location': 'https://' + req.headers['host'] + req.url
