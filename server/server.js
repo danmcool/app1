@@ -37,7 +37,7 @@ var port = 8080;
 //var server = https.createServer(ssl, app);
 //var port = 443;
 
-server.listen(port);
+server.listen(port, '127.0.0.1');
 server.on('error', onError);
 server.on('listening', onListening);
 
