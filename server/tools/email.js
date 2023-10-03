@@ -5,13 +5,16 @@ var Constants = require('../tools/constants.js');
 var Email = {};
 
 var transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'ssl0.ovh.net',
+    port: 465,
+    secure: true,
+    //service: 'Gmail',
     auth: {
         user: process.env.APP1_EMAIL_USERNAME,
         pass: process.env.APP1_EMAIL_PASSWORD
     },
-    //debug: true, // include SMTP traffic in the logs
-    logger: false // log to console
+    debug: true,
+    logger: true
 });
 
 Email.send2 = function (email_address, cc_email_address, subject, text, html, ical_content) {
