@@ -32,12 +32,12 @@ var ssl = {
 };
 
 var server = http.createServer(app);
-var port = 8080;
+var port = 80;
 
 //var server = https.createServer(ssl, app);
 //var port = 443;
 
-server.listen(port, '127.0.0.1');
+server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
