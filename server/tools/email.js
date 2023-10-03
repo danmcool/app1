@@ -41,7 +41,7 @@ Email.send = function (email_address, cc_email_address, subject, text, html) {
     transporter.sendMail({
         to: email_address,
         cc: cc_email_address,
-        from: Constants.EmailUserName,
+        from: process.env.APP1_EMAIL_USERNAME,
         subject: subject,
         text: text,
         html: html,
