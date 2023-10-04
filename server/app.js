@@ -12,8 +12,9 @@ var mongodbUri = 'mongodb://app1:' + process.env.APP1_DB_PASSWORD + '@' + proces
 mongoose.connect(mongodbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
+    strictQuery: false
+    //useCreateIndex: true,
+    //useFindAndModify: false
 });
 
 // require routes
