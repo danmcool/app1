@@ -13,6 +13,11 @@ if (!process.env.APP1_SECRET_KEY) {
     process.exit(1);
 }
 
+if (!process.env.APP1_SERVER_NAME) {
+    console.log('Missing server name');
+    process.exit(1);
+}
+
 var http = require('http');
 /*
 http.createServer(function (req, res) {

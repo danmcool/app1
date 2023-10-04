@@ -1,7 +1,4 @@
-var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'ngCookies', 'materialCarousel']).config(['$mdThemingProvider', function ($mdThemingProvider) {
-    $mdThemingProvider.theme('home')
-        .primaryPalette('grey')
-        .accentPalette('amber');
+var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'materialCalendar', 'infinite-scroll', 'materialCarousel', 'materialCalendar']).config(['$mdThemingProvider', function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
         .accentPalette('amber');
@@ -16,7 +13,63 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         .accentPalette('light-blue');
     $mdThemingProvider.alwaysWatchTheme(true);
     $mdThemingProvider.generateThemesOnDemand(false);
-}]).factory('Register', ['$resource',
+}]).factory('Applications', ['$resource',
+    function ($resource) {
+        return $resource('/client/application/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('User', ['$resource',
+    function ($resource) {
+        return $resource('/client/user/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Password', ['$resource',
+    function ($resource) {
+        return $resource('/authentication/password', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Company', ['$resource',
+    function ($resource) {
+        return $resource('/client/company/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Login', ['$resource',
+    function ($resource) {
+        return $resource('/authentication/login', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('UserStatus', ['$resource',
+    function ($resource) {
+        return $resource('/authentication/status', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Logout', ['$resource',
+    function ($resource) {
+        return $resource('/authentication/logout', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Register', ['$resource',
     function ($resource) {
         return $resource('/authentication/register', null, {
             'update': {
@@ -24,11 +77,102 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', '$cookies', '$mdDialog', function SessionService(AppTranslationService, $location, $resource, $window, $cookies, $mdDialog) {
+]).factory('Notify', ['$resource',
+    function ($resource) {
+        return $resource('/client/notify/:user_id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Forms', ['$resource',
+    function ($resource) {
+        return $resource('/client/form/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Value', ['$resource',
+    function ($resource) {
+        return $resource('/client/value/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Share', ['$resource',
+    function ($resource) {
+        return $resource('/client/share', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Calendar', ['$resource',
+    function ($resource) {
+        return $resource('/client/calendar', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Event', ['$resource',
+    function ($resource) {
+        return $resource('/client/event/:datamodel_id/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Reservation', ['$resource',
+    function ($resource) {
+        return $resource('/client/reservation/:datamodel_id/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Files', ['$resource',
+    function ($resource) {
+        return $resource('/client/file/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('FileUrl', ['$resource',
+    function ($resource) {
+        return $resource('/client/file/url/:id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('RunMachineLearningModel', ['$resource',
+    function ($resource) {
+        return $resource('/client/model_run/:datamodel_id/:data_id/:mlmodel_id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('Datas', ['$resource',
+    function ($resource) {
+        return $resource('/client/data/:datamodel_id/:entry_id', {
+            datamodel_id: '@datamodel_id',
+            entry_id: '@entry_id'
+        }, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications, User) {
     var sessionData = {
         userData: {
             properties: {
-                theme: 'home',
+                theme: 'default',
                 uiLanguage: 'auto'
             }
         },
@@ -83,33 +227,112 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         sessionData.userData.title = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '') + (userResult.user.company.name ? ' @ ' + userResult.user.company.name : '');
         sessionData.userData.name = (userResult.user.firstname ? userResult.user.firstname : '') + ' ' + (userResult.user.lastname ? userResult.user.lastname : '');
         sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
+        Applications.query({
+            skip: 0,
+            limit: 500,
+        }, function (appResult) {
+            sessionData.applications = appResult;
+            var apps = sessionData.applications;
+            var saveUserData = false;
+            if (!sessionData.userData.properties.app_score) {
+                sessionData.userData.properties.app_score = {};
+                saveUserData = true;
+            }
+            for (var i = 0; i < apps.length; i++) {
+                if (apps[i].remote) {
+                    apps[i].translated_name = translate(apps[i].name) + ' (' + apps[i].company_name + ')';
+                } else {
+                    apps[i].translated_name = translate(apps[i].name);
+                }
+                apps[i].translated_description = translate(apps[i].description);
+                if (!sessionData.userData.properties.app_score[apps[i]._id]) {
+                    sessionData.userData.properties.app_score[apps[i]._id] = 75.00;
+                    saveUserData = true;
+                }
+            }
+            apps.sort(function (app_1, app_2) {
+                return sessionData.userData.properties.app_score[app_2._id] - sessionData.userData.properties.app_score[app_1._id];
+            });
+            if (saveUserData) {
+                User.update({
+                    id: sessionData.userData._id
+                }, {
+                    properties: sessionData.userData.properties
+                });
+            }
+            if (gotoApps) {
+                sessionData.applicationName = sessionData.appData.home;
+                location('/applications');
+            } else if ($location.path() == '/') {
+                location('/applications');
+            }
+        }, function (error) {
+            // shows an error loading applications
+        });
     }
     var init = function () {
         sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
-        sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
-        var favoriteCookie = $cookies.get('app1_eu_cookies');
-        if (!favoriteCookie) {
-            $mdDialog.show(
-                $mdDialog.alert()
-                .parent(angular.element(document.body))
-                .clickOutsideToClose(true)
-                .title(sessionData.appData.cookie_policy)
-                .textContent(sessionData.appData.cookie_policy_content)
-                .ok(sessionData.appData.ok)
-            ).then(function () {
-                var expireDate = new Date();
-                expireDate.setDate(expireDate.getDate() + 10000);
-                $cookies.put('app1_eu_cookies', 'OK', {
-                    'expires': expireDate
-                });
-            });
+        UserStatus.get(function (userResult) {
+            if ($location.path() == '/login') {
+                initSessionData(userResult, true);
+            } else {
+                initSessionData(userResult, false);
+            }
+        }, function (error) {
+            sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
+            location('/login', false);
+        });
+    }
+    var openApp = function (appId) {
+        if (sessionData.userData.profile.type == 'public') return;
+        for (var i = 0; i < sessionData.applications.length; i++) {
+            sessionData.userData.properties.app_score[sessionData.applications[i]._id] *= 0.99;
         }
+        sessionData.userData.properties.app_score[appId] = Math.min(100.00, sessionData.userData.properties.app_score[appId] * 1.02);
+        sessionData.applications.sort(function (app_1, app_2) {
+            return sessionData.userData.properties.app_score[app_2._id] - sessionData.userData.properties.app_score[app_1._id];
+        });
+        User.update({
+            id: sessionData.userData._id
+        }, {
+            properties: sessionData.userData.properties
+        });
     }
     var login = function (user, password) {
-        location('/#login');
+        var loginObject = new Login({
+            user: user,
+            password: password
+        });
+        loginObject.$save(function (userResult) {
+            initSessionData(userResult, true);
+        }, function (error) {
+            sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
+            location('/', false);
+        });
+    }
+    var logout = function () {
+        Logout.get();
+        sessionData = {
+            userData: {
+                properties: {
+                    theme: 'default',
+                    uiLanguage: 'auto'
+                }
+            },
+            applicationName: 'App1'
+        }
+        sessionData.userData.properties.correctedLanguage = computeLanguage(sessionData.userData.properties, $window);
+        sessionData.appData = AppTranslationService.translate(sessionData.userData.properties.correctedLanguage);
+        location('/', false);
     }
     var location = function (url, noScroll) {
         $location.url(url);
+        if (noScroll) {} else {
+            $window.scrollTo(0, 0);
+        }
+    }
+    var locationBack = function (noScroll) {
+        $window.history.back();
         if (noScroll) {} else {
             $window.scrollTo(0, 0);
         }
@@ -119,11 +342,50 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         getSessionData: getSessionData,
         translate: translate,
         init: init,
+        openApp: openApp,
         login: login,
+        logout: logout,
         location: location,
+        locationBack: locationBack,
         computeLanguage: computeLanguage
     }
-}]).controller('HomeCtrl', ['$scope', '$timeout', '$mdSidenav', 'SessionService', function ($scope, $timeout, $mdSidenav, SessionService) {
+}]).factory('MapService', function MapService() {
+    var maps = [];
+
+    var initMap = function initMap(mapId) {
+        maps[mapId] = new google.maps.Map(document.getElementById(mapId), {
+            zoom: 2,
+            scrollwheel: false,
+            navigationControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            draggable: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+
+    var geocodeAddress = function geocodeAddress(mapId, address) {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+            'address': address
+        }, function (results, status) {
+            if (status === 'OK') {
+                maps[mapId].setCenter(results[0].geometry.location);
+                maps[mapId].setZoom(14);
+                /*var marker = new google.maps.Marker({
+                    map: maps[mapId],
+                    position: results[0].geometry.location
+                });*/
+            } else {
+                //alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+    return {
+        geocodeAddress: geocodeAddress,
+        initMap: initMap
+    }
+}).controller('AppCtrl', ['$scope', '$timeout', '$mdSidenav', 'SessionService', function ($scope, $timeout, $mdSidenav, SessionService) {
     SessionService.init();
 
     $scope.sessionData = SessionService.getSessionData();
@@ -134,10 +396,35 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         if (newValue != oldValue) $scope.sessionData = newValue;
     });
 
+    $scope.closeLeft = function () {
+        $mdSidenav('left').close();
+    }
     $scope.closeRight = function () {
         $mdSidenav('right').close();
     }
 
+    $scope.logout = function () {
+        $mdSidenav('right').close();
+        SessionService.logout();
+    }
+
+    $scope.open = function (application) {
+        //SessionService.openApp(application._id);
+        if (application.type == 'url') {
+            SessionService.location('/url/' + application._id + '?iframe_url=' + application.url);
+        } else if (application.type == 'file') {
+            SessionService.location('/file/' + application._id + '?iframe_file=' + application.file);
+        } else {
+            if (application.remote) {
+                SessionService.location('/workflows/' + application._id + '?pid=' + application.pid);
+            } else {
+                SessionService.location('/workflows/' + application._id);
+            }
+        }
+        $scope.closeLeft();
+    }
+
+    $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildDelayedToggler('right');
 
     function debounce(func, wait, context) {
@@ -159,25 +446,103 @@ var home = angular.module('home', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             $mdSidenav(navID).toggle();
         }, 200);
     }
-
-    $scope.scroll = function (elementId) {
-        document.querySelector(elementId).scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
 }]).config(['$routeProvider', function ($routeProvider) {
     $routeProvider
-        .when('/welcome', {
-            templateUrl: 'welcome.html',
-            controller: 'WelcomeCtrl'
+        .when('/form/:id/:entry_id', {
+            templateUrl: 'core/forms.html',
+            controller: 'FormDetailsCtrl'
         })
-        .when('/register', {
-            templateUrl: 'register.html',
-            controller: 'RegisterCtrl'
+        .when('/workflows/:application_id', {
+            templateUrl: 'core/workflows.html',
+            controller: 'WorkflowsCtrl'
+        })
+        .when('/url/:application_id', {
+            templateUrl: 'core/url.html',
+            controller: 'UrlCtrl'
+        })
+        .when('/file/:application_id', {
+            templateUrl: 'core/file.html',
+            controller: 'FileCtrl'
+        })
+        .when('/login', {
+            templateUrl: 'core/login.html',
+            controller: 'LoginCtrl'
+        })
+        .when('/user', {
+            templateUrl: 'core/user.html',
+            controller: 'UserCtrl'
+        })
+        .when('/company', {
+            templateUrl: 'core/company.html',
+            controller: 'CompanyCtrl'
+        })
+        .when('/applications', {
+            templateUrl: 'core/applications.html',
+            controller: 'ApplicationsCtrl'
+        })
+        .when('/designer', {
+            templateUrl: 'designer/designer.html',
+            controller: 'DesignerCtrl'
+        })
+        .when('/application_edit/:id', {
+            templateUrl: 'designer/application.html',
+            controller: 'ApplicationEditCtrl'
+        })
+        .when('/application_security/:id', {
+            templateUrl: 'designer/applicationsecurity.html',
+            controller: 'ApplicationSecurityCtrl'
+        })
+        .when('/application_profile/:id', {
+            templateUrl: 'designer/applicationprofile.html',
+            controller: 'ApplicationProfileCtrl'
+        })
+        .when('/application_users/:id', {
+            templateUrl: 'designer/applicationusers.html',
+            controller: 'ApplicationUsersCtrl'
+        })
+        .when('/application_share/:id', {
+            templateUrl: 'designer/share.html',
+            controller: 'ApplicationShareCtrl'
+        })
+        .when('/workflow_edit/:id', {
+            templateUrl: 'designer/workflow.html',
+            controller: 'WorkflowEditCtrl'
+        })
+        .when('/form_edit/:id', {
+            templateUrl: 'designer/form.html',
+            controller: 'FormEditCtrl'
+        })
+        .when('/form_display_edit/:id', {
+            templateUrl: 'designer/display.html',
+            controller: 'FormDisplayEditCtrl'
+        })
+        .when('/form_action_edit/:id', {
+            templateUrl: 'designer/action.html',
+            controller: 'FormActionEditCtrl'
+        })
+        .when('/form_value_edit/:id', {
+            templateUrl: 'designer/value.html',
+            controller: 'FormValueEditCtrl'
+        })
+        .when('/datamodel', {
+            templateUrl: 'datamodel/datamodel.html',
+            controller: 'DatamodelCtrl'
+        })
+        .when('/datamodel/:id', {
+            templateUrl: 'datamodel/datamodeledit.html',
+            controller: 'DatamodelEditCtrl'
+        })
+        .when('/machinelearningmodel', {
+            templateUrl: 'machinelearningmodel/machinelearningmodel.html',
+            controller: 'MachineLearningModelCtrl'
+        })
+        .when('/machinelearningmodel/:id', {
+            templateUrl: 'machinelearningmodel/machinelearningmodeledit.html',
+            controller: 'MachineLearningModelEditCtrl'
         })
         .otherwise({
-            redirectTo: '/',
-            templateUrl: 'welcome.html',
-            controller: 'WelcomeCtrl'
+            redirectTo: '/login',
+            templateUrl: 'core/login.html',
+            controller: 'LoginCtrl'
         });
 }]);

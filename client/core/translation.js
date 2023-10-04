@@ -1,80 +1,48 @@
-home.factory('AppTranslationService', function AppTranslationService() {
+app1.factory('AppTranslationService', function AppTranslationService() {
     var text = {
-        cookie_policy: {
-            en: 'Cookie Policy',
-            fr: 'Politique de cookies'
-        },
-        cookie_policy_content: {
-            en: 'App1 uses cookies to assure your web browsing confort, to make visitor statistics, and to propose better performance for your applications. If you continue the browsing, you agree with this information.',
-            fr: 'App1 utilise des cookies pour assurer votre confort de navigation, pour réaliser des statistiques de visites ainsi que pour vous proposer des performances améliorées de vos applications. En poursuivant votre navigation, vous en acceptez l\'utilisation.'
-        },
         app_title: {
             en: 'Application ONE',
             fr: 'Application ONE'
-        },
-        cloud_applications: {
-            en: 'CLOUD APPLICATIONS',
-            fr: 'APPLICATIONS CLOUD'
-        },
-        homepage_platform: {
-            en: 'Platform',
-            fr: 'Plateforme'
-        },
-        homepage_services: {
-            en: 'Services',
-            fr: 'Services'
         },
         homepage_welcome: {
             en: 'Welcome to App1',
             fr: 'Bienvenue chez App1'
         },
-        homepage_welcome1: {
-            en: 'DIGITAL ENTERPRISE',
-            fr: 'ENTREPRISE DIGITALE'
-        },
-        homepage_welcome2: {
-            en: 'Make your digital transformation with us!\nFree registration!',
-            fr: 'Faites votre transformation digitale avec nous!\nEnregistrement gratuit!'
-        },
-        homepage_ent_platform: {
-            en: 'Create your paper-free workflows on App1 platform',
-            fr: 'Dématérialisez vos processus sur la plateforme App1'
+        homepage_platform: {
+            en: 'App1 is the platform for digital enterprise',
+            fr: 'App1 est la plateforme de l\'entreprise digitale'
         },
         homepage_power: {
-            en: 'Applications',
-            fr: 'Applications'
+            en: 'Power',
+            fr: 'Puissance'
         },
         homepage_design: {
-            en: 'Experience',
-            fr: 'Expérience'
+            en: 'Looks',
+            fr: 'Design'
         },
         homepage_flexibility: {
             en: 'Versatility',
-            fr: 'Versatilité'
+            fr: 'Flexibilité'
         },
         homepage_architecture: {
-            en: 'Use out of the box cloud applications like event management, timesheets, etc.',
-            fr: 'Utilisez les applications existantes comme gestion d\'évènements, feuilles de présence, etc.'
+            en: 'Modern architecture allows App1 to be one of the fastest cloud enterprise software',
+            fr: 'L\'architecture moderne permet à App1 d\'être un des plus rapides logiciel cloud pour entreprise'
         },
         homepage_looks: {
             en: 'Easy to use, designed for mobile first, there\'s no need to read the manual',
             fr: 'Facile à utiliser, disponible sur mobile, tablette et desktop, pas besoin de regarder le manuel'
         },
         homepage_versatility: {
-            en: 'Create your own applications or change the existing one to suit your needs',
-            fr: 'Créez vos propres applications ou ajustez à vos besoins les applications existantes'
+            en: 'Business partners can collaborate on different apps in same cloud',
+            fr: 'Les partenaires business peuvent collaborer sur des applications différentes dans le même cloud'
         },
         homepage_products: {
             en: 'Products',
             fr: 'Produits'
         },
-        homepage_pricing: {
-            en: 'Pricing',
-            fr: 'Tarifs'
-        },
         homepage_contact: {
-            en: 'Contact',
-            fr: 'Contact'
+            en: 'Contact Us',
+            fr: 'Nous contacter'
         },
         homepage_events_title: {
             en: 'Events',
@@ -101,19 +69,19 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Créer de feuilles de présence et assignez les a vos employés, vos employés peuvent les faire valider par les clients'
         },
         homepage_consulting: {
-            en: 'CONSULTING',
-            fr: 'CONSEIL'
+            en: 'Consulting',
+            fr: 'Conseil'
         },
         homepage_buildpoc_title: {
-            en: 'Let us build your live proof of concept',
+            en: 'Let Us Build Your Live Proof Of Concept',
             fr: 'Laissez nous faire une preuve de concept live pour vous'
         },
         homepage_buildpoc: {
-            en: 'Our consulting team can help you define your digital requirements; then rapidly create a App1 application and help you with the deployment of the paper-free solution in your enterprise',
-            fr: 'Notre équipe de conseil peut vous aider à concrétiser vos besoins dans le numérique; ensuite créer très rapidement une application App1 et vous accompagner dans le déploiement de la solution de dématérialisation dans votre entreprise'
+            en: 'Our consulting team can help you define your digital requirements; then rapidly create a App1 application and help you with the deployment of the solution in your enterprise',
+            fr: 'Notre équipe de conseil peut vous aider à concrétiser vos besoins dans le numérique; ensuite créer très rapidement une application App1 et vous accompagner dans le déploiement de la solution dans votre entreprise'
         },
         homepage_appcreation_title: {
-            en: 'Training for partners and power users',
+            en: 'Training For Partners And Power Users',
             fr: 'Training pour les partenaires et utilisateurs chevronnés'
         },
         homepage_appcreation: {
@@ -124,61 +92,9 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'Free registration',
             fr: 'Enregistrement gratuit'
         },
-        homepage_register_free_trial: {
-            en: 'Free registration for up to 10 users per company',
-            fr: 'Enregistrement gratuit jusqu\'à 10 utilisateurs par société'
-        },
         homepage_require_poc: {
             en: 'Free proof of concept -> Make your digital transformation with App1',
             fr: 'Preuve de concept gratuit -> Créez votre transformation digitale avec App1'
-        },
-        pricing_package: {
-            en: 'Subscription',
-            fr: 'Souscription'
-        },
-        pricing_users: {
-            en: 'Users',
-            fr: 'Utilisateurs'
-        },
-        pricing_existing_applications: {
-            en: 'Running apps',
-            fr: 'Apps utilisées'
-        },
-        pricing_new_applications: {
-            en: 'Create your apps',
-            fr: 'Créez vos apps'
-        },
-        pricing_cost: {
-            en: 'Cost',
-            fr: 'Cout'
-        },
-        package_free: {
-            en: 'Free',
-            fr: 'Gratuit'
-        },
-        pricing_free: {
-            en: '$0',
-            fr: '0€'
-        },
-        package_team: {
-            en: 'Team',
-            fr: 'Equipe'
-        },
-        pricing_5k: {
-            en: '$99 per month',
-            fr: '99€ par mois'
-        },
-        package_enterprise: {
-            en: 'Big enterprise',
-            fr: 'Grand groupe'
-        },
-        users_unlimited: {
-            en: 'Unlimited',
-            fr: 'Sans limite'
-        },
-        pricing_per_user: {
-            en: '$1 per user per month',
-            fr: '1€ par utilisateur par mois'
         },
         new_app: {
             en: 'New application',
@@ -221,8 +137,40 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Partage publique'
         },
         no_public_profile: {
-            en: 'No public profile available',
-            fr: 'Pas de profile publique disponible'
+            en: 'No public profile or workflow available',
+            fr: 'Pas de profile publique ou de processus disponible'
+        },
+        application_profile_is_public: {
+            en: 'Public profile',
+            fr: 'Profile publique'
+        },
+        application_add_profile: {
+            en: 'Add profile',
+            fr: 'Ajouter profile'
+        },
+        application_profile_list: {
+            en: 'List',
+            fr: 'Lister'
+        },
+        application_profile_create: {
+            en: 'Create',
+            fr: 'Créer'
+        },
+        application_profile_read: {
+            en: 'Read',
+            fr: 'Lire'
+        },
+        application_profile_update: {
+            en: 'Update',
+            fr: 'Mettre à jour'
+        },
+        application_profile_delete: {
+            en: 'Delete',
+            fr: 'Supprimer'
+        },
+        application_profile_datamodel_permissions: {
+            en: 'Data access permissions',
+            fr: 'Autorisations d\'accès aux données'
         },
         error: {
             en: 'Error',
@@ -465,8 +413,12 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Enregister'
         },
         welcome: {
-            en: 'Welcome',
-            fr: 'Accueil'
+            en: 'App1 Website',
+            fr: 'Site web App1'
+        },
+        no_account: {
+            en: 'No account yet, register for free!',
+            fr: 'Pas de compte, enregistrement gratuit!'
         },
         uploading_in_progress: {
             en: 'Uploading in progress',
@@ -477,8 +429,8 @@ home.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Téléchargement terminé avec succès!'
         },
         already_account: {
-            en: 'Already have an account? Click here for login!',
-            fr: 'Vous avez déjà un compte? Cliquez pour se connecter!'
+            en: 'If you already have an account, please click here to login!',
+            fr: 'Si vous avez déjà un compte, veuillez cliquer ici pour se connecter!'
         },
         enable_saml: {
             en: 'Enable user SSO login for enterprise using SAML',
@@ -517,6 +469,10 @@ home.factory('AppTranslationService', function AppTranslationService() {
         error_creating_appointment: {
             en: 'Reservation cannot be created, please verify the date and try again!',
             fr: 'Le reservation n\'est pas possible veuillez verifier les dates et re-essayer!'
+        },
+        error_removing_appointment: {
+            en: 'Reservation cannot be removed, please verify the date and try again!',
+            fr: 'Le reservation ne peut pas être supprimée, veuillez verifier les dates et re-essayer!'
         },
         removal_confirmation: {
             en: 'Remove the object?',
@@ -602,6 +558,26 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'Mandatory',
             fr: 'Obligatoire'
         },
+        field_hide_name: {
+            en: 'Hide only the name',
+            fr: 'Cacher seulement le nom'
+        },
+        field_hide: {
+            en: 'Do not display',
+            fr: 'Ne pas afficher'
+        },
+        field_show_search: {
+            en: 'Display search field',
+            fr: 'Afficher le champs de recherche'
+        },
+        field_show_interval: {
+            en: 'Interval selection',
+            fr: 'Sélection de la période '
+        },
+        field_show_icon: {
+            en: 'Show icon',
+            fr: 'Afficher icône'
+        },
         field_destination_datafield: {
             en: 'Destination Data field',
             fr: 'Champ de données de destination'
@@ -633,6 +609,30 @@ home.factory('AppTranslationService', function AppTranslationService() {
         field_date: {
             en: 'Date',
             fr: 'Date'
+        },
+        field_show_map: {
+            en: 'Show Map',
+            fr: 'Afficher carte'
+        },
+        field_show_busy_calendar: {
+            en: 'Show calendar with busy schedules',
+            fr: 'Afficher le calendrier avec les créneaux occupés'
+        },
+        field_init_value: {
+            en: 'Initial value parameter',
+            fr: 'Paramètre pour la valeur initiale'
+        },
+        field_default_value: {
+            en: 'Default value',
+            fr: 'Valeur par defaut'
+        },
+        field_init_value_start: {
+            en: 'Initial value parameter for start',
+            fr: 'Paramètre pour la valeur initiale pour debut'
+        },
+        field_init_value_end: {
+            en: 'Initial value parameter for end',
+            fr: 'Paramètre pour la valeur initiale pour fin'
         },
         action_editor: {
             en: 'Action',
@@ -682,6 +682,18 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'Send value',
             fr: 'Envoyer valeur'
         },
+        action_notify_user: {
+            en: 'Notification Recipee User',
+            fr: 'Utilisateur destinataire de la notification'
+        },
+        new_action_email_title: {
+            en: 'Notification Email Title',
+            fr: 'Titre du courriel de notification'
+        },
+        new_action_email_html: {
+            en: 'Notification HTML Email Content',
+            fr: 'Contenu HTML du courriel de notification'
+        },
         value_editor: {
             en: 'Value',
             fr: 'Valeur'
@@ -712,7 +724,7 @@ home.factory('AppTranslationService', function AppTranslationService() {
         },
         new_datamodel: {
             en: 'New data model',
-            fr: 'Noveau model de données'
+            fr: 'Noveau modèle de données'
         },
         new_datamodel_name: {
             en: 'Name',
@@ -746,13 +758,101 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'Importance',
             fr: 'Importance'
         },
+        machinelearningmodel: {
+            en: 'Machine Learning Model',
+            fr: 'Modèle de l\'apprentissage machine'
+        },
+        machinelearningmodel_designer: {
+            en: 'Machine Learning Modeler',
+            fr: 'Modélisateur de l\'apprentissage machine'
+        },
+        new_machinelearningmodel: {
+            en: 'New machine learning model',
+            fr: 'Noveau modèle d\'apprentissage machine'
+        },
+        new_machinelearningmodel_name: {
+            en: 'Name',
+            fr: 'Nom'
+        },
+        machinelearningmodel_description: {
+            en: 'Description',
+            fr: 'Description'
+        },
+        machinelearningmodel_learning_configuration: {
+            en: 'Learning configuration',
+            fr: 'Configuration de l\'apprentissage'
+        },
+        machinelearningmodel_learning_configuration_err_threshold: {
+            en: 'Error threshold',
+            fr: 'Seuil d\'erreur'
+        },
+        machinelearningmodel_learning_configuration_max_iterations: {
+            en: 'Maximum iterations',
+            fr: 'Maximum d\'iterations'
+        },
+        machinelearningmodel_learning_configuration_learning_rate: {
+            en: 'Learning rate',
+            fr: 'Niveau d\'apprentissage'
+        },
+        machinelearningmodel_learning_result: {
+            en: 'Learning results',
+            fr: 'Resultats de l\'apprentissage'
+        },
+        machinelearningmodel_learning_result_run_date: {
+            en: 'Run date',
+            fr: 'Date d\'execution'
+        },
+        machinelearningmodel_learning_result_iterations: {
+            en: 'Number of iterations needed',
+            fr: 'Nombre d\'iterations requises'
+        },
+        machinelearningmodel_learning_result_error: {
+            en: 'Learning error',
+            fr: 'Erreur de l\'apprentissage'
+        },
+        machinelearningmodel_input_field_list: {
+            en: 'Input data fields',
+            fr: 'Champs de données en entrée'
+        },
+        machinelearningmodel_output_field_list: {
+            en: 'Output data fields',
+            fr: 'Champs de données en sortie'
+        },
+        machinelearningmodel_add_field: {
+            en: 'Add field',
+            fr: 'Ajouter champ'
+        },
+        machinelearningmodel_new_calculation: {
+            en: 'New calculation',
+            fr: 'Nouveau calcul'
+        },
+        machinelearningmodel_calculation: {
+            en: 'Calculation',
+            fr: 'Calcul'
+        },
+        machinelearningmodel_output_field_score: {
+            en: 'Score',
+            fr: 'Score'
+        },
+        machinelearningmodel_values: {
+            en: 'Values semicolon separated',
+            fr: 'Valeurs separées par point-virgule'
+        },
+        machinelearning_useai: {
+            en: 'Use Artificial Intelligence',
+            fr: 'Utiliser l\'intelligence artificielle'
+        },
+        machinelearning_score_action: {
+            en: 'When score is higher than',
+            fr: 'Quand le score est supérieur à'
+        },
         start_time: {
             en: 'Start Time',
-            fr: 'Heure de début'
+            fr: 'Temps de début'
         },
         end_time: {
             en: 'End Time',
-            fr: 'Heure de fin'
+            fr: 'Temps de fin'
         },
         day: {
             en: 'Day',
@@ -774,6 +874,22 @@ home.factory('AppTranslationService', function AppTranslationService() {
             en: 'Period',
             fr: 'Période'
         },
+        action_event_reservation: {
+            en: 'Reservation Data Model',
+            fr: 'Modèle de données pour les reservations'
+        },
+        action_event_reservation_object_id_path: {
+            en: 'Object Id Field',
+            fr: 'Champs pour l\'id de l\'objet'
+        },
+        action_event_reservation_name_path: {
+            en: 'Object Name Field',
+            fr: 'Champs pour le nom de l\'objet'
+        },
+        action_event_reservation_period_path: {
+            en: 'Reservation Period Field',
+            fr: 'Champs pour la période de la reservation'
+        },
         whole_day: {
             en: 'Whole Day',
             fr: 'Journée entière'
@@ -789,6 +905,38 @@ home.factory('AppTranslationService', function AppTranslationService() {
         previous_messages: {
             en: 'Previous Messages',
             fr: 'Messages precedents'
+        },
+        paypal_merchant_id: {
+            en: 'PayPal merchant ID (Account settings/Business Information)',
+            fr: 'ID vendeur PayPal (Configuration compte/Information vendeur)'
+        },
+        payment_country: {
+            en: 'Payment country',
+            fr: 'Pays pour paiement'
+        },
+        payment_currency: {
+            en: 'Payment currency',
+            fr: 'Monnaie pour paiement'
+        },
+        payment_value: {
+            en: 'Payement value',
+            fr: 'Montant pour paiement'
+        },
+        payment_label: {
+            en: 'Payment label',
+            fr: 'Etiquette pour paiement'
+        },
+        payment_update_path: {
+            en: 'Field to be updated after payment',
+            fr: 'Champs à mettre à jour après paiement'
+        },
+        payment_update_value: {
+            en: 'Value to set after payment',
+            fr: 'Valeur à mettre après paiement'
+        },
+        payment_using_paypal: {
+            en: 'Payment using PayPal (http://www.paypal.com)',
+            fr: 'Payment avec PayPal (http://www.paypal.com)'
         }
     }
     var translate = function translate(language) {

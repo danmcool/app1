@@ -2,28 +2,18 @@
 <html lang="en">
 
 <head>
-    <title>App1 - Digital Platform</title>
-    <meta name="title" content="App1 - Digital Platform" />
-    <meta property="og:title" content="App1 - Digital Platform" />
-    <meta name="description" content="Cloud platform allowing to build applications only with a browser, no development required. Data can be shared securely between companies using user or application profiles. Applications can contain public and private online forms, file attachements, calendars, maps, comments, actions. Text search is available out of the box." />
-    <meta property="og:description" content="Cloud platform allowing to build applications only with a browser, no development required. Data can be shared securely between companies using user or application profiles. Applications can contain public and private online forms, file attachements, calendars, maps, comments, actions. Text search is available out of the box." />
-    <meta name="keywords" content="cloud, applications, online forms, mobile, business process, digital" />
-    <meta property="og:image" content="https://app1.digital/images/logo.jpg" />
-    <meta property="og:url" content="https://app1.digital/" />
-    <meta property="og:type" content="website" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link rel="stylesheet" href="/stylesheets/style.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat:500">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/angularjs-material-carousel.min.css" />
 </head>
 
-<body ng-app="home" ng-cloak md-theme="{{sessionData.userData.properties.theme}}" ng-controller="HomeCtrl">
+<body ng-app="app1" ng-cloak md-theme="{{sessionData.userData.properties.theme}}" ng-controller="AppCtrl" ng-class="sessionData.userData.properties.theme">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.8/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.8/angular-cookies.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.8/angular-sanitize.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.8/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.8/angular-resource.min.js"></script>
@@ -32,12 +22,43 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.8/angular-messages.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
 
+    <script defer src="/javascripts/ng-infinite-scroll.min.js"></script>
     <script defer src="/javascripts/angularjs-material-carousel.min.js"></script>
+    <script defer src="/javascripts/angular-material-calendar.min.js"></script>
 
     <script src="index.js"></script>
-    <script defer src="welcome.js"></script>
-    <script defer src="register.js"></script>
-    <script defer src="translation.js"></script>
+    <script defer src="core/login.js"></script>
+    <script defer src="core/register.js"></script>
+    <script defer src="core/user.js"></script>
+    <script defer src="core/company.js"></script>
+    <script defer src="core/applications.js"></script>
+    <script defer src="core/url.js"></script>
+    <script defer src="core/file.js"></script>
+    <script defer src="core/workflows.js"></script>
+    <script defer src="core/forms.js"></script>
+    <script defer src="core/translation.js"></script>
+    <script defer src="designer/designer.js"></script>
+    <script defer src="designer/text.js"></script>
+    <script defer src="designer/application.js"></script>
+    <script defer src="designer/applicationsecurity.js"></script>
+    <script defer src="designer/applicationusers.js"></script>
+    <script defer src="designer/applicationprofile.js"></script>
+    <script defer src="designer/newprofile.js"></script>
+    <script defer src="designer/workflow.js"></script>
+    <script defer src="designer/form.js"></script>
+    <script defer src="designer/share.js"></script>
+    <script defer src="designer/display.js"></script>
+    <script defer src="designer/action.js"></script>
+    <script defer src="designer/value.js"></script>
+    <script defer src="designer/newvalue.js"></script>
+    <script defer src="datamodel/datamodel.js"></script>
+    <script defer src="datamodel/datamodeledit.js"></script>
+    <script defer src="datamodel/new.js"></script>
+    <script defer src="machinelearningmodel/machinelearningmodel.js"></script>
+    <script defer src="machinelearningmodel/machinelearningmodeledit.js"></script>
+    <script defer src="machinelearningmodel/newinput.js"></script>
+    <script defer src="machinelearningmodel/newoutput.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQcYSqCUwxCMGROL9JNR9_8jypYNqH63o"></script>
 
     <script>
         (function(i, s, o, g, r, a, m) {
@@ -56,61 +77,76 @@
 
     </script>
 
-    <md-toolbar md-scroll-shrink md-colors="{'background': 'primary-50', 'color': 'primary-800'}" style="position: fixed">
+    <md-toolbar md-scroll-shrink class="md-hue-2">
         <div class="md-toolbar-tools">
-            <a href="/app/#!login"><img style="height:40px" src="/favicon.ico"></a>
-            <md-button layout-padding class="md-no-focus" aria-label="App1" ng-href="/app/#!login">
-                {{sessionData.applicationName}}
-            </md-button>
-            <span flex></span>
-            <md-button hide-sm hide-xs layout-padding class="md-no-focus" aria-label="Platform" ng-href="#platform">
-                {{sessionData.appData.homepage_platform}}
-            </md-button>
-            <md-button hide-sm hide-xs layout-padding class="md-no-focus" aria-label="Products" ng-href="#products">
-                {{sessionData.appData.homepage_products}}
-            </md-button>
-            <md-button hide-sm hide-xs layout-padding class="md-no-focus" aria-label="Services" ng-href="#services">
-                {{sessionData.appData.homepage_services}}
-            </md-button>
-            <md-button hide-sm hide-xs layout-padding class="md-no-focus" aria-label="Services" ng-href="#pricing">
-                {{sessionData.appData.homepage_pricing}}
-            </md-button>
-            <md-button hide-sm hide-xs layout-padding class="md-no-focus" aria-label="Register" ng-href="#!register">
-                {{sessionData.appData.register}}
-            </md-button>
-            <md-button hide-sm hide-xs layout-padding class="md-no-focus" aria-label="Contact" ng-href="/authentication/open?pid=5a9c2e7864916446b1fc6857">
-                {{sessionData.appData.homepage_contact}}
-            </md-button>
-            <md-button hide-gt-sm class="md-icon-button" aria-label="Links" ng-click="toggleRight()">
+            <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleLeft()">
                 <md-icon>menu</md-icon>
+            </md-button>
+            <h2>
+                <span>{{sessionData.applicationName}}</span>
+            </h2>
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="Alert" ng-click="alertForm()" ng-if="sessionData.showAlertForm">
+                <md-icon>share</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="User" ng-click="toggleRight()">
+                <md-icon>person</md-icon>
             </md-button>
         </div>
     </md-toolbar>
 
-    <md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
+    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
         <md-content layout-padding layout="column">
-            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Platform" ng-href="#platform" ng-click="closeRight()">
-                {{sessionData.appData.homepage_platform}}
+            <md-toolbar class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.appData.app_title}}</h1>
+            </md-toolbar>
+            <md-button ng-if="sessionData.userData.title" ng-href="#!applications" class="md-primary" style="text-align: left" ng-click="closeLeft()">{{sessionData.appData.home}}
             </md-button>
-            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Products" ng-href="#products" ng-click="closeRight()">
-                {{sessionData.appData.homepage_products}}
-            </md-button>
-            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Services" ng-href="#services" ng-click="closeRight()">
-                {{sessionData.appData.homepage_services}}
-            </md-button>
-            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Services" ng-href="#pricing" ng-click="closeRight()">
-                {{sessionData.appData.homepage_pricing}}
-            </md-button>
-            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Register" ng-href="#!register" ng-click="closeRight()">
-                {{sessionData.appData.register}}
-            </md-button>
-            <md-button layout-padding style="text-align: left" class="md-no-focus" aria-label="Contact" ng-href="/authentication/open?pid=5a9c2e7864916446b1fc6857" ng-click="closeRight()">
-                {{sessionData.appData.homepage_contact}}
-            </md-button>
+            <div ng-repeat="application in sessionData.applications">
+                <md-button class="md-primary" style="text-align: left" ng-click="open(application)">{{application.translated_name}}
+                </md-button>
+            </div>
         </md-content>
     </md-sidenav>
 
-    <md-content flex ng-view style="top:50px"></md-content>
+    <md-sidenav class="md-sidenav-right" md-component-id="right" md-whiteframe="4">
+        <md-content layout-padding layout="column">
+            <md-toolbar ng-if="!sessionData.userData.title" class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.appData.user}}</h1>
+            </md-toolbar>
+            <md-toolbar ng-if="sessionData.userData.title" class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">{{sessionData.userData.title}}</h1>
+            </md-toolbar>
+            <md-button ng-href="/" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.welcome}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
+            <md-button ng-if="!sessionData.userData.title" ng-href="#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!datamodel" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.datamodel_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!machinelearningmodel" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.machinelearningmodel_designer}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!company" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.company_settings}}</md-button>
+            <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type!='public'" ng-href="#!user" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.user_settings}}</md-button>
+            <md-button ng-if="sessionData.userData.title" ng-href="/" class="md-primary" style="text-align: left" ng-click="logout()">{{sessionData.appData.logout}}</md-button>
+        </md-content>
+    </md-sidenav>
+
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" id="paypal">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" id="paypal_merchant_id">
+        <input type="hidden" name="lc" value="FR" id="paypal_country">
+        <input type="hidden" name="item_name" id="paypal_label">
+        <input type="hidden" name="amount" id="paypal_amount">
+        <input type="hidden" name="currency_code" id="paypal_currency">
+        <input type="hidden" name="button_subtype" value="services">
+        <input type="hidden" name="no_note" value="0">
+        <input type="hidden" name="cn" value="Add special instructions to the seller:">
+        <input type="hidden" name="no_shipping" value="2">
+        <input type="hidden" name="rm" value="1">
+        <input type="hidden" name="return" id="paypal_return">
+        <input type="hidden" name="cancel_return" id="paypal_cancel_return">
+        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted">
+    </form>
+
+    <md-content flex ng-view></md-content>
 </body>
 
 </html>
