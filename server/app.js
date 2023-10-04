@@ -9,13 +9,13 @@ mongoose.Promise = global.Promise;
 
 // connect to mongo db -> apps is the name of app1 data
 var mongodbUri = 'mongodb://app1:' + process.env.APP1_DB_PASSWORD + '@' + process.env.APP1_DB_ADDRESS + ':' + process.env.APP1_DB_PORT + '/apps';
+mongoose.set('strictQuery', true);
 mongoose.connect(mongodbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
     //useCreateIndex: true,
     //useFindAndModify: false
 });
-mongoose.set('strictQuery', true);
 
 // require routes
 var api = require('./routes/api.js');
