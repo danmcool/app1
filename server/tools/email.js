@@ -14,7 +14,7 @@ var transporter = nodemailer.createTransport({
         pass: process.env.APP1_EMAIL_PASSWORD
     },
     //debug: true,
-    logger: true
+    logger: false
 });
 
 Email.send2 = function (email_address, cc_email_address, subject, text, html, ical_content) {
