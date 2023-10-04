@@ -468,6 +468,10 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             templateUrl: 'core/login.html',
             controller: 'LoginCtrl'
         })
+        .when('/register', {
+            templateUrl: 'core/register.html',
+            controller: 'RegisterCtrl'
+        })
         .when('/user', {
             templateUrl: 'core/user.html',
             controller: 'UserCtrl'
