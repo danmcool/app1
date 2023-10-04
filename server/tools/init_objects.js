@@ -42,8 +42,8 @@ DataModel.find(function (err, objects) {
 // initialize saml service provider
 var sp_options = {
     entity_id: 'app1_saml_metadata.xml', //'https://localhost/authentication/saml_metadata',
-    private_key: fs.readFileSync('./server/ssl/app1-key.pem', 'utf8'),
-    certificate: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
+    //private_key: fs.readFileSync('./server/ssl/app1-key.pem', 'utf8'),
+    //certificate: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
     assert_endpoint: 'https://' + process.env.APP1_SERVER_NAME + '/authentication/saml_callback',
     force_authn: false,
     //auth_context: {
