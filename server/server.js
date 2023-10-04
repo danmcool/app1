@@ -24,18 +24,19 @@ http.createServer(function (req, res) {
 */
 var app = require('./app.js');
 var fs = require('fs');
+/*
 var https = require('https');
 var ssl = {
     key: fs.readFileSync('./server/ssl/app1-key.pem', 'utf8'),
     cert: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
     ca: fs.readFileSync('./server/ssl/app1-intermediate-cert.crt', 'utf8')
 };
+*/
+var server = http.createServer(app);
+var port = 80;
 
-//var server = http.createServer(app);
-//var port = 80;
-
-var server = https.createServer(ssl, app);
-var port = 443;
+//var server = https.createServer(ssl, app);
+//var port = 443;
 
 server.listen(port);
 server.on('error', onError);
