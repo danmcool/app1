@@ -11,11 +11,11 @@ mongoose.Promise = global.Promise;
 var mongodbUri = 'mongodb://app1:' + process.env.APP1_DB_PASSWORD + '@' + process.env.APP1_DB_ADDRESS + ':' + process.env.APP1_DB_PORT + '/apps';
 mongoose.connect(mongodbUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    strictQuery: true
+    useUnifiedTopology: true
     //useCreateIndex: true,
     //useFindAndModify: false
 });
+mongoose.set('strictQuery', true);
 
 // require routes
 var api = require('./routes/api.js');
