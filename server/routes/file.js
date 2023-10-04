@@ -78,13 +78,22 @@ router.post('/', function (req, res, next) {
     });
 });
 router.put('/upload/:company_code/:fileid', function (req, res, next) {
-    var encrypt = crypto.createCipher(Constants.FilesCryptingAlgorithm, SecretKey);
-    var file = fs.createWriteStream('./files/' + req.params.company_code + '-' + req.params.fileid);
-    req.pipe(encrypt).pipe(file);
-    res.status(200).json({
-        msg: 'File uploaded successfully!'
+    fs.mkdir('./files/' + req.params.company_code, { recursive: true }, (err) => {
+        if (err) {
+            res.status(500).json({
+                msg: 'Error creating the folder!'
+            });
+            res.end();
+        } else {
+            var encrypt = crypto.createCipher(Constants.FilesCryptingAlgorithm, SecretKey);
+            var file = fs.createWriteStream('./files/' + req.params.company_code + '/' + req.params.fileid);
+            req.pipe(encrypt).pipe(file);
+            res.status(200).json({
+                msg: 'File uploaded successfully!'
+            });
+            res.end();
+        }
     });
-    res.end();
 });
 router.get('/:id', function (req, res, next) {
     Metadata.File.findOne({
