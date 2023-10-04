@@ -1,16 +1,8 @@
 var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMessages', 'materialCalendar', 'infinite-scroll', 'materialCarousel', 'materialCalendar']).config(['$mdThemingProvider', function ($mdThemingProvider) {
-    $mdThemingProvider.theme('default')
-        .primaryPalette('blue-grey')
-        .accentPalette('amber');
-    $mdThemingProvider.theme('user1')
-        .primaryPalette('purple')
-        .accentPalette('green');
-    $mdThemingProvider.theme('user2')
-        .primaryPalette('pink')
-        .accentPalette('orange');
-    $mdThemingProvider.theme('user3')
-        .primaryPalette('blue')
-        .accentPalette('light-blue');
+    $mdThemingProvider.theme('default').primaryPalette('blue').accentPalette('light-blue');
+    $mdThemingProvider.theme('user1').primaryPalette('purple').accentPalette('green');
+    $mdThemingProvider.theme('user2').primaryPalette('pink').accentPalette('orange');
+    $mdThemingProvider.theme('user3').primaryPalette('blue-grey').accentPalette('amber');
     $mdThemingProvider.alwaysWatchTheme(true);
     $mdThemingProvider.generateThemesOnDemand(false);
 }]).factory('Applications', ['$resource',
