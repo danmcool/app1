@@ -12,7 +12,7 @@ var mongodbUri = 'mongodb://app1:' + process.env.APP1_DB_PASSWORD + '@' + proces
 mongoose.connect(mongodbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    strictQuery: false
+    strictQuery: true
     //useCreateIndex: true,
     //useFindAndModify: false
 });
