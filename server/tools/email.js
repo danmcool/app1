@@ -13,7 +13,7 @@ var transporter = nodemailer.createTransport({
         user: process.env.APP1_EMAIL_USERNAME,
         pass: process.env.APP1_EMAIL_PASSWORD
     },
-    debug: true,
+    //debug: true,
     logger: true
 });
 
