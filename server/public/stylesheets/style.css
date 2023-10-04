@@ -139,7 +139,7 @@
 }
 
 .default {
-    background-image: url(/images/background/default.png);
+    background-image: url(/images/background/user3.png);
     background-position: left;
 }
 
@@ -154,7 +154,7 @@
 }
 
 .user3 {
-    background-image: url(/images/background/user3.png);
+    background-image: url(/images/background/default.png);
     background-position: left;
 }
 
