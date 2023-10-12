@@ -12,6 +12,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            
             "program": "${workspaceFolder}\\server\\server.js",
             "env": {
                 "APP1_DB_PASSWORD": "123Apps",
