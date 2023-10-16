@@ -5,13 +5,16 @@ var Constants = require('../tools/constants.js');
 var Email = {};
 
 var transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'ssl0.ovh.net',
+    port: 465,
+    secure: true,
+    //service: 'Gmail',
     auth: {
         user: process.env.APP1_EMAIL_USERNAME,
         pass: process.env.APP1_EMAIL_PASSWORD
     },
-    //debug: true, // include SMTP traffic in the logs
-    logger: false // log to console
+    //debug: true,
+    logger: false
 });
 
 Email.send2 = function (email_address, cc_email_address, subject, text, html, ical_content) {
@@ -38,7 +41,7 @@ Email.send = function (email_address, cc_email_address, subject, text, html) {
     transporter.sendMail({
         to: email_address,
         cc: cc_email_address,
-        from: Constants.EmailUserName,
+        from: process.env.APP1_EMAIL_USERNAME,
         subject: subject,
         text: text,
         html: html,
@@ -54,7 +57,7 @@ Email.sendValidation = function (emailAddress, user, companyCode, newPassword) {
         '<span><p>Dear customer, thank-you for registering with our website, your initial password is: ' +
         newPassword +
         '</p></span><br><span><p><b>Please validate your email by clicking on the following link</b></p></span><br><a href="https://' +
-        Constants.WebAddress + '/authentication/validate?user=' + user + '&code=' +
+        process.env.APP1_SERVER_NAME + '/authentication/validate?user=' + user + '&code=' +
         companyCode + '"><p><b>Validate registration</b></p></a>');
 }
 
@@ -73,28 +76,28 @@ Email.sendShare = function (email_address, cc_email_address, profile_id, message
     Email.send(
         email_address, cc_email_address, 'App1 - Shared workflow',
         'Automatic message from App1',
-        message + '<br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
-        Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
+        message + '<br><a href="https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + profile_id + '">https://' +
+        process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + profile_id + '</a>');
 }
 Email.sendSharePublic = function (email_address, profile_id, app_name, profile_name) {
     Email.send(
         email_address, '', 'App1 - Shared workflow',
         'Automatic message from App1',
-        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
-        Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
+        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using public profile ' + profile_name + ' :</p></span><br><a href="https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + profile_id + '">https://' +
+        process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + profile_id + '</a>');
 }
 Email.sendSharePrivate = function (email_address, profile_id, app_name, profile_name) {
     Email.send(
         email_address, '', 'App1 - Shared workflow',
         'Automatic message from App1',
-        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using private profile ' + profile_name + ' :</p></span><br><a href="https://' + Constants.WebAddress + '/authentication/open?pid=' + profile_id + '">https://' +
-        Constants.WebAddress + '/authentication/open?pid=' + profile_id + '</a>');
+        '<span><p>Dear customer,</p><br><p>Please use the following link to share the ' + app_name + ' application`s workflow, using private profile ' + profile_name + ' :</p></span><br><a href="https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + profile_id + '">https://' +
+        process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + profile_id + '</a>');
 }
 
 Email.sendCalendar = function (email_address, projectName, startDate, endDate, allDay, userName) {
     try {
         cal = ical({
-            domain: Constants.WebAddress,
+            domain: process.env.APP1_SERVER_NAME,
             prodId: '//App1//calendar//EN',
             events: [{
                 start: new Date(startDate),

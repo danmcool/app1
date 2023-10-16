@@ -1,4 +1,4 @@
-home.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register', 'SessionService', function ($scope, $location, $mdDialog, Register, SessionService) {
+app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register', 'SessionService', function ($scope, $location, $mdDialog, Register, SessionService) {
     ga('send', 'pageview', '/register');
 
     $scope.sessionData = SessionService.getSessionData();

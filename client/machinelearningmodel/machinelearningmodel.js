@@ -1,5 +1,5 @@
 app1.controller('MachineLearningModelCtrl', ['$scope', 'SessionService', 'DesignMachineLearningModel', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignMachineLearningModel, $location, $routeParams, $mdDialog) {
-    ga('send', 'pageview', '/app/machinelearningmodel');
+    ga('send', 'pageview', '/machinelearningmodel');
 
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {

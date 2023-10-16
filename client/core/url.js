@@ -1,5 +1,5 @@
 app1.controller('UrlCtrl', ['$scope', '$routeParams', '$location', 'SessionService', function ($scope, $routeParams, $location, SessionService) {
-    ga('send', 'pageview', '/app/url');
+    ga('send', 'pageview', '/url');
 
     $scope.sessionData = SessionService.getSessionData();
     $scope.workflow = false;

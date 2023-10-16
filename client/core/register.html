@@ -1,11 +1,11 @@
-<md-content flex="auto">
+<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
     <div layout="row">
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex class="fade">
             <div layout-wrap layout-margin layout-align="center">
                 <md-toolbar layout="row" class="md-hue-1">
                     <div class="md-toolbar-tools">
-                        <span md-colors="{'color': 'primary-800'}">{{sessionData.appData.homepage_register_free_trial}}</span>
+                        <span md-colors="{'color': 'primary-800'}">{{sessionData.appData.homepage_register_free}}</span>
                     </div>
                 </md-toolbar>
                 <div style="height:20px"></div>
@@ -34,9 +34,13 @@
                     <md-button flex-gt-xs ng-disabled="registerForm.$invalid" ng-click="register(firstname, lastname, email, code, company_name)" class="md-secondary">{{sessionData.appData.register}}</md-button>
                 </form>
                 <md-divider md-colors="{'color': 'primary-800'}"></md-divider>
-                <md-button layout-padding flex-gt-xs ng-href="/app/#!login">{{sessionData.appData.already_account}}</md-button>
+                <md-button layout-padding flex-gt-xs ng-href="/#!login">{{sessionData.appData.already_account}}</md-button>
             </div>
         </div>
-        <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
+        <div hide-xs flex-sm="10" flex-gt-sm="15">
+        </div>
+    </div>
+    <div hide-xs flex-sm="0" flex-gt-sm="0">
+        <canvas hidden id="canvas" width="400" height="150" ></canvas>
     </div>
 </md-content>

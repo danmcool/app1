@@ -1317,7 +1317,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
         if (next_cancel_form) {
-            document.getElementById('paypal_cancel_return').value = 'https://app1.digital/app/#!/form/' + next_cancel_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
+            document.getElementById('paypal_cancel_return').value = 'https://app1.digital/#!/form/' + next_cancel_form + '/0?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
         } else {
             document.getElementById('paypal_cancel_return').value = 'https://app1.digital/';
         }

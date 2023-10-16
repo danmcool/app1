@@ -7,7 +7,6 @@ const Constants = {
     CommandLineParameterEmailPassword: 6,
     CommandLineParameterSecretKey: 7,
 
-    WebAddress: 'app1.digital',
     MaxSessionTimeout: 14 * 24 * 60 * 60 * 1000, // 2 weeks cookie validity
     MaxSessionPublicTimeout: 15 * 60 * 1000, // 15 minutes cookie validity
     MaxSessionCacheTimeout: 60 * 60 * 1000, // 1 hour cookie cache

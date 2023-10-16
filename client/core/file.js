@@ -1,5 +1,5 @@
 app1.controller('FileCtrl', ['$scope', '$routeParams', '$location', 'SessionService', 'FileUrl', function ($scope, $routeParams, $location, SessionService, FileUrl) {
-    ga('send', 'pageview', '/app/file');
+    ga('send', 'pageview', '/file');
 
     $scope.sessionData = SessionService.getSessionData();
     $scope.workflow = false;

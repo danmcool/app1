@@ -406,14 +406,14 @@ router.put('/share', function (req, res, next) {
                         if (err) return next(err);
                         res.status(200).json({
                             msg: 'Application shared successfully (new share)!',
-                            share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+                            share_url: 'https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + newUserprofile._id
                         });
                         Email.sendSharePublic(SessionCache.userData[userToken].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
                     });
                 } else {
                     res.status(200).json({
                         msg: 'Application shared successfully (existing share)!',
-                        share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
+                        share_url: 'https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + objectExistingProfile._id
                     });
                     Email.sendSharePublic(SessionCache.userData[userToken].email, objectExistingProfile._id, req.body.app_name, req.body.profile_name);
                 }
@@ -435,14 +435,14 @@ router.put('/share', function (req, res, next) {
                         if (err) return next(err);
                         res.status(200).json({
                             msg: 'Application shared successfully (new share)!',
-                            share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+                            share_url: 'https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + newUserprofile._id
                         });
                         Email.sendSharePrivate(SessionCache.userData[userToken].email, newUserprofile._id, req.body.app_name, req.body.profile_name);
                     });
                 } else {
                     res.status(200).json({
                         msg: 'Application shared successfully (existing share)!',
-                        share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + objectExistingProfile._id
+                        share_url: 'https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + objectExistingProfile._id
                     });
                     Email.sendSharePublic(SessionCache.userData[userToken].email, objectExistingProfile._id, req.body.app_name, req.body.profile_name);
                 }
@@ -463,7 +463,7 @@ router.put('/share', function (req, res, next) {
                 if (err) return next(err);
                 res.status(200).json({
                     msg: 'Application shared successfully!',
-                    share_url: 'https://' + Constants.WebAddress + '/authentication/open?pid=' + newUserprofile._id
+                    share_url: 'https://' + process.env.APP1_SERVER_NAME + '/authentication/open?pid=' + newUserprofile._id
                 });
                 if (!req.body.message) {
                     req.body.message = '';
@@ -700,7 +700,7 @@ router.get('/payment_callback/:datamodel_id/:id', function (req, res, next) {
                         msg: 'No object found!'
                     });
                 }
-                return res.redirect('/app/#!/form/' + req.query.next_form_id + '/' + req.params.id + '?application_id=' + req.query.application_id + '&workflow_id=' + req.query.workflow_id);
+                return res.redirect('/#!/form/' + req.query.next_form_id + '/' + req.params.id + '?application_id=' + req.query.application_id + '&workflow_id=' + req.query.workflow_id);
             });
         } else {
             return res.status(401).json({

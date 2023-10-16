@@ -1,5 +1,5 @@
 app1.controller('DatamodelCtrl', ['$scope', 'SessionService', 'DesignDataModel', 'DesignMachineLearningModel', '$location', '$routeParams', '$mdDialog', function ($scope, SessionService, DesignDataModel, DesignMachineLearningModel, $location, $routeParams, $mdDialog) {
-    ga('send', 'pageview', '/app/datamodel');
+    ga('send', 'pageview', '/datamodel');
 
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {

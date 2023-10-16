@@ -12,29 +12,36 @@ if (!process.env.APP1_SECRET_KEY) {
     console.log('Invalid secret key configuration');
     process.exit(1);
 }
-/*
+
+if (!process.env.APP1_SERVER_NAME) {
+    console.log('Missing server name');
+    process.exit(1);
+}
+
 var http = require('http');
+/*
 http.createServer(function (req, res) {
     res.writeHead(301, {
         'Location': 'https://' + req.headers['host'] + req.url
     });
     res.end();
-}).listen(8080);
+}).listen(80);
 */
 var app = require('./app.js');
 var fs = require('fs');
+/*
 var https = require('https');
 var ssl = {
     key: fs.readFileSync('./server/ssl/app1-key.pem', 'utf8'),
     cert: fs.readFileSync('./server/ssl/app1-cert.crt', 'utf8'),
     ca: fs.readFileSync('./server/ssl/app1-intermediate-cert.crt', 'utf8')
 };
-
+*/
 var server = http.createServer(app);
-var port = 8080;
+var port = 80;
 
 //var server = https.createServer(ssl, app);
-//var port = 8443;
+//var port = 443;
 
 server.listen(port);
 server.on('error', onError);

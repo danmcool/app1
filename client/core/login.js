@@ -1,5 +1,5 @@
 app1.controller('LoginCtrl', ['$scope', 'Login', 'SessionService', function ($scope, Login, SessionService) {
-    ga('send', 'pageview', '/app/login');
+    ga('send', 'pageview', '/login');
 
     $scope.sessionData = SessionService.getSessionData();
     $scope.sessionData.applicationName = 'App1';

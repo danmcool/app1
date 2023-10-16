@@ -271,7 +271,7 @@ router.get('/validate', function (req, res) {
                 applications: appList
             });
         });
-        res.status(200).send('<p>Registration: user has been validated, please log on using initial password!</p><br><a href="https://' + Constants.WebAddress + '/app/#!/login">Login</a>');
+        res.status(200).send('<p>Registration: user has been validated, please log on using initial password!</p><br><a href="https://' + process.env.APP1_SERVER_NAME + '/#!/login">Login</a>');
         /*
         var objectList = {};
         Application.find({
@@ -562,7 +562,7 @@ router.get('/open', function (req, res, next) {
                                 if (errWorkflow) return res.status(400).json({
                                     err: 'Workflow error'
                                 });
-                                res.redirect('/app/#!/form/' + workflow.startup_form + '/0?application_id=' + application_id + '&workflow_id=' + workflow._id);
+                                res.redirect('/#!/form/' + workflow.startup_form + '/0?application_id=' + application_id + '&workflow_id=' + workflow._id);
                             })
                         });
                     });
@@ -580,10 +580,10 @@ router.get('/open', function (req, res, next) {
                                 err: 'Workflow error'
                             });
                             var datamodel = Object.keys(objectProfile.profile.datamodels)[0];
-                            res.redirect('/app/#!/form/' + workflow.startup_form + '/' + Object.keys(objectProfile.profile.datamodels[datamodel])[0] + '?application_id=' + app_id + '&workflow_id=' + workflow._id);
+                            res.redirect('/#!/form/' + workflow.startup_form + '/' + Object.keys(objectProfile.profile.datamodels[datamodel])[0] + '?application_id=' + app_id + '&workflow_id=' + workflow._id);
                         });
                     } else {
-                        return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + Constants.WebAddress + '/#!/register">Register</a><br><a href="https://' + Constants.WebAddress + '' + '/#!/login">Login</a>');
+                        return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + process.env.APP1_SERVER_NAME + '/#!/register">Register</a><br><a href="https://' + process.env.APP1_SERVER_NAME + '' + '/#!/login">Login</a>');
                     }
                 });
             } else if (objectProfile.properties.workflow) {
@@ -600,7 +600,7 @@ router.get('/open', function (req, res, next) {
                         }
                         var app_id = Object.keys(objectProfile.profile.applications)[0];
                         if (profileFound) {
-                            res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
+                            res.redirect('/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
                         } else {
                             User.findOneAndUpdate({
                                 user: userRemoteProfile.user,
@@ -644,13 +644,13 @@ router.get('/open', function (req, res, next) {
                                         userRemoteProfile.remote_profiles.push(JSON.parse(JSON.stringify(objectProfile)));
                                         userRemoteProfile.remote_applications.push(app_id);
                                         SessionCache.update(token, userRemoteProfile);
-                                        res.redirect('/app/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
+                                        res.redirect('/#!/workflows/' + app_id + '?pid=' + objectProfile._id);
                                     });
                                 }
                             });
                         }
                     } else {
-                        return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + Constants.WebAddress + '/#!/register">Register</a><br><a href="https://' + Constants.WebAddress + '' + '/#!/login">Login</a>');
+                        return res.status(200).send('<p>Authentication: please register or login to App1 in order to use this workflow!</p><br><a href="https://' + process.env.APP1_SERVER_NAME + '/#!/register">Register</a><br><a href="https://' + process.env.APP1_SERVER_NAME + '' + '/#!/login">Login</a>');
                     }
                 });
             }
@@ -670,7 +670,7 @@ router.get('/open', function (req, res, next) {
                     err: 'Invalid parameters!'
                 });
                 SessionCache.update(req.cookies[Constants.SessionCookie], userObject);
-                res.redirect('/app/#!/form/' + req.query.form_id + '/' + req.query.data_id);
+                res.redirect('/#!/form/' + req.query.form_id + '/' + req.query.data_id);
             });
         */
     });
@@ -781,7 +781,7 @@ router.post('/saml_callback', function (req, res) {
                                     return res.cookie(Constants.SessionCookie, newSession._id, {
                                         maxAge: Constants.MaxSessionTimeout,
                                         httpOnly: true
-                                    }).redirect('/app/');
+                                    }).redirect('/');
                                 });
                                 Email.sendSAMLNewUser(newUser.email, newUser.user, newUser._company_code);
                             });
@@ -803,7 +803,7 @@ router.post('/saml_callback', function (req, res) {
                             return res.cookie(Constants.SessionCookie, newSession._id, {
                                 maxAge: Constants.MaxSessionTimeout,
                                 httpOnly: true
-                            }).redirect('/app/');
+                            }).redirect('/');
                         });
                     }
                 });
