@@ -35,5 +35,4 @@ Tools.resolvePathUpdate = function (object, path, value) {
     }, object);
 }
 
-
 module.exports = Tools;
