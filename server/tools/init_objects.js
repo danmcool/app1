@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var fs = require('fs');
+//var fs = require('fs');
 var saml2 = require('saml2-js');
 
 var Schema = mongoose.Schema;

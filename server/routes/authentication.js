@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
 var crypto = require('crypto');
 var saml2 = require('saml2-js');
 
@@ -9,6 +8,7 @@ var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
 var SessionCache = require('../tools/session_cache.js');
 var ApplicationLiveCycle = require('../tools/application_live_cycle.js');
+//const writeTextToJpegStream = require('../tools/draw_signature.js');
 
 var Company = Metadata.Company;
 var User = Metadata.User;
@@ -232,6 +232,7 @@ router.post('/register', function (req, res) {
                                     }
                                     User.create(publicUser, function (errNewPublicUser, newPublicUser) {
                                         if (errNewPublicUser) return next(errNewPublicUser);
+                                        //writeTextToJpegStream('test');
                                         res.status(200).json({
                                             msg: 'Registration: please check your email inbox to validate the registration!'
                                         });

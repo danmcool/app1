@@ -1,9 +1,7 @@
-@@ -0,0 +1,39 @@
-const puppeteer = require('puppeteer');
-const Tools = require('./tools');
+var puppeteer = require('puppeteer');
+var Tools = require('./tools');
 
 var pdf = {};
-
 
 function base64_encode(file) {
     // read binary data
@@ -12,13 +10,13 @@ function base64_encode(file) {
     return new Buffer.from(bitmap).toString('base64');
 }
 
-pdf.printPDF = async function (htmlTemplate, data) {
+pdf.printPDF = async function (htmlTemplate, data, userProfile) {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
-    htmlTemplate.replace(/st(ring)/, function (match, capture) {
+    htmlTemplate.replace('<app1data_([a-z.]+)>', function (match, capture) {
         return Tools.resolvePath(data, match);
-    }); 
+    });
     
     const test_html = `<html><h3>Hello world!</h3><img src="http://localhost:3000/logo.jpg"></html>`;
     await page.goto(`data:text/html,${test_html}`, { waitUntil: 'networkidle0' });
@@ -36,5 +34,8 @@ pdf.printPDF = async function (htmlTemplate, data) {
 }
 
 printPDF('<html><h3>Hello world!</h3><img src="http://localhost:3000/logo.jpg"></html>', {data:{value1:10}});
+
+pdf.drawText(font, )
+
 
 module.exports = pdf;
