@@ -30,6 +30,7 @@ router.get('/url/:id', function (req, res, next) {
         });
     });
 });
+
 router.get('/', function (req, res, next) {
     var userToken = req.cookies[Constants.SessionCookie];
     var pageOptions = {

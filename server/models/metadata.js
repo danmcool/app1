@@ -364,5 +364,6 @@ var indexUser = {
 };
 UserSchema.index(indexUser.fields, indexUser.options);
 Metadata.User = mongoose.model('User', UserSchema);
+Metadata.User.syncIndexes();
 
 module.exports = Metadata;
