@@ -14,12 +14,18 @@ mongoose.set('debug', true);
 var DataModel = Metadata.DataModel;
 DataModel.find(function (err, objects) {
     if (err) return next(err);
+    var userFound = false;
+    var fileFound = false;
     for (var i = 0; i < objects.length; i++) {
         var modelSchema;
         if (objects[i].properties && objects[i].properties.reference == Constants.DataModelUserId) {
             Metadata.Objects[objects[i]._id] = Metadata.User;
+            Metadata.UserRefId = objects[i]._id;
+            userFound = true;
         } else if (objects[i].properties && objects[i].properties.reference == Constants.DataModelFileId) {
             Metadata.Objects[objects[i]._id] = Metadata.File;
+            Metadata.FileRefId = objects[i]._id;
+            fileFound = true;
         } else {
             var modelSchema;
             var index = {
@@ -42,6 +48,13 @@ DataModel.find(function (err, objects) {
             Metadata.Objects[objects[i]._id] = mongoose.model(Constants.DataModelPrefix + objects[i]._id, modelSchema, Constants.DataModelPrefix + objects[i]._id);
             Metadata.Objects[objects[i]._id].syncIndexes();
         }
+    }
+    if (!userFound) {
+        DataModel.create('"name": {"en": "User"},"_company_code": "00000","_updated_at": "{}","_created_at": "2023-11-06T14:01:27.170Z","properties": {"reference": "userdata"}', function (err, object) {
+            if (err) return next(err);
+            Metadata.Objects[object._id] = Metadata.User;
+            module.exports = Metadata;
+        });
     }
 });
 

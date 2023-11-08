@@ -830,14 +830,14 @@ router.get('/pdf/:datamodel_id/:data_id/:html_file_id', function (req, res, next
     var token = req.cookies[Constants.SessionCookie];
     var datamodel_id = req.params.datamodel_id;
     var searchCriteriaPrint = {
-        _id: datamodel_id,
-        _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
+        _id: req.params.id,
+        _company_code: SessionCache.userData[token]._company_code
     }
     if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, searchCriteriaPrint)) {
-        Metadata.MachineLearningModel.findOne(searchCriteriaPrint).exec(function (errML, mlObject) {
-            if (errML) return next(errML);
-            if (!mlObject) return res.status(400).json({
-                msg: 'No machine learning model found!'
+        Metadata.Objects[datamodel_id].findOne(searchCriteriaPrint).populate(req.query.populate).exec(function (err, object) {
+            if (err) return next(err);
+            if (!object) return res.status(400).json({
+                msg: 'Object not found!'
             });
 
             var dataSearchCriteria = {};
