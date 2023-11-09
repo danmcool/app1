@@ -2,7 +2,7 @@ app1.controller('RegisterCtrl', ['$scope', '$location', '$mdDialog', 'Register',
     ga('send', 'pageview', '/register');
 
     $scope.sessionData = SessionService.getSessionData();
-    $scope.sessionData.applicationName = 'App1';
+    $scope.sessionData.applicationName = $scope.sessionData.appData.homepage_register_free;
     SessionService.setSessionData($scope.sessionData);
 
     $scope.register = function (firstname, lastname, email, code, company_name) {

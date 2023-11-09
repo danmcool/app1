@@ -104,6 +104,7 @@ var FileSchema = new Schema({
     _company_code: String
 });
 Metadata.File = mongoose.model('File', FileSchema);
+Metadata.FileRefId = null;
 
 var FormSchema = new Schema({
     name: Schema.Types.Mixed,
@@ -364,5 +365,7 @@ var indexUser = {
 };
 UserSchema.index(indexUser.fields, indexUser.options);
 Metadata.User = mongoose.model('User', UserSchema);
+Metadata.User.syncIndexes();
+Metadata.UserRefId = null;
 
 module.exports = Metadata;

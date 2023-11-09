@@ -13,8 +13,6 @@ mongoose.set('strictQuery', true);
 mongoose.connect(mongodbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-    //useCreateIndex: true,
-    //useFindAndModify: false
 });
 
 // require routes

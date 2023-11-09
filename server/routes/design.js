@@ -401,8 +401,11 @@ router.post('/datamodel', function (req, res, next) {
         }
         DataModel.create(req.body, function (err, object) {
             if (err) return next(err);
-            modelSchema.index(index.fields, index.options);
+            if (Object.keys(index.fields).length > 0) {
+                modelSchema.index(index.fields, index.options);
+            }
             Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + req.body._id);
+            Metadata.Objects[object._id].syncIndexes();
             module.exports = Metadata;
             return res.json(object);
         });
@@ -465,18 +468,13 @@ router.put('/datamodel/:id', function (req, res, next) {
                 err: 'Not enough user rights'
             });
             var datamodelName = Constants.DataModelPrefix + object._id;
-            if (mongoose.connection.collections[datamodelName]) {
-                try {
-                    mongoose.connection.collections[datamodelName].dropIndex(Constants.DataModelIndexName);
-                } catch (err) {
-                    console.log(err);
-                }
-            }
             delete mongoose.connection.models[datamodelName];
-            delete mongoose.modelSchemas[datamodelName];
             delete Metadata.Objects[object._id];
-            modelSchema.index(index.fields, index.options);
+            if (Object.keys(index.fields).length > 0) {
+                modelSchema.index(index.fields, index.options);
+            }
             Metadata.Objects[object._id] = mongoose.model(Constants.DataModelPrefix + object._id, modelSchema, Constants.DataModelPrefix + object._id);
+            Metadata.Objects[object._id].syncIndexes();
             module.exports = Metadata;
             return res.json(object);
         });
@@ -495,7 +493,7 @@ router.delete('/datamodel/:id', function (req, res, next) {
         if (err) return next(err);
         if (object.properties && !object.properties.reference) {
             delete mongoose.connection.models[Constants.DataModelPrefix + req.params._id];
-            delete mongoose.modelSchemas[Constants.DataModelPrefix + req.params._id];
+            delete mongoose.models[Constants.DataModelPrefix + req.params._id];
             delete Metadata.Objects[req.params._id];
         }
         res.json(object);

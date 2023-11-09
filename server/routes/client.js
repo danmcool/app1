@@ -10,6 +10,7 @@ var Constants = require('../tools/constants.js');
 var Email = require('../tools/email.js');
 var Tools = require('../tools/tools.js');
 var MarchineLearning = require('../tools/machinelearning.js');
+var Print = require('../tools/print.js');
 var CalendarTools = require('../tools/calendar_tools.js');
 
 var User = Metadata.User;
@@ -807,6 +808,36 @@ router.get('/model_run/:datamodel_id/:data_id/:mlmodel_id', function (req, res, 
             if (errML) return next(errML);
             if (!mlObject) return res.status(400).json({
                 msg: 'No machine learning model found!'
+            });
+
+            var dataSearchCriteria = {};
+            var datamodel_id = req.params.datamodel_id;
+            var search_criteria = {
+                _id: req.params.data_id
+            }
+            if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, search_criteria)) {
+                var object = {};
+                Tools.resolvePathUpdate(object, req.query.value_path, req.query.value);
+                Metadata.Objects[datamodel_id].findOne(search_criteria, object, function (errObject, object) {
+                    mlObject.brain.run();
+                });
+            }
+        });
+    }
+});
+
+router.get('/pdf/:datamodel_id/:data_id/:html_file_id', function (req, res, next) {
+    var token = req.cookies[Constants.SessionCookie];
+    var datamodel_id = req.params.datamodel_id;
+    var searchCriteriaPrint = {
+        _id: req.params.id,
+        _company_code: SessionCache.userData[token]._company_code
+    }
+    if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, searchCriteriaPrint)) {
+        Metadata.Objects[datamodel_id].findOne(searchCriteriaPrint).populate(req.query.populate).exec(function (err, object) {
+            if (err) return next(err);
+            if (!object) return res.status(400).json({
+                msg: 'Object not found!'
             });
 
             var dataSearchCriteria = {};

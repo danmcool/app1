@@ -117,7 +117,6 @@
             <md-toolbar ng-if="sessionData.userData.title" class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">{{sessionData.userData.title}}</h1>
             </md-toolbar>
-            <md-button ng-href="/" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.welcome}}</md-button>
             <md-button ng-if="!sessionData.userData.title" ng-href="#!login" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.login}}</md-button>
             <md-button ng-if="!sessionData.userData.title" ng-href="#!register" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.register}}</md-button>
             <md-button ng-if="sessionData.userData.title && sessionData.userData.profile.type=='administrator'" ng-href="#!designer" class="md-primary" style="text-align: left" ng-click="closeRight()">{{sessionData.appData.app_designer}}</md-button>
