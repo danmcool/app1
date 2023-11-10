@@ -50,16 +50,24 @@ app1.controller('FormActionEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'S
             fr: 'Envoyer calendrier'
         },
         add_event: {
-            en: 'Add Event',
+            en: 'Add event',
             fr: 'Ajouter événement'
         },
         remove_event: {
-            en: 'Remove Event',
+            en: 'Remove event',
             fr: 'Supprimer événement'
         },
         pay: {
             en: 'Pay',
             fr: 'Payer'
+        },
+        download_pdf: {
+            en: 'Download a PDF document',
+            fr: 'Telecharger un document PDF'
+        },
+        email_pdf: {
+            en: 'Send by email a PDF document',
+            fr: 'Envoyer par email un document PDF'
         }
     }
 

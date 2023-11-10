@@ -8,7 +8,7 @@
 					<img ng-src="{{sessionData.userData.company.properties.logo_url}}" md-card-sm-image style="max-height: 75px">
 				</md-card-title>
 			</md-card>
-			<md-card ng-repeat="application in sessionData.applications" ng-click="open(application)">
+			<md-card ng-repeat="application in sessionData.applications" ng-click="openApplication(application)">
 				<md-card-title>
 					<md-card-title-text>
 						<span class="md-headline">{{application.translated_name}}</span>
