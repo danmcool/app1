@@ -699,10 +699,10 @@
                                 <md-button ng-disabled="dynamicForm.$invalid" ng-click="pay(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="download_pdf">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="download_pdf(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="downloadPdf(action.formula, action.next_form_id, action.set_value, action.pdf_file_name, action.pdf_html_template)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                             <div ng-switch-when="email_pdf">
-                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="email_pdf(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-primary">{{action.translated_name}}</md-button>
+                                <md-button ng-disabled="dynamicForm.$invalid" ng-click="emailPdf(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-primary">{{action.translated_name}}</md-button>
                             </div>
                         </div>
                     </div>

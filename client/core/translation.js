@@ -603,12 +603,20 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Utilisateur destinataire de la notification'
         },
         new_action_email_title: {
-            en: 'Notification Email Title',
+            en: 'Notification email title',
             fr: 'Titre du courriel de notification'
         },
         new_action_email_html: {
-            en: 'Notification HTML Email Content',
+            en: 'Notification HTML email content',
             fr: 'Contenu HTML du courriel de notification'
+        },
+        pdf_content_html: {
+            en: 'HTML template of the Pdf file',
+            fr: 'Modèle HTML du fichier Pdf'
+        },
+        pdf_file_name: {
+            en: 'Name of Pdf file',
+            fr: 'Nom du fichier Pdf'
         },
         value_editor: {
             en: 'Value',

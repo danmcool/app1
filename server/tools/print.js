@@ -10,7 +10,7 @@ function base64_encode(file) {
     return new Buffer.from(bitmap).toString('base64');
 }
 
-print.createPDF = async function (htmlTemplate, data, userProfile) {
+print.createPdf = async function (htmlTemplate, data, userProfile) {
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
 

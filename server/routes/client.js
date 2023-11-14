@@ -826,11 +826,11 @@ router.get('/model_run/:datamodel_id/:data_id/:mlmodel_id', function (req, res, 
     }
 });
 
-router.get('/pdf/:datamodel_id/:data_id/:html_file_id', function (req, res, next) {
+router.post('/pdf/:datamodel_id/:data_id', function (req, res, next) {
     var token = req.cookies[Constants.SessionCookie];
     var datamodel_id = req.params.datamodel_id;
     var searchCriteriaPrint = {
-        _id: req.params.id,
+        _id: req.params.data_id,
         _company_code: SessionCache.userData[token]._company_code
     }
     if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, searchCriteriaPrint)) {
@@ -839,19 +839,10 @@ router.get('/pdf/:datamodel_id/:data_id/:html_file_id', function (req, res, next
             if (!object) return res.status(400).json({
                 msg: 'Object not found!'
             });
-
-            var dataSearchCriteria = {};
-            var datamodel_id = req.params.datamodel_id;
-            var search_criteria = {
-                _id: req.params.data_id
-            }
-            if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, search_criteria)) {
-                var object = {};
-                Tools.resolvePathUpdate(object, req.query.value_path, req.query.value);
-                Metadata.Objects[datamodel_id].findOne(search_criteria, object, function (errObject, object) {
-                    mlObject.brain.run();
-                });
-            }
+            res.setHeader("Content-Disposition", "attachment; filename=" + req.body.file_name);
+            Print.createPdf(req.body.html, object, SessionCache.userData[token].profile).then(function (result) {
+                res.send(result);
+            });
         });
     }
 });
