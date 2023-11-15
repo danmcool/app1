@@ -406,6 +406,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     if (formFields[i].listofvalues == formValues[j]._id) {
                         if (formValues[j].type == 'list') {
                             $scope.updateValuesForm(formFields[i], formValues[j].values);
+                        } else if (formValues[j].type == 'query') {
+                            var selectionValues = {};
+                            selectionValues.datamodel_id = formValues[j].values.datamodel_id;
+                            selectionValues.datamodel_search_criteria = formValues[j].values.datamodel_search_criteria?formValues[j].values.datamodel_search_criteria:{};
+                            if (formFields[i].disabled && $scope.localdata[formFields[i].id]) {
+                                selectionValues.datamodel_search_criteria['_id'] = $scope.localdata[formFields[i].id];
+                            }
+                            selectionValues.datamodel_sort_by = formValues[j].values.datamodel_sort_by?formValues[j].values.datamodel_sort_by:{};
+                            $scope.queryValues(formValues[j]._id, formValues[j].type, selectionValues, formFields[i], 'form', formFields[i]);
                         } else {
                             var selectionValues = {};
                             selectionValues.relation = formValues[j].values.relation;
@@ -1328,7 +1337,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var pdfForm = document.createElement("form");
         pdfForm.target ="_self"||"_blank";
         pdfForm.id="pdfForm";
-        pdfForm.action = "/client/pdf/" + $scope.form.datamodel._id + "/" + $scope.data._id;
+        var populate = "";
+        var projectionKeys = Object.keys($scope.form.datamodel.projection);
+        for (j = 0; j < projectionKeys.length; j++) {
+            var childField = $scope.form.datamodel.projection[projectionKeys[j]];
+            if (childField.type ==  "reference") {
+                populate += childField.full_path + " ";
+            }
+        }
+        pdfForm.action = "/client/pdf/" + $scope.form.datamodel._id + "/" + $scope.data._id + "?populate=" + populate;
         pdfForm.method = "post";
     
         var fileNameInput = document.createElement("input");

@@ -45,7 +45,24 @@
                             </md-select>
                         </md-input-container>
                     </div>
-                    <div ng-switch-when="query"></div>
+                    <div ng-switch-when="query">
+                        <div layout="column">
+                            <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.datamodel}}</label>
+                                <md-select ng-model="value.values.datamodel_id" ng-required="true">
+                                    <md-option ng-repeat="datamodel in datamodels" ng-value="datamodel._id">{{datamodel.translated_name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                                        <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.form_search_criteria}}</label>
+                                <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.values.datamodel_search_criteria" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <label>{{sessionData.appData.form_sort_by}}</label>
+                                <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="value.values.datamodel_sort_by" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
+                            </md-input-container>
+                        </div>
+                    </div>
                 </div>
                 <div layout="row" layout-align="end" flex>
                     <md-button ng-disabled="valueForm.$invalid" type="submit" ng-click="save()" class="md-primary">{{sessionData.appData.save}}</md-button>

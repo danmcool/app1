@@ -71,25 +71,18 @@ router.put('/value/:id', function (req, res, next) {
             });
         }
     } else if (req.query.type == Constants.ValuesTypeQuery) {
-        var queryParams = {
-            _company_code: SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code
-        }
-        if (req.body.id_list) {
-            queryParams._id = {
-                '$in': req.body.id_list
-            }
-        }
-
-        User.find(userParams, req.body.user_fields).skip(pageOptions.skip).limit(pageOptions.limit).exec(function (errUserObjects, userObjects) {
-            if (errUserObjects) return next(errUserObjects);
-            if (!userObjects) return res.status(400).json({
-                msg: 'Url is null!'
+        if (req.body.datamodel_id) {
+            var sort_by = req.body.datamodel_sort_by ? req.body.datamodel_sort_by : '{}';
+            var search_criteria = req.body.datamodel_search_criteria ? req.body.datamodel_search_criteria : '{}';
+            search_criteria._company_code = SessionCache.userData[req.cookies[Constants.SessionCookie]]._company_code;
+    
+            Metadata.Objects[req.body.datamodel_id].find(search_criteria).limit(500).sort(sort_by).exec(function (err, datas) {
+                if (err) return next(err);
+                result.values = datas;
+        
+                return res.status(200).json(result);
             });
-            result.values = userObjects;
-            return res.status(200).json(result);
-        });
-
-        return res.status(200).json('');
+        }
     } else {
         return res.status(200).json('');
     }

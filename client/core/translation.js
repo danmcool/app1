@@ -624,7 +624,7 @@ app1.factory('AppTranslationService', function AppTranslationService() {
         },
         new_value: {
             en: 'New Value',
-            fr: 'Nouvelle valuer'
+            fr: 'Nouvelle valeur'
         },
         new_value_name: {
             en: 'Value Name',

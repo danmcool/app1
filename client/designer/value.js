@@ -78,6 +78,16 @@ app1.controller('FormValueEditCtrl', ['$scope', '$routeParams', '$mdDialog', 'Se
         }
     });
 
+    DesignDataModel.query({
+        skip: 0,
+        limit: 500,
+    }, function (datamodels) {
+        for (var i = 0; i < datamodels.length; i++) {
+            datamodels[i].translated_name = SessionService.translate(datamodels[i].name);
+        }
+        $scope.datamodels = datamodels;
+    });
+
     $scope.editText = function (object, property, multipleLines) {
         if (!object[property]) object[property] = {};
         $mdDialog.show({
