@@ -833,7 +833,7 @@ router.post('/pdf/:datamodel_id/:data_id', function (req, res, next) {
                 msg: 'Object not found!'
             });
             res.setHeader("Content-Disposition", "attachment; filename=" + req.body.file_name);
-            Print.createPdf(req.body.html, object, SessionCache.userData[token].profile).then(function (result) {
+            Print.createPdf(req.body.html, object, SessionCache.userData[token].profile, req.body.landscape).then(function (result) {
                 res.send(result);
             });
         });
