@@ -169,19 +169,45 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             var i;
             for (var j = 0; j < formValues.length; j++) {
                 var itemValues = {};
-                if ($scope.form_field_list.title_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
-                    itemValues.relation = formValues[j].values.relation;
-                    itemValues.id_list = [];
+                if ($scope.form_field_list.title_listofvalues == formValues[j]._id){
+                    if (formValues[j].type == 'user'){
+                        itemValues.relation = formValues[j].values.relation;
+                        itemValues.id_list = [];
+                        for (i = 0; i < datas.length; i++) {
+                            itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
+                        }
+                        $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
+                    }                    
+                } else if (formValues[j].type == 'query') {
+                    var id_list = [];
                     for (i = 0; i < datas.length; i++) {
-                        itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
+                        id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
+                    }
+                    itemValues = { 
+                        _id: {
+                        '$in': id_list
+                        }
                     }
                     $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                 }
-                if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id && formValues[j].type != 'list') {
-                    itemValues.relation = formValues[j].values.relation;
-                    itemValues.id_list = [];
+                if ($scope.form_field_list.subtitle_listofvalues == formValues[j]._id) {
+                    if (formValues[j].type == 'user') {
+                        itemValues.relation = formValues[j].values.relation;
+                        itemValues.id_list = [];
+                        for (i = 0; i < datas.length; i++) {
+                            itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
+                        }
+                        $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
+                    }
+                } else if (formValues[j].type == 'query') {
+                    var id_list = [];
                     for (i = 0; i < datas.length; i++) {
-                        itemValues.id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
+                        id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
+                    }
+                    itemValues = { 
+                        _id: {
+                        '$in': id_list
+                        }
                     }
                     $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
                 }
