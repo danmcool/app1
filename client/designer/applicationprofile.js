@@ -103,14 +103,26 @@ app1.controller('ApplicationProfileCtrl', ['$scope', 'SessionService', 'DesignAp
     }
 
     $scope.updateDatamodel = function (datamodelId) {
-        $scope.profile.profile.datamodels = {};
-        $scope.profile.profile.datamodels[datamodelId] = {};
+        if (!$scope.profile.profile.datamodels) {
+            $scope.profile.profile.datamodels = {};
+        }
+        if (!$scope.profile.profile.datamodels[datamodelId]) {
+            $scope.profile.profile.datamodels[datamodelId] = {};
+        }
         var datamodel = $scope.profile.profile.datamodels[datamodelId];
-        $scope.rights_for_list = false;
-        $scope.rights_for_read = false;
-        $scope.rights_for_create = false;
-        $scope.rights_for_update = false;
-        $scope.rights_for_delete = false;
+        if (datamodel) {
+            $scope.rights_for_list = datamodel.list ? true : false;
+            $scope.rights_for_read = datamodel.read ? true : false;
+            $scope.rights_for_create = datamodel.create ? true : false;
+            $scope.rights_for_update = datamodel.update ? true : false;
+            $scope.rights_for_delete = datamodel.delete ? true : false;
+        } else {
+            $scope.rights_for_list = false;
+            $scope.rights_for_read = false;
+            $scope.rights_for_create = false;
+            $scope.rights_for_update = false;
+            $scope.rights_for_delete = false;
+        }
     }
 
     $scope.updateListSecurity = function () {
