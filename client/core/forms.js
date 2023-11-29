@@ -178,15 +178,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                         $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                     }  else if (formValues[j].type == 'query') {
+                        itemValues.datamodel_id = formValues[j].values.datamodel_id;
+                        itemValues.datamodel_search_criteria = formValues[j].values.datamodel_search_criteria?formValues[j].values.datamodel_search_criteria:{};
                         var id_list = [];
                         for (i = 0; i < datas.length; i++) {
                             id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.title].full_path));
                         }
-                        itemValues = { 
-                            _id: {
+                        itemValues.datamodel_search_criteria['_id'] = {
                             '$in': id_list
-                            }
                         }
+                        itemValues.datamodel_sort_by = formValues[j].values.datamodel_sort_by?formValues[j].values.datamodel_sort_by:{};
                         $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'title', $scope.form_field_list);
                     }
                 }
@@ -199,15 +200,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                         $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
                     } else if (formValues[j].type == 'query') {
+                        itemValues.datamodel_id = formValues[j].values.datamodel_id;
+                        itemValues.datamodel_search_criteria = formValues[j].values.datamodel_search_criteria?formValues[j].values.datamodel_search_criteria:{};
                         var id_list = [];
                         for (i = 0; i < datas.length; i++) {
                             id_list.push($scope.resolvePath(datas[i], $scope.form.datamodel.projection[$scope.form_field_list.subtitle].full_path));
                         }
-                        itemValues = { 
-                            _id: {
+                        itemValues.datamodel_search_criteria['_id'] = {
                             '$in': id_list
-                            }
-                        }
+                        };
+                        itemValues.datamodel_sort_by = formValues[j].values.datamodel_sort_by?formValues[j].values.datamodel_sort_by:{};
                         $scope.queryValues(formValues[j]._id, formValues[j].type, itemValues, $scope.form_field_list, 'subtitle', $scope.form_field_list);
                     }
                 }
@@ -362,8 +364,14 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var k;
         if (extData) {
             if (extData.title_display_text == 'property') {
-                for (k = 0; k < newValues.length; k++) {
-                    formField.title_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.title_full_path);
+                if (extData.title_ref) {
+                    for (k = 0; k < newValues.length; k++) {
+                        formField.title_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.title_ref);
+                    }
+                } else {
+                    for (k = 0; k < newValues.length; k++) {
+                        formField.title_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.title_full_path);
+                    }
                 }
             } else if (extData.title_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
@@ -382,9 +390,15 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var k;
         if (extData) {
             if (extData.subtitle_display_text == 'property') {
-                for (k = 0; k < newValues.length; k++) {
-                    formField.subtitle_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.subtitle_full_path);
-                }
+                if (extData.subtitle_ref) {
+                    for (k = 0; k < newValues.length; k++) {
+                        formField.subtitle_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.subtitle_ref);
+                    }
+                } else {
+                    for (k = 0; k < newValues.length; k++) {
+                        formField.subtitle_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.subtitle_full_path);
+                    }
+                    }
             } else if (extData.subtitle_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
                     formField.subtitle_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.subtitle_calculation);

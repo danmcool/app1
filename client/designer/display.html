@@ -67,7 +67,7 @@
                                 <md-input-container ng-if="field.title_display=='value'&&title_ref.show&&field.title_display_text=='property'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.title_ref" ng-required="true">
-                                        <md-option ng-repeat="datakey in ref_datamodel_title_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                        <md-option ng-repeat="datakey in ref_datamodel_title_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.title_display=='value'&&title_ref.show&&field.title_display_text=='calculation'" flex="auto" class="md-block">
@@ -116,7 +116,7 @@
                                 <md-input-container ng-if="field.subtitle_display=='value'&&subtitle_ref.show&&field.subtitle_display_text=='property'" flex="auto" class="md-block">
                                     <label>{{sessionData.appData.field_datafield}}</label>
                                     <md-select ng-model="field.subtitle_ref">
-                                        <md-option ng-repeat="datakey in ref_datamodel_subtitle_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                                        <md-option ng-repeat="datakey in ref_datamodel_subtitle_keys" ng-value="datakey.full_path">{{datakey.translated_name}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container ng-if="field.subtitle_display=='value'&&subtitle_ref.show&&field.subtitle_display_text=='calculation'" flex="auto" class="md-block">
