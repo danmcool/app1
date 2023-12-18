@@ -431,7 +431,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             } else if (formFields[i].display == 'currency') {
                 if (formFields[i].init_value_amount && formFields[i].init_value_amount != '' && $routeParams[formFields[i].init_value_amount] && 
                     formFields[i].init_value_currency && formFields[i].init_value_currency != '' && $routeParams[formFields[i].init_value_currency]) {
-                    $scope.localdata[formFields[i].id] = { 'value' : $routeParams[formFields[i].init_value_amount], 'currency' : $routeParams[formFields[i].init_value_currency] };
+                    $scope.localdata[formFields[i].id] = { 'value' : Number($routeParams[formFields[i].init_value_amount]), 'currency' : $routeParams[formFields[i].init_value_currency] };
                 } else {
                     $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 }
