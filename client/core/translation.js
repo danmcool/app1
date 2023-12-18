@@ -550,6 +550,14 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Initial value parameter for end',
             fr: 'Paramètre pour la valeur initiale pour fin'
         },
+        field_init_value_amount: {
+            en: 'Initial value parameter for amount',
+            fr: 'Paramètre pour la valeur initiale pour le montant'
+        },
+        field_init_value_currency: {
+            en: 'Initial value parameter for currency',
+            fr: 'Paramètre pour la valeur initiale pour la monnaie'
+        },
         action_editor: {
             en: 'Action',
             fr: 'Action'

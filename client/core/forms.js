@@ -429,8 +429,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     MapService.geocodeAddress('map' + formFields[i].id, (address.address_line1 ? (address.address_line1 + ',') : '') + (address.address_line2 ? (address.address_line2 + ',') : '') + (address.address_city ? (address.address_city + ',') : '') + (address.address_postal_code ? (address.address_postal_code + ',') : '') + (address.address_country ? (address.address_country + ',') : ''));
                 }
             } else if (formFields[i].display == 'currency') {
-                if (formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
-                    $scope.localdata[formFields[i].id] = { 'value' : $routeParams[formFields[i].init_value] };
+                if (formFields[i].init_value_amount && formFields[i].init_value_amount != '' && $routeParams[formFields[i].init_value_amount] && 
+                    formFields[i].init_value_currency && formFields[i].init_value_currency != '' && $routeParams[formFields[i].init_value_currency]) {
+                    $scope.localdata[formFields[i].id] = { 'value' : $routeParams[formFields[i].init_value_amount], 'currency' : $routeParams[formFields[i].init_value_currency] };
                 } else {
                     $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 }
