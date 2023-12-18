@@ -452,6 +452,10 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_init_value}}</label>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="field_init_value" ng-model="field.init_value" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
+                        </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_listofvalues}}</label>
                             <md-select ng-model="field.listofvalues" ng-required="(form.values.length > 0)">
                                 <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
@@ -477,6 +481,10 @@
                             <md-select ng-model="field.projectionid" ng-required="true" ng-change="changeFieldDisplay(field)">
                                 <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
                             </md-select>
+                        </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_init_value}}</label>
+                            <textarea type="text" ng-disabled="false" ng-required="false" name="field_init_value" ng-model="field.init_value" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" rows="1"></textarea>
                         </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_listofvalues}}</label>
