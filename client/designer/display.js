@@ -151,6 +151,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             en: 'Delete',
             fr: 'Supprimer'
         },
+        show_list: {
+            en: 'Show',
+            fr: 'Afficher'
+        },
         link_list: {
             en: 'Link',
             fr: 'Lien'

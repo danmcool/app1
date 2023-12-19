@@ -670,7 +670,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     });
 
-    $scope.gotoNextForm = function (formula, nextFormId, data) {
+    $scope.gotoNextForm = function (formula, nextFormId, data, skipId = false) {
         if (nextFormId == 'home') {
             if ($routeParams.pid) {
                 SessionService.location('/workflows/' + $scope.sessionData.application_id + '?pid=' + $routeParams.pid);
@@ -682,7 +682,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         } else {
             var formUrl = '/form/' + nextFormId + '/';
             if (data && data._id) {
-                formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
+                if (skipId) {
+                    formUrl = formUrl + '0?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
+                } else {
+                    formUrl = formUrl + data._id + '?application_id=' + $routeParams.application_id + '&workflow_id=' + $routeParams.workflow_id;
+                }
                 if (formula) {
                     for (var i = 0; i < formula.length; i++) {
                         formUrl = formUrl + '&' + $scope.form.datamodel.projection[formula[i]].full_path +
@@ -1191,9 +1195,13 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 });
             });
     }
-    $scope.linkList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+    $scope.showList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
         $scope.notify(notifyUser, emailTitle, emailHtml);
         $scope.gotoNextForm(formula, nextFormId, data);
+    }
+    $scope.linkList = function (formula, nextFormId, data, notifyUser, emailTitle, emailHtml) {
+        $scope.notify(notifyUser, emailTitle, emailHtml);
+        $scope.gotoNextForm(formula, nextFormId, data, true);
     }
     /*    $scope.download = function (data, dataFields, fileName) {
             var content = 'sep=,\n';

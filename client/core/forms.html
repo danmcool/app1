@@ -114,6 +114,9 @@
                                                             <div ng-switch-when="delete_list">
                                                                 <md-button ng-click="deleteList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                                             </div>
+                                                            <div ng-switch-when="show_list">
+                                                                <md-button ng-click="showList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
+                                                            </div>
                                                             <div ng-switch-when="link_list">
                                                                 <md-button ng-click="linkList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
                                                             </div>
