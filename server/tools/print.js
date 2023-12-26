@@ -19,8 +19,11 @@ puppeteer.launch({ headless: "new" }).then(async browser => {
 print.createPdf = async function (htmlTemplate, data, userProfile, landscape) {
     //const browser = await puppeteer.launch({ headless: "new" });
     //const page = await browser.newPage();
-    const preparedTemplate = htmlTemplate.replace(/<app1data_([a-z0-9.]+)>/g, function (match, capture, offset, string, groups) {
+    const dataPreparedTemplate = htmlTemplate.replace(/<app1data_([a-z0-9.]+)>/g, function (match, capture, offset, string, groups) {
         return Tools.resolvePath(data, capture);
+    });
+    const preparedTemplate = dataPreparedTemplate.replace(/<app1user_([a-z0-9.]+)>/g, function (match, capture, offset, string, groups) {
+        return Tools.resolvePath(userProfile, capture);
     });
     await page.goto(`data:text/html,${preparedTemplate}`, { waitUntil: 'networkidle0' });
     const pdf = await page.pdf({ format: 'A4', landscape: landscape,
