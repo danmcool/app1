@@ -832,9 +832,10 @@ router.post('/pdf/:datamodel_id/:data_id', function (req, res, next) {
             if (!object) return res.status(400).json({
                 msg: 'Object not found!'
             });
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader("Content-Disposition", "attachment; filename=" + req.body.file_name);
             Print.createPdf(req.body.html, object, SessionCache.userData[token].profile, req.body.landscape).then(function (result) {
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader("Content-Disposition", "attachment; filename=" + req.body.file_name);
+                res.setHeader('Content-Length', result.length);
                 res.send(result);
             });
         });
