@@ -18,6 +18,16 @@ if (!process.env.APP1_SERVER_NAME) {
     process.exit(1);
 }
 
+if (!process.env.APP1_DEFAULT_APP) {
+    console.log('No default app');
+    process.exit(1);
+}
+
+if (!process.env.APP1_ADMIN_PROFILE) {
+    console.log('Admin profile setting');
+    process.exit(1);
+}
+
 var http = require('http');
 /*
 http.createServer(function (req, res) {

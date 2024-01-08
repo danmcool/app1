@@ -156,7 +156,7 @@ router.post('/register', function (req, res) {
         }
         var company = {
             name: req.body.company_name,
-            applications: ['58209e223ee6583658eceedb', '586bbda98983994e00fc9757', '58223c8dfaa281219c13beaf', '5981c48700ba0804fc43b9b0']
+            applications: [process.env.APP1_DEFAULT_APP]
         }
         Company.create(company, function (errCompany, newCompany) {
             if (errCompany) return next(errCompany);
@@ -184,7 +184,7 @@ router.post('/register', function (req, res) {
                         _company_code: req.body.code
                     };
                     UserProfile.create(userprofilePrivate, function (errUserProfilePrivate, newUserprofilePrivate) {
-                        if (errUserProfilePrivate) return next(errUserProfile);
+                        if (errUserProfilePrivate) return next(errUserProfilePrivate);
                         var userprofilePublic = {
                             name: {
                                 en: 'Public'
@@ -195,6 +195,7 @@ router.post('/register', function (req, res) {
                         UserProfile.create(userprofilePublic, function (errUserProfilePublic, newUserprofilePublic) {
                             if (errUserProfilePublic) return next(errUserProfilePublic);
                             var newPassword = randomString();
+                            var newUserProfile = process.env.APP1_ADMIN_PROFILE ? newUserprofileAdministrator._id : newUserprofilePrivate._id;
                             crypto.pbkdf2(newPassword, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
                                 if (errCrypto) return next(errCrypto);
                                 var hashPassword = key.toString('hex');
@@ -208,7 +209,7 @@ router.post('/register', function (req, res) {
                                         theme: 'default',
                                         uiLanguage: 'auto'
                                     },
-                                    profile: newUserprofileAdministrator._id,
+                                    profile: newUserProfile,
                                     validated: false,
                                     company: newCompany._id,
                                     _company_code: req.body.code
