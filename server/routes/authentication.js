@@ -195,7 +195,7 @@ router.post('/register', function (req, res) {
                         UserProfile.create(userprofilePublic, function (errUserProfilePublic, newUserprofilePublic) {
                             if (errUserProfilePublic) return next(errUserProfilePublic);
                             var newPassword = randomString();
-                            var newUserProfile = process.env.APP1_ADMIN_PROFILE ? newUserprofileAdministrator._id : newUserprofilePrivate._id;
+                            var newUserProfile = process.env.APP1_ADMIN_PROFILE == 'true' ? newUserprofileAdministrator._id : newUserprofilePrivate._id;
                             crypto.pbkdf2(newPassword, SecretKey, Constants.SecretIterations, Constants.SecretByteSize, Constants.SecretAlgorithm, function (errCrypto, key) {
                                 if (errCrypto) return next(errCrypto);
                                 var hashPassword = key.toString('hex');
