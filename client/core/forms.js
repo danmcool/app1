@@ -360,7 +360,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
     $scope.updateValuesTitle = function (formField, newValues, extData) {
-        formField.title_values = {};
+        if (formField.title_values == undefined) {
+            formField.title_values = {};
+        }
         var k;
         if (extData) {
             if (extData.title_display_text == 'property') {
@@ -386,7 +388,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
     $scope.updateValuesSubTitle = function (formField, newValues, extData) {
-        formField.subtitle_values = {};
+        if (formField.subtitle_values == undefined) {
+            formField.subtitle_values = {};
+        }
         var k;
         if (extData) {
             if (extData.subtitle_display_text == 'property') {
@@ -398,7 +402,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     for (k = 0; k < newValues.length; k++) {
                         formField.subtitle_values[newValues[k]._id] = $scope.resolvePath(newValues[k], extData.subtitle_full_path);
                     }
-                    }
+                }
             } else if (extData.subtitle_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
                     formField.subtitle_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.subtitle_calculation);
