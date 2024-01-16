@@ -390,6 +390,12 @@
                             <label>{{sessionData.appData.form_calculation}}</label>
                             <textarea type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.calculation" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="2"></textarea>
                         </md-input-container>
+                        <md-input-container flex="auto" class="md-block">
+                            <label>{{sessionData.appData.field_datafield}}</label>
+                            <md-select ng-model="field.projectionid" ng-required="!field.disabled">
+                                <md-option ng-repeat="datakey in datamodel_keys" ng-value="datakey.id">{{datakey.translated_name}}</md-option>
+                            </md-select>
+                        </md-input-container>
                     </div>
 
                     <div ng-switch-when="appointment|appointment_properties" ng-switch-when-separator="|">
