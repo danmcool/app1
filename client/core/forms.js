@@ -1443,6 +1443,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.getNextData();
     }
 
+    $scope.updateCalculation = function () {
+        var formFields = $scope.form.fields;
+        var i;
+        for (i = 0; i < formFields.length; i++) {
+            if (formFields[i].display == 'calculation') {
+                $scope.updateComponents($scope.form, null, $scope.data);
+                var data = $scope.data;
+                $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+            }
+        }
+    }
+
     $scope.interval = function (fieldId, dateValueObject, objectId) {
         $scope.list_interval_validation[objectId] = true;
         if (dateValueObject.date) {

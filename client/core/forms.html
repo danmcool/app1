@@ -200,7 +200,7 @@
                                         <div ng-switch-when="false">
                                             <md-input-container flex="auto" class="md-block">
                                                 <label ng-if="!field.hide_name">{{field.translated_name}}</label>
-                                                <input type="text" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size">
+                                                <input type="text" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size"  ng-change="updateCalculation()">
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long.
@@ -220,7 +220,7 @@
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
                                                 <label ng-if="!field.hide_name">{{field.translated_name}}</label>
-                                                <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max">
+                                                <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id]" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max" ng-change="updateCalculation()">
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'pattern']">
                                                         Your input must be a double digit number.
@@ -241,7 +241,7 @@
                                             <div layout="row">
                                                 <md-input-container flex="80">
                                                     <label>{{field.translated_name}}</label>
-                                                    <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id].value" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max">
+                                                    <input type="number" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" ng-model="localdata[field.id].value" ng-pattern="field.pattern" step="{{field.step}}" ng-min="field.min" ng-max="field.max" ng-change="updateCalculation()">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'pattern']">
                                                             Your input must be a double digit number.
@@ -354,7 +354,7 @@
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
                                                 <label>{{field.translated_name}}</label>
-                                                <md-select name="{{field.translated_name}}" ng-model="localdata[field.id]" ng-disabled="field.disabled" ng-required="field.required">
+                                                <md-select name="{{field.translated_name}}" ng-model="localdata[field.id]" ng-disabled="field.disabled" ng-required="field.required" ng-change="updateCalculation()">
                                                     <md-option ng-repeat="value in field.values" value="{{value._id}}" ng-selected="localdata[field.id]=='{{value._id}}'">{{value.name}}</md-option>
                                                 </md-select>
                                             </md-input-container>
@@ -370,7 +370,7 @@
                                         </div>
                                         <div ng-switch-when="false">
                                             <md-input-container>
-                                                <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]">{{field.translated_name}}</md-checkbox>
+                                                <md-checkbox ng-disabled="field.disabled" name="{{field.translated_name}}" ng-model="localdata[field.id]" ng-change="updateCalculation()">{{field.translated_name}}</md-checkbox>
                                             </md-input-container>
                                         </div>
                                     </div>
@@ -385,7 +385,7 @@
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
                                                 <label ng-if="!field.hide_name">{{field.translated_name}}</label>
-                                                <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" md-open-on-focus ng-model="localdata[field.id]"></md-datepicker>
+                                                <md-datepicker md-hide-icons="triangle" ng-disabled="field.disabled" ng-required="field.required" name="{{field.translated_name}}" md-open-on-focus ng-model="localdata[field.id]" ng-change="updateCalculation()"></md-datepicker>
                                             </md-input-container>
                                         </div>
                                     </div>
@@ -540,7 +540,7 @@
                                         <div ng-switch-when="false">
                                             <md-input-container class="md-block">
                                                 <label ng-if="!field.hide_name">{{field.translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" />
+                                                <input ng-disabled="field.disabled" ng-required="field.required" type="email" name="{{field.translated_name}}" ng-model="localdata[field.id]" md-minlength="field.validation.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.max_size" ng-maxlength="field.validation.max_size" ng-pattern="/^.+@.+\..+$/" ng-change="updateCalculation()"/>
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
                                                         Your input must be between {{field.validation.min_size}} and {{field.validation.max_size}} characters long and look like an e-mail address.
@@ -593,7 +593,7 @@
                                             <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
                                             <md-input-container class="md-block">
                                                 <label>{{field.address_line1_translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size">
+                                                <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_line1_translated_name}}" ng-model="localdata[field.id].address_line1" md-minlength="field.validation.address_line1.min_size" ng-minlength="field.validation.min_size" md-maxlength="field.validation.min_size" ng-maxlength="field.validation.min_size" ng-change="updateCalculation()">
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                         Your input must be between 1 and 200 characters long.
@@ -602,7 +602,7 @@
                                             </md-input-container>
                                             <md-input-container class="md-block">
                                                 <label>{{field.address_line2_translated_name}}</label>
-                                                <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_line2_translated_name}}" ng-model="localdata[field.id].address_line2" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" ng-change="updateCalculation()">
                                                 <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                     <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                         Your input must be between 0 and 200 characters long.
@@ -612,7 +612,7 @@
                                             <div layout="row" layout-xs="column">
                                                 <md-input-container flex="70" flex-xs="100">
                                                     <label>{{field.address_city_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200">
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_city_translated_name}}" ng-model="localdata[field.id].address_city" md-minlength="1" ng-minlength="1" md-maxlength="200" ng-maxlength="200" ng-change="updateCalculation()">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 1 and 200 characters long.
@@ -621,7 +621,7 @@
                                                 </md-input-container>
                                                 <md-input-container flex="30" flex-xs="100" style-gt-xs="margin-left: 14px">
                                                     <label>{{field.address_postal_code_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_postal_code_translated_name}}" ng-model="localdata[field.id].address_postal_code" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" ng-change="updateCalculation()">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 0 and 200 characters long.
@@ -632,7 +632,7 @@
                                             <div layout="row" layout-xs="column">
                                                 <md-input-container flex="50" flex-xs="100">
                                                     <label>{{field.address_state_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                    <input ng-disabled="field.disabled" ng-required="false" name="{{field.address_state_translated_name}}" ng-model="localdata[field.id].address_state" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" ng-change="updateCalculation()">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 0 and 200 characters long.
@@ -641,7 +641,7 @@
                                                 </md-input-container>
                                                 <md-input-container flex="50" flex-xs="100" style-gt-xs="margin-left: 14px">
                                                     <label>{{field.address_country_translated_name}}</label>
-                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200">
+                                                    <input ng-disabled="field.disabled" ng-required="field.required" name="{{field.address_country_translated_name}}" ng-model="localdata[field.id].address_country" md-minlength="0" ng-minlength="0" md-maxlength="200" ng-maxlength="200" ng-change="updateCalculation()">
                                                     <div ng-messages="dynamicForm.$field.id.$error" role="alert">
                                                         <div ng-message-exp="['required', 'minlength', 'maxlength']">
                                                             Your input must be between 0 and 200 characters long.

@@ -381,6 +381,12 @@
                             <md-input-container flex="auto" class="md-block">
                                 <md-checkbox ng-model="field.required">{{sessionData.appData.field_required}}</md-checkbox>
                             </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.hide">{{sessionData.appData.field_hide}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.hide_name">{{sessionData.appData.field_hide_name}}</md-checkbox>
+                            </md-input-container>
                         </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
