@@ -98,7 +98,7 @@ app.get('/admin', function (req, res) {
 });
 // error hndlers
 app.use(function (req, res, next) {
-    var err = new Error('Not Found URL:' + req.path);
+    var err = new Error('Not Found URL:' + req.path + ' method:' + req.method);
     err.status = 404;
     next(err);
 });
