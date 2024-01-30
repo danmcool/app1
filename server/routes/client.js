@@ -834,8 +834,10 @@ router.post('/pdf/:datamodel_id/:data_id', function (req, res, next) {
             });
             Print.createPdf(req.body.html, object, SessionCache.userData[token], req.body.landscape).then(function (result) {
                 res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader("Content-Disposition", "attachment; filename=" + req.body.file_name);
+                res.setHeader('Content-Disposition', 'attachment; filename=\"' + req.body.file_name + '\"');
                 res.setHeader('Content-Length', result.length);
+                console.log('PDF Download size' + result.length);
+                console.log(req.body);
                 res.send(result);
             });
         });
