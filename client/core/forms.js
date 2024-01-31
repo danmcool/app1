@@ -1394,32 +1394,27 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         document.getElementById('paypal').submit();
     }
 
-    $scope.downloadPdf = function (formula, nextFormId, setValue, fileName, htmlTemplate) {
-        var pdfForm = document.createElement("form");
-        pdfForm.target ="_self"||"_blank";
-        pdfForm.id="pdfForm";
+    $scope.downloadPdf = function (formula, nextFormId, setValue, action_index) {
         var populate = "";
         var projectionKeys = Object.keys($scope.form.datamodel.projection);
         for (j = 0; j < projectionKeys.length; j++) {
             var childField = $scope.form.datamodel.projection[projectionKeys[j]];
             if (childField.type ==  "reference") {
-                populate += childField.full_path + " ";
+                if (populate == "") {
+                    populate += childField.full_path;
+                } else {
+                    populate += " " + childField.full_path;
+                }
             }
         }
-        pdfForm.action = "/client/pdf/" + $scope.form.datamodel._id + "/" + $scope.data._id + "?populate=" + populate;
-        pdfForm.method = "post";
-    
-        var fileNameInput = document.createElement("input");
-        fileNameInput.type = "hidden";
-        fileNameInput.name = "file_name";
-        fileNameInput.value = fileName[$scope.sessionData.userData.properties.correctedLanguage];
-        pdfForm.appendChild(fileNameInput);
-        var htmlInput = document.createElement("input");
-        htmlInput.type = "hidden";
-        htmlInput.name = "html";
-        htmlInput.value = htmlTemplate[$scope.sessionData.userData.properties.correctedLanguage];
-        pdfForm.appendChild(htmlInput);
 
+        var pdfForm = document.createElement("form");
+        pdfForm.target ="_self"||"_blank";
+        pdfForm.id="pdfForm";
+        pdfForm.action = "/client/pdf/" + $scope.form.datamodel._id + "/" + $scope.data._id + "?populate=" + populate +
+        "&pid=" + $scope.sessionData.token + "&form_id=" + $scope.form._id + "&action_index=" + action_index +
+        "&language=" + $scope.sessionData.userData.properties.correctedLanguage;
+        pdfForm.method = "post";
         document.body.appendChild(pdfForm);
         /*pdfForm.on('submit', function(error){
             $scope.initComponents();

@@ -819,26 +819,39 @@ router.get('/model_run/:datamodel_id/:data_id/:mlmodel_id', function (req, res, 
     }
 });
 
-router.post('/pdf/:datamodel_id/:data_id', function (req, res, next) {
-    var token = req.cookies[Constants.SessionCookie];
+router.all('/pdf/:datamodel_id/:data_id', function (req, res, next) {
+    var token = req.query.pid;
     var datamodel_id = req.params.datamodel_id;
+    var data_id = req.params.data_id;
     var searchCriteriaPrint = {
-        _id: req.params.data_id,
+        _id: data_id,
         _company_code: SessionCache.userData[token]._company_code
     }
-    if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, req.params.data_id, searchCriteriaPrint)) {
-        Metadata.Objects[datamodel_id].findOne(searchCriteriaPrint).populate(req.query.populate).exec(function (err, object) {
-            if (err) return next(err);
-            if (!object) return res.status(400).json({
-                msg: 'Object not found!'
+    if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, data_id, searchCriteriaPrint)) {
+        Metadata.Form.findOne({
+            _id: {
+                $eq: req.query.form_id
+            }
+        }).exec(function (formErr, formObject) {
+            if (formErr) return next(formErr);
+            if (!formObject) return res.status(400).json({
+                msg: 'Form not found!'
             });
-            Print.createPdf(req.body.html, object, SessionCache.userData[token], req.body.landscape).then(function (result) {
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename=\"' + req.body.file_name + '\"');
-                res.setHeader('Content-Length', result.length);
-                console.log('PDF Download size' + result.length);
-                console.log(req.body);
-                res.send(result);
+            Metadata.Objects[datamodel_id].findOne(searchCriteriaPrint).populate(req.query.populate).exec(function (err, object) {
+                if (err) return next(err);
+                if (!object) return res.status(400).json({
+                    msg: 'Object not found!'
+                });
+                var action = null;
+                if (formObject.actions && formObject.actions[req.query.action_index]) {
+                    action = formObject.actions[req.query.action_index];
+                }
+                Print.createPdf(action.pdf_html_template[req.query.language], object, SessionCache.userData[token], action.pdf_landscape).then(function (result) {
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', 'attachment; filename=\"' + action.pdf_file_name[req.query.language] + '\"');
+                    res.setHeader('Content-Length', result.length);
+                    res.send(result);
+                });
             });
         });
     }

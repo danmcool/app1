@@ -48,6 +48,9 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 function allowedPath(req) {
+    if (req.path.startsWith('/client/pdf')) {
+        return true;
+    }
     if (req.path.startsWith('/client') || req.path.startsWith('/api')) {
         return false;
     }
@@ -96,7 +99,7 @@ app.get('/', function (req, res) {
 app.get('/admin', function (req, res) {
     res.sendFile(path.join(__dirname, '../client', 'index_admin.html'));
 });
-// error hndlers
+// error handlers
 app.use(function (req, res, next) {
     var err = new Error('Not Found URL:' + req.path + ' method:' + req.method);
     err.status = 404;
