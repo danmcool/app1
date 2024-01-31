@@ -820,6 +820,7 @@ router.get('/model_run/:datamodel_id/:data_id/:mlmodel_id', function (req, res, 
 });
 
 router.all('/pdf/:datamodel_id/:data_id', function (req, res, next) {
+    console.log(req.query);
     var token = req.query.pid;
     var datamodel_id = req.params.datamodel_id;
     var data_id = req.params.data_id;
