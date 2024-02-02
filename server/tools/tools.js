@@ -24,7 +24,7 @@ Tools.resolvePath = function (object, path) {
 Tools.resolvePathUndefValue = function (object, path, undefValue) {
     if (!path) return undefValue;
     return path.split('.').reduce(function (previous, current) {
-        return (previous ? previous[current] : undefValue);
+        return (previous ? (previous[current] == undefined ? undefValue : previous[current]) : undefValue);
     }, object);
 }
 
