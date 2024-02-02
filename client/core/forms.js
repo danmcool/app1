@@ -12,6 +12,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     $scope.calculation = function (object, calculation) {
         var data = object;
+        var language = $scope.sessionData.userData.properties.correctedLanguage;
         try {
             return eval(calculation);
         } catch (e) {
@@ -495,11 +496,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.localdata[formFields[i].id] = new Date($scope.localdata[formFields[i].id]);
                 }
             } else if (formFields[i].display == 'calculation') {
-                var data = $scope.data;
-                try {
-                    $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
-                } catch (e) {
-                }
+                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, formFields[i].calculation);
             } else if (formFields[i].display == 'list') {
                 $scope.show_search = true;
                 $scope.form_field_list = formFields[i];
@@ -1458,11 +1455,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var i;
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                var data = $scope.data;
-                try {
-                    $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
-                } catch (e) {
-                }
+                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, formFields[i].calculation);
             }
         }
     }
