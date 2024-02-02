@@ -12,7 +12,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
     $scope.calculation = function (object, calculation) {
         var data = object;
-        return eval(calculation);
+        try {
+            return eval(calculation);
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
     }
 
     $scope.resolvePath = function (object, path) {
@@ -492,7 +497,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             } else if (formFields[i].display == 'calculation') {
                 var data = $scope.data;
-                $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+                try {
+                    $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+                } catch (e) {
+                    console.log(e);
+                }
             } else if (formFields[i].display == 'list') {
                 $scope.show_search = true;
                 $scope.form_field_list = formFields[i];
@@ -535,9 +544,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.currentFile[formFields[i].id] = 0;
                 $scope.filesCount[formFields[i].id] = 0;
                 if (formFields[i].display == 'image' && formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
-                    $scope.localdata[formFields[i].id] = eval($routeParams[formFields[i].init_value]);
+                    try {
+                        $scope.localdata[formFields[i].id] = eval($routeParams[formFields[i].init_value]);
+                    } catch (e) {
+                        console.log(e);
+                    }
                 } else if (formFields[i].default_value && formFields[i].default_value != '') {
-                    $scope.localdata[formFields[i].id] = eval(formFields[i].default_value);
+                    try {
+                        $scope.localdata[formFields[i].id] = eval(formFields[i].default_value);
+                    } catch (e) {
+                        console.log(e);
+                    }
                 } else {
                     $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                 }
@@ -1445,7 +1462,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             if (formFields[i].display == 'calculation') {
                 $scope.updateComponents($scope.form, null, $scope.data);
                 var data = $scope.data;
-                $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+                try {
+                    $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
     }
