@@ -21,6 +21,13 @@ Tools.resolvePath = function (object, path) {
     }, object);
 }
 
+Tools.resolvePathUndefValue = function (object, path, undefValue) {
+    if (!path) return undefValue;
+    return path.split('.').reduce(function (previous, current) {
+        return (previous ? previous[current] : undefValue);
+    }, object);
+}
+
 Tools.resolvePathUpdate = function (object, path, value) {
     if (!path) return undefined;
     path.split('.').reduce(function (previous, current, index, array) {
