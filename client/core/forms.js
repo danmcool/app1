@@ -621,6 +621,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             }
         }
+        $scope.updateComponents($scope.form, null, $scope.data);
     }
 
     Forms.get({
