@@ -974,6 +974,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (setValue) {
             $scope.resolvePathUpdate(data, setValue.full_path, setValue.value);
         }
+        $scope.updateCalculationInternal();
     }
 
     $scope.updateErrorAlert = function () {
@@ -1451,12 +1452,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.getNextData();
     }
 
-    $scope.updateCalculation = function () {
+    $scope.updateCalculationInternal = function () {
         var formFields = $scope.form.fields;
         var i;
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                $scope.updateComponents($scope.form, null, $scope.data);
                 var data = $scope.data;
                 try {
                     $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
@@ -1464,6 +1464,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             }
         }
+    }
+
+    $scope.updateCalculation = function () {
+        $scope.updateComponents($scope.form, null, $scope.data);
     }
 
     $scope.interval = function (fieldId, dateValueObject, objectId) {
