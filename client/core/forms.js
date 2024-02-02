@@ -15,7 +15,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         try {
             return eval(calculation);
         } catch (e) {
-            console.log(e);
             return null;
         }
     }
@@ -500,7 +499,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 try {
                     $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
                 } catch (e) {
-                    console.log(e);
                 }
             } else if (formFields[i].display == 'list') {
                 $scope.show_search = true;
@@ -547,13 +545,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     try {
                         $scope.localdata[formFields[i].id] = eval($routeParams[formFields[i].init_value]);
                     } catch (e) {
-                        console.log(e);
                     }
                 } else if (formFields[i].default_value && formFields[i].default_value != '') {
                     try {
                         $scope.localdata[formFields[i].id] = eval(formFields[i].default_value);
                     } catch (e) {
-                        console.log(e);
                     }
                 } else {
                     $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
@@ -1465,7 +1461,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 try {
                     $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
                 } catch (e) {
-                    console.log(e);
                 }
             }
         }
