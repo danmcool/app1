@@ -160,7 +160,7 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
-]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, Login, Logout, UserStatus, Applications, User) {
+]).factory('SessionService', ['AppTranslationService', '$location', '$resource', '$window', '$mdDateLocale', 'Login', 'Logout', 'UserStatus', 'Applications', 'User', function SessionService(AppTranslationService, $location, $resource, $window, $mdDateLocale, Login, Logout, UserStatus, Applications, User) {
     var sessionData = {
         userData: {
             properties: {
@@ -169,9 +169,12 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         },
         applicationName: 'App1',
-        appData: {}
+        appData: {},
     };
-    var translate = function (text) {
+    $mdDateLocale.formatDate = function(date) {
+        return new Date(date).toLocaleDateString(sessionData.userData.properties.correctedLanguage);
+    };
+var translate = function (text) {
         if (!text) return 'xxxxx';
         var translated_text = text[sessionData.userData.properties.correctedLanguage];
         if (translated_text) return translated_text;
@@ -203,13 +206,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
         if (properties.uiLanguage && properties.uiLanguage == 'auto') {
             var language = window.navigator.userLanguage || window.navigator.language;
             if (!language) {
-                return 'en';
+                language = 'en';
             } else {
-                return (language.indexOf('en') == 0 ? 'en' : language.indexOf('fr') == 0 ? 'fr' : 'en');
+                language = (language.indexOf('en') == 0 ? 'en' : language.indexOf('fr') == 0 ? 'fr' : 'en');
             }
         } else {
-            return properties.uiLanguage;
+            language = properties.uiLanguage;
         }
+        return language;
     }
     var initSessionData = function (userResult, gotoApps) {
         sessionData = {};
