@@ -10,8 +10,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     });
 
-    $scope.calculation = function (object, calculation) {
+    $scope.calculation = function (object, objectList, calculation) {
         var data = object;
+        var datas = objectList;
         var language = $scope.sessionData.userData.properties.correctedLanguage;
         try {
             return eval(calculation);
@@ -348,9 +349,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 for (k = 0; k < newValues.length; k++) {
                     formField.values.push({
                         _id: newValues[k]._id,
-                        name: $scope.calculation(newValues[k], extData.selection_calculation)
+                        name: $scope.calculation(newValues[k], null, extData.selection_calculation)
                     });
-                    formField.values_key[newValues[k]._id] = $scope.calculation(newValues[k], extData.selection_calculation);
+                    formField.values_key[newValues[k]._id] = $scope.calculation(newValues[k], null, extData.selection_calculation);
                 }
             }
         } else {
@@ -382,7 +383,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             } else if (extData.title_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
-                    formField.title_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.title_calculation);
+                    formField.title_values[newValues[k]._id] = $scope.calculation(newValues[k], null, extData.title_calculation);
                 }
             }
         } else {
@@ -410,7 +411,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             } else if (extData.subtitle_display_text == 'calculation') {
                 for (k = 0; k < newValues.length; k++) {
-                    formField.subtitle_values[newValues[k]._id] = $scope.calculation(newValues[k], extData.subtitle_calculation);
+                    formField.subtitle_values[newValues[k]._id] = $scope.calculation(newValues[k], null, extData.subtitle_calculation);
                 }
             }
         } else {
@@ -496,7 +497,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.localdata[formFields[i].id] = new Date($scope.localdata[formFields[i].id]);
                 }
             } else if (formFields[i].display == 'calculation') {
-                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, formFields[i].calculation);
+                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
             } else if (formFields[i].display == 'list') {
                 $scope.show_search = true;
                 $scope.form_field_list = formFields[i];
@@ -1455,7 +1456,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var i;
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, formFields[i].calculation);
+                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
             }
         }
     }
