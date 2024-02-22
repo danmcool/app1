@@ -49,7 +49,11 @@ router.get('/:datamodelid/', function (req, res, next) {
     }
     var pageOptions = Tools.computePage(req);
     var sort_by = JSON.parse(req.query.sort_by ? req.query.sort_by : '{}');
-    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
+    var search_criteria = req.query.search_criteria ? req.query.search_criteria : '{}';
+    search_criteria = search_criteria.replace(/<app1query_([a-z0-9.]+)>/g, function (match, capture, offset, string, groups) {
+        return Tools.resolvePath(req.query, capture);
+    });
+    search_criteria = JSON.parse(search_criteria);
     if (remote) {
         search_criteria._company_code = {
             $eq: remote_profile._company_code
@@ -99,10 +103,7 @@ router.get('/:datamodelid/', function (req, res, next) {
         req.query.populate = '';
     }
     Metadata.Objects[req.params.datamodelid].find(search_criteria, searchScoreProjection).skip(pageOptions.skip).limit(pageOptions.limit).populate(req.query.populate).sort(sort_by).exec(function (err, objects) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        } 
+        if (err) return next(err);
         res.json(objects);
     });
 });
@@ -177,10 +178,7 @@ router.post('/:datamodelid/', function (req, res, next) {
         }
     }
     Metadata.Objects[req.params.datamodelid].create(req.body, function (err, object) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        } 
+        if (err) return next(err);
         res.status(200).json({
             msg: 'Data: entry created!',
             _id: object._id
@@ -241,7 +239,11 @@ router.get('/:datamodelid/:id', function (req, res, next) {
             });
         }
     }
-    var search_criteria = JSON.parse(req.query.search_criteria ? req.query.search_criteria : '{}');
+    var search_criteria = req.query.search_criteria ? req.query.search_criteria : '{}';
+    search_criteria = search_criteria.replace(/<app1query_([a-z0-9.]+)>/g, function (match, capture, offset, string, groups) {
+        return Tools.resolvePath(req.query, capture);
+    });
+    search_criteria = JSON.parse(search_criteria);
     search_criteria._id = {
         $eq: req.params.id
     }
@@ -263,10 +265,7 @@ router.get('/:datamodelid/:id', function (req, res, next) {
         req.query.populate = '';
     }
     Metadata.Objects[req.params.datamodelid].findOne(search_criteria).populate(req.query.populate).exec(function (err, object) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        } 
+        if (err) return next(err);
         res.json(object);
     });
 });
@@ -347,10 +346,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
     objectToBeUpdated._updated_at = Date.now();
     delete objectToBeUpdated._appointments;
     Metadata.Objects[req.params.datamodelid].findOneAndUpdate(search_criteria, req.body, function (err, object) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        } 
+        if (err) return next(err);
         if (object) {
             res.status(200).json({
                 msg: 'Data: entry updated!'
@@ -358,10 +354,7 @@ router.put('/:datamodelid/:id', function (req, res, next) {
         } else {
             delete search_criteria._updated_at;
             Metadata.Objects[req.params.datamodelid].findOne(search_criteria, function (err, object) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                } 
+                if (err) return next(err);
                 res.status(400).json(object);
             });
         }
@@ -393,10 +386,7 @@ router.delete('/:datamodelid/:id', function (req, res, next) {
         _id: req.params.id,
         _company_code: profile.datamodels[req.params.datamodelid].delete._company_code
     }, function (err, object) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        } 
+        if (err) return next(err);
         res.status(200).json({
             msg: 'Data: entry deleted!'
         });
