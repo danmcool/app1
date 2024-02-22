@@ -14,7 +14,7 @@
                         <div ng-repeat="field in block.fields" flex="auto">
                             <div ng-switch="field.display" flex="auto">
 
-                                <div ng-switch-when="list" layout-padding>
+                                <div ng-switch-when="list" layout-padding ng-if="!field.hide">
                                     <md-input-container ng-if="field.show_search" flex="auto" class="md-block">
                                         <label>{{sessionData.appData.search_text}}</label>
                                         <input ng-model="search_text" name="SearchTextList" ng-change="search(search_text)">
