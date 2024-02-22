@@ -19,6 +19,9 @@
                     <div ng-switch-when="list">
                         <div layout="row" layout-xs="column">
                             <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.hide">{{sessionData.appData.field_hide}}</md-checkbox>
+                            </md-input-container>
+                            <md-input-container flex="auto" class="md-block">
                                 <md-checkbox ng-model="field.show_search">{{sessionData.appData.field_show_search}}</md-checkbox>
                             </md-input-container>
                             <md-input-container flex="auto" class="md-block">
