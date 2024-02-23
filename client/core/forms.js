@@ -224,6 +224,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.datas.push(datas[i]);
             }
             $scope.updateCalculation();
+    
+            var formFields = $scope.form.fields;
+            for (var i = 0; i < formFields.length; i++) {
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+            }
             $scope.tempStopScroll = false;
         });
     }
@@ -431,6 +436,17 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var formFields = $scope.form.fields;
         var formValues = $scope.form.values;
         var i, j;
+        for (var i = 0; i < formFields.length; i++) {
+            if (formFields[i].display == 'calculation') {
+                var data = $scope.data;
+                $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+            }
+        }
+       for (var i = 0; i < formFields.length; i++) {
+            if (formFields[i].display != 'list' && formFields[i].display != 'item') {
+                $scope.resolvePathUpdate(data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
+            }
+        }
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'address') {
                 $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
@@ -497,8 +513,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 if ($scope.localdata[formFields[i].id]) {
                     $scope.localdata[formFields[i].id] = new Date($scope.localdata[formFields[i].id]);
                 }
-            } else if (formFields[i].display == 'calculation') {
-                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
             } else if (formFields[i].display == 'list') {
                 $scope.show_search = true;
                 $scope.form_field_list = formFields[i];
@@ -620,7 +634,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             }
         }
-        $scope.updateComponents($scope.form, null, $scope.data);
     }
 
     Forms.get({
