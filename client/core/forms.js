@@ -438,8 +438,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var i, j;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                var data = $scope.data;
-                $scope.localdata[formFields[i].id] = eval(formFields[i].calculation);
+                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
             }
         }
        for (var i = 0; i < formFields.length; i++) {
