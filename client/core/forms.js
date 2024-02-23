@@ -231,6 +231,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
                 }
             }
+            for (i = 0; i < formFields.length; i++) {
+                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+            }
             $scope.tempStopScroll = false;
         });
     }
