@@ -447,7 +447,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
        for (var i = 0; i < formFields.length; i++) {
-            if (formFields[i].display != 'list' && formFields[i].display != 'item') {
+            if ($scope.localdata[formFields[i].id] && formFields[i].display != 'list' && formFields[i].display != 'item') {
                 $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
             }
         }
