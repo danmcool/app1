@@ -223,7 +223,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             for (i = 0; i < datas.length; i++) {
                 $scope.datas.push(datas[i]);
             }
-            $scope.updateCalculation();
+            $scope.updateCalculationInternal();
     
             var formFields = $scope.form.fields;
             for (i = 0; i < formFields.length; i++) {
