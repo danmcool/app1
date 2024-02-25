@@ -238,6 +238,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     if (formFields[i].full_path == calculationFields[j]) {
                         $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
                     }
+                }
             }
             $scope.tempStopScroll = false;
         });
