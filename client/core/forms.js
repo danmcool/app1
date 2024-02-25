@@ -226,13 +226,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             $scope.updateCalculationInternal();
     
             var formFields = $scope.form.fields;
+            var calculationFields = [];
             for (i = 0; i < formFields.length; i++) {
                 if (formFields[i].display == 'calculation') {
                     $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
+                    calculationFields.push(formFields[i].full_path);
                 }
             }
             for (i = 0; i < formFields.length; i++) {
-                $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                for (j = 0; j < calculationFields.length; j++) {
+                    if (formFields[i].full_path == calculationFields[j]) {
+                        $scope.localdata[formFields[i].id] = $scope.resolvePath($scope.data, formFields[i].full_path);
+                    }
             }
             $scope.tempStopScroll = false;
         });
