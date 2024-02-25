@@ -224,7 +224,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 $scope.datas.push(datas[i]);
             }
             $scope.updateCalculationInternal();
-    
             var formFields = $scope.form.fields;
             var calculationFields = [];
             for (i = 0; i < formFields.length; i++) {
@@ -240,6 +239,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             }
+            // nested calculations (1 level only)
+            $scope.updateCalculationInternal();
             $scope.tempStopScroll = false;
         });
     }
