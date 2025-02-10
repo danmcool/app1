@@ -1,6 +1,6 @@
 Login command
 
-*	Request URL: https://app1.digital/authentication/login
+*	Request URL: https://YOUR.WEBSITE.COM/authentication/login
 *	Request Method: POST
 *	Request Payload : ```{"user":"adminapp1@easy.com","password":"Start123"}```
 *	Response :
@@ -66,7 +66,7 @@ Login command
 ```
 
 Login command
-*	Request URL: https://app1.digital/authentication/login?pid=5b68155f19e6a544a2280542
+*	Request URL: https://YOUR.WEBSITE.COM/authentication/login?pid=5b68155f19e6a544a2280542
 *	Request Method: GET
 *	Response :
 ```
@@ -156,13 +156,13 @@ Login command
 ```
 
 Logout command
-*	Request URL: https://app1.digital/authentication/logout
+*	Request URL: https://YOUR.WEBSITE.COM/authentication/logout
 *	Request Method: GET
 *	Request Payload : 
 *	Response : 
 
 Status command
-*	Request URL : https://app1.digital/authentication/status
+*	Request URL : https://YOUR.WEBSITE.COM/authentication/status
 *	Request Method : GET
 *	Request Payload : 
 *	Response :
@@ -230,7 +230,7 @@ Status command
 ```
 
 Register to an existing company command; use this command to add an user the an existing company; sid : specifies the token of a connected user of the corresponding company; properties.extra : can contain any additional or custom properties of the user
-*	Request URL: https://app1.digital/authentication/register_company
+*	Request URL: https://YOUR.WEBSITE.COM/authentication/register_company
 *	Request Method: POST
 *	Request Payload :
 ```
@@ -255,7 +255,7 @@ Register to an existing company command; use this command to add an user the an 
 ```
 
 Create data command; add data model id to the URL
-*	Request URL: https://app1.digital/client/data/58403392cc33781c8cc5c2d5
+*	Request URL: https://YOUR.WEBSITE.COM/client/data/58403392cc33781c8cc5c2d5
 *	Request Method : POST
 *	Request Payload :
 ```
@@ -280,7 +280,7 @@ Create data command; add data model id to the URL
 ```
 
 Get data command; add data model id and object id to the URL; populate : specifies the references from object’s definition that have to be loaded (list of field names space separated); search_criteria : specifies a “MongoDB” like query for filtering data on the DB (json formatted string with field names and the type of conditions) : {"project":{"$eq":"Test 1"}}
-*	Request URL : https://app1.digital/client/data/58403392cc33781c8cc5c2d5/5b5ae434e65a093a51156ed7?populate=&search_criteria=
+*	Request URL : https://YOUR.WEBSITE.COM/client/data/58403392cc33781c8cc5c2d5/5b5ae434e65a093a51156ed7?populate=&search_criteria=
 *	Request Method : GET
 *	Request Payload : 
 *	Response :
@@ -305,7 +305,7 @@ Get data command; add data model id and object id to the URL; populate : specifi
 ```
 
 List data command; limit : specifies the maximum number of objects returned; skip : specifies the number of objects skipped from the beginning of the query; sorty_by : specifies a “MongoDB” like sort by clause (json formatted string with field name and the type of sorting) : ```{"\_updated_at" : "descending"}```; search_criteria : specifies a “MongoDB” like query for filtering data on the DB (json formatted string with field names and the type of conditions) : ```{"status":{"$eq":"1"}}```; search_text : specifies a string containing the search words
-*	Request URL : https://app1.digital/client/data/58403392cc33781c8cc5c2d5?limit=10&search_criteria=%7B%22status%22:%7B%22$eq%22:%221%22%7D%7D&search_text=&skip=0&sort_by=%7B%22_updated_at%22:%22descending%22%7D
+*	Request URL : https://YOUR.WEBSITE.COM/client/data/58403392cc33781c8cc5c2d5?limit=10&search_criteria=%7B%22status%22:%7B%22$eq%22:%221%22%7D%7D&search_text=&skip=0&sort_by=%7B%22_updated_at%22:%22descending%22%7D
 *	Request Method : GET
 *	Request Payload : 
 *	Response :
@@ -332,7 +332,7 @@ List data command; limit : specifies the maximum number of objects returned; ski
 ```
 
 File object creation; this API will create a file object, and provide a file upload URL that has to be used to upload the file (url value from the result)
-*	Request URL : https://app1.digital/client/file
+*	Request URL : https://YOUR.WEBSITE.COM/client/file
 *	Request Method : POST
 *	Request Payload : ```{name: "Superpiki2_Adria-1024x592.jpg", type: "image/jpeg"}```
 *	Response :
@@ -352,19 +352,19 @@ File object creation; this API will create a file object, and provide a file upl
 ```
 
 File upload; this API will upload a file once the file object having been created
-*	Request URL : https://app1.digital/client/file/upload/demo1/5b7152fd19e6a544a2280548
+*	Request URL : https://YOUR.WEBSITE.COM/client/file/upload/demo1/5b7152fd19e6a544a2280548
 *	Request Method : PUT
 *	Request Payload : 
 *	Response : 
 
 File delete; this API will remove a file object and its underlaying file 
-*	Request URL : https://app1.digital/client/file/5b7152fd19e6a544a2280548
+*	Request URL : https://YOUR.WEBSITE.COM/client/file/5b7152fd19e6a544a2280548
 *	Request Method : DELETE
 *	Request Payload : 
 *	Response : ```{"msg":"File has been deleted!"}```
 
 File download; this API will download a file
-*	Request URL : https://app1.digital/client/file/5b71552519e6a544a2280549
+*	Request URL : https://YOUR.WEBSITE.COM/client/file/5b71552519e6a544a2280549
 *	Request Method : GET
 *	Request Payload : 
 *	Response : Binary file data
