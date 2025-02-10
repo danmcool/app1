@@ -36,11 +36,11 @@
                     <div ng-if="company.properties.saml.enabled">
                         <md-input-container class="md-block" flex-gt-xs>
                             <p class="subtitle">{{sessionData.appData.saml_login_url}}</p>
-                            <a class="md-body-1" href="https://app1.digital/authentication/login_saml/{{company._company_code}}">https://app1.digital/authentication/login_saml/{{company._company_code}}</a>
+                            <a class="md-body-1" href="https://YOUR.WEBSITE.COM/authentication/login_saml/{{company._company_code}}">https://YOUR.WEBSITE.COM/authentication/login_saml/{{company._company_code}}</a>
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-xs>
                             <p class="subtitle">{{sessionData.appData.saml_metadata_url}}</p>
-                            <a class="md-body-1" href="https://app1.digital/authentication/saml_metadata">https://app1.digital/authentication/saml_metadata</a>
+                            <a class="md-body-1" href="https://YOUR.WEBSITE.COM/authentication/saml_metadata">https://YOUR.WEBSITE.COM/authentication/saml_metadata</a>
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-xs>
                             <md-checkbox name="{{sessionData.appData.saml_activate_test}}" ng-model="company.properties.saml.test">{{sessionData.appData.saml_activate_test}}</md-checkbox>
