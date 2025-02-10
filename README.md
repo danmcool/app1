@@ -20,7 +20,7 @@ The framework lets you focus on business aspects like application creation and r
 * object availability calendar
 * etc.
 
-We encourage to check the framework capabilities by using the demo website at https://app1.digital
+We encourage to check the framework capabilities by using the demo website at https://YOUR.WEBSITE.COM
 
 ## Basics of App1 applications
 
