@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://app1.digital/sitemap.xml
+Sitemap: https://YOUR.WEBSITE.COM/sitemap.xml
