@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://app1.digital/</loc>
+        <loc>https://YOUR.WEBSITE.COM/</loc>
     </url>
     <url>
-        <loc>https://app1.digital/#!/#platform</loc>
+        <loc>https://YOUR.WEBSITE.COM/#!/#platform</loc>
     </url>
     <url>
-        <loc>https://app1.digital/#!/#products</loc>
+        <loc>https://YOUR.WEBSITE.COM/#!/#products</loc>
     </url>
     <url>
-        <loc>https://app1.digital/#!/#services</loc>
+        <loc>https://YOUR.WEBSITE.COM/#!/#services</loc>
     </url>
     <url>
-        <loc>https://app1.digital/authentication/open?pid=5a9c2e7864916446b1fc6857</loc>
+        <loc>https://YOUR.WEBSITE.COM/authentication/open?pid=5a9c2e7864916446b1fc6857</loc>
     </url>
     <url>
-        <loc>https://app1.digital/app</loc>
+        <loc>https://YOUR.WEBSITE.COM/app</loc>
     </url>
 </urlset>
