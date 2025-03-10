@@ -37,6 +37,28 @@ Email.send2 = function (email_address, cc_email_address, subject, text, html, ic
     });
 }
 
+Email.sendAttachments = function (email_address, cc_email_address, subject, text, html, file_name, attachment) {
+    var message = {
+        from: Constants.EmailUserName,
+        to: email_address,
+        subject: subject,
+        text: text,
+        html: html,
+        attachments : [ {
+            filename: file_name,
+            content: attachment,
+            encoding: 'base64'
+            }
+        ]
+    }
+    transporter.sendMail(message, function (error, info) {
+        if (error) {
+            console.log('Error occurred' + error.message);
+            return;
+        }
+    });
+}
+
 Email.send = function (email_address, cc_email_address, subject, text, html) {
     transporter.sendMail({
         to: email_address,
