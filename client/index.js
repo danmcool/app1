@@ -117,6 +117,14 @@ var app1 = angular.module('app1', ['ngRoute', 'ngResource', 'ngMaterial', 'ngMes
             }
         });
     }
+]).factory('EmailPdf', ['$resource',
+    function ($resource) {
+        return $resource('/client/emailpdf/:datamodel_id/:data_id', null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
+    }
 ]).factory('Reservation', ['$resource',
     function ($resource) {
         return $resource('/client/reservation/:datamodel_id/:id', null, {

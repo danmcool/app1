@@ -820,7 +820,6 @@ router.get('/model_run/:datamodel_id/:data_id/:mlmodel_id', function (req, res, 
 });
 
 router.all('/pdf/:datamodel_id/:data_id', function (req, res, next) {
-    console.log(req.query);
     var token = req.query.pid;
     var datamodel_id = req.params.datamodel_id;
     var data_id = req.params.data_id;
@@ -852,6 +851,42 @@ router.all('/pdf/:datamodel_id/:data_id', function (req, res, next) {
                     res.setHeader('Content-Disposition', 'attachment; filename=\"' + action.pdf_file_name[req.query.language] + '\"');
                     res.setHeader('Content-Length', result.length);
                     res.send(result);
+                });
+            });
+        });
+    }
+});
+
+router.get('/emailpdf/:datamodel_id/:data_id', function (req, res, next) {
+    var token = req.cookies[Constants.SessionCookie];
+    var datamodel_id = req.params.datamodel_id;
+    var data_id = req.params.data_id;
+    var searchCriteriaPrint = {
+        _id: data_id,
+        _company_code: SessionCache.userData[token]._company_code
+    }
+    if (SessionCache.createSecurityFiltersUpdate(token, null, datamodel_id, data_id, searchCriteriaPrint)) {
+        Metadata.Form.findOne({
+            _id: {
+                $eq: req.query.form_id
+            }
+        }).exec(function (formErr, formObject) {
+            if (formErr) return next(formErr);
+            if (!formObject) return res.status(400).json({
+                msg: 'Form not found!'
+            });
+            Metadata.Objects[datamodel_id].findOne(searchCriteriaPrint).populate(req.query.populate).exec(function (err, object) {
+                if (err) return next(err);
+                if (!object) return res.status(400).json({
+                    msg: 'Object not found!'
+                });
+                var action = null;
+                if (formObject.actions && formObject.actions[req.query.action_index]) {
+                    action = formObject.actions[req.query.action_index];
+                }
+                Print.createPdf(action.pdf_html_template[req.query.language], object, SessionCache.userData[token], action.pdf_landscape).then(function (result) {
+                    Email.sendAttachments(req.query.email_to, req.query.email_cc, req.query.email_title, req.query.email_content_html, action.pdf_file_name[req.query.language], result.toString('base64'));
+                    return res.status(200).json('');
                 });
             });
         });

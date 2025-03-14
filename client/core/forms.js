@@ -1,4 +1,4 @@
-app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', 'Reservation', 'RunMachineLearningModel', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event, Reservation, RunMachineLearningModel) {
+app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$route', '$resource', '$mdDialog', 'SessionService', 'MapService', 'Forms', 'Value', 'Files', 'Datas', 'Share', 'Calendar', 'Notify', 'Event', 'Reservation', 'EmailPdf', 'RunMachineLearningModel', function ($scope, $routeParams, $location, $route, $resource, $mdDialog, SessionService, MapService, Forms, Value, Files, Datas, Share, Calendar, Notify, Event, Reservation, EmailPdf, RunMachineLearningModel) {
     $scope.sessionData = SessionService.getSessionData();
 
     $scope.$watch(function () {
@@ -1433,7 +1433,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         document.getElementById('paypal').submit();
     }
 
-    $scope.downloadPdf = function (formula, nextFormId, setValue, action_index) {
+    $scope.downloadPdf = function (formula, nextFormId, setValue, actionIndex) {
         var populate = "";
         var projectionKeys = Object.keys($scope.form.datamodel.projection);
         for (j = 0; j < projectionKeys.length; j++) {
@@ -1451,7 +1451,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         pdfForm.target ="_self"||"_blank";
         pdfForm.id="pdfForm";
         pdfForm.action = "/client/pdf/" + $scope.form.datamodel._id + "/" + $scope.data._id + "?populate=" + populate +
-        "&pid=" + $scope.sessionData.token + "&form_id=" + $scope.form._id + "&action_index=" + action_index +
+        "&pid=" + $scope.sessionData.token + "&form_id=" + $scope.form._id + "&action_index=" + actionIndex +
         "&language=" + $scope.sessionData.userData.properties.correctedLanguage;
         pdfForm.method = "post";
         document.body.appendChild(pdfForm);
@@ -1462,6 +1462,37 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
 
         pdfForm.submit();
         $scope.gotoNextForm(formula, nextFormId, $scope.data);
+    }
+
+    $scope.emailPdf = function (formula, nextFormId, setValue, actionIndex, emailPath, emailTitle, emailContent) {
+        var populate = "";
+        var projectionKeys = Object.keys($scope.form.datamodel.projection);
+        for (j = 0; j < projectionKeys.length; j++) {
+            var childField = $scope.form.datamodel.projection[projectionKeys[j]];
+            if (childField.type ==  "reference") {
+                if (populate == "") {
+                    populate += childField.full_path;
+                } else {
+                    populate += " " + childField.full_path;
+                }
+            }
+        }
+
+        EmailPdf.get({
+            datamodel_id: $scope.form.datamodel._id,
+            data_id: $scope.data._id,
+            form_id: $scope.form._id,
+            action_index: actionIndex,
+            language: $scope.sessionData.userData.properties.correctedLanguage,
+            populate: populate,
+            email_to: $scope.resolvePath($scope.data, emailPath),
+            email_cc: $scope.sessionData.userData.email,
+            email_title: SessionService.translate(emailTitle),
+            email_content: null,
+            email_content_html: SessionService.translate(emailContent)
+        }, function (res) {
+            $scope.gotoNextForm(formula, nextFormId, $scope.data);
+        })
     }
 
     $scope.search = function (search_text) {

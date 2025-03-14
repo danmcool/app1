@@ -1,10 +1,4 @@
 app1.controller('FormEditCtrl', ['$scope', '$resource', '$location', '$routeParams', '$mdDialog', 'SessionService', 'DesignForm', 'DesignDataModel', 'DesignValue', function ($scope, $resource, $location, $routeParams, $mdDialog, SessionService, DesignForm, DesignDataModel, DesignValue) {
-    var swap = function (arr, i, j) {
-        var tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
-    }
-
     $scope.sessionData = SessionService.getSessionData();
     $scope.$watch(function () {
         return SessionService.getSessionData();

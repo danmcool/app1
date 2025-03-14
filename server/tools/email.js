@@ -17,10 +17,13 @@ var transporter = nodemailer.createTransport({
     logger: false
 });
 
-Email.send2 = function (email_address, cc_email_address, subject, text, html, ical_content) {
+var EmailUserName = process.env.APP1_EMAIL_USERNAME;
+
+Email.send2 = function (emailAddress, ccEmailAddress, subject, text, html, ical_content) {
     var message = {
-        from: Constants.EmailUserName,
-        to: email_address,
+        from: EmailUserName,
+        to: emailAddress,
+        cc: ccEmailAddress,
         subject: subject,
         text: text,
         html: html,
@@ -37,15 +40,15 @@ Email.send2 = function (email_address, cc_email_address, subject, text, html, ic
     });
 }
 
-Email.sendAttachments = function (email_address, cc_email_address, subject, text, html, file_name, attachment) {
+Email.sendAttachments = function (emailAddress, ccEmailAddress, subject, html, fileName, attachment) {
     var message = {
-        from: Constants.EmailUserName,
-        to: email_address,
+        from: EmailUserName,
+        to: emailAddress,
+        cc: ccEmailAddress,
         subject: subject,
-        text: text,
         html: html,
         attachments : [ {
-            filename: file_name,
+            filename: fileName,
             content: attachment,
             encoding: 'base64'
             }
@@ -59,11 +62,11 @@ Email.sendAttachments = function (email_address, cc_email_address, subject, text
     });
 }
 
-Email.send = function (email_address, cc_email_address, subject, text, html) {
+Email.send = function (emailAddress, ccEmailAddress, subject, text, html) {
     transporter.sendMail({
-        to: email_address,
-        cc: cc_email_address,
-        from: process.env.APP1_EMAIL_USERNAME,
+        from: EmailUserName,
+        to: emailAddress,
+        cc: ccEmailAddress,
         subject: subject,
         text: text,
         html: html,
