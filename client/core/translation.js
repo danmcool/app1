@@ -470,6 +470,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Disabled',
             fr: 'Désactivé'
         },
+        field_only_on_init: {
+            en: 'Only on init',
+            fr: 'Seulement lors l\'initialisation'
+        },
         field_required: {
             en: 'Mandatory',
             fr: 'Obligatoire'

@@ -75,6 +75,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     $scope.skip = 0;
     $scope.limit = 10;
     $scope.datas = [];
+    $scope.onceCalculation = true;
     $scope.stopScroll = false;
     $scope.tempStopScroll = false;
     $scope.files = {};
@@ -223,7 +224,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             for (i = 0; i < datas.length; i++) {
                 $scope.datas.push(datas[i]);
             }
-            $scope.updateCalculationInternal();
+            $scope.updateCalculationInternal($scope.onceCalculation);
             var formFields = $scope.form.fields;
             var calculationFields = [];
             for (i = 0; i < formFields.length; i++) {
@@ -240,7 +241,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             }
             // nested calculations (1 level only)
-            $scope.updateCalculationInternal();
+            $scope.updateCalculationInternal($scope.onceCalculation);
+            $scope.onceCalculation = false;
             $scope.tempStopScroll = false;
         });
     }
@@ -645,7 +647,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                 }
             }
         }
-        $scope.updateCalculation();
+        $scope.updateComponents($scope.form, null, $scope.data, true);
     }
 
     Forms.get({
@@ -977,7 +979,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
     }
 
-    $scope.updateComponents = function (form, setValue, data) {
+    $scope.updateComponents = function (form, setValue, data, init) {
         var formFields = $scope.form.fields;
         for (var i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'feed') {
@@ -999,7 +1001,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (setValue) {
             $scope.resolvePathUpdate(data, setValue.full_path, setValue.value);
         }
-        $scope.updateCalculationInternal();
+        $scope.updateCalculationInternal(init);
     }
 
     $scope.updateErrorAlert = function () {
@@ -1058,7 +1060,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.create = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml, useAI, mlModel, mlMinScore, mlSetValue) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         if ($routeParams.pid) {
             $scope.data.pid = $routeParams.pid;
         }
@@ -1073,7 +1075,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         });
     }
     $scope.modify = function (formula, nextFormId, setValue, forwardId, notifyUser, emailTitle, emailHtml) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: $scope.data._id,
@@ -1115,7 +1117,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.subscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         $scope.resolvePath($scope.data, itemPath).push($scope.sessionData.userData._id);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
@@ -1130,7 +1132,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         });
     }
     $scope.unsubscribe = function (formula, nextFormId, setValue, forwardId, itemPath, notifyUser, emailTitle, emailHtml) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         var itemList = $scope.resolvePath($scope.data, itemPath);
         for (var i = itemList.length - 1; i >= 0; i--) {
             if (itemList[i] == $scope.sessionData.userData._id || itemList[i]._id == $scope.sessionData.userData._id) {
@@ -1160,7 +1162,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             .ok($scope.sessionData.appData.ok)
             .cancel($scope.sessionData.appData.cancel)).then(
             function () {
-                $scope.updateComponents($scope.form, setValue, $scope.data);
+                $scope.updateComponents($scope.form, setValue, $scope.data, false);
                 var itemList = $scope.resolvePath($scope.data, itemPath);
                 for (var i = itemList.length - 1; i >= 0; i--) {
                     if (itemList[i] == itemId || itemList[i]._id == itemId) {
@@ -1181,7 +1183,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             });
     }
     $scope.moveItem = function (formula, nextFormId, setValue, itemId, itemPath, destinationItemPath, notifyUser, emailTitle, emailHtml) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         var itemList = $scope.resolvePath($scope.data, itemPath);
         for (var i = itemList.length - 1; i >= 0; i--) {
             if (itemList[i] == itemId || itemList[i]._id == itemId) {
@@ -1203,7 +1205,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.modifyList = function (formula, nextFormId, setValue, data, notifyUser, emailTitle, emailHtml) {
-        $scope.updateComponents($scope.form, setValue, data);
+        $scope.updateComponents($scope.form, setValue, data, false);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id,
@@ -1304,7 +1306,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }*/
     $scope.share = function (formula, nextFormId, setValue, constraintPath, constraintValue, emailPath, shareAppProfileId, message, data) {
-        $scope.updateComponents($scope.form, setValue, data);
+        $scope.updateComponents($scope.form, setValue, data, false);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id,
@@ -1327,7 +1329,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         });
     }
     $scope.calendar = function (formula, nextFormId, setValue, forwardId, projectNamePath, startDatePath, endDatePath, userPath, data) {
-        $scope.updateComponents($scope.form, setValue, data);
+        $scope.updateComponents($scope.form, setValue, data, false);
         Datas.update({
             datamodel_id: $scope.form.datamodel._id,
             entry_id: data._id,
@@ -1348,7 +1350,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.addEvent = function (formula, nextFormId, setValue, objectNamePath, periodPath, reservation_datamodel, objectIdReservationPath, nameReservationPath, periodReservationPath) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         var reservation = {};
         $scope.resolvePathUpdate(reservation, objectIdReservationPath, $scope.data._id);
         $scope.resolvePathUpdate(reservation, nameReservationPath, $scope.resolvePath($scope.data, objectNamePath));
@@ -1403,7 +1405,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
     }
 
     $scope.pay = function (formula, nextFormId, setValue, paymentCountry, paymentCurrency, paymentValuePath, paymentLabelPath, updatePath, updateValue) {
-        $scope.updateComponents($scope.form, setValue, $scope.data);
+        $scope.updateComponents($scope.form, setValue, $scope.data, false);
         document.getElementById('paypal_country').value = paymentCountry;
         document.getElementById('paypal_currency').value = paymentCurrency;
         document.getElementById('paypal_merchant_id').value = $scope.sessionData.userData.company.properties.payment.paypal_merchant_id;
@@ -1508,18 +1510,16 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.getNextData();
     }
 
-    $scope.updateCalculationInternal = function () {
+    $scope.updateCalculationInternal = function (init) {
         var formFields = $scope.form.fields;
         var i;
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
+                if (!formFields[i].field_only_on_init || (formFields[i].field_only_on_init && init)) {
+                    $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
+                }
             }
         }
-    }
-
-    $scope.updateCalculation = function () {
-        $scope.updateComponents($scope.form, null, $scope.data);
     }
 
     $scope.interval = function (fieldId, dateValueObject, objectId) {

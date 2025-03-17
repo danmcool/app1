@@ -391,6 +391,11 @@
                                 <md-checkbox ng-model="field.hide_name">{{sessionData.appData.field_hide_name}}</md-checkbox>
                             </md-input-container>
                         </div>
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex="auto" class="md-block">
+                                <md-checkbox ng-model="field.on_init">{{sessionData.appData.field_only_on_init}}</md-checkbox>
+                            </md-input-container>
+                        </div>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
                             <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
