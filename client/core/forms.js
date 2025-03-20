@@ -1003,7 +1003,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         }
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                if (!formFields[i].field_only_on_init || (formFields[i].field_only_on_init && init)) {
+                if (!formFields[i].only_on_init || (formFields[i].only_on_init && init)) {
                     $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
                     $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
                 }
@@ -1522,7 +1522,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var i;
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                if (!formFields[i].field_only_on_init || (formFields[i].field_only_on_init && init)) {
+                if (!formFields[i].only_on_init || (formFields[i].only_on_init && init)) {
                     $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
                 }
             }
