@@ -1001,10 +1001,12 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         if (setValue) {
             $scope.resolvePathUpdate($scope.data, setValue.full_path, setValue.value);
         }
-        $scope.updateCalculationInternal(init);
         for (i = 0; i < formFields.length; i++) {
             if (formFields[i].display == 'calculation') {
-                $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
+                if (!formFields[i].field_only_on_init || (formFields[i].field_only_on_init && init)) {
+                    $scope.localdata[formFields[i].id] = $scope.calculation($scope.data, $scope.datas, formFields[i].calculation);
+                    $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
+                }
             }
         }
     }
