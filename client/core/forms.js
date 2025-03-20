@@ -995,13 +995,18 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     });
                 }
             } else if (formFields[i].display != 'list' && formFields[i].display != 'item') {
-                $scope.resolvePathUpdate(data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
+                $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
             }
         }
         if (setValue) {
-            $scope.resolvePathUpdate(data, setValue.full_path, setValue.value);
+            $scope.resolvePathUpdate($scope.data, setValue.full_path, setValue.value);
         }
         $scope.updateCalculationInternal(init);
+        for (i = 0; i < formFields.length; i++) {
+            if (formFields[i].display == 'calculation') {
+                $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
+            }
+        }
     }
 
     $scope.updateErrorAlert = function () {
