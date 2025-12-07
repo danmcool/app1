@@ -1,4 +1,5 @@
-<md-content flex="auto" ng-class="sessionData.userData.properties.theme">
+                                                <md-input-container class="md-block">
+                  <md-content flex="auto" ng-class="sessionData.userData.properties.theme">
     <div layout="row">
         <div hide-xs flex-sm="10" flex-gt-sm="15"></div>
         <div layout-padding flex class="fade">
@@ -36,6 +37,166 @@
                                                 </md-input-container>
                                                 <md-input-container class="md-block">
                                                     <label>{{sessionData.appData.minute}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.start_date.minutes" ng-change="interval(field.id, list_interval.start_date, 2)">
+                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                        <div layout="column">
+                                            <p class="subtitle" style="margin-bottom: 14px; color: rgba(0,0,0,0.38)">{{sessionData.appData.end_time}}</p>
+                                            <div layout="row" class="md-inline-form">
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.day}}</label>
+                                                    <md-datepicker md-hide-icons="calendar" md-open-on-focus ng-model="list_interval.end_date.date" md-min-date="today" md-max-date="today_plus_1_year" ng-change="interval(field.id, list_interval.end_date, 3)"></md-datepicker>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.hour}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.end_date.hours" ng-change="interval(field.id, list_interval.end_date, 4)">
+                                                        <md-option ng-repeat="hour in full_hours" value="{{hour}}">{{hour}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                                <md-input-container class="md-block">
+                                                    <label>{{sessionData.appData.minute}}</label>
+                                                    <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.end_date.minutes" ng-required="field.required" ng-change="interval(field.id, list_interval.end_date, 5)">
+                                                        <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <md-list flex="auto" infinite-scroll="getNextData()" infinite-scroll-distance="10">
+                                        <md-list-item class="md-3-line" ng-repeat="data in datas">
+                                            <img ng-if="field.show_icon" ng-src="{{getIcon(data,field.icon)}}" class="md-avatar">
+                                            <div class="md-list-item-text" layout="column">
+                                                <div ng-switch="field.title_display">
+                                                    <div ng-switch-when="text">
+                                                        <div ng-switch="field.title_display_text">
+                                                            <div ng-switch-when="property">
+                                                                <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(data,field.title_full_path)}}</p>
+                                                            </div>
+                                                            <div ng-switch-when="calculation">
+                                                                <p style="color: rgba(0, 0, 0, 0.85)">{{calculation(data,field.title_calculation)}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div ng-switch-when="value">
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{field.title_values[resolvePath(data,field.title_full_path)]}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="currency">
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(data,field.title_full_path).value}} {{field.title_values[resolvePath(data,field.title_full_path).currency]}}</p>
+                                                    </div>
+                                                </div>
+                                                <div ng-switch="field.subtitle_display">
+                                                    <div ng-switch-when="text">
+                                                        <div ng-switch="field.subtitle_display_text">
+                                                            <div ng-switch-when="property">
+                                                                <p>{{resolvePath(data,field.subtitle_full_path)}}</p>
+                                                            </div>
+                                                            <div ng-switch-when="calculation">
+                                                                <p>{{calculation(data,field.subtitle_calculation)}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div ng-switch-when="value">
+                                                        <p>{{field.subtitle_values[resolvePath(data,field.subtitle_full_path)]}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="currency">
+                                                        <p>{{resolvePath(data,field.subtitle_full_path).value}} {{field.subtitle_values[resolvePath(data,field.subtitle_full_path).currency]}}</p>
+                                                    </div>
+                                                </div>
+                                                <p>{{resolvePath(data,field.date_full_path)|date:field.date_format}}</p>
+                                            </div>
+                                            <div class="md-secondary">
+                                                <div layout="row" layout-xs="column" layout-align="center end">
+                                                    <div ng-repeat="action in field.item_actions">
+                                                        <div ng-switch="action.action">
+                                                            <div ng-switch-when="delete_list">
+                                                                <md-button ng-click="deleteList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                            <div ng-switch-when="show_list">
+                                                                <md-button ng-click="showList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                            <div ng-switch-when="link_list">
+                                                                <md-button ng-click="linkList(action.formula, action.next_form_id, data)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                            <div ng-switch-when="modify_list">
+                                                                <md-button ng-click="modifyList(action.formula, action.next_form_id, action.set_value, data)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <md-divider ng-if="!$last" md-colors="{'background-color': 'primary-A100'}"></md-divider>
+                                        </md-list-item>
+                                    </md-list>
+                                </div>
+
+                                <div ng-switch-when="item" layout-padding>
+                                    <p class="md-body-1" style="margin-bottom: 14px">{{field.translated_name}}</p>
+                                    <md-list flex="auto">
+                                        <md-list-item class="md-3-line" ng-repeat="item in field[field.projectionid+'_values']">
+                                            <div class="md-list-item-text" layout="column">
+                                                <div ng-switch="field.title_display">
+                                                    <div ng-switch-when="text">
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(item,field.title_full_path)}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="value">
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{field.title_values[resolvePath(item,field.title_full_path)]}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="currency">
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{resolvePath(item,field.title_full_path).value}} {{field.title_values[resolvePath(item,field.title_full_path).currency]}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="calculation">
+                                                        <p style="color: rgba(0, 0, 0, 0.85)">{{calculation(item,field.title_calculation)}}</p>
+                                                    </div>
+                                                </div>
+                                                <div ng-switch="field.subtitle_display">
+                                                    <div ng-switch-when="text">
+                                                        <p>{{resolvePath(item,field.subtitle_full_path)}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="value">
+                                                        <p>{field.subtitle_values[resolvePath(item,field.subtitle_full_path)]}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="currency">
+                                                        <p>{{resolvePath(item,field.subtitle_full_path).value}} {{field.subtitle_values[resolvePath(item,field.subtitle_full_path).currency]}}</p>
+                                                    </div>
+                                                    <div ng-switch-when="calculation">
+                                                        <p>{{calculation(item,field.subtitle_calculation)}}</p>
+                                                    </div>
+                                                </div>
+                                                <p>{{resolvePath(item,field.date_full_path)|date:field.date_format}}</p>
+                                            </div>
+                                            <div class="md-secondary">
+                                                <div layout="row" layout-xs="column" layout-align="center end">
+                                                    <div ng-repeat="action in field.item_actions">
+                                                        <div ng-switch="action.action">
+                                                            <div ng-switch-when="modify_item">
+                                                                <md-button ng-click="modifyItem(action.formula, action.next_form_id, action.set_value, item._id, field.projectionid, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                            <div ng-switch-when="delete_item">
+                                                                <md-button ng-click="deleteItem(action.formula, action.next_form_id, action.set_value, item._id, field.full_path, action.datamodel, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                            <div ng-switch-when="move_item">
+                                                                <md-button ng-click="moveItem(action.formula, action.next_form_id, action.set_value, item._id, field.full_path, action.destination_full_path, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                            <div ng-switch-when="link_item">
+                                                                <md-button ng-click="linkItem(action.formula, action.next_form_id, action.set_value, item._id, field.projectionid, action.notify_user, action.email_title, action.email_html)">{{action.translated_name}}</md-button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </md-list-item>
+                                    </md-list>
+                                </div>
+
+                                <div ng-switch-when="shorttext" layout-padding ng-if="!field.hide">
+                                    <div ng-switch="field.disabled">
+                                        <div ng-switch-when="true">
+                                            <p ng-if="!field.hide_name" class="md-body-1">{{field.translated_name}}</p>
+                                            <p class="subtitle">{{localdata[field.id]}}                                  <label>{{sessionData.appData.minute}}</label>
                                                     <md-select name="{{sessionData.appData.hours}}" ng-model="list_interval.start_date.minutes" ng-change="interval(field.id, list_interval.start_date, 2)">
                                                         <md-option ng-repeat="minute in full_minutes" value="{{minute}}">{{minute}}</md-option>
                                                     </md-select>
