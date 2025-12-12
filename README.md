@@ -20,12 +20,13 @@ The framework lets you focus on business aspects like application creation and r
 * object availability calendar
 * etc.
 
-We encourage to check the framework capabilities by using the demo website at https://YOUR.WEBSITE.COM
+We encourage to check the framework capabilities by using the demo website at https://web.locataire.app
 
 ## Basics of App1 applications
 
 Applications are structured into workflows; each workflow contains a list of forms.
 Forms are an interpretation of underneath data, whether in read or write mode or a mix of the two.
+Create your own ML models training with the existing data, implementing models into workflows using Brain.JS
 
 ## Most common use cases are:
 
