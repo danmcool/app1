@@ -641,7 +641,7 @@
     </div>
 
     <!-- ── Fixed bottom toolbar with form action buttons ── -->
-    <md-toolbar class="md-hue-1" style="min-height: 56px; flex-shrink: 0;">
+    <md-toolbar class="md-hue-1" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; min-height: 56px;">
         <div class="md-toolbar-tools" layout="row" layout-align="end center" style="width: 100%; padding: 0 8px;">
             <div ng-repeat="action in form.actions">
                 <div ng-switch="action.action">
