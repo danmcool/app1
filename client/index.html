@@ -77,7 +77,8 @@
 
     </script>
 
-    <md-toolbar md-scroll-shrink class="md-hue-2">
+    <!-- Fixed global app toolbar — position:fixed keeps it on screen during scroll -->
+    <md-toolbar md-scroll-shrink class="md-hue-2" style="position: fixed; top: 0; left: 0; right: 0; z-index: 60;">
         <div class="md-toolbar-tools">
             <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleLeft()">
                 <md-icon>menu</md-icon>
@@ -145,7 +146,8 @@
         <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted">
     </form>
 
-    <md-content flex ng-view></md-content>
+    <!-- 64px top padding to offset the fixed global toolbar -->
+    <md-content flex ng-view style="padding-top: 64px;"></md-content>
 </body>
 
 </html>
