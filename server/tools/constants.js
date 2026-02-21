@@ -7,7 +7,7 @@ const Constants = {
     CommandLineParameterEmailPassword: 6,
     CommandLineParameterSecretKey: 7,
 
-    MaxSessionTimeout: 14 * 24 * 60 * 60 * 1000, // 2 weeks cookie validity
+    MaxSessionTimeout: 42 * 24 * 60 * 60 * 1000, // 6 weeks cookie validity
     MaxSessionPublicTimeout: 15 * 60 * 1000, // 15 minutes cookie validity
     MaxSessionCacheTimeout: 60 * 60 * 1000, // 1 hour cookie cache
     DBSessionTimerCleanup: 1 * 60 * 1000, // clean up expired sessions every hour
