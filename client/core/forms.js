@@ -1549,4 +1549,96 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             $scope.getNextData();
         }
     }
+
+    $scope.signaturePads = {};
+    
+    $scope.initSignatureCanvas = function(fieldId) {
+        // A brief timeout ensures the element is fully attached to the DOM before querying it
+        setTimeout(function() {
+            var canvas = document.getElementById('sig-canvas-' + fieldId);
+            if (!canvas) return;
+            
+            var ctx = canvas.getContext('2d');
+            ctx.lineWidth = 2;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+    
+            var padState = { canvas: canvas, ctx: ctx, drawing: false };
+            $scope.signaturePads[fieldId] = padState;
+    
+            // Load existing signature if editing a saved record
+            if ($scope.localdata && $scope.localdata[fieldId]) {
+                var img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = $scope.localdata[fieldId];
+            }
+    
+            function getPos(e) {
+                var rect = canvas.getBoundingClientRect();
+                var clientX = e.clientX;
+                var clientY = e.clientY;
+                // Handle touch events natively
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                }
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+    
+            function draw(e) {
+                if (!padState.drawing) return;
+                e.preventDefault(); // Prevent scroll while drawing
+                var pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+    
+            function startDrawing(e) {
+                e.preventDefault();
+                padState.drawing = true;
+                var pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+    
+            function stopDrawing(e) {
+                if (padState.drawing) {
+                    padState.drawing = false;
+                    // Safely update Angular's scope with the base64 image data
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if (!$scope.localdata) $scope.localdata = {};
+                            $scope.localdata[fieldId] = canvas.toDataURL('image/png');
+                            if($scope.updateCalculation) $scope.updateCalculation(); // trigger form evaluation if needed
+                        });
+                    });
+                }
+            }
+    
+            // Vanilla JS Event Listeners attached directly to the canvas
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('touchstart', startDrawing, { passive: false });
+            
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('touchmove', draw, { passive: false });
+            
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('touchend', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+        }, 100);
+    };
+
+    $scope.clearSignature = function(fieldId) {
+        var pad = $scope.signaturePads[fieldId];
+        if (pad) {
+            pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
+        }
+        if ($scope.localdata) {
+            $scope.localdata[fieldId] = null;
+        }
+    };
 }]);
