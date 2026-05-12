@@ -565,14 +565,18 @@
                                             
                                             <div ng-switch-when="false">
                                                 <p class="md-caption">{{field.translated_name}}</p>
-                                                <div layout="column">
+                                                <div style="position: relative; display: inline-block;">
                                                     <canvas id="sig-canvas-{{field.id}}" width="300" height="150" 
                                                             style="border: 1px solid #ccc; touch-action: none; background: #fff; cursor: crosshair;"
                                                             ng-init="initSignatureCanvas(field.id)">
                                                     </canvas>
-                                                    <div layout="row" style="margin-top: 5px;">
-                                                        <md-button class="md-raised md-warn" ng-click="clearSignature(field.id)">Clear</md-button>
-                                                    </div>
+                                                    <md-button class="md-warn md-icon-button" 
+                                                               style="position: absolute; top: 0; right: 0; min-width: 30px; height: 30px; line-height: 30px;" 
+                                                               title="x" 
+                                                               aria-label="Erase" 
+                                                               ng-click="clearSignature(field.id)">
+                                                        <span style="font-weight: bold; font-size: 16px;">x</span>
+                                                    </md-button>
                                                 </div>
                                             </div>
                                         </div>
