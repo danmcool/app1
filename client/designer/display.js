@@ -87,6 +87,10 @@ app1.controller('FormDisplayEditCtrl', ['$scope', '$routeParams', '$mdDialog', '
             en: 'Email',
             fr: 'Courriel'
         },
+        signature: {
+            en: 'Signature',
+            fr: 'Signature'
+        },
         address: {
             en: 'Address',
             fr: 'Adresse'
