@@ -12,7 +12,7 @@ function base64_encode(file) {
 
 var page;
 
-puppeteer.launch({ headless: "new" }).then(async browser => {
+puppeteer.launch({ headless: "new", args: ['--no-sandbox'] }).then(async browser => {
     page = await browser.newPage();
 });
 
