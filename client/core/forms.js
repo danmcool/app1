@@ -517,7 +517,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         break;
                     }
                 }
-                if (formFields[i].values.length > 0 && !$scope.localdata[formFields[i].id]) {
+                if (formFields[i].values && formFields[i].values.length > 0 && !$scope.localdata[formFields[i].id]) {
                     $scope.localdata[formFields[i].id] = formFields[i].values[0]._id;
                 }
             } else if (formFields[i].display == 'calendar') {
