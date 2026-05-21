@@ -385,7 +385,11 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
         if (formField.values.length > 0 && !$scope.localdata[formField.id]) {
-            $scope.localdata[formField.id] = formField.values[0]._id;
+            if (formField.display == 'selection') {
+                $scope.localdata[formField.id] = formField.values[0]._id;
+            } else if (formField.display == 'currency') {
+                $scope.localdata[formField.id] = { 'currency' : formField.values[0]._id };
+            }
         }
     }
     $scope.updateValuesTitle = function (formField, newValues, extData) {
