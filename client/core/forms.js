@@ -384,6 +384,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     SessionService.translate(newValues[k].name);
             }
         }
+        if (formField.values.length > 0 && !$scope.localdata[formField.id]) {
+            $scope.localdata[formField.id] = formField.values[0]._id;
+        }
     }
     $scope.updateValuesTitle = function (formField, newValues, extData) {
         if (formField.title_values == undefined) {
@@ -516,9 +519,6 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         }
                         break;
                     }
-                }
-                if (formFields[i].values && formFields[i].values.length > 0 && !$scope.localdata[formFields[i].id]) {
-                    $scope.localdata[formFields[i].id] = formFields[i].values[0]._id;
                 }
             } else if (formFields[i].display == 'calendar') {
                 if (formFields[i].init_value && formFields[i].init_value != '' && $routeParams[formFields[i].init_value]) {
