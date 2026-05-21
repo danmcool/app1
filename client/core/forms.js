@@ -384,6 +384,9 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     SessionService.translate(newValues[k].name);
             }
         }
+        if (formField.display == 'selection' && formField.values.length > 0 && !$scope.localdata[formField.id]) {
+            $scope.localdata[formField.id] = formField.values[0]._id;
+        }
     }
     $scope.updateValuesTitle = function (formField, newValues, extData) {
         if (formField.title_values == undefined) {
