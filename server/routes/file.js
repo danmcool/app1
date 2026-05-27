@@ -110,7 +110,7 @@ router.get('/:id', function (req, res, next) {
                 msg: 'Not enough access rights!'
             });
         }
-        var readStream = fs.createReadStream('./files/' + file._company_code + '-' + file._id);
+        var readStream = fs.createReadStream('./files/' + file._company_code + '/' + file._id);
         readStream.on('error', function () {
             return res.status(500).json({
                 msg: 'File read error!'
