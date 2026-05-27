@@ -340,7 +340,7 @@
                                                 <div layout-padding>
                                                     <p class="md-body-1" id="file_upload_{{field.id}}"></p>
                                                     <md-input-container ng-if="!field.disabled" class="md-block">
-                                                        <input multiple accept="image/jpeg" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="changeFilesInFormsJS(this.files,this.id)">
+                                                        <input multiple accept="image/*" capture="environment" type="file" ng-disabled="field.disabled" ng-required="field.required" aria-label="{{field.translated_name}}" id="{{field.id}}" name="{{field.translated_name}}" onchange="changeFilesInFormsJS(this.files,this.id)">
                                                     </md-input-container>
                                                 </div>
                                             </div>
