@@ -162,7 +162,7 @@ router.delete('/:id', function (req, res, next) {
         _company_code: company_code
     }, function (err, file) {
         if (err) return next(err);
-        fs.unlink('./files/' + company_code + '-' + file._id, function () {
+        fs.unlink('./files/' + company_code + '/' + file._id, function () {
             res.json({
                 msg: 'File has been deleted!'
             });
