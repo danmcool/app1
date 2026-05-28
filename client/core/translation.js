@@ -391,8 +391,8 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             fr: 'Le reservation ne peut pas être supprimée, veuillez verifier les dates et re-essayer!'
         },
         removal_confirmation: {
-            en: 'Can you confirm the data removal?',
-            fr: 'Pouvez vous confirmer la suppression des données?'
+            en: 'Remove the data?',
+            fr: 'Supprimer les données?'
         },
         confirmation: {
             en: 'Confirm',
