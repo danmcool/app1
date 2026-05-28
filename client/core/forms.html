@@ -557,7 +557,7 @@
                                         <div ng-switch="field.disabled">
                                             <div ng-switch-when="true">
                                                 <p class="md-caption">{{field.translated_name}}</p>
-                                                <div ng-if="localdata[field.id]">
+                                                <div ng-if="localdata[field.id]" style="position: relative; display: inline-block; width: 100%; max-width: 302px;">
                                                     <img ng-src="{{localdata[field.id]}}" style="max-width: 300px; max-height: 250px; border: 1px solid #eee;" alt="Signature" />
                                                 </div>
                                                 <p ng-if="!localdata[field.id]" class="subtitle"><del>{{field.translated_name}}</del></p>
@@ -565,7 +565,7 @@
                                             
                                             <div ng-switch-when="false">
                                                 <p class="md-caption">{{field.translated_name}}</p>
-                                                <div style="position: relative; display: inline-block;">
+                                                <div style="position: relative; display: inline-block; width: 100%; max-width: 302px;">
                                                     <canvas id="sig-canvas-{{field.id}}" width="300" height="250" 
                                                             style="border: 1px solid #ccc; touch-action: none; background: #fff; cursor: crosshair;"
                                                             ng-init="initSignatureCanvas(field.id)">
