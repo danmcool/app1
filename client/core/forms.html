@@ -555,30 +555,42 @@
 
                                     <div ng-switch-when="signature" layout-padding ng-if="!field.hide">
                                         <div ng-switch="field.disabled">
+                                            
                                             <div ng-switch-when="true">
                                                 <p class="md-caption">{{field.translated_name}}</p>
-                                                <div ng-if="localdata[field.id]" style="position: relative; display: inline-block; width: 100%; max-width: 302px;">
-                                                    <img ng-src="{{localdata[field.id]}}" style="max-width: 300px; max-height: 250px; border: 1px solid #eee;" alt="Signature" />
+                                                <div ng-if="localdata[field.id]">
+                                                    <img ng-src="{{localdata[field.id]}}" style="max-width: 100%; height: auto; max-height: 150px; border: 1px solid #eee;" alt="Signature" />
                                                 </div>
                                                 <p ng-if="!localdata[field.id]" class="subtitle"><del>{{field.translated_name}}</del></p>
                                             </div>
                                             
                                             <div ng-switch-when="false">
-                                                <p class="md-caption">{{field.translated_name}}</p>
-                                                <div style="position: relative; display: inline-block; width: 100%; max-width: 302px;">
-                                                    <canvas id="sig-canvas-{{field.id}}" width="300" height="250" 
-                                                            style="border: 1px solid #ccc; touch-action: none; background: #fff; cursor: crosshair;"
+                                                <p class="md-caption">
+                                                    {{field.translated_name}}
+                                                    <span ng-if="field.required" style="color: rgb(221,44,0);">*</span>
+                                                </p>
+                                                <div style="position: relative; width: 100%; max-width: 300px;">
+                                                    <canvas id="sig-canvas-{{field.id}}" width="300" height="150" 
+                                                            style="border: 1px solid #ccc; touch-action: none; background: #fff; cursor: crosshair; width: 100%; display: block;"
+                                                            ng-style="{'border-color': (field.required && !localdata[field.id]) ? 'rgb(221,44,0)' : '#ccc'}"
                                                             ng-init="initSignatureCanvas(field.id)">
                                                     </canvas>
                                                     <md-button class="md-warn md-icon-button" 
-                                                               style="position: absolute; top: 0; right: 0; min-width: 30px; height: 30px; line-height: 30px;" 
+                                                               style="position: absolute; top: 0; right: 0; min-width: 30px; height: 30px; line-height: 30px; margin: 0;" 
                                                                title="x" 
                                                                aria-label="Erase" 
                                                                ng-click="clearSignature(field.id)">
                                                         <span style="font-weight: bold; font-size: 16px;">x</span>
                                                     </md-button>
                                                 </div>
+                                                
+                                                <input type="text" 
+                                                       ng-model="localdata[field.id]" 
+                                                       ng-required="field.required" 
+                                                       name="{{field.translated_name}}" 
+                                                       style="position: absolute; visibility: hidden; width: 0; height: 0; padding: 0; margin: 0; border: 0;">
                                             </div>
+                                            
                                         </div>
                                     </div>
 
