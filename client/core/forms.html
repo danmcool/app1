@@ -569,8 +569,8 @@
                                                     {{field.translated_name}}
                                                     <span ng-if="field.required" style="color: rgb(221,44,0);">*</span>
                                                 </p>
-                                                <div style="position: relative; width: 100%; max-width: 400px;">
-                                                    <canvas id="sig-canvas-{{field.id}}" width="400" height="300" 
+                                                <div style="position: relative; width: 100%; max-width: 300px;">
+                                                    <canvas id="sig-canvas-{{field.id}}" width="300" height="300" 
                                                             style="border: 1px solid #ccc; touch-action: none; background: #fff; cursor: crosshair; width: 100%; display: block;"
                                                             ng-style="{'border-color': (field.required && !localdata[field.id]) ? 'rgb(221,44,0)' : '#ccc'}"
                                                             ng-init="initSignatureCanvas(field.id)">
