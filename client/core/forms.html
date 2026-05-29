@@ -725,7 +725,7 @@
                         <md-button ng-disabled="dynamicForm.$invalid" ng-click="pay(action.formula, action.next_form_id, action.set_value, action.payment_country, action.payment_currency, action.payment_value_path, action.payment_label_path, action.payment_update_path, action.payment_update_value)" class="md-raised md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="download_pdf">
-                        <md-button ng-disabled="dynamicForm.$invalid" ng-click="downloadPdf(action.formula, action.next_form_id, action.set_value, action.save_data, $index)" class="md-raised md-primary">{{action.translated_name}}</md-button>
+                        <md-button ng-disabled="dynamicForm.$invalid" ng-click="downloadPdf(action.formula, action.next_form_id, action.set_value, $index)" class="md-raised md-primary">{{action.translated_name}}</md-button>
                     </div>
                     <div ng-switch-when="email_pdf">
                         <md-button ng-disabled="dynamicForm.$invalid" ng-click="emailPdf(action.formula, action.next_form_id, action.set_value, $index, action.email_path, action.email_title, action.email_html, action.save_data)" class="md-raised md-primary">{{action.translated_name}}</md-button>
