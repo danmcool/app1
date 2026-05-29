@@ -248,6 +248,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Save',
             fr: 'Sauvegarder'
         },
+        save_data: {
+            en: 'Save data',
+            fr: 'Sauvegarder les données'
+        },
         code_error: {
             en: 'Your company code must be between 5 and 20 characters long, it is used for the security of company data.',
             fr: 'Votre code société doit contenir entre 5 et 20 caractères, il sera utilisé pour la sécurité des données de votre société.'
