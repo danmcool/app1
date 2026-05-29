@@ -33,8 +33,10 @@
                         <md-option ng-repeat="notifyuser in notifyuser_types" ng-value="notifyuser.id">{{notifyuser.translated_name}}</md-option>
                     </md-select>
                 </md-input-container>
-                <md-input-container flex="auto" class="md-block" ng-if="action.action=='email_pdf'||action.notify_user&&action.notify_user!='none'">
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='email_pdf'">
                     <md-checkbox ng-model="action.save_data">{{sessionData.appData.save}}</md-checkbox>
+                </md-input-container>
+                <md-input-container flex="auto" class="md-block" ng-if="action.action=='email_pdf'||action.notify_user&&action.notify_user!='none'">
                     <label>{{sessionData.appData.new_action_email_title}}</label>
                     <input type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.email_title[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(action,'email_title',false)">
                 </md-input-container>
