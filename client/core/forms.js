@@ -1480,10 +1480,10 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         $scope.gotoNextForm(formula, nextFormId, $scope.data);
     }
 
-    $scope.emailPdf = function (formula, nextFormId, setValue, actionIndex, emailPath, emailTitle, emailContent) {
+    $scope.emailPdf = function (formula, nextFormId, setValue, actionIndex, emailPath, emailTitle, emailContent, saveData) {
         var populate = "";
         var projectionKeys = Object.keys($scope.form.datamodel.projection);
-        for (j = 0; j < projectionKeys.length; j++) {
+        for (var j = 0; j < projectionKeys.length; j++) {
             var childField = $scope.form.datamodel.projection[projectionKeys[j]];
             if (childField.type ==  "reference") {
                 if (populate == "") {
@@ -1494,21 +1494,57 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
             }
         }
 
-        EmailPdf.get({
-            datamodel_id: $scope.form.datamodel._id,
-            data_id: $scope.data._id,
-            form_id: $scope.form._id,
-            action_index: actionIndex,
-            language: $scope.sessionData.userData.properties.correctedLanguage,
-            populate: populate,
-            email_to: $scope.resolvePath($scope.data, emailPath),
-            email_cc: $scope.sessionData.userData.email,
-            email_title: SessionService.translate(emailTitle),
-            email_content: null,
-            email_content_html: SessionService.translate(emailContent)
-        }, function (res) {
-            $scope.gotoNextForm(formula, nextFormId, $scope.data);
-        })
+        // Helper function to execute the email API call
+        var sendEmailRequest = function(dataId) {
+            EmailPdf.get({
+                datamodel_id: $scope.form.datamodel._id,
+                data_id: dataId,
+                form_id: $scope.form._id,
+                action_index: actionIndex,
+                language: $scope.sessionData.userData.properties.correctedLanguage,
+                populate: populate,
+                email_to: $scope.resolvePath($scope.data, emailPath),
+                email_cc: $scope.sessionData.userData.email,
+                email_title: SessionService.translate(emailTitle),
+                email_content: null,
+                email_content_html: SessionService.translate(emailContent)
+            }, function (res) {
+                $scope.gotoNextForm(formula, nextFormId, $scope.data);
+            });
+        };
+
+        // If the designer specified that data should be saved before sending
+        if (saveData) {
+            $scope.updateComponents($scope.form, setValue, $scope.data, false);
+            
+            if ($scope.data._id) {
+                // Modifying an existing document
+                Datas.update({
+                    datamodel_id: $scope.form.datamodel._id,
+                    entry_id: $scope.data._id,
+                    pid: $routeParams.pid
+                }, $scope.data, function (res) {
+                    sendEmailRequest($scope.data._id);
+                }, function (res) {
+                    $scope.data = res.data;
+                    $scope.updateErrorAlert();
+                });
+            } else {
+                // Creating a brand new document
+                if ($routeParams.pid) {
+                    $scope.data.pid = $routeParams.pid;
+                }
+                $scope.data.$save(function (res) {
+                    $scope.data._id = res.id; // Assign the newly generated ID
+                    sendEmailRequest(res.id);
+                }, function (res) {
+                    $scope.data = res.data;
+                });
+            }
+        } else {
+            // Standard execution (No save, just trigger email)
+            sendEmailRequest($scope.data._id);
+        }
     }
 
     $scope.search = function (search_text) {
