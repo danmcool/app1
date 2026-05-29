@@ -34,7 +34,7 @@
                     </md-select>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='email_pdf'">
-                    <md-checkbox ng-model="action.save_data">{{sessionData.appData.save}}</md-checkbox>
+                    <md-checkbox ng-model="action.save_data">{{sessionData.appData.save_data}}</md-checkbox>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='email_pdf'||action.notify_user&&action.notify_user!='none'">
                     <label>{{sessionData.appData.new_action_email_title}}</label>
