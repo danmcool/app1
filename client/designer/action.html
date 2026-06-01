@@ -42,7 +42,7 @@
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='email_pdf'||action.notify_user&&action.notify_user!='none'">
                     <label>{{sessionData.appData.new_action_email_html}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.email_html[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="2000" ng-maxlength="2000" rows="4" ng-focus="editText(action, 'email_html', true)"></textarea>
+                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.email_html[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="4000" ng-maxlength="4000" rows="4" ng-focus="editText(action, 'email_html', true)"></textarea>
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='subscribe'||action.action=='unsubscribe'">
                     <label>{{sessionData.appData.action_subscription_list}}</label>
@@ -184,7 +184,7 @@
                 </md-input-container>
                 <md-input-container flex="auto" class="md-block" ng-if="action.action=='download_pdf'||action.action=='email_pdf'">
                     <label>{{sessionData.appData.pdf_content_html}}</label>
-                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.pdf_html_template[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="4000" ng-maxlength="4000" rows="8" ng-focus="editText(action, 'pdf_html_template', true)"></textarea>
+                    <textarea type="text" ng-disabled="false" ng-required="true" name="appicon" ng-model="action.pdf_html_template[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="40000" ng-maxlength="40000" rows="8" ng-focus="editText(action, 'pdf_html_template', true)"></textarea>
                 </md-input-container>
                 <div flex layout="column">
                     <div>
