@@ -550,6 +550,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Default value',
             fr: 'Valeur par defaut'
         },
+        field_save_value: {
+            en: 'Save value',
+            fr: 'Sauvegarder la valeur'
+        },
         field_init_value_start: {
             en: 'Initial value parameter for start',
             fr: 'Paramètre pour la valeur initiale pour debut'
