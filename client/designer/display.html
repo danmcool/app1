@@ -516,6 +516,9 @@
                                 <md-option ng-repeat="listofvalue in form.values" ng-value="listofvalue._id">{{listofvalue.translated_name}}</md-option>
                             </md-select>
                         </md-input-container>
+                        <md-input-container ng-if="!selection_ref.show" flex="auto" class="md-block">
+                            <md-checkbox ng-model="field.save_value">{{sessionData.appData.field_save_value}}</md-checkbox>
+                        </md-input-container>
                         <md-input-container ng-if="selection_ref.show" flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_display}}</label>
                             <md-select ng-model="field.selection_display" ng-required="true">
