@@ -1456,7 +1456,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var projectionKeys = Object.keys($scope.form.datamodel.projection);
         for (j = 0; j < projectionKeys.length; j++) {
             var childField = $scope.form.datamodel.projection[projectionKeys[j]];
-            if (childField.type ==  "reference") {
+            if (childField.type == "reference" || childField.type == "item") {
                 if (populate == "") {
                     populate += childField.full_path;
                 } else {
@@ -1487,7 +1487,7 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         var projectionKeys = Object.keys($scope.form.datamodel.projection);
         for (var j = 0; j < projectionKeys.length; j++) {
             var childField = $scope.form.datamodel.projection[projectionKeys[j]];
-            if (childField.type ==  "reference") {
+            if (childField.type == "reference" || childField.type == "item") {
                 if (populate == "") {
                     populate += childField.full_path;
                 } else {
