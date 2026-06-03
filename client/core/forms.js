@@ -1001,6 +1001,8 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                         date: Date.now()
                     });
                 }
+            } else if (formFields[i].display == 'selection' && formFields[i].save_value) {
+                $scope.resolvePathUpdate($scope.data, formFields[i].full_path, formFields[i].values_key[$scope.localdata[formFields[i].id]]);
             } else if (formFields[i].display != 'list' && formFields[i].display != 'item') {
                 $scope.resolvePathUpdate($scope.data, formFields[i].full_path, $scope.localdata[formFields[i].id]);
             }
