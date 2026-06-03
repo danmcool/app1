@@ -1,7 +1,9 @@
 var puppeteer = require('puppeteer');
 var crypto = require('crypto');
 var fs = require('fs');
+
 var Tools = require('./tools');
+var Constants = require('../tools/constants.js');;
 
 var SecretKey = process.env.APP1_SECRET_KEY;
 // Make sure Constants is defined! I assume it's required somewhere like this:
