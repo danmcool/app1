@@ -490,6 +490,10 @@ app1.factory('AppTranslationService', function AppTranslationService() {
             en: 'Do not display',
             fr: 'Ne pas afficher'
         },
+        field_resize: {
+            en: 'Resize image to max 1000px',
+            fr: 'Redimensionner l\'image a max 1000px'
+        },
         field_show_search: {
             en: 'Display search field',
             fr: 'Afficher le champs de recherche'
