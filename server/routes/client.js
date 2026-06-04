@@ -886,8 +886,8 @@ router.get('/emailpdf/:datamodel_id/:data_id', function (req, res, next) {
                 }
                 Print.createPdf(action.pdf_html_template[req.query.language], object, SessionCache.userData[token], action.pdf_landscape).then(function (result) {
                     Email.sendAttachments(req.query.email_to, req.query.email_cc, req.query.email_title, req.query.email_content_html, action.pdf_file_name[req.query.language], result.toString('base64'));
-                    return res.status(200).json('');
                 });
+                return res.status(200).json('');
             });
         });
     }
