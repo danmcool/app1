@@ -349,6 +349,9 @@
                                 <md-checkbox ng-model="field.hide_name">{{sessionData.appData.field_hide_name}}</md-checkbox>
                             </md-input-container>
                         </div>
+                        <md-input-container flex="auto" class="md-block" ng-if="field.display=='image'">
+                            <md-checkbox ng-model="field.resize">{{sessionData.appData.field_resize}}</md-checkbox>
+                        </md-input-container>
                         <md-input-container flex="auto" class="md-block">
                             <label>{{sessionData.appData.field_name}}</label>
                             <input type="text" ng-disabled="false" ng-required="false" name="appicon" ng-model="field.text[sessionData.userData.properties.correctedLanguage]" md-minlength="0" ng-minlength="0" md-maxlength="100" ng-maxlength="100" ng-focus="editText(field,'text',false)">
