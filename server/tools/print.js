@@ -84,7 +84,7 @@ print.createPdf = async function (htmlTemplate, data, userSession, landscape) {
             try {
                 // Fixed syntax errors and passing the full image object
                 let base64data = await base64_encode_async(images[i]);
-                htmlImages += '<img src="data:' + images[i].type + ';base64,' + base64data + '" width="600" height="600"><br>';
+                htmlImages += '<img src="data:' + images[i].type + ';base64,' + base64data + '" style="width:100%;max-width:600px;height:100%;max-height:600px"><br>';
             } catch (err) {
                 console.error("Failed to load image:", err);
             }
