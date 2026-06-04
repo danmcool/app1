@@ -785,29 +785,52 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
         xhr.send(file);
     }
 
-    // do not add var in front of the function name neither put it in the scope!!!
-    changeFilesInFormsJS = function (files, fieldId) {
-        if (files.length == 0) return;
-        //$scope.dynamicForm.$setValidity({'Attachments': true});
+// do not add var in front of the function name neither put it in the scope!!!
+    changeFilesInFormsJS = function (inputFiles, fieldId) {
+        if (inputFiles.length == 0) return;
         if (!$scope.localdata[fieldId]) {
             $scope.localdata[fieldId] = [];
         }
+        
+        // Convert FileList to a standard Array to safely remove items
+        var files = [];
+        for(var f = 0; f < inputFiles.length; f++) {
+            files.push(inputFiles[f]);
+        }
+    
         for (var k = files.length - 1; k >= 0; k--) {
             if (files[k].size / 1048576 > 20) {
                 files.splice(k, 1);
             }
         }
+    
+        if (files.length == 0) return;
+        
+        var currentField = null;
+        if ($scope.form && $scope.form.fields) {
+            for (var fIndex = 0; fIndex < $scope.form.fields.length; fIndex++) {
+                if ($scope.form.fields[fIndex].id == fieldId) {
+                    currentField = $scope.form.fields[fIndex];
+                    break;
+                }
+            }
+        }
+    
         $scope.filesCount[fieldId] = files.length;
         $scope.currentFile[fieldId] = 1;
         document.getElementById('file_upload_' + fieldId).textContent = $scope.sessionData.appData.uploading_in_progress + ' ' + $scope.currentFile[fieldId] + '/' + $scope.filesCount[fieldId];
-        for (var i = 0; i < $scope.filesCount[fieldId]; i++) {
-            var file = new Files({
-                name: files[i].name,
-                type: files[i].type,
+    
+        // 1. Inner function to upload the file to the server
+        var uploadSingleFile = function(fileToUpload) {
+            var fileApi = new Files({
+                name: fileToUpload.name,
+                type: fileToUpload.type,
                 pid: $routeParams.pid
             });
-            $scope.files[fieldId].push(files[i]);
-            file.$save(function (res) {
+            
+            $scope.files[fieldId].push(fileToUpload);
+            
+            fileApi.$save(function (res) {
                 for (var j = 0; j < $scope.files[fieldId].length; j++) {
                     if ($scope.files[fieldId][j].name == res.file.name) {
                         $scope.localdata[fieldId].push({
@@ -820,6 +843,69 @@ app1.controller('FormDetailsCtrl', ['$scope', '$routeParams', '$location', '$rou
                     }
                 }
             });
+        };
+    
+        // 2. Inner function to check if the file needs resizing
+        var processAndUpload = function(file) {
+            // Only proceed with resizing if 'resize' is enabled for this field and it's an image
+            if (currentField && currentField.resize === true && file.type && file.type.match(/image.*/)) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = new Image();
+                    img.onload = function() {
+                        var MAX_DIMENSION = 1000;
+                        var width = img.width;
+                        var height = img.height;
+    
+                        // Check if EITHER width or height exceeds 1000px
+                        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+                            // Scale down based on whichever dimension is larger
+                            if (width > height) {
+                                height = Math.round(height * (MAX_DIMENSION / width));
+                                width = MAX_DIMENSION;
+                            } else {
+                                width = Math.round(width * (MAX_DIMENSION / height));
+                                height = MAX_DIMENSION;
+                            }
+                        } else {
+                            // If smaller than 1000x1000, upload the original file
+                            uploadSingleFile(file);
+                            return;
+                        }
+    
+                        // Draw image on canvas to resize it
+                        var canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+    
+                        // Convert canvas back to a Blob and upload
+                        canvas.toBlob(function(blob) {
+                            if (blob) {
+                                // Assign the original file name to the new Blob
+                                blob.name = file.name;
+                                blob.lastModified = Date.now();
+                                uploadSingleFile(blob);
+                            } else {
+                                uploadSingleFile(file); // Fallback if conversion fails
+                            }
+                        }, file.type || 'image/jpeg', 0.9);
+                    };
+                    img.onerror = function() { uploadSingleFile(file); };
+                    img.src = e.target.result;
+                };
+                reader.onerror = function() { uploadSingleFile(file); };
+                reader.readAsDataURL(file);
+            } else {
+                // If not an image, or resize is turned off in the designer, bypass canvas
+                uploadSingleFile(file);
+            }
+        };
+    
+        // Loop through all uploaded files and process them
+        for (var i = 0; i < files.length; i++) {
+            processAndUpload(files[i]);
         }
     }
 
